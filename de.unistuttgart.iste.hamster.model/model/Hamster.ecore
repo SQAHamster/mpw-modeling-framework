@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="hamster" nsURI="http://www.hamster.uni-stuttgart.de/hamster"
+    nsPrefix="hamster">
+  <eClassifiers xsi:type="ecore:EClass" name="Hamster" eSuperTypes="#//GameEntity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Territory" eSuperTypes="#//GameEntity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GameEntity" eSuperTypes="Command.ecore#//CommandEntity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cell" eSuperTypes="#//GameEntity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isClear" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Grain" eSuperTypes="#//GameEntity"/>
+</ecore:EPackage>
