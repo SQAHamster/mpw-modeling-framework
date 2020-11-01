@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: de.unistuttgart.iste.hamster.model
-Bundle-SymbolicName: de.unistuttgart.iste.hamster.model; singleton:=true
+Bundle-Name: de.unistuttgart.iste.modeling.mpw
+Bundle-SymbolicName: de.unistuttgart.iste.modeling.mpw;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.core.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-14
-Automatic-Module-Name: de.unistuttgart.iste.hamster.model
+Automatic-Module-Name: de.unistuttgart.iste.modeling.mpw
