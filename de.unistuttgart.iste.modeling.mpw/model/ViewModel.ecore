@@ -13,18 +13,10 @@
     <eOperations name="textTyped">
       <eParameters name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
+    <eOperations name="getViewModel" eType="#//ViewModel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Presenter" eSuperTypes="#//ViewInput">
     <eStructuralFeatures xsi:type="ecore:EReference" name="viewModel" lowerBound="1"
         eType="#//ViewModel" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="view" lowerBound="1" eType="#//View"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="View" abstract="true" interface="true">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Represents the callback interface to the UI framework. Especially it receives the viewmodel to display the game state on the screen."/>
-    </eAnnotations>
-    <eOperations name="showViewModel">
-      <eParameters name="viewModel" eType="#//ViewModel"/>
-    </eOperations>
   </eClassifiers>
 </ecore:EPackage>
