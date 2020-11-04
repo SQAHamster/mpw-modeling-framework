@@ -2,8 +2,8 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mpw" nsURI="http://www.mpw.uni-stuttgart.de/mpw" nsPrefix="mpw">
   <eClassifiers xsi:type="ecore:EClass" name="Actor" abstract="true" eSuperTypes="#//TileContent">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="commandstack" lowerBound="1"
-        eType="#//command/GameCommandStack"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
+        eType="ecore:EClass Command.ecore#//CommandStack"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Prop" abstract="true" eSuperTypes="#//TileContent"/>
   <eClassifiers xsi:type="ecore:EClass" name="Tile">
@@ -15,29 +15,30 @@
         eOpposite="#//Tile/contents"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Stage" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="commandstack" lowerBound="1"
-        eType="#//command/GameCommandStack"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tiles" upperBound="-1"
         eType="#//Tile" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
+        eType="ecore:EClass Command.ecore#//CommandStack"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MiniProgrammingWorld" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="commandstack" lowerBound="1"
-        eType="#//command/GameCommandStack" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" lowerBound="1" eType="#//Stage"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
+        eType="ecore:EClass Command.ecore#//CommandStack" containment="true"/>
   </eClassifiers>
-  <eSubpackages name="command" nsURI="http://www.mpw.uni-stuttgart.de/command" nsPrefix="command">
-    <eClassifiers xsi:type="ecore:EClass" name="GameCommandStack">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="stack" upperBound="-1"
-          eType="#//command/GameCommand" containment="true"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="EditorCommand" abstract="true" eSuperTypes="#//command/Command"/>
-    <eClassifiers xsi:type="ecore:EClass" name="Command" abstract="true">
-      <eOperations name="execute"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="GameCommand" abstract="true" eSuperTypes="#//command/Command">
-      <eOperations name="undo"/>
-      <eOperations name="redo"/>
-    </eClassifiers>
-  </eSubpackages>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" abstract="true">
+    <eOperations name="setProperty">
+      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="v" eType="#//ValueUnion"/>
+    </eOperations>
+    <eOperations name="addReference">
+      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="e" eType="#//Entity"/>
+    </eOperations>
+    <eOperations name="removeReference">
+      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="e" eType="#//Entity"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ValueUnion" instanceTypeName="newDataType1"/>
 </ecore:EPackage>
