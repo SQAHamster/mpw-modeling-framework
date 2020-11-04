@@ -26,7 +26,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" lowerBound="1" eType="#//Stage"
         containment="true"/>
   </eClassifiers>
-  <eSubpackages name="command">
+  <eSubpackages name="command" nsURI="http://www.mpw.uni-stuttgart.de/command" nsPrefix="command">
     <eClassifiers xsi:type="ecore:EClass" name="GameCommandStack">
       <eStructuralFeatures xsi:type="ecore:EReference" name="stack" upperBound="-1"
           eType="#//command/GameCommand" containment="true"/>
