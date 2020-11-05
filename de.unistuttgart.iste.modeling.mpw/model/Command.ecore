@@ -2,10 +2,23 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="command" nsURI="http://www.hamster.uni-stuttgart.de/command"
     nsPrefix="command">
-  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveCommand" abstract="true" eSuperTypes="#//Command"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SetPropertyCommand" eSuperTypes="#//PrimitiveCommand"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AddEntityCommand" eSuperTypes="#//PrimitiveCommand"/>
-  <eClassifiers xsi:type="ecore:EClass" name="RemoveEntityCommand" eSuperTypes="#//PrimitiveCommand"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveCommand" abstract="true" eSuperTypes="#//Command">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
+        eType="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SetPropertyCommand" eSuperTypes="#//PrimitiveCommand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldValue" eType="#//ValueUnion"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValue" eType="#//ValueUnion"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AddEntityCommand" eSuperTypes="#//PrimitiveCommand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entityToAdd" lowerBound="1"
+        eType="#//Entity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RemoveEntityCommand" eSuperTypes="#//PrimitiveCommand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entityToRemove" lowerBound="1"
+        eType="#//Entity"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CommandStack">
     <eStructuralFeatures xsi:type="ecore:EReference" name="stack" upperBound="-1"
         eType="#//Command" containment="true"/>
@@ -19,4 +32,19 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="subCommands" upperBound="-1"
         eType="#//Command" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" abstract="true">
+    <eOperations name="setProperty">
+      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="v" eType="#//ValueUnion"/>
+    </eOperations>
+    <eOperations name="addReference">
+      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="e" eType="#//Entity"/>
+    </eOperations>
+    <eOperations name="removeReference">
+      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="e" eType="#//Entity"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ValueUnion" instanceTypeName="newDataType1"/>
 </ecore:EPackage>
