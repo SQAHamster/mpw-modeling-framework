@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="hamsterviewmodel" nsURI="http://www.mpw.uni-stuttgart.de/hamsterviewmodel"
+    nsPrefix="hamsterviewmodel">
+  <eClassifiers xsi:type="ecore:EClass" name="GameViewModel" eSuperTypes="ViewModel.ecore#//ViewModel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Datastructure with Databinding capabilities which contains all relevant information to be displayed on the screen."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="logEntries" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cells" lowerBound="1" eType="#//ViewModelCellArray2d"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GameViewInput" abstract="true" interface="true">
+    <eOperations name="playClicked"/>
+    <eOperations name="stopClicked"/>
+    <eOperations name="textTyped">
+      <eParameters name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getViewModel" eType="#//GameViewModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GameViewPresenter" eSuperTypes="#//GameViewInput ViewModel.ecore#//Presenter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="viewModel" lowerBound="1"
+        eType="#//GameViewModel" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewModelCell">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="layers" upperBound="-1"
+        eType="#//ViewModelCellLayer" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewModelCellArray2d" eSuperTypes="ViewModel.ecore#//Array2d">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cells" upperBound="-1"
+        eType="#//ViewModelCell" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewModelCellLayer" eSuperTypes="ViewModel.ecore#//ViewModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="imageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rotation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+</ecore:EPackage>
