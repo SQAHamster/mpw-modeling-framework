@@ -4,8 +4,6 @@
     nsPrefix="viewmodel">
   <eClassifiers xsi:type="ecore:EClass" name="Presenter" abstract="true" interface="true"
       eSuperTypes="#//ViewStereotype"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Array2d" abstract="true" interface="true"
-      eSuperTypes="#//ViewStereotype"/>
   <eClassifiers xsi:type="ecore:EClass" name="ViewModel" abstract="true" interface="true"
       eSuperTypes="#//ViewStereotype"/>
   <eClassifiers xsi:type="ecore:EClass" name="ViewStereotype" abstract="true" interface="true"/>

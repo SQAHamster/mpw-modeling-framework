@@ -8,7 +8,7 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="logEntries" unique="false"
         upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cells" lowerBound="1" eType="#//ViewModelCellArray2d"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//ViewModelRow"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameViewInput" abstract="true" interface="true">
@@ -23,11 +23,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="viewModel" lowerBound="1"
         eType="#//GameViewModel" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ViewModelCell">
+  <eClassifiers xsi:type="ecore:EClass" name="ViewModelCell" eSuperTypes="ViewModel.ecore#//ViewModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="layers" upperBound="-1"
         eType="#//ViewModelCellLayer" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ViewModelCellArray2d" eSuperTypes="ViewModel.ecore#//Array2d">
+  <eClassifiers xsi:type="ecore:EClass" name="ViewModelRow" eSuperTypes="ViewModel.ecore#//ViewModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="cells" upperBound="-1"
         eType="#//ViewModelCell" containment="true"/>
   </eClassifiers>

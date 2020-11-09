@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="hamster" nsURI="http://www.mpw.uni-stuttgart.de/hamster" nsPrefix="hamster">
-  <eClassifiers xsi:type="ecore:EClass" name="Hamster" eSuperTypes="MiniProgrammingWorld.ecore#//Actor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Hamster" eSuperTypes="MiniProgrammingWorld.ecore#//Actor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grains" upperBound="-1"
+        eType="#//Grain"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Territory" eSuperTypes="MiniProgrammingWorld.ecore#//Stage"/>
   <eClassifiers xsi:type="ecore:EClass" name="Grain" eSuperTypes="MiniProgrammingWorld.ecore#//Prop"/>
   <eClassifiers xsi:type="ecore:EClass" name="Wall" eSuperTypes="MiniProgrammingWorld.ecore#//Prop"/>

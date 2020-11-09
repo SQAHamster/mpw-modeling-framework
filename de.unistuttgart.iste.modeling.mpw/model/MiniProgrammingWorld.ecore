@@ -4,6 +4,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Actor" abstract="true" eSuperTypes="#//TileContent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
         eType="ecore:EClass Command.ecore#//CommandStack"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//Direction"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Prop" abstract="true" eSuperTypes="#//TileContent"/>
   <eClassifiers xsi:type="ecore:EClass" name="Tile" eSuperTypes="Command.ecore#//Entity">
@@ -21,6 +22,8 @@
         eType="#//Tile" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
         eType="ecore:EClass Command.ecore#//CommandStack"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tileContents" upperBound="-1"
+        eType="#//TileContent" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MiniProgrammingWorld" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" lowerBound="1" eType="#//Stage"
@@ -31,5 +34,11 @@
   <eClassifiers xsi:type="ecore:EClass" name="Location">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="row" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Direction">
+    <eLiterals name="NORTH"/>
+    <eLiterals name="SOUTH" value="1"/>
+    <eLiterals name="WEST" value="2"/>
+    <eLiterals name="EAST" value="3"/>
   </eClassifiers>
 </ecore:EPackage>
