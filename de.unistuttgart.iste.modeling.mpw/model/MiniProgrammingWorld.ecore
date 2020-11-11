@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mpw" nsURI="http://www.mpw.uni-stuttgart.de/mpw" nsPrefix="mpw">
   <eClassifiers xsi:type="ecore:EClass" name="Actor" abstract="true" eSuperTypes="#//TileContent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
-        eType="ecore:EClass Command.ecore#//CommandStack"/>
+        eType="ecore:EClass Command.ecore#//CommandStack" changeable="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//Direction"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Prop" abstract="true" eSuperTypes="#//TileContent"/>
@@ -21,7 +21,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="tiles" upperBound="-1"
         eType="#//Tile" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
-        eType="ecore:EClass Command.ecore#//CommandStack"/>
+        eType="ecore:EClass Command.ecore#//CommandStack" changeable="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tileContents" upperBound="-1"
         eType="#//TileContent" containment="true"/>
   </eClassifiers>

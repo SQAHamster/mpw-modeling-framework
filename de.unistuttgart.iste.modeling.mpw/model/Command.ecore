@@ -7,8 +7,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SetPropertyCommand" eSuperTypes="#//PrimitiveCommand">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldValue" eType="#//ValueUnion"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValue" eType="#//ValueUnion"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldValue" eType="#//Object"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValue" eType="#//Object"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AddEntityCommand" eSuperTypes="#//PrimitiveCommand">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entityToAdd" lowerBound="1"
@@ -34,7 +34,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Entity" abstract="true">
     <eOperations name="setProperty">
       <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="v" eType="#//ValueUnion"/>
+      <eParameters name="o" eType="#//Object"/>
     </eOperations>
     <eOperations name="addReference">
       <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -45,5 +45,5 @@
       <eParameters name="e" eType="#//Entity"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="ValueUnion" instanceTypeName="newDataType1"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceTypeName="objectType"/>
 </ecore:EPackage>
