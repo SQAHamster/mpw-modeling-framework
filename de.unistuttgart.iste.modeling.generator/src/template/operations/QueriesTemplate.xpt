@@ -1,0 +1,9 @@
+«IMPORT ecore»
+
+«EXTENSION template::util::GeneratorExtensions»
+
+«DEFINE QueryDefinitions FOR EClass»
+	  «FOREACH getQueriesForType(this) AS q»
+	  // «q»
+      «ENDFOREACH»
+«ENDDEFINE»

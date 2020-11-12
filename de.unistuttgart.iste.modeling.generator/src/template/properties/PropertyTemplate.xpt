@@ -1,0 +1,74 @@
+«IMPORT ecore»
+
+«EXTENSION template::util::GeneratorExtensions»
+
+«DEFINE PropertyDefinitions FOR EClass»
+	  «FOREACH eStructuralFeatures AS f»
+	  «IF f.isObservableProperty()»
+      private final «f.featureToObservableFieldType()» «f.name» = «f.featureToObservableFieldInstantiation()»;
+      «ELSEIF f.changeable»
+      private «f.featureToJavaType()» «f.name»;
+      «ELSEIF f.isConstructorInjectedProperty()»
+      private final «f.featureToJavaType()» «f.name»;
+	  «ELSE»
+      private final «f.featureToJavaType()» «f.name» = «f.featureToFieldInstantiation()»;
+	  «ENDIF»
+      «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE ConstructorDefinition FOR EClass»
+      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
+      «LET injectedProperties.without(eStructuralFeatures) AS injectedForParentProperties»
+      public «name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToJavaType()» «f.name»«ENDFOREACH») {
+      «IF injectedForParentProperties.size > 0-»
+      super(«FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
+      «ENDIF»
+      «FOREACH injectedProperties.without(injectedForParentProperties) AS f»
+      this.«f.name» = «f.name»;
+      «ENDFOREACH»
+      }
+      «ENDLET»
+      «ENDLET»
+«ENDDEFINE»
+
+«DEFINE ImplConstructorDefinition FOR EClass»
+      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
+      public «name»Impl(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToJavaType()» «f.name»«ENDFOREACH») {
+      «FOREACH injectedProperties AS f»
+      super(«FOREACH injectedProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
+      «ENDFOREACH»
+      }
+      «ENDLET»
+«ENDDEFINE»
+
+«DEFINE GetPropertyValueDefinitions FOR EClass»
+	  «FOREACH eStructuralFeatures AS f»
+	  public «f.featureToJavaType()» «f.name.getter()»() {
+  	    «IF f.isObservableProperty()-»
+	  	return this.«f.name».get();
+        «ELSE-»
+	  	return this.«f.name»;
+	    «ENDIF-»
+	  }
+      «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE SetPropertyValueDefinitions FOR EClass»
+	  «FOREACH eStructuralFeatures.select(e|e.changeable).reject(e|e.isCollection()) AS f»
+	  public void «f.name.setter()»(«f.featureToJavaType()» «f.name») {
+  	    «IF f.isObservableProperty()-»
+	  	this.«f.name».set(«f.name»);
+        «ELSE-»
+	  	this.«f.name» = «f.name»;
+	    «ENDIF-»
+	  }
+      «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE GetPropertyDefinitions FOR EClass»
+	  «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
+	  public «f.featureToObservableReadonlyType()» «f.name»Property() {
+	  	return this.«f.name».getReadOnlyProperty();
+	  }
+      «ENDFOREACH»
+«ENDDEFINE»

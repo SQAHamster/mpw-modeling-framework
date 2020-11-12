@@ -1,0 +1,20 @@
+import ecore;
+
+extension util::Extensions reexport;
+
+setPropertyName() : "setProperty";
+addReferenceName() : "addReference";
+removeReferenceName() : "removeReference";
+
+getAllUseDefinedOperations(EClass this) :
+    eAllOperations.reject(e|e.isBuiltInOperation());
+    
+isBuiltInOperation(EOperation this) :
+    this.name.isEntityDefinedOperation();
+    
+private isEntityDefinedOperation(String this) :
+    this == setPropertyName() || this == addReferenceName() || this == removeReferenceName();
+
+containsUntypedGenericCode(EOperation o) :
+    o.name.isEntityDefinedOperation() && o.name != "removeReference";
+    

@@ -1,0 +1,131 @@
+import ecore;
+
+extension util::Extensions reexport;
+extension template::operations::BuiltInOperationsExtensions reexport;
+
+String getModulePackage() : GLOBALVAR module_package;
+
+// Only dummy data until real queries are modeled
+List[String] getQueriesForType(EClass class) : 
+    getQueries()
+    .collect(e|e.split("\\|"))
+    .select(e|e.get(0) == class.name)
+    .collect(e|e.get(1));
+
+private List[String] getQueries() : GLOBALVAR queries;
+
+// Only dummy data until real commands are modeled
+List[String] getCommandsForType(EClass class) : 
+    getCommands()
+    .collect(e|e.split("\\|"))
+    .select(e|e.get(0) == class.name)
+    .collect(e|e.get(1));
+
+private List[String] getCommands() : GLOBALVAR commands;
+
+getter(String this) :
+	"get"+this.toFirstUpper();
+	
+setter(String this) :
+	"set"+this.toFirstUpper();
+	
+isCollection(EStructuralFeature this) :
+    upperBound == -1;
+	
+isObservableProperty(EStructuralFeature this) :
+    this.changeable && this.eContainingClass.eAllSuperTypes.notExists(t|t.name == "Command");
+    
+isConstructorInjectedProperty(EStructuralFeature this) :
+    !this.changeable && !this.isContainment();
+    
+private isContainment(EStructuralFeature this) :
+    EReference.isInstance(this) && ((EReference)this).containment; 
+	
+toJavaType(String this) :
+	if (this == "EInt") then "int"
+	else if (this == "EBoolean") then "boolean"
+	else if (this == "EString") then "String"
+	else if (this == "EObject") then "Object"
+	else this;
+	
+isBuiltInType(EClassifier this) :
+    isPrimitive() || this.name == "Object";
+    
+isPrimitive(EClassifier this) :
+    (this.name == "EInt" || this.name == "EBoolean" || this.name == "EString");
+	
+featureToJavaType(EStructuralFeature this) :
+	if (this.upperBound == -1) then "List<" + this.eType.name.toJavaType() + ">"
+	else this.eType.name.toJavaType();
+
+featureToObservableFieldType(EStructuralFeature this) :
+	if (this.upperBound == -1) then "ReadOnlyListWrapper<" + this.eType.name.toUnboxedJavaTypeName() + ">"
+	else if (this.eType.isBuiltInType()) then "ReadOnly" + this.eType.name.toUnboxedJavaTypeName() + "Wrapper"
+	else "ReadOnlyObjectWrapper<" + this.eType.name + ">";
+	
+featureToObservableReadonlyType(EStructuralFeature this) :
+	if (this.upperBound == -1) then "ReadOnlyListProperty<" + this.eType.name.toUnboxedJavaTypeName() + ">"
+	else if (this.eType.isBuiltInType()) then "ReadOnly" + this.eType.name.toUnboxedJavaTypeName() + "Property"
+	else "ReadOnlyObjectProperty<" + this.eType.name + ">";
+
+featureToObservableFieldInstantiation(EStructuralFeature this) :
+    let defaultValue = defaultValueOf(this) :
+    let defaultValuePart = if (defaultValue != null) then ", " + defaultValue else "" :
+    
+	if (this.upperBound == -1) then "new ReadOnlyListWrapper<>(this, \"" + this.name + "\", FXCollections.observableArrayList())"
+	else if (this.eType.isBuiltInType()) then "new ReadOnly" + this.eType.name.toUnboxedJavaTypeName() + "Wrapper(this, \"" + this.name + "\"" + defaultValuePart + ")"
+	else "new ReadOnlyObjectWrapper<>(this, \"" + this.name + "\")";
+
+featureToFieldInstantiation(EStructuralFeature this) :
+	if (this.upperBound == -1) then "new ArrayList<>()"
+	else "new " + this.eType.name.toUnboxedJavaTypeName() + "()";
+	
+private toUnboxedJavaTypeName(String this) :
+	if (this == "EInt") then "Integer"
+	else if (this == "EBoolean") then "Boolean"
+	else if (this == "EString") then "String"
+	else if (this == "EObject") then "Object"
+	else this;
+	
+private defaultValueOf(EStructuralFeature f) :
+    if (f.eType == "EInt") then "0"
+	else if (f.eType == "EBoolean") then "false"
+	else if (f.defaultValueLiteral != null) then f.defaultValueLiteral
+	else null;
+	
+operationToSignature(EOperation this) :
+    operationToJavaType() + " " + name + "(" 
+     + eParameters.collect(e|e.eType.name.toJavaType() + " " + e.name).joinToString(", ") 
+     + ")";
+	
+private operationToJavaType(EOperation this) :
+	if (this.eType == null) then "void" else this.eType.name.toJavaType();
+	
+toInheritance(List[EClassifier] this) :
+    let filteredExtends = this.typeSelect(EClass)
+    	.reject(e|e.interface) :
+    let filteredInterfaces = this.typeSelect(EClass)
+        .reject(e|e.isStereotype())
+    	.select(e|e.interface) :
+    if (filteredExtends.size > 0 && filteredInterfaces.size > 0) then "extends " + filteredExtends.get(0).name + " implements " + filteredInterfaces.collect(i|i.name).toString(", ")
+    else if (filteredExtends.size > 0) then "extends " + filteredExtends.get(0).name
+    else if (filteredInterfaces.size > 0) then "implements " + filteredInterfaces.collect(i|i.name).toString(", ")
+    else "";
+
+isStereotype(EClassifier this) :
+    EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewStereotype");
+
+hasImplSubclass(EClass this) :
+	!isViewModelType() && getAllUseDefinedOperations().size > 0 && !abstract;
+
+isViewModelType(EClassifier this) :
+    EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewModel");
+    
+toJavaPackagePath(EPackage this) :
+    this.toJavaPackageName().replaceAll("\\.", "/");
+
+toJavaPackageName(EPackage this) :
+    getModulePackage() + "." + this.name;
+    
+List[EClassifier] getUsedTypes(EOperation this) :
+    this.eParameters.collect(p|p.eType).union({this.eType}.reject(r|r == null));

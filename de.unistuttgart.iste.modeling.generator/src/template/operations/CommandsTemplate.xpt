@@ -1,0 +1,9 @@
+«IMPORT ecore»
+
+«EXTENSION template::util::GeneratorExtensions»
+
+«DEFINE CommandDefinitions FOR EClass»
+	  «FOREACH getCommandsForType(this) AS c»
+	  // «c»
+      «ENDFOREACH»
+«ENDDEFINE»

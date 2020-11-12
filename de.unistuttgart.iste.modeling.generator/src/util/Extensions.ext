@@ -1,0 +1,6 @@
+	
+excluding(Collection this, Object obj) :
+    reject(e|e == obj);
+
+joinToString(List[String] this, String separator) :
+	this.toString(separator);

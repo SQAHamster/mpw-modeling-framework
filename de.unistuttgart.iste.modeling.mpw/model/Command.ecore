@@ -34,15 +34,15 @@
   <eClassifiers xsi:type="ecore:EClass" name="Entity" abstract="true">
     <eOperations name="setProperty">
       <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="o" eType="#//Object"/>
+      <eParameters name="value" eType="#//Object"/>
     </eOperations>
     <eOperations name="addReference">
       <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="e" eType="#//Entity"/>
+      <eParameters name="entity" eType="#//Entity"/>
     </eOperations>
     <eOperations name="removeReference">
       <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="e" eType="#//Entity"/>
+      <eParameters name="entity" eType="#//Entity"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceTypeName="objectType"/>

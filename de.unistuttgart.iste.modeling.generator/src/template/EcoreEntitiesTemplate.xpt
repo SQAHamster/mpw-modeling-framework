@@ -1,0 +1,82 @@
+«IMPORT ecore»
+
+«EXTENSION template::util::GeneratorExtensions»
+
+«DEFINE main FOR List[EPackage]»
+    «EXPAND EcoreFile FOREACH this»
+«ENDDEFINE»
+
+«DEFINE EcoreFile FOR EPackage»
+    «EXPAND JavaClass FOREACH this.eClassifiers.typeSelect(EClass).reject(c|c.interface)»
+    «EXPAND JavaInterface FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.interface)»
+    «EXPAND JavaEnum FOREACH this.eClassifiers.typeSelect(EEnum)»
+«ENDDEFINE»
+
+«DEFINE JavaClass FOR EClass»
+    «FILE this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    
+    «EXPAND template::types::ImportUsedTypesTemplate::ImportDefinitions FOR this»
+    
+    public «IF hasImplSubclass() || abstract»abstract«ENDIF» class «this.name» «eSuperTypes.toInheritance()» {
+      «EXPAND template::properties::PropertyTemplate::PropertyDefinitions FOR this»
+      «EXPAND template::properties::PropertyTemplate::ConstructorDefinition FOR this»
+      «EXPAND template::operations::QueriesTemplate::QueryDefinitions FOR this»
+      «EXPAND template::operations::CommandsTemplate::CommandDefinitions FOR this»
+      «EXPAND template::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
+      «EXPAND template::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
+      «EXPAND template::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
+      «FOREACH eOperations AS o»
+      «IF o.isBuiltInOperation()-»
+      «IF o.containsUntypedGenericCode()-»
+      @SuppressWarnings("unchecked")
+      «ENDIF-»
+      public «o.operationToSignature()» {
+          «EXPAND template::operations::BuiltInOperationsTemplate::BuiltInOperationImpl FOR o»
+      }
+      «ELSE-»
+      public abstract «o.operationToSignature()»;
+      «ENDIF-»
+      «ENDFOREACH»
+    }
+    «ENDFILE»
+    «IF hasImplSubclass()»
+    «FILE this.ePackage.toJavaPackagePath() + "/impl/" + name + "Impl.java"»package «this.ePackage.toJavaPackageName()».impl;
+    
+    «EXPAND template::types::ImportUsedTypesTemplate::ImplImportDefinitions FOR this»
+    
+    public class «this.name»Impl extends «this.name» {
+      «EXPAND template::properties::PropertyTemplate::ImplConstructorDefinition FOR this»
+      «FOREACH this.getAllUseDefinedOperations() AS o»
+      @Override
+      public «o.operationToSignature()» {
+          throw new RuntimeException("not implemented");
+      }
+      «ENDFOREACH»
+    }
+    «ENDFILE»
+    «ENDIF»
+«ENDDEFINE»
+
+«DEFINE JavaInterface FOR EClass»
+    «FILE this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    
+    «EXPAND template::types::ImportUsedTypesTemplate::ImportDefinitions FOR this»
+    
+    public interface «this.name» «eSuperTypes.toInheritance()» {
+      «FOREACH eOperations AS o»
+      «o.operationToSignature()»;
+      «ENDFOREACH»
+    }
+    «ENDFILE»
+«ENDDEFINE»
+
+«DEFINE JavaEnum FOR EEnum»
+    «FILE this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    
+    public enum «this.name» {
+      «FOREACH eLiterals AS l SEPARATOR ", "»
+      «l»
+	  «ENDFOREACH»
+    }
+    «ENDFILE»
+«ENDDEFINE»

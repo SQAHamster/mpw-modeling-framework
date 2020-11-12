@@ -1,0 +1,87 @@
+module xpand.example.Generator
+
+import org.eclipse.emf.mwe.utils.Reader
+import org.eclipse.emf.mwe.utils.StandaloneSetup
+import org.eclipse.emf.mwe.utils.DirectoryCleaner
+import org.eclipse.xtend.typesystem.emf.EmfRegistryMetaModel
+import org.eclipse.xtend.check.CheckComponent
+import org.eclipse.xpand2.Generator
+import org.eclipse.xpand2.output.JavaBeautifier
+import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
+import model
+
+var mpwModelBaseUri  = "platform:/resource/de.unistuttgart.iste.modeling.mpw/model/"
+var dirSrcGen = "src-gen"
+
+Workflow {
+	/* set up EMF for standalone execution */
+	bean = StandaloneSetup { 
+		platformUri="../"
+	}
+	
+	/** instantiate metamodel */
+	bean = EmfRegistryMetaModel : mm_emf { }
+
+	bean = JavaBeautifier : formatter_java { }
+
+	/* load model and store it in slots */
+	component = components.MultiEcoreReader {
+		baseUri = mpwModelBaseUri
+		ecoreName = "MiniProgrammingWorld.ecore"
+		ecoreName = "Command.ecore"
+		ecoreName = "Hamster.ecore"
+		ecoreName = "HamsterViewModel.ecore"
+		modelSlot = "entityModels"
+	}
+	
+	component = components.QueryReader {
+		modelSlot = "queries"
+	}
+	
+	component = components.CommandReader {
+		modelSlot = "commands"
+	}
+
+	/* check model */
+	/*component = CheckComponent {
+		metaModel = mm_emf
+		checkFile = "util::Checks"
+		emfAllChildrenSlot = ""
+	}*/
+
+	/** Clear output directory */
+	component = DirectoryCleaner {
+		directory = dirSrcGen
+		exclude = "impl"
+	}
+
+	/* generate entities */
+	component = Generator {
+		globalVarDef = {
+			name = "module_package"
+			value = "'de.unistuttgart.hamster'"
+		}
+		globalVarDef = {
+			name = "queries"
+			value = "queries"
+		}
+		globalVarDef = {
+			name = "commands"
+			value = "commands"
+		}
+		metaModel = mm_emf
+		expand = "template::EcoreEntitiesTemplate::main FOR entityModels"
+		outlet = {
+			path = dirSrcGen
+			overwrite = false
+			postprocessor = formatter_java
+			fileEncoding = "ISO-8859-1" // this is the encoding for files written the outlet
+		}
+		// configure Xpand resource encoding (check project resource setting)
+		resourceManager = ResourceManagerDefaultImpl {
+			fileEncoding = "ISO-8859-1"
+		}
+		
+	}
+
+}

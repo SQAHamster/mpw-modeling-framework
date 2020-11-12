@@ -22,7 +22,7 @@
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="MiniProgrammingWorld.ecore#/"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_GbHWcR7TEeudQsNRgy0q-A" name="command class diagram" repPath="#_GbE6MB7TEeudQsNRgy0q-A" changeId="8a2820c1-793f-427a-b696-817e89bd872a">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_GbHWcR7TEeudQsNRgy0q-A" name="command class diagram" repPath="#_GbE6MB7TEeudQsNRgy0q-A" changeId="9db92806-15f5-47f6-a39d-eb214bf65cb6">
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="Command.ecore#/"/>
       </ownedRepresentationDescriptors>
@@ -1788,30 +1788,30 @@
         <description xmi:type="style:FlatContainerStyleDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@conditionnalStyles.1/@style"/>
       </ownedStyle>
       <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']"/>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_STQ8ox81EeudQsNRgy0q-A" name="setProperty(propertyName EString, o Object)" tooltipText="setProperty(propertyName, o)">
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_STQ8ox81EeudQsNRgy0q-A" name="setProperty(propertyName EString, value Object)" tooltipText="setProperty(propertyName, value)">
         <target xmi:type="ecore:EOperation" href="Command.ecore#//Entity/setProperty"/>
         <semanticElements xmi:type="ecore:EOperation" href="Command.ecore#//Entity/setProperty"/>
-        <semanticElements xmi:type="ecore:EParameter" href="Command.ecore#//Entity/setProperty/o"/>
         <semanticElements xmi:type="ecore:EParameter" href="Command.ecore#//Entity/setProperty/propertyName"/>
+        <semanticElements xmi:type="ecore:EParameter" href="Command.ecore#//Entity/setProperty/value"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_STQ8pB81EeudQsNRgy0q-A" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='Operation']/@style"/>
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='Operation']"/>
       </ownedElements>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_STQ8pR81EeudQsNRgy0q-A" name="addReference(propertyName EString, e Entity)" tooltipText="addReference(propertyName, e)">
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_STQ8pR81EeudQsNRgy0q-A" name="addReference(propertyName EString, entity Entity)" tooltipText="addReference(propertyName, entity)">
         <target xmi:type="ecore:EOperation" href="Command.ecore#//Entity/addReference"/>
         <semanticElements xmi:type="ecore:EOperation" href="Command.ecore#//Entity/addReference"/>
-        <semanticElements xmi:type="ecore:EParameter" href="Command.ecore#//Entity/addReference/e"/>
+        <semanticElements xmi:type="ecore:EParameter" href="Command.ecore#//Entity/addReference/entity"/>
         <semanticElements xmi:type="ecore:EParameter" href="Command.ecore#//Entity/addReference/propertyName"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_STQ8ph81EeudQsNRgy0q-A" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='Operation']/@style"/>
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='Operation']"/>
       </ownedElements>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_STRjsB81EeudQsNRgy0q-A" name="removeReference(propertyName EString, e Entity)" tooltipText="removeReference(propertyName, e)">
+      <ownedElements xmi:type="diagram:DNodeListElement" uid="_STRjsB81EeudQsNRgy0q-A" name="removeReference(propertyName EString, entity Entity)" tooltipText="removeReference(propertyName, entity)">
         <target xmi:type="ecore:EOperation" href="Command.ecore#//Entity/removeReference"/>
         <semanticElements xmi:type="ecore:EOperation" href="Command.ecore#//Entity/removeReference"/>
-        <semanticElements xmi:type="ecore:EParameter" href="Command.ecore#//Entity/removeReference/e"/>
+        <semanticElements xmi:type="ecore:EParameter" href="Command.ecore#//Entity/removeReference/entity"/>
         <semanticElements xmi:type="ecore:EParameter" href="Command.ecore#//Entity/removeReference/propertyName"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_STRjsR81EeudQsNRgy0q-A" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='Operation']/@style"/>
