@@ -1,0 +1,56 @@
+modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+
+transformation RoleTransformation(inout ecore: Ecore);
+
+configuration property Queries: List(String);
+configuration property EditorCommands: List(String);
+configuration property GameCommands: List(String);
+
+main() {
+  ecore.rootObjects()[EPackage]->map transformClasses();
+}
+
+mapping Ecore::EPackage::transformClasses() {
+  var classes := self.eClassifiers[EClass];
+  classes[isRelevantType()]->map transformToRoles();
+}
+
+helper Ecore::EClass::isRelevantType() : Boolean {
+  return self.eAllSuperTypes->exists(t|t.name = "Actor" or t.name = "Stage");
+}
+
+mapping inout Ecore::EClass::transformToRoles() {
+  var baseName := self.name;
+  self.name := "ReadOnly" + baseName;
+  
+  self._abstract := true;
+  self.eOperations += Queries->map transformQueryToOperation();
+  
+  var editorClass := object EClass {
+  	name := "Editor" + baseName
+  };
+  editorClass.eSuperTypes += self;
+  self.ePackage.eClassifiers += editorClass;
+  editorClass.eOperations += EditorCommands->map transformEditorCommandToOperation();
+  editorClass._abstract := true;
+  
+  var gameClass := object EClass {
+  	name := "Game" + baseName
+  };
+  gameClass.eSuperTypes += editorClass;
+  self.ePackage.eClassifiers += gameClass;
+  gameClass.eOperations += GameCommands->map transformGameCommandToOperation();
+}
+
+mapping String::transformQueryToOperation() : EOperation {
+	name := self;
+	eType := EBoolean.oclAsType(EClassifier);
+}
+
+mapping String::transformEditorCommandToOperation() : EOperation {
+	name := self;
+}
+
+mapping String::transformGameCommandToOperation() : EOperation {
+	name := self;
+}

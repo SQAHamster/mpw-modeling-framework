@@ -10,7 +10,8 @@ import org.eclipse.xpand2.output.JavaBeautifier
 import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
 import model
 
-var mpwModelBaseUri  = "platform:/resource/de.unistuttgart.iste.modeling.mpw/model/"
+var mpwModelProject  = "de.unistuttgart.iste.modeling.mpw"
+var roleTransformationUri  = "platform:/resource/de.unistuttgart.iste.modeling.transformations/transforms/RoleTransformation.qvto"
 var dirSrcGen = "src-gen"
 
 Workflow {
@@ -26,11 +27,8 @@ Workflow {
 
 	/* load model and store it in slots */
 	component = components.MultiEcoreReader {
-		baseUri = mpwModelBaseUri
-		ecoreName = "MiniProgrammingWorld.ecore"
-		ecoreName = "Command.ecore"
-		ecoreName = "Hamster.ecore"
-		ecoreName = "HamsterViewModel.ecore"
+		projectName = mpwModelProject
+		excludeModel = "ViewModel"
 		modelSlot = "entityModels"
 	}
 	
@@ -40,6 +38,11 @@ Workflow {
 	
 	component = components.CommandReader {
 		modelSlot = "commands"
+	}
+	
+	component = components.QvtoTransformator {
+		uri = roleTransformationUri
+		modelSlot = "entityModels"
 	}
 
 	/* check model */
