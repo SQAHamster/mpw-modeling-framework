@@ -12,6 +12,12 @@
         eType="#//TileContent" eOpposite="#//TileContent/currentTile"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="location" lowerBound="1"
         eType="#//Location" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="south" eType="#//Tile"
+        eOpposite="#//Tile/north"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="north" eType="#//Tile"
+        eOpposite="#//Tile/south"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="east" eType="#//Tile" eOpposite="#//Tile/west"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="west" eType="#//Tile" eOpposite="#//Tile/east"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TileContent" abstract="true" eSuperTypes="Command.ecore#//Entity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="currentTile" eType="#//Tile"
