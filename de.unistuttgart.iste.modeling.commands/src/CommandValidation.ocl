@@ -1,0 +1,8 @@
+import _'http://www.eclipse.org/emf/2011/Henshin'
+
+package henshin
+
+context Module
+inv: units->select(oclIsTypeOf(Rule))->collect(oclAsType(Rule))->forAll(lhs.nodes->exists(n|n.name = 'this'))
+
+endpackage
