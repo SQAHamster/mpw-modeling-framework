@@ -8,16 +8,19 @@ import org.eclipse.xtend.check.CheckComponent
 import org.eclipse.xpand2.Generator
 import org.eclipse.xpand2.output.JavaBeautifier
 import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
-import model
 
 var mpwModelProject  = "de.unistuttgart.iste.modeling.mpw"
+var commandsModelProject  = "de.unistuttgart.iste.modeling.commands"
 var roleTransformationUri  = "platform:/resource/de.unistuttgart.iste.modeling.transformations/transforms/RoleTransformation.qvto"
+var commandTransformationUri  = "platform:/resource/de.unistuttgart.iste.modeling.transformations/transforms/CommandTransformation.qvto"
 var dirSrcGen = "src-gen"
 
 Workflow {
 	/* set up EMF for standalone execution */
 	bean = StandaloneSetup { 
 		platformUri="../"
+		registerEcoreFile="platform:/resource/de.unistuttgart.iste.modeling.transformations/model/CommandGraphTransformation.ecore"
+		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
 	}
 	
 	/** instantiate metamodel */
@@ -37,14 +40,25 @@ Workflow {
 	}
 	
 	component = components.CommandReader {
+		projectName = commandsModelProject
 		modelSlot = "commands"
 	}
 	
 	component = components.QvtoTransformator {
-		uri = roleTransformationUri
+		transformationUri = roleTransformationUri
 		modelSlot = "entityModels"
 	}
-
+	
+	component = components.QvtoTransformator {
+		transformationUri = commandTransformationUri
+		modelSlot = "commands"
+		sourceTargetRelationship = "NEW_TARGET"
+	}
+	
+	component = components.XmiWriter {
+		modelSlot = "commands"
+	}
+	
 	/* check model */
 	/*component = CheckComponent {
 		metaModel = mm_emf

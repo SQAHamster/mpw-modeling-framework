@@ -3,6 +3,16 @@ import _'http://www.eclipse.org/emf/2011/Henshin'
 package henshin
 
 context Module
-inv: units->select(oclIsTypeOf(Rule))->collect(oclAsType(Rule))->forAll(lhs.nodes->exists(n|n.name = 'this'))
+
+-- all rules need a "this" instance
+def: allRules : Sequence(Rule) = units->select(oclIsTypeOf(Rule))->collect(oclAsType(Rule))
+inv allRulesHaveThis: allRules ->forAll(lhs.nodes->exists(n|n.name = 'this'))
+
+-- if there is single main unit, each rule has to be distinguishable by attribute conditions on this
+def: noSingleMainUnit : Boolean = (units->size() > 0 and units->forAll(oclIsTypeOf(Rule)))
+inv mainUnitsAreDistinguishable: noSingleMainUnit implies allRules->collect(thisNode)->forAll(attributes->notEmpty())
+
+context Rule
+def: thisNode : Node = lhs.nodes->any(name = 'this')
 
 endpackage

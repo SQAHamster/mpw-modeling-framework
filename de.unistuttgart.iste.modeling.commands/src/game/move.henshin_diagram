@@ -6,14 +6,6 @@
     </eAnnotations>
     <children xmi:type="notation:DecorationNode" xmi:id="_CYUmUCXtEeuiY_E2amZoVQ" type="5001"/>
     <children xmi:type="notation:DecorationNode" xmi:id="_CYUmUSXtEeuiY_E2amZoVQ" type="7001">
-      <children xmi:type="notation:Node" xmi:id="_XhHlACXtEeuiY_E2amZoVQ" type="3005">
-        <children xmi:type="notation:DecorationNode" xmi:id="_XhHlBCXtEeuiY_E2amZoVQ" type="5006"/>
-        <children xmi:type="notation:DecorationNode" xmi:id="_XhHlBSXtEeuiY_E2amZoVQ" type="5007"/>
-        <styles xmi:type="notation:DescriptionStyle" xmi:id="_XhHlASXtEeuiY_E2amZoVQ"/>
-        <styles xmi:type="notation:FontStyle" xmi:id="_XhHlAiXtEeuiY_E2amZoVQ" fontName=".AppleSystemUIFont"/>
-        <element xmi:type="henshin:AttributeCondition" href="move.henshin#_XhFIwCXtEeuiY_E2amZoVQ"/>
-        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_XhHlAyXtEeuiY_E2amZoVQ" x="14" y="1"/>
-      </children>
       <children xmi:type="notation:Shape" xmi:id="_dOq9sCXtEeuiY_E2amZoVQ" type="3001" fontName=".AppleSystemUIFont">
         <children xmi:type="notation:DecorationNode" xmi:id="_dOq9siXtEeuiY_E2amZoVQ" type="5002"/>
         <children xmi:type="notation:DecorationNode" xmi:id="_dOq9syXtEeuiY_E2amZoVQ" type="5003"/>

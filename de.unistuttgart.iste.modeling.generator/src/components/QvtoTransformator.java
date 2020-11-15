@@ -1,57 +1,103 @@
 package components;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.m2m.qvt.oml.BasicModelExtent;
 import org.eclipse.m2m.qvt.oml.ExecutionContextImpl;
+import org.eclipse.m2m.qvt.oml.ExecutionDiagnostic;
 import org.eclipse.m2m.qvt.oml.TransformationExecutor;
 
 public class QvtoTransformator extends WorkflowComponentWithModelSlot {
-	private String uri;
+	private String transformationUri;
+	private SourceTargetRelationship sourceTargetRelationship = SourceTargetRelationship.EXISTING_TARGET;
+	private String targetModelSlot;
 	
-	public String getUri() {
-		return uri;
+	public String getTransformationUri() {
+		return transformationUri;
 	}
 
-	public void setUri(String uri) {
-		this.uri = uri;
+	public void setTransformationUri(String uri) {
+		this.transformationUri = uri;
+	}
+	
+	public SourceTargetRelationship getSourceTargetRelationship() {
+		return sourceTargetRelationship;
+	}
+
+	public void setSourceTargetRelationship(String sourceTargetRelationship) {
+		this.sourceTargetRelationship = SourceTargetRelationship.valueOf(sourceTargetRelationship);
+	}
+	
+	public String getTargetModelSlot() {
+		if (targetModelSlot == null) {
+			return getModelSlot();
+		}
+		return targetModelSlot;
+	}
+
+	public void setTargetModelSlot(String targetModelSlot) {
+		this.targetModelSlot = targetModelSlot;
 	}
 
 	@Override
 	protected void invokeInternal(WorkflowContext workflowContext, ProgressMonitor monitor, Issues issues) {
-		var transformationURI = URI.createURI(uri);
+		var transformationURI = URI.createURI(transformationUri);
 		var executor = new TransformationExecutor(transformationURI);
 		
-		var ecoreModels = (List<?>)workflowContext.get(getModelSlot());
-		for (var object : ecoreModels) {
-			var ePackage = (EPackage)object;
-			// var ecoreModel = ePackage.eResource();
-
-			var input = new BasicModelExtent(Arrays.asList(ePackage));
+		var modelInstances = (List<?>)workflowContext.get(getModelSlot());
+		var resultInstances = new ArrayList<EObject>();
+		for (var instance : modelInstances) {
+			var eObject = (EObject)instance;
+			var input = new BasicModelExtent(Arrays.asList(eObject));
 			
 			var context = new ExecutionContextImpl();
 			context.setConfigProperty("Queries", Arrays.asList("frontIsClear", "mouthEmpty"));
 			context.setConfigProperty("EditorCommands", Arrays.asList("initHamster"));
 			context.setConfigProperty("GameCommands", Arrays.asList("move", "turnLeft"));
 			
-			var result = executor.execute(context, input);
+			ExecutionDiagnostic result;
+			if (sourceTargetRelationship == SourceTargetRelationship.EXISTING_TARGET) {
+				result = executor.execute(context, input);
+				resultInstances.add(eObject);
+			} else {
+				var output = new BasicModelExtent();
+				result = executor.execute(context, input, output);
+				List<EObject> contents = output.getContents();
+				resultInstances.addAll(contents);
+			}
+			
 			if (result.getSeverity() == Diagnostic.OK) {
-				issues.addInfo("Transformed QVTo successfully for: " + ePackage.getName());
+				issues.addInfo("Transformed QVTo successfully for: " + getName(eObject));
 			} else {
 				var status = BasicDiagnostic.toIStatus(result);
 				issues.addError(status.getMessage());
 			}
 		}
+		
+		workflowContext.set(getTargetModelSlot(), resultInstances);
 
+	}
+	
+	private static String getName(EObject object) {
+		if (object instanceof ENamedElement) {
+			return ((ENamedElement) object).getName();
+		}
+		return object.toString();
+	}
+	
+	public enum SourceTargetRelationship {
+		NEW_TARGET, EXISTING_TARGET
 	}
 
 }

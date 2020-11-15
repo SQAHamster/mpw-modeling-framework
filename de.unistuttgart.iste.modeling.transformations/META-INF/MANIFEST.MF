@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Transformations Plug-in
-Bundle-SymbolicName: de.unistuttgart.iste.modeling.transformations
+Bundle-SymbolicName: de.unistuttgart.iste.modeling.transformations;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.m2m.qvt.oml

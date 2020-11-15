@@ -1,4 +1,5 @@
 import ecore;
+import commandgt;
 
 extension util::Extensions reexport;
 extension template::operations::BuiltInOperationsExtensions reexport;
@@ -17,11 +18,10 @@ private List[String] getQueries() : GLOBALVAR queries;
 // Only dummy data until real commands are modeled
 List[String] getCommandsForType(EClass class) : 
     getCommands()
-    .collect(e|e.split("\\|"))
-    .select(e|e.get(0) == class.name)
-    .collect(e|e.get(1));
+    .collect(c|c.roleName.toFirstUpper() + c.targetClassName)
+    .select(n|n == class.name);
 
-private List[String] getCommands() : GLOBALVAR commands;
+private List[Transformation] getCommands() : GLOBALVAR commands;
 
 getter(String this) :
 	"get"+this.toFirstUpper();

@@ -43,7 +43,6 @@
         <type href="../../../de.unistuttgart.iste.modeling.mpw/model/MiniProgrammingWorld.ecore#//TileContent/currentTile"/>
       </edges>
     </rhs>
-    <attributeConditions xmi:id="_XhFIwCXtEeuiY_E2amZoVQ" name="frontIsClear()" conditionText="true"/>
     <mappings xmi:id="_dOohcCXtEeuiY_E2amZoVQ" origin="_dOn6YCXtEeuiY_E2amZoVQ" image="_dOn6YSXtEeuiY_E2amZoVQ"/>
     <mappings xmi:id="_sjXPwiXtEeuiY_E2amZoVQ" origin="_sjXPwCXtEeuiY_E2amZoVQ" image="_sjXPwSXtEeuiY_E2amZoVQ"/>
     <mappings xmi:id="_ubP-ciXtEeuiY_E2amZoVQ" origin="_ubP-cCXtEeuiY_E2amZoVQ" image="_ubP-cSXtEeuiY_E2amZoVQ"/>
@@ -89,7 +88,6 @@
         <type href="../../../de.unistuttgart.iste.modeling.mpw/model/MiniProgrammingWorld.ecore#//TileContent/currentTile"/>
       </edges>
     </rhs>
-    <attributeConditions xmi:id="_nbT28CaUEeuov9PRwIk0LQ" name="frontIsClear()" conditionText="true"/>
     <mappings xmi:id="_o4x4LiZgEeuiY_E2amZoVQ" origin="_o4x4IiZgEeuiY_E2amZoVQ" image="_o4x4KCZgEeuiY_E2amZoVQ"/>
     <mappings xmi:id="_o4x4LyZgEeuiY_E2amZoVQ" origin="_o4x4IyZgEeuiY_E2amZoVQ" image="_o4x4KSZgEeuiY_E2amZoVQ"/>
     <mappings xmi:id="_o4x4MCZgEeuiY_E2amZoVQ" origin="_o4x4JCZgEeuiY_E2amZoVQ" image="_o4x4KiZgEeuiY_E2amZoVQ"/>
@@ -135,7 +133,6 @@
         <type href="../../../de.unistuttgart.iste.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile/west"/>
       </edges>
     </rhs>
-    <attributeConditions xmi:id="_olqxQCaUEeuov9PRwIk0LQ" name="frontIsClear()" conditionText="true"/>
     <mappings xmi:id="_p5lOACZgEeuiY_E2amZoVQ" origin="_p5lN9CZgEeuiY_E2amZoVQ" image="_p5lN-iZgEeuiY_E2amZoVQ"/>
     <mappings xmi:id="_p5lOASZgEeuiY_E2amZoVQ" origin="_p5lN9SZgEeuiY_E2amZoVQ" image="_p5lN-yZgEeuiY_E2amZoVQ"/>
     <mappings xmi:id="_p5lOAiZgEeuiY_E2amZoVQ" origin="_p5lN9iZgEeuiY_E2amZoVQ" image="_p5lN_CZgEeuiY_E2amZoVQ"/>
@@ -181,7 +178,6 @@
         <type href="../../../de.unistuttgart.iste.modeling.mpw/model/MiniProgrammingWorld.ecore#//TileContent/currentTile"/>
       </edges>
     </rhs>
-    <attributeConditions xmi:id="_pKZ2ACaUEeuov9PRwIk0LQ" name="frontIsClear()" conditionText="true"/>
     <mappings xmi:id="_FUGCXyZhEeuiY_E2amZoVQ" origin="_FUGCUyZhEeuiY_E2amZoVQ" image="_FUGCWSZhEeuiY_E2amZoVQ"/>
     <mappings xmi:id="_FUGCYCZhEeuiY_E2amZoVQ" origin="_FUGCVCZhEeuiY_E2amZoVQ" image="_FUGCWiZhEeuiY_E2amZoVQ"/>
     <mappings xmi:id="_FUGCYSZhEeuiY_E2amZoVQ" origin="_FUGCVSZhEeuiY_E2amZoVQ" image="_FUGCWyZhEeuiY_E2amZoVQ"/>

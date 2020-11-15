@@ -1,0 +1,256 @@
+modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
+modeltype Commandgt uses "http://www.mpw.uni-stuttgart.de/commandgt";
+
+transformation TransformHenshin2Commandgt(in inModel:Henshin, out outModel:Commandgt);
+
+property number : Integer = 0;
+
+main() {
+  inModel.rootObjects()[Module]->map toTransformation();
+}
+
+mapping Henshin::Module::toTransformation() : Commandgt::Transformation {
+  name := self.name;
+  /* units := self.units->map toUnit();
+  /mainUnit := self.units->any(u|u.name = self.name).resolveone(Commandgt::Unit);
+  result.mainUnit.parameters->forEach(p) {
+  	if (p.name = "thisInstance") {
+  		p.name := "self";
+  	}
+  };
+  units->forEach(u) {
+  	u.parameters := u.parameters->select(p|p.name != "thisInstance");
+  }*/
+}
+
+/*
+
+mapping Henshin::Rule::toRule() : Commandgt::Rule {
+  number := 0;
+
+  name := self.name;
+  instanceConditions := self.lhs.nodes->map toInstanceCondition();
+  instanceConditions += self.rhs.nodes[action.toString() = "create"]->map toCreateInstanceCondition();
+ 
+  variables := self.parameters->map toVariableDeclaration();
+  attributeConditions := self.lhs.nodes.allSubobjectsOfType(Attribute)->map toAttributeCondition();
+  attributeConditions += self.rhs.nodes.allSubobjectsOfType(Attribute)[action.toString() = "create"]->map toCreateAttributeCondition();
+  
+  referenceConditions := self.lhs.edges[type.upperBound <> -1]->map toReferenceCondition();
+  referenceConditions += self.rhs.edges[type.upperBound <> -1 and action.toString() = "create"]->map toCreateReferenceCondition(self);
+  referenceConditions += self.lhs.getNACs().allSubobjectsOfType(Edge)[action.toString() = "forbid"]->map toForbidReferenceCondition(self);
+  
+  referenceConditions += self.lhs.edges[type.upperBound = -1]->map toManyReferenceCondition();
+  referenceConditions += self.rhs.edges[type.upperBound = -1 and action.toString() = "create"]->map toCreateManyReferenceCondition(self);
+  
+  modifications := self.lhs.edges[action.toString() = "delete"]->map toDeleteEdgeModifications();
+  modifications += self.rhs.edges[action.toString() = "create"]->map toAddEdgeModifications();
+  
+  // TODO attribute modifications
+  
+  thisInstance := self.lhs.nodes->any(n|n.type.eSuperTypes->exists(t|t.name = 'Actor')).resolveone(Commandgt::InstanceCondition);
+  if (thisInstance = null) {
+  	thisInstance := self.lhs.nodes->any(n|n.name = "this").resolveone(Commandgt::InstanceCondition);
+  } endif;
+  
+  referenceConditions := result.sortReferences();
+  
+  thisInstance.variableName := "thisInstance";
+}
+
+helper Commandgt::Rule::sortReferences(): OrderedSet(ReferenceCondition) {
+    var sortedResult: OrderedSet(ReferenceCondition);
+    var lhsReferences = self.referenceConditions->select(r|not r.isCreate);
+
+	var order: Dict(ReferenceCondition, Integer);
+	var reachableInstances: Set(InstanceCondition);
+	var allReferencesCount = lhsReferences->size();
+	var i: Integer := 0;
+	
+	reachableInstances += self.thisInstance;
+	
+	while (sortedResult->size() != allReferencesCount) {
+		var anyAdded := false;
+		
+		var remainingReferences = lhsReferences->symmetricDifference(sortedResult); 
+		remainingReferences->forEach(r) {
+			if (reachableInstances->includes(r.source) and not reachableInstances->includes(r.target)) {
+				reachableInstances += r.target;
+			} endif;
+			
+			if (reachableInstances->includes(r.source) and reachableInstances->includes(r.target)) {
+				anyAdded := true;
+				order->put(r, i);
+				i := i+1;
+				sortedResult += r;	
+			} endif;
+		};
+		
+		if (not anyAdded) {
+			raise "Cannot reach all instances from this";
+		} endif;
+		
+	};
+	
+	self.referenceConditions->select(r|r.isCreate)->forEach(r) {
+		sortedResult += r;
+	};
+	
+	return sortedResult;
+	
+} 
+
+mapping Henshin::Unit::toUnit() : Commandgt::Unit
+	disjuncts Henshin::Rule::toRule,
+	          Henshin::IteratedUnit::toIteratedUnit,
+	          Henshin::SequentialUnit::toSequentialUnit;
+
+mapping Henshin::IteratedUnit::toIteratedUnit() : Commandgt::IteratedUnit {
+    name := self.name;
+    repeat := self.iterations;
+    parameters := self.parameters->map toParameter();
+    targetInvocation := self.subUnit.map toInvocation(self);
+}
+
+mapping Henshin::SequentialUnit::toSequentialUnit() : Commandgt::SequentialUnit {
+  name := self.name;
+  parameters := self.parameters->map toParameter();
+  targetInvocations := self.subUnits->map toInvocation(self);
+}
+
+mapping Henshin::Unit::toInvocation(parentUnit: Henshin::Unit) : Commandgt::Invocation {
+  targetMethodName := self.name;
+  self.parameters->reject(p|p.kind = ParameterKind::VAR)->forEach(p) {
+  	var foundMapping = parentUnit.parameterMappings->any(m|m.target = p);
+  	assert(foundMapping != null);
+  	if (foundMapping != null) {
+  		result.mappedParameters += foundMapping.source.resolveone(Commandgt::Parameter);
+  	}
+  	
+  }
+}
+
+mapping Henshin::Node::toInstanceCondition() : Commandgt::InstanceCondition {
+  typeName := self.type.name;
+  variableName := self.name;
+  if variableName = null then {
+  	variableName := "o" + number.toString();
+  	number := number + 1;
+  } endif
+}
+
+mapping Henshin::Node::toCreateInstanceCondition() : Commandgt::InstanceCondition {
+  typeName := self.type.name;
+  variableName := self.name;
+  isCreate := true;
+  if variableName = null then {
+  	variableName := "o" + number.toString();
+  	number := number + 1;
+  } endif
+}
+
+mapping Henshin::Parameter::toParameter() : Commandgt::Parameter {
+  name := self.name;
+  type := self.type.name;  
+}
+
+
+mapping Henshin::Parameter::toVariableDeclaration() : Commandgt::VariableDeclaration {
+  name := self.name;
+  type := self.type.name;
+}
+
+mapping Henshin::Attribute::toAttributeCondition() : Commandgt::AttributeCondition {
+  var inName = self.type.name;
+  
+  attributeName := inName;
+  attributeName := attributeName.replaceAll("direction", "direction.value");
+  attributeValueLiteral := self.value;
+  if (self.type.eType.name = "EBoolean") {
+  	attributeName := "is" + inName.substring(1, 1).toUpper();
+  	if (inName.size() >= 2) {
+  		attributeName := attributeName + inName.substring(2, inName.size());
+  	} endif;
+  } endif;
+  instance := self.node.resolveone(Commandgt::InstanceCondition);
+  
+  var rule = self.node.graph.getRule();
+  // isVariableAssignment := rule.parameters->exists(p|p.name = result.attributeValueLiteral);
+}
+
+mapping Henshin::Attribute::toCreateAttributeCondition() : Commandgt::AttributeCondition {
+  // init { result := self.toAttributeCondition() } // todo check how to correctly reuse mapping in QVTo
+  isCreate := true;
+}
+
+
+mapping Henshin::Edge::toReferenceCondition() : Commandgt::SingleReferenceCondition {
+  referenceName := self.type.name;
+  source := self.source.resolveone(Commandgt::InstanceCondition);
+  target := self.target.resolveone(Commandgt::InstanceCondition);
+}
+
+mapping Henshin::Edge::toCreateReferenceCondition(rule: Henshin::Rule) : Commandgt::SingleReferenceCondition {
+  referenceName := self.type.name;
+  rule.mappings->forEach(m) {
+  	if (m.image = self.source) {
+  		source := m.origin.resolveone(Commandgt::InstanceCondition); // search in lhs
+  	} endif;
+  	if (m.image = self.target) {
+  		target := m.origin.resolveone(Commandgt::InstanceCondition); // search in lhs
+  	} endif;
+  };
+  
+  if (target = null) {
+  	target := self.target.resolveone(Commandgt::InstanceCondition); // search in rhs
+  } endif;
+}
+
+mapping Henshin::Edge::toForbidReferenceCondition(rule: Henshin::Rule) : Commandgt::SingleReferenceCondition {
+  referenceName := self.type.name;
+  isForbid := true;
+  rule.lhs.getNestedConditions().mappings->forEach(m) { // search mappings in NAC Graph
+  	if (m.image = self.source) {
+  		source := m.origin.resolveone(Commandgt::InstanceCondition); // search in lhs
+  	} endif;
+  };
+  
+}
+
+
+mapping Henshin::Edge::toManyReferenceCondition() : Commandgt::ManyReferenceCondition {
+  referenceName := self.type.name;
+  source := self.source.resolveone(Commandgt::InstanceCondition);
+  target := self.target.resolveone(Commandgt::InstanceCondition);
+}
+
+mapping Henshin::Edge::toCreateManyReferenceCondition(rule: Henshin::Rule) : Commandgt::ManyReferenceCondition {
+  referenceName := self.type.name;
+  rule.mappings->forEach(m) {
+  	if (m.image = self.source) {
+  		source := m.origin.resolveone(Commandgt::InstanceCondition); // search in lhs
+  	} endif;
+  	if (m.image = self.target) {
+  		target := m.origin.resolveone(Commandgt::InstanceCondition); // search in lhs
+  	} endif;
+  };
+  
+  if (target = null) {
+  	target := self.target.resolveone(Commandgt::InstanceCondition); // search in rhs
+  } endif;
+  
+}
+
+
+mapping Henshin::Edge::toAddEdgeModifications() : Commandgt::Modification {
+  reference := self.resolveone(Commandgt::ReferenceCondition);
+  action := Commandgt::Action::CREATE;
+  result.reference.isCreate := true;
+}
+
+mapping Henshin::Edge::toDeleteEdgeModifications() : Commandgt::Modification {
+  reference := self.resolveone(Commandgt::ReferenceCondition);
+  action := Commandgt::Action::DELETE;
+}
+
+*/
