@@ -65,7 +65,7 @@
     public interface «this.name» «toInheritance()» {
       «FOREACH eOperations AS o»
       «o.operationToSignature()»;
-      «IF o.isFeatureGetter()-»
+      «IF o.isPropertyGetter()-»
         «o.operationToObservableGetterSignature()»;
       «ENDIF-»
       «ENDFOREACH»

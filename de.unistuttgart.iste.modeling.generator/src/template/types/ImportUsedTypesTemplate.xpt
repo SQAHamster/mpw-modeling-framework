@@ -7,7 +7,7 @@
     import java.util.List;
 	«ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
-	    eOperations.exists(o|o.isFeatureGetter())-»
+	    eOperations.exists(o|o.isPropertyGetter())-»
 	import javafx.beans.property.*;
 	«ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection())-»

@@ -1,0 +1,57 @@
+import ecore;
+
+getter(String this) :
+	"get"+this.toFirstUpper();
+	
+setter(String this) :
+	"set"+this.toFirstUpper();
+	
+isCollection(ETypedElement this) :
+    upperBound == -1;
+	
+isConstructorInjectedProperty(EStructuralFeature this) :
+    !this.changeable && !this.isContainment();
+    
+isContainment(EStructuralFeature this) :
+    EReference.isInstance(this) && ((EReference)this).containment;
+    
+toJavaType(String this) :
+	if (this == "EInt") then "int"
+	else if (this == "EBoolean") then "boolean"
+	else if (this == "EString") then "String"
+	else if (this == "EObject") then "Object"
+	else this;
+	
+isBuiltInType(EClassifier this) :
+    isPrimitive() || this.name == "Object";
+
+isPrimitive(EClassifier this) :
+    (this.name == "EInt" || this.name == "EBoolean" || this.name == "EString");
+
+featureToJavaType(EStructuralFeature this) : elementToJavaType();
+operationToJavaType(EOperation this) : elementToJavaType();
+	
+private elementToJavaType(ETypedElement this) :
+    if (this.eType == null) then "void" 
+	else if (this.upperBound == -1) then "List<" + this.eType.name.toJavaType() + ">"
+	else this.eType.name.toJavaType();
+
+featureToFieldInstantiation(EStructuralFeature this) :
+	if (this.upperBound == -1) then "new ArrayList<>()"
+	else "new " + this.eType.name.toUnboxedJavaTypeName() + "()";
+	
+toUnboxedJavaTypeName(String this) :
+	if (this == "EInt") then "Integer"
+	else if (this == "EBoolean") then "Boolean"
+	else if (this == "EString") then "String"
+	else if (this == "EObject") then "Object"
+	else this;
+	
+defaultValueOf(EStructuralFeature f) :
+    if (f.eType == "EInt") then "0"
+	else if (f.eType == "EBoolean") then "false"
+	else if (f.defaultValueLiteral != null) then f.defaultValueLiteral
+	else null;
+    
+List[EClassifier] getUsedTypes(EOperation this) :
+    this.eParameters.collect(p|p.eType).union({this.eType}.reject(r|r == null));

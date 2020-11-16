@@ -12,9 +12,8 @@ getAllUseDefinedOperations(EClass this) :
 isBuiltInOperation(EOperation this) :
     this.name.isEntityDefinedOperation();
     
-private isEntityDefinedOperation(String this) :
-    this == setPropertyName() || this == addReferenceName() || this == removeReferenceName();
-
 containsUntypedGenericCode(EOperation o) :
     o.name.isEntityDefinedOperation() && o.name != "removeReference";
-    
+
+private isEntityDefinedOperation(String this) :
+    this == setPropertyName() || this == addReferenceName() || this == removeReferenceName();

@@ -1,0 +1,19 @@
+import ecore;
+
+extension util::Extensions reexport;
+extension template::util::EmfGeneratorExtensions reexport;
+
+operationToSignature(EOperation this) :
+    operationToJavaType() + " " + effectiveOperationName() + "(" 
+     + eParameters.collect(e|e.eType.name.toJavaType() + " " + e.name).joinToString(", ") 
+     + ")";
+
+private effectiveOperationName(EOperation this) : if (isPropertyGetter()) then name.getter() else name;
+
+hasPropertyGetterOperation(EStructuralFeature this) :
+    let class = (EClass)eContainer :
+    class.eAllSuperTypes.exists(t|t.eOperations.exists(o|o.isPropertyGetter() && o.name == name));
+    
+isPropertyGetter(EOperation this) :
+    eAnnotations.exists(a|a.details.exists(d|d.key == "isFeature"));
+    
