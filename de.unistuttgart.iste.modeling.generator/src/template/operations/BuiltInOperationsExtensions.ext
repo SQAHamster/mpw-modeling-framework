@@ -6,8 +6,9 @@ setPropertyName() : "setProperty";
 addReferenceName() : "addReference";
 removeReferenceName() : "removeReference";
 
-getAllUseDefinedOperations(EClass this) :
-    eAllOperations.reject(e|e.isBuiltInOperation());
+getUserDefinedOperations(EClass this) :
+    eAllOperations
+    .reject(o|o.isBuiltInOperation());
     
 isBuiltInOperation(EOperation this) :
     this.name.isEntityDefinedOperation();

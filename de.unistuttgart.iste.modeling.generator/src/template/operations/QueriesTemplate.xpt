@@ -3,7 +3,10 @@
 «EXTENSION template::util::GeneratorExtensions»
 
 «DEFINE QueryDefinitions FOR EClass»
-	  «FOREACH getQueriesForType(this) AS q»
-	  // «q»
+	  «FOREACH eAllOperations.select(o|o.isQuery()) AS q»
+	  @Override
+	  public «q.operationToJavaType()» «q.name»() {
+	      throw new RuntimeException("not implemented");
+	  }
       «ENDFOREACH»
 «ENDDEFINE»

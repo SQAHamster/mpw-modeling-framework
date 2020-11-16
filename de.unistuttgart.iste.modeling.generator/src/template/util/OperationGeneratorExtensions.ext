@@ -14,6 +14,11 @@ hasPropertyGetterOperation(EStructuralFeature this) :
     let class = (EClass)eContainer :
     class.eAllSuperTypes.exists(t|t.eOperations.exists(o|o.isPropertyGetter() && o.name == name));
     
-isPropertyGetter(EOperation this) :
-    eAnnotations.exists(a|a.details.exists(d|d.key == "isFeature"));
+isPropertyGetter(EOperation this) : isMarkedWith("isPropertyGetter");
     
+isCommand(EOperation this) : isMarkedWith("isCommand");
+    
+isQuery(EOperation this) : isMarkedWith("isQuery");
+
+private isMarkedWith(EOperation this, String key) :
+    eAnnotations.exists(a|a.details.exists(d|d.key == key));

@@ -23,14 +23,12 @@ mapping inout Ecore::EClass::transformToRoles() {
   var baseName := self.name;
   self.name := "Concrete" + baseName;
   
-  self._abstract := true;
-  
   var readOnlyRole := object EClass {
   	name := "ReadOnly" + baseName;
   	_abstract := true;
   	interface := true;
   };
-  readOnlyRole.eOperations += self.eAllStructuralFeatures->map transformFeatureToGetterOperation();
+  readOnlyRole.eOperations += self.eAllStructuralFeatures->select(f|f.changeable)->map transformFeatureToGetterOperation();
   readOnlyRole.eOperations += Queries->select(q|q.startsWith(baseName))->map transformQueryToOperation();
   self.ePackage.eClassifiers += readOnlyRole;
   
@@ -59,20 +57,26 @@ mapping inout Ecore::EClass::transformToRoles() {
 mapping String::transformQueryToOperation() : EOperation {
 	name := self.substringAfter("|");
 	eType := EBoolean.oclAsType(EClassifier);
+	eAnnotations += "isQuery".toMarkerAnnotation();
 }
 
 mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {
 	name := self.name;
 	eType := self.eType;
 	upperBound := self.upperBound;
-	eAnnotations += object EAnnotation {
-	  details += object EStringToStringMapEntry {
-	  	  key := "isFeature";
-	  };
-	};
+	eAnnotations += "isPropertyGetter".toMarkerAnnotation();
 }
 
 mapping Commandgt::Transformation::transformCommandToOperation() : EOperation {
 	name := self.name;
+	eAnnotations += "isCommand".toMarkerAnnotation();
+}
+
+helper String::toMarkerAnnotation() : EAnnotation {
+	return object EAnnotation {
+	  details += object EStringToStringMapEntry {
+	  	  key := self;
+	  };
+	};
 }
 

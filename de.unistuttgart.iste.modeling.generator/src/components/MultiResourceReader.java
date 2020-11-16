@@ -1,5 +1,6 @@
 package components;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -74,7 +75,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 			var modelNames = files.map(f -> f.toFile().getPath())
 				 .map(f -> substringAfter(f, targetDirectory))
 				 .filter(f -> f.endsWith(fileExtension))
-			     .filter(f -> !excludeModels.contains(f))
+			     .filter(f -> !isExcluded(f))
 			     .collect(Collectors.toList());
 			
 			modelNames.forEach(fileName -> {
@@ -112,6 +113,11 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 				Integer.MAX_VALUE,
 		        (filePath, fileAttr) 
 		        -> fileAttr.isRegularFile());
+	}
+	
+	private boolean isExcluded(String filePath) {
+		String fileName = new File(filePath).getName();
+		return excludeModels.contains(fileName);
 	}
 	
 	private String getBaseUri() {

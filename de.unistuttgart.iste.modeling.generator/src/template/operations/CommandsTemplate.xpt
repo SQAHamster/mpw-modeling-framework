@@ -3,7 +3,10 @@
 «EXTENSION template::util::GeneratorExtensions»
 
 «DEFINE CommandDefinitions FOR EClass»
-	  «FOREACH getCommandsForType(this) AS c»
-	  // «c»
+	  «FOREACH eAllOperations.select(o|o.isCommand()) AS c»
+	  @Override
+	  public void «c.name»() {
+	      throw new RuntimeException("not implemented");
+	  }
       «ENDFOREACH»
 «ENDDEFINE»

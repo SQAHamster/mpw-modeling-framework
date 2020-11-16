@@ -3,12 +3,19 @@ import ecore;
 extension util::Extensions reexport;
 extension template::operations::BuiltInOperationsExtensions reexport;
 extension template::util::GlobalsGeneratorExtensions reexport;
+extension template::util::OperationGeneratorExtensions reexport;
 
 isStereotype(EClassifier this) :
     EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewStereotype");
 
-hasImplSubclass(EClass this) :
-	!isViewModelType() && getAllUseDefinedOperations().size > 0 && !abstract;
+needsImplSubclass(EClass this) :
+	!isViewModelType() && getManualImplementedOperations().size > 0 && !abstract;
+
+getManualImplementedOperations(EClass this) :
+    getUserDefinedOperations().reject(o|o.isGenerated());
+
+private isGenerated(EOperation this) :
+    isCommand() || isQuery() || isPropertyGetter();
 
 isViewModelType(EClassifier this) :
     EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewModel");
