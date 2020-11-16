@@ -29,7 +29,7 @@ getter(String this) :
 setter(String this) :
 	"set"+this.toFirstUpper();
 	
-isCollection(EStructuralFeature this) :
+isCollection(ETypedElement this) :
     upperBound == -1;
 	
 isObservableProperty(EStructuralFeature this) :
@@ -39,7 +39,12 @@ isConstructorInjectedProperty(EStructuralFeature this) :
     !this.changeable && !this.isContainment();
     
 private isContainment(EStructuralFeature this) :
-    EReference.isInstance(this) && ((EReference)this).containment; 
+    EReference.isInstance(this) && ((EReference)this).containment;
+    
+isDerivedProperty(EStructuralFeature this) :
+    let class = (EClass)eContainer :
+    let derivedOperations = class.eAllSuperTypes.collect(t|t.eOperations).flatten() :
+    derivedOperations.exists(o|o.isFeatureGetter() && o.name == name);
 	
 toJavaType(String this) :
 	if (this == "EInt") then "int"
@@ -54,8 +59,12 @@ isBuiltInType(EClassifier this) :
 isPrimitive(EClassifier this) :
     (this.name == "EInt" || this.name == "EBoolean" || this.name == "EString");
 	
-featureToJavaType(EStructuralFeature this) :
-	if (this.upperBound == -1) then "List<" + this.eType.name.toJavaType() + ">"
+featureToJavaType(EStructuralFeature this) : elementToJavaType();
+operationToJavaType(EOperation this) : elementToJavaType();
+	
+private elementToJavaType(ETypedElement this) :
+    if (this.eType == null) then "void" 
+	else if (this.upperBound == -1) then "List<" + this.eType.name.toJavaType() + ">"
 	else this.eType.name.toJavaType();
 
 featureToObservableFieldType(EStructuralFeature this) :
@@ -63,7 +72,9 @@ featureToObservableFieldType(EStructuralFeature this) :
 	else if (this.eType.isBuiltInType()) then "ReadOnly" + this.eType.name.toUnboxedJavaTypeName() + "Wrapper"
 	else "ReadOnlyObjectWrapper<" + this.eType.name + ">";
 	
-featureToObservableReadonlyType(EStructuralFeature this) :
+featureToObservableReadonlyType(EStructuralFeature this) : elementToObservableReadonlyType();
+	
+private elementToObservableReadonlyType(ETypedElement this) :
 	if (this.upperBound == -1) then "ReadOnlyListProperty<" + this.eType.name.toUnboxedJavaTypeName() + ">"
 	else if (this.eType.isBuiltInType()) then "ReadOnly" + this.eType.name.toUnboxedJavaTypeName() + "Property"
 	else "ReadOnlyObjectProperty<" + this.eType.name + ">";
@@ -94,21 +105,27 @@ private defaultValueOf(EStructuralFeature f) :
 	else null;
 	
 operationToSignature(EOperation this) :
-    operationToJavaType() + " " + name + "(" 
+    operationToJavaType() + " " + effectiveOperationName() + "(" 
      + eParameters.collect(e|e.eType.name.toJavaType() + " " + e.name).joinToString(", ") 
      + ")";
+
+private effectiveOperationName(EOperation this) : if (isFeatureGetter()) then name.getter() else name;
+ 
+isFeatureGetter(EOperation this) :
+    eAnnotations.exists(a|a.details.exists(d|d.key == "isFeature"));
 	
-private operationToJavaType(EOperation this) :
-	if (this.eType == null) then "void" else this.eType.name.toJavaType();
+operationToObservableGetterSignature(EOperation this) :
+    elementToObservableReadonlyType() + " " + name + "Property()";
 	
-toInheritance(List[EClassifier] this) :
-    let filteredExtends = this.typeSelect(EClass)
+toInheritance(EClass this) :
+    let filteredExtends = eSuperTypes.typeSelect(EClass)
     	.reject(e|e.interface) :
-    let filteredInterfaces = this.typeSelect(EClass)
+    let filteredInterfaces = eSuperTypes.typeSelect(EClass)
         .reject(e|e.isStereotype())
     	.select(e|e.interface) :
     if (filteredExtends.size > 0 && filteredInterfaces.size > 0) then "extends " + filteredExtends.get(0).name + " implements " + filteredInterfaces.collect(i|i.name).toString(", ")
     else if (filteredExtends.size > 0) then "extends " + filteredExtends.get(0).name
+    else if (interface && filteredInterfaces.size > 0) then "extends " + filteredInterfaces.collect(i|i.name).toString(", ")
     else if (filteredInterfaces.size > 0) then "implements " + filteredInterfaces.collect(i|i.name).toString(", ")
     else "";
 

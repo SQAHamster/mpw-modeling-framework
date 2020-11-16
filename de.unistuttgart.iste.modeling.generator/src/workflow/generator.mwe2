@@ -45,14 +45,19 @@ Workflow {
 	}
 	
 	component = components.QvtoTransformator {
+		transformationUri = commandTransformationUri
+		modelSlot = "commands"
+		sourceTargetRelationship = "NEW_TARGET"
+	}
+	
+	component = components.QvtoTransformator {
 		transformationUri = roleTransformationUri
 		modelSlot = "entityModels"
 	}
 	
-	component = components.QvtoTransformator {
-		transformationUri = commandTransformationUri
-		modelSlot = "commands"
-		sourceTargetRelationship = "NEW_TARGET"
+	component = components.XmiWriter {
+		modelSlot = "entityModels"
+		fileExtension = "ecore"
 	}
 	
 	component = components.XmiWriter {

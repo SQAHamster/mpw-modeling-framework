@@ -27,8 +27,8 @@ public class QueryReader extends WorkflowComponentWithModelSlot {
 		models.add("Hamster|frontIsClear");
 		models.add("Hamster|mouthEmpty");
 		models.add("Hamster|grainAvailable");
-		models.add("Hamster|location");
-		models.add("Hamster|direction");
+		// models.add("Hamster|location");
+		// models.add("Hamster|direction");
 
 		context.set(getModelSlot(), models);
 	}

@@ -62,9 +62,11 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 			var input = new BasicModelExtent(Arrays.asList(eObject));
 			
 			var context = new ExecutionContextImpl();
-			context.setConfigProperty("Queries", Arrays.asList("frontIsClear", "mouthEmpty"));
-			context.setConfigProperty("EditorCommands", Arrays.asList("initHamster"));
-			context.setConfigProperty("GameCommands", Arrays.asList("move", "turnLeft"));
+			
+			// dummy: later set by slots
+			context.setConfigProperty("Queries", workflowContext.get("queries"));
+			context.setConfigProperty("Commands", workflowContext.get("commands"));
+			context.setConfigProperty("SourceModelUri", eObject.eResource().getURI().toString());
 			
 			ExecutionDiagnostic result;
 			if (sourceTargetRelationship == SourceTargetRelationship.EXISTING_TARGET) {

@@ -1,10 +1,10 @@
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+modeltype Commandgt uses commandgt('http://www.mpw.uni-stuttgart.de/commandgt');
 
 transformation RoleTransformation(inout ecore: Ecore);
 
 configuration property Queries: List(String);
-configuration property EditorCommands: List(String);
-configuration property GameCommands: List(String);
+configuration property Commands: List(Commandgt::Transformation);
 
 main() {
   ecore.rootObjects()[EPackage]->map transformClasses();
@@ -21,36 +21,58 @@ helper Ecore::EClass::isRelevantType() : Boolean {
 
 mapping inout Ecore::EClass::transformToRoles() {
   var baseName := self.name;
-  self.name := "ReadOnly" + baseName;
+  self.name := "Concrete" + baseName;
   
   self._abstract := true;
-  self.eOperations += Queries->map transformQueryToOperation();
   
-  var editorClass := object EClass {
-  	name := "Editor" + baseName
+  var readOnlyRole := object EClass {
+  	name := "ReadOnly" + baseName;
+  	_abstract := true;
+  	interface := true;
   };
-  editorClass.eSuperTypes += self;
-  self.ePackage.eClassifiers += editorClass;
-  editorClass.eOperations += EditorCommands->map transformEditorCommandToOperation();
-  editorClass._abstract := true;
+  readOnlyRole.eOperations += self.eAllStructuralFeatures->map transformFeatureToGetterOperation();
+  readOnlyRole.eOperations += Queries->select(q|q.startsWith(baseName))->map transformQueryToOperation();
+  self.ePackage.eClassifiers += readOnlyRole;
   
-  var gameClass := object EClass {
-  	name := "Game" + baseName
+  var gameRole := object EClass {
+  	name := "Game" + baseName;
+  	_abstract := true;
+  	interface := true;
   };
-  gameClass.eSuperTypes += editorClass;
-  self.ePackage.eClassifiers += gameClass;
-  gameClass.eOperations += GameCommands->map transformGameCommandToOperation();
+  gameRole.eSuperTypes += readOnlyRole;
+  gameRole.eOperations += Commands->select(c|c.roleName = "game" and c.targetClassName = baseName)->map transformCommandToOperation();
+  self.ePackage.eClassifiers += gameRole;
+  
+  var editorRole := object EClass {
+  	name := "Editor" + baseName;
+  	_abstract := true;
+  	interface := true;
+  };
+  editorRole.eSuperTypes += readOnlyRole;
+  editorRole.eOperations += Commands->select(c|c.roleName = "editor" and c.targetClassName = baseName)->map transformCommandToOperation();
+  self.ePackage.eClassifiers += editorRole;
+  
+  self.eSuperTypes += gameRole;
+  self.eSuperTypes += editorRole;
 }
 
 mapping String::transformQueryToOperation() : EOperation {
-	name := self;
+	name := self.substringAfter("|");
 	eType := EBoolean.oclAsType(EClassifier);
 }
 
-mapping String::transformEditorCommandToOperation() : EOperation {
-	name := self;
+mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {
+	name := self.name;
+	eType := self.eType;
+	upperBound := self.upperBound;
+	eAnnotations += object EAnnotation {
+	  details += object EStringToStringMapEntry {
+	  	  key := "isFeature";
+	  };
+	};
 }
 
-mapping String::transformGameCommandToOperation() : EOperation {
-	name := self;
+mapping Commandgt::Transformation::transformCommandToOperation() : EOperation {
+	name := self.name;
 }
+

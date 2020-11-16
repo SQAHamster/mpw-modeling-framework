@@ -3,10 +3,11 @@
 «EXTENSION template::util::GeneratorExtensions»
 
 «DEFINE ImportDefinitions FOR EClass»
-	«IF eStructuralFeatures.exists(f|f.isCollection())-»
+	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
     import java.util.List;
 	«ENDIF-»
-	«IF eStructuralFeatures.exists(f|f.isObservableProperty())-»
+	«IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
+	    eOperations.exists(o|o.isFeatureGetter())-»
 	import javafx.beans.property.*;
 	«ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection())-»

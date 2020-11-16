@@ -43,6 +43,9 @@
 
 «DEFINE GetPropertyValueDefinitions FOR EClass»
 	  «FOREACH eStructuralFeatures AS f»
+	  «IF f.isDerivedProperty()-»
+	  @Override
+	  «ENDIF-»
 	  public «f.featureToJavaType()» «f.name.getter()»() {
   	    «IF f.isObservableProperty()-»
 	  	return this.«f.name».get();
@@ -67,6 +70,9 @@
 
 «DEFINE GetPropertyDefinitions FOR EClass»
 	  «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
+	  «IF f.isDerivedProperty()-»
+	  @Override
+	  «ENDIF-»
 	  public «f.featureToObservableReadonlyType()» «f.name»Property() {
 	  	return this.«f.name».getReadOnlyProperty();
 	  }

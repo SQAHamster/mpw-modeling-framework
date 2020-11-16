@@ -71,8 +71,9 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		String targetDirectory = "../" + projectName + "/" + projectSubPath;
 		try (var files = listFiles(targetDirectory)) {
 			
-			var modelNames = files.map(f -> f.toFile().getName())
-			     .filter(f -> f.endsWith(fileExtension))
+			var modelNames = files.map(f -> f.toFile().getPath())
+				 .map(f -> substringAfter(f, targetDirectory))
+				 .filter(f -> f.endsWith(fileExtension))
 			     .filter(f -> !excludeModels.contains(f))
 			     .collect(Collectors.toList());
 			
@@ -84,6 +85,11 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		} catch (IOException e) {
 			log.error("Failed to locate " + getModelNameFromExtension() + " files under: " + targetDirectory, e);
 		}
+	}
+	
+	private static String substringAfter(String string, String match) {
+		int index = string.indexOf(match);
+		return string.substring(index + match.length());
 	}
 
 	private void addModelsToSlot(WorkflowContext context, List<String> modelNames) {
@@ -101,8 +107,11 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		context.set(getModelSlot(), models);
 	}
 	
-	private static Stream<Path> listFiles(String directory) throws IOException {
-		return Files.list(Path.of(directory));
+	private Stream<Path> listFiles(String directory) throws IOException {
+		return Files.find(Path.of(directory), 
+				Integer.MAX_VALUE,
+		        (filePath, fileAttr) 
+		        -> fileAttr.isRegularFile());
 	}
 	
 	private String getBaseUri() {

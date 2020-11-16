@@ -3,6 +3,8 @@ modeltype Commandgt uses "http://www.mpw.uni-stuttgart.de/commandgt";
 
 transformation TransformHenshin2Commandgt(in inModel:Henshin, out outModel:Commandgt);
 
+configuration property SourceModelUri: String;
+
 property number : Integer = 0;
 
 main() {
@@ -11,6 +13,8 @@ main() {
 
 mapping Henshin::Module::toTransformation() : Commandgt::Transformation {
   name := self.name;
+  targetClassName := self.findTargetClassName();
+  roleName := SourceModelUri.toRole();
   /* units := self.units->map toUnit();
   /mainUnit := self.units->any(u|u.name = self.name).resolveone(Commandgt::Unit);
   result.mainUnit.parameters->forEach(p) {
@@ -21,6 +25,16 @@ mapping Henshin::Module::toTransformation() : Commandgt::Transformation {
   units->forEach(u) {
   	u.parameters := u.parameters->select(p|p.name != "thisInstance");
   }*/
+}
+
+helper Henshin::Module::findTargetClassName() : String {
+	return self.units[Rule]->first().lhs.nodes->any(n|n.name = "this").type.name;
+}
+
+helper String::toRole() : String {
+	var lastSlashIndex := self.lastIndexOf("/");
+	var foreLastSlashIndex := self.substring(1, lastSlashIndex-1).lastIndexOf("/");
+	return self.substring(foreLastSlashIndex+1, lastSlashIndex-1);
 }
 
 /*
