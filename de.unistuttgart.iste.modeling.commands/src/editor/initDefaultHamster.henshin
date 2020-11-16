@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_NOYy8CXXEeuHDMx4P4HuOA" name="initDefaultHamster">
+  <imports href="../../../de.unistuttgart.iste.modeling.mpw/model/MiniProgrammingWorld.ecore#/"/>
+  <imports href="../../../de.unistuttgart.iste.modeling.mpw/model/Hamster.ecore#/"/>
+  <units xsi:type="henshin:Rule" xmi:id="_FUGCUSZhEeuiY_E2amZoVQ" name="initDefaultHamster">
+    <lhs xmi:id="_FUGCUiZhEeuiY_E2amZoVQ" name="Lhs">
+      <nodes xmi:id="_FUGCUyZhEeuiY_E2amZoVQ" name="this">
+        <type href="../../../de.unistuttgart.iste.modeling.mpw/model/Hamster.ecore#//Hamster"/>
+      </nodes>
+    </lhs>
+    <rhs xmi:id="_FUGCWCZhEeuiY_E2amZoVQ" name="Rhs">
+      <nodes xmi:id="_FUGCWSZhEeuiY_E2amZoVQ" name="this">
+        <type href="../../../de.unistuttgart.iste.modeling.mpw/model/Hamster.ecore#//Hamster"/>
+      </nodes>
+    </rhs>
+    <mappings xmi:id="_FUGCXyZhEeuiY_E2amZoVQ" origin="_FUGCUyZhEeuiY_E2amZoVQ" image="_FUGCWSZhEeuiY_E2amZoVQ"/>
+  </units>
+</henshin:Module>
