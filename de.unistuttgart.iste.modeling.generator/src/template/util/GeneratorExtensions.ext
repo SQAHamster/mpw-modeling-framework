@@ -43,8 +43,7 @@ private isContainment(EStructuralFeature this) :
     
 isDerivedProperty(EStructuralFeature this) :
     let class = (EClass)eContainer :
-    let derivedOperations = class.eAllSuperTypes.collect(t|t.eOperations).flatten() :
-    derivedOperations.exists(o|o.isFeatureGetter() && o.name == name);
+    class.eAllSuperTypes.exists(t|t.eOperations.exists(o|o.isFeatureGetter() && o.name == name));
 	
 toJavaType(String this) :
 	if (this == "EInt") then "int"
