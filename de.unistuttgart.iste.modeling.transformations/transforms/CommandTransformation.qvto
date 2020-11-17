@@ -1,3 +1,5 @@
+import helpers.RuleReferenceSorter;
+
 modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
 modeltype Commandgt uses "http://www.mpw.uni-stuttgart.de/commandgt";
 
@@ -15,16 +17,17 @@ mapping Henshin::Module::toTransformation() : Commandgt::Transformation {
   name := self.name;
   targetClassName := self.findTargetClassName();
   roleName := SourceModelUri.toRole();
-  /* units := self.units->map toUnit();
-  /mainUnit := self.units->any(u|u.name = self.name).resolveone(Commandgt::Unit);
-  result.mainUnit.parameters->forEach(p) {
-  	if (p.name = "thisInstance") {
-  		p.name := "self";
-  	}
+  units := self.units->map toUnit();
+  mainUnit := self.units->any(u|u.name = self.name).resolveone(Commandgt::Unit);
+  
+  if (mainUnit = null) {
+  	mainUnit := createSequentialMainUnitForRules(result);
   };
+  mainUnit.name := "execute";
+  
   units->forEach(u) {
-  	u.parameters := u.parameters->select(p|p.name != "thisInstance");
-  }*/
+  	u.parameters := u.parameters->select(p|p.name != "this");
+  };
 }
 
 helper Henshin::Module::findTargetClassName() : String {
@@ -37,7 +40,10 @@ helper String::toRole() : String {
 	return self.substring(foreLastSlashIndex+1, lastSlashIndex-1);
 }
 
-/*
+mapping Henshin::Unit::toUnit() : Commandgt::Unit
+	disjuncts Henshin::Rule::toRule,
+	          Henshin::IteratedUnit::toIteratedUnit,
+	          Henshin::SequentialUnit::toSequentialUnit;
 
 mapping Henshin::Rule::toRule() : Commandgt::Rule {
   number := 0;
@@ -71,53 +77,6 @@ mapping Henshin::Rule::toRule() : Commandgt::Rule {
   
   thisInstance.variableName := "thisInstance";
 }
-
-helper Commandgt::Rule::sortReferences(): OrderedSet(ReferenceCondition) {
-    var sortedResult: OrderedSet(ReferenceCondition);
-    var lhsReferences = self.referenceConditions->select(r|not r.isCreate);
-
-	var order: Dict(ReferenceCondition, Integer);
-	var reachableInstances: Set(InstanceCondition);
-	var allReferencesCount = lhsReferences->size();
-	var i: Integer := 0;
-	
-	reachableInstances += self.thisInstance;
-	
-	while (sortedResult->size() != allReferencesCount) {
-		var anyAdded := false;
-		
-		var remainingReferences = lhsReferences->symmetricDifference(sortedResult); 
-		remainingReferences->forEach(r) {
-			if (reachableInstances->includes(r.source) and not reachableInstances->includes(r.target)) {
-				reachableInstances += r.target;
-			} endif;
-			
-			if (reachableInstances->includes(r.source) and reachableInstances->includes(r.target)) {
-				anyAdded := true;
-				order->put(r, i);
-				i := i+1;
-				sortedResult += r;	
-			} endif;
-		};
-		
-		if (not anyAdded) {
-			raise "Cannot reach all instances from this";
-		} endif;
-		
-	};
-	
-	self.referenceConditions->select(r|r.isCreate)->forEach(r) {
-		sortedResult += r;
-	};
-	
-	return sortedResult;
-	
-} 
-
-mapping Henshin::Unit::toUnit() : Commandgt::Unit
-	disjuncts Henshin::Rule::toRule,
-	          Henshin::IteratedUnit::toIteratedUnit,
-	          Henshin::SequentialUnit::toSequentialUnit;
 
 mapping Henshin::IteratedUnit::toIteratedUnit() : Commandgt::IteratedUnit {
     name := self.name;
@@ -267,4 +226,16 @@ mapping Henshin::Edge::toDeleteEdgeModifications() : Commandgt::Modification {
   action := Commandgt::Action::DELETE;
 }
 
-*/
+helper createSequentialMainUnitForRules(inout m: Commandgt::Transformation) : Commandgt::SequentialUnit {
+  var unit = object Commandgt::SequentialUnit {
+  	name := m.name;
+  };
+  m.units += unit;
+  m.units[Rule]->forEach(r) {
+    unit.targetInvocations += object Commandgt::Invocation {
+    	targetMethodName := r.name;
+    };
+  };
+  return unit;
+}
+
