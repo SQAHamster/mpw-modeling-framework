@@ -89,6 +89,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	}
 	
 	private static String substringAfter(String string, String match) {
+		string = string.replaceAll("\\\\", "/");
 		int index = string.indexOf(match);
 		return string.substring(index + match.length());
 	}
