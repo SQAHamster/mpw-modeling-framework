@@ -79,7 +79,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 			     .collect(Collectors.toList());
 			
 			modelNames.forEach(fileName -> {
-				log.info("found: " + fileName);
+				log.debug("found: " + fileName);
 			});
 			
 			addModelsToSlot(context, modelNames);

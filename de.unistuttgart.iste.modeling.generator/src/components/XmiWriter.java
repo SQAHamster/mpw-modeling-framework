@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -17,6 +18,7 @@ import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 
 public class XmiWriter extends WorkflowComponentWithModelSlot {
+	private final static Logger log = Logger.getLogger(XmiWriter.class.getName());
 	
 	private String fileExtension = "xmi";
 	
@@ -54,10 +56,9 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 			resource.getContents().add(EcoreUtil.copy(object));
 			resource.save(saveOptions);
 			
-			System.out.println(fileUri + " created.");
+			log.debug(fileUri + " created.");
 		} catch (IOException e) {
-			System.out.println("Error during creating Xmi.");
-			e.printStackTrace();
+			log.error("Error during creating Xmi.", e);
 		}
 	}
 	
