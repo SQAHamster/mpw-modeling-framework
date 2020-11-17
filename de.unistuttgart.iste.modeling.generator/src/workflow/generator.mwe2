@@ -9,6 +9,7 @@ import org.eclipse.xpand2.Generator
 import org.eclipse.xpand2.output.JavaBeautifier
 import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
 
+var generatedProjectBasePackage  = "'de.unistuttgart.hamster'"
 var mpwModelProject  = "de.unistuttgart.iste.modeling.mpw"
 var commandsModelProject  = "de.unistuttgart.iste.modeling.commands"
 var roleTransformationUri  = "platform:/resource/de.unistuttgart.iste.modeling.transformations/transforms/RoleTransformation.qvto"
@@ -81,7 +82,7 @@ Workflow {
 	component = Generator {
 		globalVarDef = {
 			name = "module_package"
-			value = "'de.unistuttgart.hamster'"
+			value = generatedProjectBasePackage
 		}
 		globalVarDef = {
 			name = "queries"
@@ -97,13 +98,30 @@ Workflow {
 			path = dirSrcGen
 			overwrite = false
 			postprocessor = formatter_java
-			fileEncoding = "ISO-8859-1" // this is the encoding for files written the outlet
+			fileEncoding = "ISO-8859-1"
 		}
-		// configure Xpand resource encoding (check project resource setting)
 		resourceManager = ResourceManagerDefaultImpl {
 			fileEncoding = "ISO-8859-1"
 		}
 		
+	}
+	
+	/* generate commands */
+	component = Generator {
+		globalVarDef = {
+			name = "module_package"
+			value = generatedProjectBasePackage
+		}
+		metaModel = mm_emf
+		expand = "template::CommandTemplate::main FOREACH commands"
+		outlet = {
+			path = dirSrcGen
+			postprocessor = formatter_java
+			fileEncoding = "ISO-8859-1"
+		}
+		resourceManager = ResourceManagerDefaultImpl {
+			fileEncoding = "ISO-8859-1"
+		}
 	}
 
 }

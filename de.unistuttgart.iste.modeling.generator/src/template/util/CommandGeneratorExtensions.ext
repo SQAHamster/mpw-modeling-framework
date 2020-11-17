@@ -1,0 +1,12 @@
+import commandgt;
+
+extension template::util::GlobalsGeneratorExtensions reexport;
+
+getCommandJavaPackagePath(Transformation this) :
+  this.getCommandJavaPackageName().replaceAll("\\.", "/");
+
+getCommandJavaPackageName(Transformation this) :
+  getModulePackage() + ".commands";
+
+String toPropertyGetters(String s) :
+    JAVA template.properties.PropertyUtils.toPropertyGetters(java.lang.String);
