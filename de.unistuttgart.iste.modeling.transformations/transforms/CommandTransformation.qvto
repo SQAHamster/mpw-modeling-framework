@@ -1,5 +1,7 @@
 import helpers.RuleReferenceSorter;
 
+modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+	
 modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
 modeltype Commandgt uses "http://www.mpw.uni-stuttgart.de/commandgt";
 
@@ -15,13 +17,13 @@ main() {
 
 mapping Henshin::Module::toTransformation() : Commandgt::Transformation {
   name := self.name;
-  targetClassName := self.findTargetClassName();
+  targetClass := self.findTargetClass();
   roleName := SourceModelUri.toRole();
   units := self.units->map toUnit();
   mainUnit := self.units->any(u|u.name = self.name).resolveone(Commandgt::Unit);
   
   if (mainUnit = null) {
-  	mainUnit := createSequentialMainUnitForRules(result);
+  	mainUnit := createConditionalMainUnitForRules(result);
   };
   mainUnit.name := "execute";
   
@@ -30,8 +32,8 @@ mapping Henshin::Module::toTransformation() : Commandgt::Transformation {
   };
 }
 
-helper Henshin::Module::findTargetClassName() : String {
-	return self.units[Rule]->first().lhs.nodes->any(n|n.name = "this").type.name;
+helper Henshin::Module::findTargetClass() : ecore::EClass {
+	return self.units[Rule]->first().lhs.nodes->any(n|n.name = "this").type;
 }
 
 helper String::toRole() : String {
@@ -137,8 +139,7 @@ mapping Henshin::Attribute::toAttributeCondition() : Commandgt::AttributeConditi
   var inName = self.type.name;
   
   attributeName := inName;
-  attributeName := attributeName.replaceAll("direction", "direction.value");
-  attributeValueLiteral := self.value;
+  attributeValueLiteral := self.value.replaceAll("\"(WEST|NORTH|SOUTH|EAST)\"", "$1");
   if (self.type.eType.name = "EBoolean") {
   	attributeName := "is" + inName.substring(1, 1).toUpper();
   	if (inName.size() >= 2) {
@@ -159,6 +160,7 @@ mapping Henshin::Attribute::toCreateAttributeCondition() : Commandgt::AttributeC
 
 mapping Henshin::Edge::toReferenceCondition() : Commandgt::SingleReferenceCondition {
   referenceName := self.type.name;
+  type := self.type;
   source := self.source.resolveone(Commandgt::InstanceCondition);
   target := self.target.resolveone(Commandgt::InstanceCondition);
 }
@@ -193,6 +195,7 @@ mapping Henshin::Edge::toForbidReferenceCondition(rule: Henshin::Rule) : Command
 
 mapping Henshin::Edge::toManyReferenceCondition() : Commandgt::ManyReferenceCondition {
   referenceName := self.type.name;
+  type := self.type;
   source := self.source.resolveone(Commandgt::InstanceCondition);
   target := self.target.resolveone(Commandgt::InstanceCondition);
 }
@@ -214,7 +217,6 @@ mapping Henshin::Edge::toCreateManyReferenceCondition(rule: Henshin::Rule) : Com
   
 }
 
-
 mapping Henshin::Edge::toAddEdgeModifications() : Commandgt::Modification {
   reference := self.resolveone(Commandgt::ReferenceCondition);
   action := Commandgt::Action::CREATE;
@@ -226,16 +228,32 @@ mapping Henshin::Edge::toDeleteEdgeModifications() : Commandgt::Modification {
   action := Commandgt::Action::DELETE;
 }
 
-helper createSequentialMainUnitForRules(inout m: Commandgt::Transformation) : Commandgt::SequentialUnit {
-  var unit = object Commandgt::SequentialUnit {
+helper createConditionalMainUnitForRules(inout m: Commandgt::Transformation) : Commandgt::Unit {
+  var mainUnit = object Commandgt::ConditionalUnit {
   	name := m.name;
   };
-  m.units += unit;
-  m.units[Rule]->forEach(r) {
-    unit.targetInvocations += object Commandgt::Invocation {
-    	targetMethodName := r.name;
-    };
-  };
-  return unit;
+  m.units += mainUnit;
+  mainUnit.conditions := m.units[Commandgt::Rule]->map toCondition();
+  return mainUnit;
 }
 
+mapping Commandgt::Rule::toCondition() : Commandgt::Condition {
+  unit := self;
+  
+  var attributeConditions := self.attributeConditions->select(c|c.instance = self.thisInstance);
+  assert(attributeConditions->notEmpty());
+  condition := attributeConditions->collect(c|"thisInstance." + c.attributeName + "==" + c.attributeValueLiteral)->joinToString(" && ");
+}
+
+helper Sequence(String)::joinToString(separator: String) : String {
+	var str := "";
+	var first = true;
+	self->forEach(o) {
+	  if (first = false) {
+	  	str := str + separator;
+	  };
+	  str := str + o.toString();
+	  first := false;		
+	};
+	return str;
+} 

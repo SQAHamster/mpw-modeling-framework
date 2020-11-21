@@ -104,13 +104,13 @@ public interface CommandgtPackage extends EPackage {
 	int TRANSFORMATION__ROLE_NAME = 3;
 
 	/**
-	 * The feature id for the '<em><b>Target Class Name</b></em>' attribute.
+	 * The feature id for the '<em><b>Target Class</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFORMATION__TARGET_CLASS_NAME = 4;
+	int TRANSFORMATION__TARGET_CLASS = 4;
 
 	/**
 	 * The number of structural features of the '<em>Transformation</em>' class.
@@ -1130,15 +1130,15 @@ public interface CommandgtPackage extends EPackage {
 	EAttribute getTransformation_RoleName();
 
 	/**
-	 * Returns the meta object for the attribute '{@link commandgt.Transformation#getTargetClassName <em>Target Class Name</em>}'.
+	 * Returns the meta object for the reference '{@link commandgt.Transformation#getTargetClass <em>Target Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Target Class Name</em>'.
-	 * @see commandgt.Transformation#getTargetClassName()
+	 * @return the meta object for the reference '<em>Target Class</em>'.
+	 * @see commandgt.Transformation#getTargetClass()
 	 * @see #getTransformation()
 	 * @generated
 	 */
-	EAttribute getTransformation_TargetClassName();
+	EReference getTransformation_TargetClass();
 
 	/**
 	 * Returns the meta object for class '{@link commandgt.Unit <em>Unit</em>}'.
@@ -1794,12 +1794,12 @@ public interface CommandgtPackage extends EPackage {
 		EAttribute TRANSFORMATION__ROLE_NAME = eINSTANCE.getTransformation_RoleName();
 
 		/**
-		 * The meta object literal for the '<em><b>Target Class Name</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Target Class</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TRANSFORMATION__TARGET_CLASS_NAME = eINSTANCE.getTransformation_TargetClassName();
+		EReference TRANSFORMATION__TARGET_CLASS = eINSTANCE.getTransformation_TargetClass();
 
 		/**
 		 * The meta object literal for the '{@link commandgt.impl.UnitImpl <em>Unit</em>}' class.

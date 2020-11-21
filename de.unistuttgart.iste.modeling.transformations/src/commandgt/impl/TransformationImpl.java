@@ -34,7 +34,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link commandgt.impl.TransformationImpl#getUnits <em>Units</em>}</li>
  *   <li>{@link commandgt.impl.TransformationImpl#getMainUnit <em>Main Unit</em>}</li>
  *   <li>{@link commandgt.impl.TransformationImpl#getRoleName <em>Role Name</em>}</li>
- *   <li>{@link commandgt.impl.TransformationImpl#getTargetClassName <em>Target Class Name</em>}</li>
+ *   <li>{@link commandgt.impl.TransformationImpl#getTargetClass <em>Target Class</em>}</li>
  * </ul>
  *
  * @generated
@@ -101,24 +101,14 @@ public class TransformationImpl extends MinimalEObjectImpl.Container implements 
 	protected String roleName = ROLE_NAME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getTargetClassName() <em>Target Class Name</em>}' attribute.
+	 * The cached value of the '{@link #getTargetClass() <em>Target Class</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getTargetClassName()
+	 * @see #getTargetClass()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TARGET_CLASS_NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTargetClassName() <em>Target Class Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTargetClassName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String targetClassName = TARGET_CLASS_NAME_EDEFAULT;
+	protected EClass targetClass;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -236,8 +226,16 @@ public class TransformationImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getTargetClassName() {
-		return targetClassName;
+	public EClass getTargetClass() {
+		if (targetClass != null && targetClass.eIsProxy()) {
+			InternalEObject oldTargetClass = (InternalEObject)targetClass;
+			targetClass = (EClass)eResolveProxy(oldTargetClass);
+			if (targetClass != oldTargetClass) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommandgtPackage.TRANSFORMATION__TARGET_CLASS, oldTargetClass, targetClass));
+			}
+		}
+		return targetClass;
 	}
 
 	/**
@@ -245,11 +243,20 @@ public class TransformationImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTargetClassName(String newTargetClassName) {
-		String oldTargetClassName = targetClassName;
-		targetClassName = newTargetClassName;
+	public EClass basicGetTargetClass() {
+		return targetClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTargetClass(EClass newTargetClass) {
+		EClass oldTargetClass = targetClass;
+		targetClass = newTargetClass;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommandgtPackage.TRANSFORMATION__TARGET_CLASS_NAME, oldTargetClassName, targetClassName));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommandgtPackage.TRANSFORMATION__TARGET_CLASS, oldTargetClass, targetClass));
 	}
 
 	/**
@@ -283,8 +290,9 @@ public class TransformationImpl extends MinimalEObjectImpl.Container implements 
 				return basicGetMainUnit();
 			case CommandgtPackage.TRANSFORMATION__ROLE_NAME:
 				return getRoleName();
-			case CommandgtPackage.TRANSFORMATION__TARGET_CLASS_NAME:
-				return getTargetClassName();
+			case CommandgtPackage.TRANSFORMATION__TARGET_CLASS:
+				if (resolve) return getTargetClass();
+				return basicGetTargetClass();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -311,8 +319,8 @@ public class TransformationImpl extends MinimalEObjectImpl.Container implements 
 			case CommandgtPackage.TRANSFORMATION__ROLE_NAME:
 				setRoleName((String)newValue);
 				return;
-			case CommandgtPackage.TRANSFORMATION__TARGET_CLASS_NAME:
-				setTargetClassName((String)newValue);
+			case CommandgtPackage.TRANSFORMATION__TARGET_CLASS:
+				setTargetClass((EClass)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -338,8 +346,8 @@ public class TransformationImpl extends MinimalEObjectImpl.Container implements 
 			case CommandgtPackage.TRANSFORMATION__ROLE_NAME:
 				setRoleName(ROLE_NAME_EDEFAULT);
 				return;
-			case CommandgtPackage.TRANSFORMATION__TARGET_CLASS_NAME:
-				setTargetClassName(TARGET_CLASS_NAME_EDEFAULT);
+			case CommandgtPackage.TRANSFORMATION__TARGET_CLASS:
+				setTargetClass((EClass)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -361,8 +369,8 @@ public class TransformationImpl extends MinimalEObjectImpl.Container implements 
 				return mainUnit != null;
 			case CommandgtPackage.TRANSFORMATION__ROLE_NAME:
 				return ROLE_NAME_EDEFAULT == null ? roleName != null : !ROLE_NAME_EDEFAULT.equals(roleName);
-			case CommandgtPackage.TRANSFORMATION__TARGET_CLASS_NAME:
-				return TARGET_CLASS_NAME_EDEFAULT == null ? targetClassName != null : !TARGET_CLASS_NAME_EDEFAULT.equals(targetClassName);
+			case CommandgtPackage.TRANSFORMATION__TARGET_CLASS:
+				return targetClass != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -381,8 +389,6 @@ public class TransformationImpl extends MinimalEObjectImpl.Container implements 
 		result.append(name);
 		result.append(", roleName: ");
 		result.append(roleName);
-		result.append(", targetClassName: ");
-		result.append(targetClassName);
 		result.append(')');
 		return result.toString();
 	}

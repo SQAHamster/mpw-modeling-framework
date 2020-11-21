@@ -22,7 +22,6 @@ import commandgt.Transformation;
 import commandgt.Unit;
 import commandgt.VariableAssignment;
 import commandgt.VariableDeclaration;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -275,8 +274,8 @@ public class CommandgtPackageImpl extends EPackageImpl implements CommandgtPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getTransformation_TargetClassName() {
-		return (EAttribute)transformationEClass.getEStructuralFeatures().get(4);
+	public EReference getTransformation_TargetClass() {
+		return (EReference)transformationEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -807,7 +806,7 @@ public class CommandgtPackageImpl extends EPackageImpl implements CommandgtPacka
 		createEReference(transformationEClass, TRANSFORMATION__UNITS);
 		createEReference(transformationEClass, TRANSFORMATION__MAIN_UNIT);
 		createEAttribute(transformationEClass, TRANSFORMATION__ROLE_NAME);
-		createEAttribute(transformationEClass, TRANSFORMATION__TARGET_CLASS_NAME);
+		createEReference(transformationEClass, TRANSFORMATION__TARGET_CLASS);
 
 		unitEClass = createEClass(UNIT);
 		createEAttribute(unitEClass, UNIT__NAME);
@@ -924,7 +923,7 @@ public class CommandgtPackageImpl extends EPackageImpl implements CommandgtPacka
 		initEReference(getTransformation_Units(), this.getUnit(), null, "units", null, 0, -1, Transformation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTransformation_MainUnit(), this.getUnit(), null, "mainUnit", null, 1, 1, Transformation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransformation_RoleName(), ecorePackage.getEString(), "roleName", null, 1, 1, Transformation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTransformation_TargetClassName(), ecorePackage.getEString(), "targetClassName", null, 1, 1, Transformation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTransformation_TargetClass(), ecorePackage.getEClass(), null, "targetClass", null, 0, 1, Transformation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unitEClass, Unit.class, "Unit", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUnit_Name(), ecorePackage.getEString(), "name", null, 1, 1, Unit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

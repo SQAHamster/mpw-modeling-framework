@@ -4,6 +4,7 @@ package commandgt;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -19,7 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link commandgt.Transformation#getUnits <em>Units</em>}</li>
  *   <li>{@link commandgt.Transformation#getMainUnit <em>Main Unit</em>}</li>
  *   <li>{@link commandgt.Transformation#getRoleName <em>Role Name</em>}</li>
- *   <li>{@link commandgt.Transformation#getTargetClassName <em>Target Class Name</em>}</li>
+ *   <li>{@link commandgt.Transformation#getTargetClass <em>Target Class</em>}</li>
  * </ul>
  *
  * @see commandgt.CommandgtPackage#getTransformation()
@@ -106,25 +107,25 @@ public interface Transformation extends EObject {
 	void setRoleName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Target Class Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>Target Class</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Target Class Name</em>' attribute.
-	 * @see #setTargetClassName(String)
-	 * @see commandgt.CommandgtPackage#getTransformation_TargetClassName()
-	 * @model required="true"
+	 * @return the value of the '<em>Target Class</em>' reference.
+	 * @see #setTargetClass(EClass)
+	 * @see commandgt.CommandgtPackage#getTransformation_TargetClass()
+	 * @model
 	 * @generated
 	 */
-	String getTargetClassName();
+	EClass getTargetClass();
 
 	/**
-	 * Sets the value of the '{@link commandgt.Transformation#getTargetClassName <em>Target Class Name</em>}' attribute.
+	 * Sets the value of the '{@link commandgt.Transformation#getTargetClass <em>Target Class</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Target Class Name</em>' attribute.
-	 * @see #getTargetClassName()
+	 * @param value the new value of the '<em>Target Class</em>' reference.
+	 * @see #getTargetClass()
 	 * @generated
 	 */
-	void setTargetClassName(String value);
+	void setTargetClass(EClass value);
 
 } // Transformation
