@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.queries.ide
+Bundle-ManifestVersion: 2
+Bundle-Name: de.unistuttgart.iste.sqa.mpw.modeling.queries.ide
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: de.unistuttgart.iste.sqa.mpw.modeling.queries.ide; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: de.unistuttgart.iste.sqa.mpw.modeling.queries,
+ org.eclipse.xtext.ide,
+ org.eclipse.xtext.xbase.ide,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-14
+Export-Package: de.unistuttgart.iste.sqa.mpw.modeling.queries.ide.contentassist.antlr.internal,
+ de.unistuttgart.iste.sqa.mpw.modeling.queries.ide.contentassist.antlr

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="ASCII"?>
-<uriMap:MappingContainer xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:uriMap="http:///www.eclipse.org/m2m/qvt/oml/MModelUriMap/1.0.0">
-  <mapping sourceURI="http://www.mpw.uni-stuttgart.de/commandgt" targetURI="platform:/resource/de.unistuttgart.iste.modeling.transformations/model/CommandGraphTransformation.ecore#/"/>
-  <mapping sourceURI="http://www.mpw.uni-stuttgart.de/querydsl" targetURI="platform:/resource/de.unistuttgart.iste.modeling.queries/model/generated/QueryDsl.ecore#/"/>
-</uriMap:MappingContainer>
