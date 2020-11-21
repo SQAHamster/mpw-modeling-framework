@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: de.unistuttgart.iste.modeling.queries.ui
+Bundle-ManifestVersion: 2
+Bundle-Name: de.unistuttgart.iste.modeling.queries.ui
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: de.unistuttgart.iste.modeling.queries.ui; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: de.unistuttgart.iste.modeling.queries,
+ de.unistuttgart.iste.modeling.queries.ide,
+ org.eclipse.xtext.ui,
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.ui.editors;bundle-version="3.5.0",
+ org.eclipse.ui.ide;bundle-version="3.5.0",
+ org.eclipse.ui,
+ org.eclipse.compare,
+ org.eclipse.xtext.builder,
+ org.eclipse.xtext.xbase.ui,
+ org.eclipse.jdt.debug.ui,
+ org.eclipse.xtext.common.types.ui
+Import-Package: org.apache.log4j
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: de.unistuttgart.iste.modeling.queries.ui.quickfix,
+ de.unistuttgart.iste.modeling.queries.ui.contentassist,
+ de.unistuttgart.iste.modeling.queries.ui.internal
+Bundle-Activator: de.unistuttgart.iste.modeling.queries.ui.internal.QueriesActivator

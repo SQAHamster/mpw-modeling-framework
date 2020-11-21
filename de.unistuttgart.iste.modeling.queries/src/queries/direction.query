@@ -1,0 +1,2 @@
+context Hamster
+query direction: self.direction;

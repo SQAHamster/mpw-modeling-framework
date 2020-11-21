@@ -1,0 +1,47 @@
+grammar de.unistuttgart.iste.modeling.queries.QueryDsl with org.eclipse.xtext.common.Terminals
+
+generate querydsl "http://www.mpw.uni-stuttgart.de/querydsl"
+
+Model:
+	(context=Context) (expressions+=Expression)+ ';';
+	
+Expression:
+	OrExpression
+;
+
+OrExpression returns Expression:
+	ImpliesExpression ({OrExpression.left=current} 'or' right=ImpliesExpression)*
+;
+
+ImpliesExpression returns Expression:
+	AndExpression ({ImpliesExpression.left=current} 'implies' right=AndExpression)*
+;
+
+AndExpression returns Expression:
+	EqualityExpression ({AndExpression.left=current} 'and' right=EqualityExpression)*
+;
+
+EqualityExpression returns Expression:
+	PropertyPathExpression ({EqualityExpression.left=current} operation=('='|'<>') right=PropertyPathExpression)*
+;
+
+PropertyPathExpression returns Expression:
+    statements+=Statement statements+=(NavigatedStatement)*;
+    
+Statement:
+	target='self' | target=Direction | target=ID;
+
+NavigatedStatement returns Statement:
+    ('.' target=ID) | ('->' target=CollectionMethod);
+    
+CollectionMethod:
+	('notEmpty' | 'isEmpty') '()';
+	
+Context:
+	'context' className=ID kind=ContextKind name=ID ':';
+	
+enum ContextKind:
+    QUERY = 'query' | PRE = 'pre' | POST = 'post';
+    
+Direction:
+	('EAST' | 'WEST' | 'SOUTH' | 'NORTH');
