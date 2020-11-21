@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated mpw -->
+      <package
+            uri="http://www.mpw.uni-stuttgart.de/command"
+            class="command.CommandPackage"
+            genModel="model/mpw.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated mpw -->
+      <package
+            uri="http://www.mpw.uni-stuttgart.de/hamster"
+            class="hamster.HamsterPackage"
+            genModel="model/mpw.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated mpw -->
+      <package
+            uri="http://www.mpw.uni-stuttgart.de/hamsterviewmodel"
+            class="hamsterviewmodel.HamsterviewmodelPackage"
+            genModel="model/mpw.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated mpw -->
+      <package
+            uri="http://www.mpw.uni-stuttgart.de/mpw"
+            class="mpw.MpwPackage"
+            genModel="model/mpw.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated mpw -->
+      <package
+            uri="http://www.mpw.uni-stuttgart.de/viewmodel"
+            class="viewmodel.ViewmodelPackage"
+            genModel="model/mpw.genmodel"/>
+   </extension>
+
+</plugin>

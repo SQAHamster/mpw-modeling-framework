@@ -13,6 +13,7 @@
     <semanticResources>model/Command.ecore</semanticResources>
     <semanticResources>model/ViewModel.ecore</semanticResources>
     <semanticResources>model/HamsterViewModel.ecore</semanticResources>
+    <semanticResources>model/mpw.genmodel</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" uid="_AlcLIBtzEeuBToo0ySntrA">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']"/>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_BWHaIRtzEeuBToo0ySntrA" name="hamster class diagram" repPath="#_BWDvwBtzEeuBToo0ySntrA" changeId="ab17235d-21c7-4d1f-b0bc-d2c328a6f24d">
