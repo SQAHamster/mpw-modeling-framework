@@ -14,5 +14,5 @@ Require-Bundle: de.unistuttgart.iste.modeling.queries.ui,
  org.eclipse.core.runtime,
  org.eclipse.xtext.ui.testing,
  org.eclipse.ui.workbench;resolution:=optional
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-14
 Export-Package: de.unistuttgart.iste.modeling.queries.ui.tests;x-internal=true

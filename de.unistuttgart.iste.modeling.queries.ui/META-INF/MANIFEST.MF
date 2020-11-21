@@ -20,7 +20,7 @@ Require-Bundle: de.unistuttgart.iste.modeling.queries,
  org.eclipse.jdt.debug.ui,
  org.eclipse.xtext.common.types.ui
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-14
 Export-Package: de.unistuttgart.iste.modeling.queries.ui.quickfix,
  de.unistuttgart.iste.modeling.queries.ui.contentassist,
  de.unistuttgart.iste.modeling.queries.ui.internal
