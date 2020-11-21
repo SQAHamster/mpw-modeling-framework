@@ -1,9 +1,10 @@
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 modeltype Commandgt uses commandgt('http://www.mpw.uni-stuttgart.de/commandgt');
+modeltype QueryDsl uses querydsl('http://www.mpw.uni-stuttgart.de/querydsl');
 
 transformation RoleTransformation(inout ecore: Ecore);
 
-configuration property Queries: List(String);
+configuration property Queries: List(QueryDsl::Model);
 configuration property Commands: List(Commandgt::Transformation);
 
 main() {
@@ -40,8 +41,15 @@ helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
   	_abstract := true;
   	interface := true;
   };
-  readOnlyRole.eOperations += self.eAllStructuralFeatures->select(f|f.changeable)->map transformFeatureToGetterOperation();
-  readOnlyRole.eOperations += Queries->select(q|q.startsWith(baseName))->map transformQueryToOperation();
+  readOnlyRole.eOperations += self.eAllStructuralFeatures->select(f|f.changeable)
+            											 ->map transformFeatureToGetterOperation();
+  var queriesForThisType := Queries->select(q|q.context.className = baseName);
+  readOnlyRole.eOperations += queriesForThisType->reject(q|readOnlyRole.eAllOperations->exists(o|o.name = q.context.name))
+  									 			->map transformQueryToOperation();
+  readOnlyRole.eOperations->select(o|queriesForThisType->exists(q|q.context.name = o.name))
+						  ->forEach(o) {
+						 	 o.eAnnotations += "isQuery".toMarkerAnnotation();
+						  };
   self.ePackage.eClassifiers += readOnlyRole;
   return readOnlyRole;
 }
@@ -52,13 +60,13 @@ helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ec
   	_abstract := true;
   	interface := true;
   };
-  roleClass.eOperations += Commands->select(c|c.roleName = roleName and c.targetClassName = baseName)->map transformCommandToOperation();
+  roleClass.eOperations += Commands->select(c|c.roleName = roleName and c.targetClass.name = baseName)->map transformCommandToOperation();
   self.ePackage.eClassifiers += roleClass;
   return roleClass;
 }
 
-mapping String::transformQueryToOperation() : EOperation {
-	name := self.substringAfter("|");
+mapping QueryDsl::Model::transformQueryToOperation() : EOperation {
+	name := self.context.name;
 	eType := EBoolean.oclAsType(EClassifier);
 	eAnnotations += "isQuery".toMarkerAnnotation();
 }
