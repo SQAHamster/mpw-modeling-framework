@@ -23,3 +23,5 @@ Require-Bundle: org.eclipse.xtend.profiler;resolution:=optional,
  de.unistuttgart.iste.modeling.queries
 Bundle-RequiredExecutionEnvironment: JavaSE-14
 Automatic-Module-Name: de.unistuttgart.iste.modeling.generator
+Import-Package: org.eclipse.emf.mwe2.ecore,
+ org.eclipse.xtext.ecore

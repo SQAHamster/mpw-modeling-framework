@@ -45,5 +45,4 @@
             class="viewmodel.ViewmodelPackage"
             genModel="model/mpw.genmodel"/>
    </extension>
-
 </plugin>

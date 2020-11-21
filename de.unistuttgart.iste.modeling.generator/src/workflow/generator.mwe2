@@ -9,12 +9,18 @@ import org.eclipse.xpand2.Generator
 import org.eclipse.xpand2.output.JavaBeautifier
 import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
 
+var platformUriPrefix = "platform:/resource"
+var moduleBaseName = "de.unistuttgart.iste.modeling"
+
 var generatedProjectBasePackage  = "'de.unistuttgart.hamster'"
-var mpwModelProject  = "de.unistuttgart.iste.modeling.mpw"
-var commandsModelProject  = "de.unistuttgart.iste.modeling.commands"
-var queriesModelProject  = "de.unistuttgart.iste.modeling.queries"
-var roleTransformationUri  = "platform:/resource/de.unistuttgart.iste.modeling.transformations/transforms/RoleTransformation.qvto"
-var commandTransformationUri  = "platform:/resource/de.unistuttgart.iste.modeling.transformations/transforms/CommandTransformation.qvto"
+
+var mpwModelProject  = "${moduleBaseName}.mpw"
+var commandsModelProject  = "${moduleBaseName}.commands"
+var queriesModelProject  = "${moduleBaseName}.queries"
+var transformationsProject = "${moduleBaseName}.transformations"
+
+var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/RoleTransformation.qvto"
+var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/CommandTransformation.qvto"
 var dirSrcGen = "src-gen"
 
 Workflow {
@@ -29,6 +35,16 @@ Workflow {
 	bean = EmfRegistryMetaModel : mm_emf { }
 
 	bean = JavaBeautifier : formatter_java { }
+	
+	/* generate genmodels */
+	/* component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
+		genModel = "${platformUriPrefix}/${mpwModelProject}/model/mpw.genmodel"
+		srcPath = "${platformUriPrefix}/${mpwModelProject}/${dirSrcGen}"
+	}
+	component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
+		genModel = "${platformUriPrefix}/${transformationsProject}/model/transformations.genmodel"
+		srcPath = "${platformUriPrefix}/${transformationsProject}/${dirSrcGen}"
+	} */
 
 	/* load model and store it in slots */
 	component = components.MultiEcoreReader {
