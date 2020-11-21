@@ -17,6 +17,8 @@ import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 
+import de.unistuttgart.iste.modeling.queries.querydsl.Model;
+
 public class XmiWriter extends WorkflowComponentWithModelSlot {
 	private final static Logger log = Logger.getLogger(XmiWriter.class.getName());
 	
@@ -43,8 +45,8 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 			Map<String, String> saveOptions = new HashMap<String, String>();
 			saveOptions.put(org.eclipse.emf.ecore.xmi.XMLResource.OPTION_ENCODING, "UTF-8");
 			
-			var nameFeature = object.eClass().getEStructuralFeature("name");
-			String fileUri = "platform:/resource/de.unistuttgart.iste.modeling.generator/out/" + object.eGet(nameFeature) + "." + fileExtension;
+			var name = getName(object);
+			String fileUri = "platform:/resource/de.unistuttgart.iste.modeling.generator/out/" + object.eClass().getEPackage().getName() + "/" + name + "." + fileExtension;
 			
 			var resourceSet = new ResourceSetImpl();
 
@@ -60,6 +62,14 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 		} catch (IOException e) {
 			log.error("Error during creating Xmi.", e);
 		}
+	}
+
+	private String getName(EObject object) {
+		if (object instanceof Model) {
+			return ((Model) object).getContext().getName();
+		}
+		var nameFeature = object.eClass().getEStructuralFeature("name");
+		return "" + object.eGet(nameFeature);
 	}
 	
 }

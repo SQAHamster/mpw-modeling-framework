@@ -14,7 +14,7 @@ private List[String] getQueries() : GLOBALVAR queries;
 
 List[String] getCommandsForType(EClass class) : 
     getCommands()
-    .collect(c|c.roleName.toFirstUpper() + c.targetClassName)
+    .collect(c|c.roleName.toFirstUpper() + c.targetClass.name)
     .select(n|n == class.name);
 
 private List[Transformation] getCommands() : GLOBALVAR commands;

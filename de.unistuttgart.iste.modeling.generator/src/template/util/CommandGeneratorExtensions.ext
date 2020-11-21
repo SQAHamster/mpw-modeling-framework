@@ -1,4 +1,5 @@
 import commandgt;
+import ecore;
 
 extension template::util::GlobalsGeneratorExtensions reexport;
 
@@ -10,3 +11,21 @@ getCommandJavaPackageName(Transformation this) :
 
 String toPropertyGetters(String s) :
     JAVA template.properties.PropertyUtils.toPropertyGetters(java.lang.String);
+
+getConcreteName(EClass this) : "Concrete" + name;
+
+getConcreteTypeName(InstanceCondition this) :
+  let transformation = (Transformation)eRootContainer : 
+  if (transformation.targetClass.name == this.typeName) then "Concrete" + this.typeName
+  else this.typeName;
+
+getVisibility(Unit this) : 
+  if (name == "execute") then "public" else "private";
+  
+getVariableNameForFindReference(ManyReferenceCondition this) :
+  if (isPolymorphic()) then target.variableName + this.type.eType.name
+  else target.variableName;
+  
+isPolymorphic(ManyReferenceCondition this) :
+  this.type.eType.name != this.target.typeName;
+    

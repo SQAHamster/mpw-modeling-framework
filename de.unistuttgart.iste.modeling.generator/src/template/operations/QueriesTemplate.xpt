@@ -3,7 +3,7 @@
 «EXTENSION template::util::GeneratorExtensions»
 
 «DEFINE QueryDefinitions FOR EClass»
-	  «FOREACH eAllOperations.select(o|o.isQuery()) AS q»
+	  «FOREACH eAllOperations.select(o|o.isQuery()).reject(o|o.isPropertyGetter()) AS q»
 	  @Override
 	  public «q.operationToJavaType()» «q.name»() {
 	      throw new RuntimeException("not implemented");

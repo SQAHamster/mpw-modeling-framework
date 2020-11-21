@@ -12,6 +12,7 @@ import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
 var generatedProjectBasePackage  = "'de.unistuttgart.hamster'"
 var mpwModelProject  = "de.unistuttgart.iste.modeling.mpw"
 var commandsModelProject  = "de.unistuttgart.iste.modeling.commands"
+var queriesModelProject  = "de.unistuttgart.iste.modeling.queries"
 var roleTransformationUri  = "platform:/resource/de.unistuttgart.iste.modeling.transformations/transforms/RoleTransformation.qvto"
 var commandTransformationUri  = "platform:/resource/de.unistuttgart.iste.modeling.transformations/transforms/CommandTransformation.qvto"
 var dirSrcGen = "src-gen"
@@ -37,6 +38,7 @@ Workflow {
 	}
 	
 	component = components.QueryReader {
+		projectName = queriesModelProject
 		modelSlot = "queries"
 	}
 	
@@ -63,6 +65,10 @@ Workflow {
 	
 	component = components.XmiWriter {
 		modelSlot = "commands"
+	}
+
+	component = components.XmiWriter {
+		modelSlot = "queries"
 	}
 	
 	/* check model */

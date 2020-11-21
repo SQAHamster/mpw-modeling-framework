@@ -21,7 +21,7 @@
       «EXPAND template::properties::PropertyTemplate::PropertyDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::ConstructorDefinition FOR this»
       «EXPAND template::operations::QueriesTemplate::QueryDefinitions FOR this»
-      «EXPAND template::operations::CommandsTemplate::CommandDefinitions FOR this»
+      «EXPAND template::operations::CommandCallsTemplate::CommandDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»

@@ -82,6 +82,8 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 				log.debug("found: " + fileName);
 			});
 			
+			log.info("found " + modelNames.size() + " " + fileExtension + " files");
+			
 			addModelsToSlot(context, modelNames);
 		} catch (IOException e) {
 			log.error("Failed to locate " + getModelNameFromExtension() + " files under: " + targetDirectory, e);

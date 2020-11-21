@@ -64,6 +64,15 @@
         «ELSE-»
 	  	this.«f.name» = «f.name»;
 	    «ENDIF-»
+	    «REM»
+	    «IF EReference.isInstance(f)-»
+	    «LET (EReference)f AS r-»
+	    «IF r.eOpposite != null-»
+	    «f.name».«r.eOpposite.name.setter()»(«f.name.getter()»());
+	    «ENDIF-»
+	    «ENDLET-»
+	    «ENDIF-»
+	    «ENDREM»
 	  }
       «ENDFOREACH»
 «ENDDEFINE»

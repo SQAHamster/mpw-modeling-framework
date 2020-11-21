@@ -6,6 +6,9 @@
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
     import java.util.List;
 	«ENDIF-»
+	«IF !interface && eAllOperations.exists(o|o.isCommand())-»
+    import «getModulePackage()».commands.*;
+	«ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
 	    eOperations.exists(o|o.isPropertyGetter())-»
 	import javafx.beans.property.*;
@@ -37,4 +40,8 @@
 
 «DEFINE SingleImportDefinition FOR EClassifier-»
     import «getModulePackage()».«ePackage.name».«name»;
+«ENDDEFINE»
+
+«DEFINE CommandEntityImportDefinition FOR EClass-»
+    import «getModulePackage()».«ePackage.name».*;
 «ENDDEFINE»

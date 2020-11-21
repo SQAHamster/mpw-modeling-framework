@@ -6,7 +6,7 @@
 	  «FOREACH eAllOperations.select(o|o.isCommand()) AS c»
 	  @Override
 	  public void «c.name»() {
-	      throw new RuntimeException("not implemented");
+	      new «c.name.toFirstUpper()»Command(this).execute();
 	  }
       «ENDFOREACH»
 «ENDDEFINE»

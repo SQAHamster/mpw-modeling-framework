@@ -3,29 +3,22 @@
 «EXTENSION template::util::GeneratorExtensions»
 
 «DEFINE main FOR Transformation»
-    «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Transformation.java"»package «this.getCommandJavaPackageName()»;
+    «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Command.java"»package «this.getCommandJavaPackageName()»;
     	
-        import static framework.helper.CommandgtAssert.*;
-    	import «getModulePackage()».*;
-    	import «getModulePackage()».impl.*;
+        import static de.unistuttgart.hamster.framework.FrameworkAssert.*;
+    	«EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
     	import «getModulePackage()».mpw.*;
-    	import «getModulePackage()».mpw.Direction.*;
+    	import static «getModulePackage()».mpw.Direction.*;
     	
-		public class «name.toFirstUpper()»Transformation {
-			private final «IF name.contains("Territory")»Territory«ELSE»Hamster«ENDIF» thisInstance;
+		public class «name.toFirstUpper()»Command {
+			private final «targetClass.getConcreteName()» thisInstance;
 			«IF mainUnit != null»
 			«FOREACH mainUnit.parameters AS p»
 			private final «p.type.toJavaType()» «p.name»;
 			«ENDFOREACH»
 			«ENDIF»
 		
-			«IF mainUnit != null»
-			public «name.toFirstUpper()»Transformation(«FOREACH mainUnit.parameters.select(e|e.name != "thisInstance") AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH») {
-			«ELSE»
-			«LET name.contains("Territory") ? "Territory" : "Hamster" AS thisName»
-			public «name.toFirstUpper()»Transformation(«thisName» self) {
-			«ENDLET»
-			«ENDIF»
+			public «name.toFirstUpper()»Command(«targetClass.getConcreteName()» self«FOREACH mainUnit.parameters AS p», «p.type.toJavaType()» «p.name»«ENDFOREACH») {
 				this.thisInstance = self;
 				
 				«IF mainUnit != null»
@@ -39,6 +32,30 @@
             «EXPAND UnitExpand FOREACH units.excluding(mainUnit)»
         }
     «ENDFILE»
+«ENDDEFINE»
+
+«DEFINE UnitExpand FOR Unit»
+	«getVisibility()» void «name»(«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH») {
+	«EXPAND UnitExpandBody FOR this»
+	}
+«ENDDEFINE»
+
+«DEFINE UnitExpandBody FOR Unit»«ENDDEFINE»
+
+«DEFINE UnitExpandBody FOR ConditionalUnit»
+    «FOREACH conditions AS c»
+    if («c.condition.toPropertyGetters()») {
+	«EXPAND UnitInvokeExpand FOR c.unit»
+	}
+    «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE UnitExpandBody FOR SequentialUnit»
+	«EXPAND UnitInvokeExpand FOR this»
+«ENDDEFINE»
+
+«DEFINE UnitExpandBody FOR IteratedUnit»
+	«EXPAND UnitInvokeExpand FOR this»
 «ENDDEFINE»
 
 «DEFINE UnitInvokeExpand FOR Unit»«ENDDEFINE»
@@ -59,24 +76,8 @@
     «name»();
 «ENDDEFINE»
 
-«DEFINE UnitExpand FOR Unit»
-	private void «name»(«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH») {
-	«EXPAND UnitExpandBody FOR this»
-	}
-«ENDDEFINE»
-
-«DEFINE UnitExpandBody FOR Unit»«ENDDEFINE»
-
-«DEFINE UnitExpandBody FOR SequentialUnit»
-	«EXPAND UnitInvokeExpand FOR this»
-«ENDDEFINE»
-
-«DEFINE UnitExpandBody FOR IteratedUnit»
-	«EXPAND UnitInvokeExpand FOR this»
-«ENDDEFINE»
-
 «DEFINE UnitExpand FOR Rule»
-    private void «name»() {
+    «getVisibility()» void «name»() {
     «EXPAND VariableDefinition FOREACH variables»
     «EXPAND InstanceDefinition FOREACH instanceConditions»
     «EXPAND ReferenceDefinition FOREACH referenceConditions»
@@ -123,13 +124,13 @@
 	«IF !this.isCreate»
 		// find new variable from many-reference: «this.source.variableName»:«this.source.typeName» -> «this.referenceName» -> «this.target.variableName»:«this.target.typeName»
 		«LET (Rule)this.eContainer AS rule»
-	    «this.target.typeName» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»();
+	    «this.target.typeName» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.variableName»);
 	    «ENDLET»
 	«ENDIF»
 «ENDDEFINE»
 
 «DEFINE VariableAssignmentDefinition FOR VariableAssignment»
-    «attributeValueLiteral» = «instance.variableName».«getter(attributeName)»();
+    «variableName» = «value»;
 «ENDDEFINE»
 
 «DEFINE AttributeDefinition FOR AttributeCondition»
@@ -145,7 +146,11 @@
 	«ENDIF»
     «IF this.action == Action::DELETE && this.reference != null»
     // remove reference: «this.action» «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
-    «this.reference.source.variableName».«setter(this.reference.referenceName)»(null);
+    «IF this.reference.metaType == SingleReferenceCondition»
+        «this.reference.source.variableName».«setter(this.reference.referenceName)»(null);
+    «ELSE»
+		«this.reference.source.variableName».«getter(this.reference.referenceName)»().remove(«this.reference.target.variableName»);
+    «ENDIF»
     «ENDIF»
 «ENDDEFINE»
 
@@ -166,11 +171,17 @@
 «DEFINE FindObjectDefinition FOR ManyReferenceCondition»
 	«LET (Rule)this.eContainer AS rule»
 	
-	private «this.target.typeName» «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»() {
+	private «this.target.typeName» «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.getConcreteTypeName()» source) {
 		«this.target.typeName» result = null;
 		
-		for («this.target.typeName» «this.target.variableName» : thisInstance.«getter(this.referenceName)»()) {
-			«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && !e.isVariableAssignment && e.instance == this.target)»
+		for («this.type.eType.name» «getVariableNameForFindReference()» : source.«getter(this.referenceName)»()) {
+		    «IF isPolymorphic()»
+		      if (!(«getVariableNameForFindReference()» instanceof «this.target.typeName»)) {
+		        continue;
+		      }
+		      «this.target.typeName» «this.target.variableName» = («this.target.typeName»)«getVariableNameForFindReference()»;
+		    «ENDIF»
+			«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)»
 			«EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)»
 			
 			result = «this.target.variableName»;
@@ -202,7 +213,7 @@
     }
     
 	«LET (Rule)this.eContainer AS rule»
-	«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && !e.isVariableAssignment && e.instance == this.target)»
+	«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)»
 	«EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)»
 	«ENDLET»
 «ENDDEFINE»
