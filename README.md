@@ -22,9 +22,8 @@ Polyglot hamstersimulation, which is based on a Model-Driven-Engineering approac
 * run QueryDsl workflow generation
     * `de.unistuttgart.iste.sqa.mpw.modeling.queries/src/de/unistuttgart/iste/sqa/mpw/modeling/queries/GenerateQueryDsl.mwe2`
     
-* obtain javafx-base (note: will later be handled by maven)
-    * download from: `https://mvnrepository.com/artifact/org.openjfx/javafx-base/14`
-    * place it as: `de.unistuttgart.iste.sqa.mpw.modeling.generator/lib/javafx-base-14.jar`
-    
 * run final generation
     * `de.unistuttgart.iste.sqa.mpw.modeling.generator/src/workflow/generator.mwe2`
+
+* open target project in the IDE of choice
+    * Java by Maven: `de.unistuttgart.iste.sqa.mpw.hamstersimulator.java`
