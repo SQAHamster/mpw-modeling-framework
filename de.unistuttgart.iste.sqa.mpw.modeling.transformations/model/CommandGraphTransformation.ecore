@@ -70,12 +70,15 @@
   <eClassifiers xsi:type="ecore:EClass" name="Modification">
     <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//ReferenceCondition"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="instance" eType="#//InstanceCondition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="#//AttributeCondition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newAttributeValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" lowerBound="1"
         eType="#//Action" defaultValueLiteral="CREATE"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Action">
     <eLiterals name="DELETE"/>
     <eLiterals name="CREATE" value="1"/>
+    <eLiterals name="MODIFY" value="2" literal="MODIFY"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VariableAssignment">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"

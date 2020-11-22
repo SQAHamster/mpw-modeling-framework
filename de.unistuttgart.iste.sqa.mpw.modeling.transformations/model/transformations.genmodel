@@ -9,6 +9,7 @@
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="CommandGraphTransformation.ecore#//Action">
       <genEnumLiterals ecoreEnumLiteral="CommandGraphTransformation.ecore#//Action/DELETE"/>
       <genEnumLiterals ecoreEnumLiteral="CommandGraphTransformation.ecore#//Action/CREATE"/>
+      <genEnumLiterals ecoreEnumLiteral="CommandGraphTransformation.ecore#//Action/MODIFY"/>
     </genEnums>
     <genClasses ecoreClass="CommandGraphTransformation.ecore#//Transformation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Transformation/name"/>
@@ -55,6 +56,8 @@
     <genClasses ecoreClass="CommandGraphTransformation.ecore#//Modification">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Modification/reference"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Modification/instance"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Modification/attribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Modification/newAttributeValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Modification/action"/>
     </genClasses>
     <genClasses ecoreClass="CommandGraphTransformation.ecore#//VariableAssignment">

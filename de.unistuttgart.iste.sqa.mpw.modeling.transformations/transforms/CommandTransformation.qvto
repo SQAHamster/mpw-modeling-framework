@@ -71,8 +71,7 @@ mapping Henshin::Rule::toRule() : Commandgt::Rule {
   
   modifications := self.lhs.edges[action.toString() = "delete"]->map toDeleteEdgeModifications();
   modifications += self.rhs.edges[action.toString() = "create"]->map toAddEdgeModifications();
-  
-  // TODO attribute modifications
+  modifications += self.lhs.allSubobjectsOfType(Attribute)[isModification()]->map toAttributeModifications();
   
   thisInstance := self.lhs.nodes->any(n|n.type.eSuperTypes->exists(t|t.name = 'Actor')).resolveone(Commandgt::InstanceCondition);
   if (thisInstance = null) {
@@ -82,6 +81,20 @@ mapping Henshin::Rule::toRule() : Commandgt::Rule {
   referenceConditions := result.sortReferences();
   
   thisInstance.variableName := "thisInstance";
+}
+
+helper Henshin::Attribute::isModification() : Boolean {
+	if (self.action.toString() <> "preserve") {
+		return false;
+	};
+	var rhsAttribute = self.getRhsAttribute();
+	return self.value <> rhsAttribute.value;
+}
+
+helper Henshin::Attribute::getRhsAttribute() : Henshin::Attribute {
+	var lhsNode := self.node;
+	var rhsNode: Node := self.getGraph().getRule().mappings->any(origin = lhsNode).image;
+	return rhsNode.attributes->any(type = self.type);
 }
 
 mapping Henshin::IteratedUnit::toIteratedUnit() : Commandgt::IteratedUnit {
@@ -143,7 +156,7 @@ mapping Henshin::Attribute::toAttributeCondition() : Commandgt::AttributeConditi
   var inName = self.type.name;
   
   attributeName := inName;
-  attributeValueLiteral := self.value.replaceAll("\"(WEST|NORTH|SOUTH|EAST)\"", "$1");
+  attributeValueLiteral := self.value.toEffectiveValueLiteral();
   if (self.type.eType.name = "EBoolean") {
   	attributeName := "is" + inName.substring(1, 1).toUpper();
   	if (inName.size() >= 2) {
@@ -154,6 +167,10 @@ mapping Henshin::Attribute::toAttributeCondition() : Commandgt::AttributeConditi
   
   var rule = self.node.graph.getRule();
   // isVariableAssignment := rule.parameters->exists(p|p.name = result.attributeValueLiteral);
+}
+
+helper String::toEffectiveValueLiteral() : EString {
+	return self.replaceAll("\"(WEST|NORTH|SOUTH|EAST)\"", "$1");
 }
 
 mapping Henshin::Attribute::toCreateAttributeCondition() : Commandgt::AttributeCondition {
@@ -230,6 +247,13 @@ mapping Henshin::Edge::toAddEdgeModifications() : Commandgt::Modification {
 mapping Henshin::Edge::toDeleteEdgeModifications() : Commandgt::Modification {
   reference := self.resolveone(Commandgt::ReferenceCondition);
   action := Commandgt::Action::DELETE;
+}
+
+mapping Henshin::Attribute::toAttributeModifications() : Commandgt::Modification {
+  var rhsAttribute := self.getRhsAttribute();
+  attribute := self.resolveone(Commandgt::AttributeCondition);
+  action := Commandgt::Action::MODIFY;
+  newAttributeValue := rhsAttribute.value.toEffectiveValueLiteral();
 }
 
 helper createConditionalMainUnitForRules(inout m: Commandgt::Transformation) : Commandgt::Unit {
