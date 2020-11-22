@@ -10,23 +10,29 @@ import org.eclipse.xpand2.output.JavaBeautifier
 import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
 
 var platformUriPrefix = "platform:/resource"
-var moduleBaseName = "de.unistuttgart.iste.sqa.mpw.modeling"
+var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
+var modelingModuleBaseName = "${moduleBaseName}.modeling"
 
 var generatedProjectBasePackage  = "'de.unistuttgart.hamster'"
 
-var mpwModelProject  = "${moduleBaseName}.mpw"
-var commandsModelProject  = "${moduleBaseName}.commands"
-var queriesModelProject  = "${moduleBaseName}.queries"
-var transformationsProject = "${moduleBaseName}.transformations"
+var projectRoot  = ".."
+var mpwModelProject  = "${modelingModuleBaseName}.mpw"
+var commandsModelProject  = "${modelingModuleBaseName}.commands"
+var queriesModelProject  = "${modelingModuleBaseName}.queries"
+var transformationsProject = "${modelingModuleBaseName}.transformations"
+var generatorProject = "${modelingModuleBaseName}.generator"
+
+var targetSimulatorProject = "${moduleBaseName}.hamstersimulator.java"
+var targetCoreSimulatorProject = "${targetSimulatorProject}/core"
 
 var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/RoleTransformation.qvto"
 var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/CommandTransformation.qvto"
-var dirSrcGen = "src-gen"
+var simulatorTargetSrcGen = "${projectRoot}/${targetCoreSimulatorProject}/src/main/generated"
 
 Workflow {
 	/* set up EMF for standalone execution */
 	bean = StandaloneSetup { 
-		platformUri="../"
+		platformUri="${projectRoot}"
 		registerEcoreFile="platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.transformations/model/CommandGraphTransformation.ecore"
 		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
 	}
@@ -39,11 +45,11 @@ Workflow {
 	/* generate genmodels */
 	/* component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
 		genModel = "${platformUriPrefix}/${mpwModelProject}/model/mpw.genmodel"
-		srcPath = "${platformUriPrefix}/${mpwModelProject}/${dirSrcGen}"
+		srcPath = "${platformUriPrefix}/${mpwModelProject}/src-gen}"
 	}
 	component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
 		genModel = "${platformUriPrefix}/${transformationsProject}/model/transformations.genmodel"
-		srcPath = "${platformUriPrefix}/${transformationsProject}/${dirSrcGen}"
+		srcPath = "${platformUriPrefix}/${transformationsProject}/src-gen"
 	} */
 
 	/* load model and store it in slots */
@@ -96,7 +102,7 @@ Workflow {
 
 	/** Clear output directory */
 	component = DirectoryCleaner {
-		directory = dirSrcGen
+		directory = simulatorTargetSrcGen
 		exclude = "impl"
 	}
 
@@ -117,7 +123,7 @@ Workflow {
 		metaModel = mm_emf
 		expand = "template::EcoreEntitiesTemplate::main FOR entityModels"
 		outlet = {
-			path = dirSrcGen
+			path = simulatorTargetSrcGen
 			overwrite = false
 			postprocessor = formatter_java
 			fileEncoding = "ISO-8859-1"
@@ -137,7 +143,7 @@ Workflow {
 		metaModel = mm_emf
 		expand = "template::CommandTemplate::main FOREACH commands"
 		outlet = {
-			path = dirSrcGen
+			path = simulatorTargetSrcGen
 			postprocessor = formatter_java
 			fileEncoding = "ISO-8859-1"
 		}
@@ -146,4 +152,9 @@ Workflow {
 		}
 	}
 
+    /* copy framework util code */
+    component = components.DirectoryCopyer {
+    	sourcePath = "${projectRoot}/${generatorProject}/src-framework"
+    	targetPath = simulatorTargetSrcGen
+    }
 }
