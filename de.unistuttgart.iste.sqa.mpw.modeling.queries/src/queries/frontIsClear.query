@@ -1,5 +1,5 @@
 context Hamster
-query isFrontClear: 
+query frontIsClear: 
         self.direction = WEST implies self.position.west.isClear
     and self.direction = EAST implies self.position.east.isClear
     and self.direction = NORTH implies self.position.north.isClear
