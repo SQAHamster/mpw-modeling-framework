@@ -3,7 +3,7 @@ import ecore;
 extension template::util::EmfGeneratorExtensions reexport;
 
 isObservableProperty(EStructuralFeature this) :
-    this.changeable && this.eContainingClass.eAllSuperTypes.notExists(t|t.name == "Command");
+    this.changeable && !this.derived && this.eContainingClass.eAllSuperTypes.notExists(t|t.name == "Command");
     
 featureToObservableFieldType(EStructuralFeature this) :
 	if (this.upperBound == -1) then "ReadOnlyListWrapper<" + this.eType.name.toUnboxedJavaTypeName() + ">"

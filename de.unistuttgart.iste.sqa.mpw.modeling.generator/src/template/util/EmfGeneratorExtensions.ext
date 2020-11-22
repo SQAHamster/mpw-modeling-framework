@@ -10,7 +10,11 @@ isCollection(ETypedElement this) :
     upperBound == -1;
 	
 isConstructorInjectedProperty(EStructuralFeature this) :
-    !this.changeable && !this.isContainment();
+    !this.changeable && !this.isContainment() && !this.derived;
+
+// e.g. Territory is a concrete references for derviced "stage" reference.
+isStageField(EStructuralFeature this) :
+    EClass.isInstance(this.eType) && ((EClass)this.eType).eSuperTypes.exists(t|t.name == "Stage");
     
 isContainment(EStructuralFeature this) :
     EReference.isInstance(this) && ((EReference)this).containment;

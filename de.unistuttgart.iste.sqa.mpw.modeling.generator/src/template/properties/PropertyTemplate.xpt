@@ -6,11 +6,11 @@
 	  «FOREACH eStructuralFeatures AS f»
 	  «IF f.isObservableProperty()»
       private final «f.featureToObservableFieldType()» «f.name» = «f.featureToObservableFieldInstantiation()»;
-      «ELSEIF f.changeable»
+      «ELSEIF f.derived || f.changeable»
       private «f.featureToJavaType()» «f.name»;
       «ELSEIF f.isConstructorInjectedProperty()»
       private final «f.featureToJavaType()» «f.name»;
-	  «ELSE»
+	  «ELSEIF !f.derived»
       private final «f.featureToJavaType()» «f.name» = «f.featureToFieldInstantiation()»;
 	  «ENDIF»
       «ENDFOREACH»
@@ -25,6 +25,9 @@
       «ENDIF»
       «FOREACH injectedProperties.without(injectedForParentProperties) AS f»
       this.«f.name» = «f.name»;
+      «ENDFOREACH»
+      «FOREACH eAllStructuralFeatures.select(f|f.isStageField()) AS f»
+      «"stage".setter()»(«f.name»);
       «ENDFOREACH»
       }
       «ENDLET»
@@ -58,7 +61,7 @@
 
 «DEFINE SetPropertyValueDefinitions FOR EClass»
 	  «FOREACH eStructuralFeatures.select(e|e.changeable).reject(e|e.isCollection()) AS f»
-	  public void «f.name.setter()»(«f.featureToJavaType()» «f.name») {
+	  «IF f.derived»protected«ELSE»public«ENDIF» void «f.name.setter()»(«f.featureToJavaType()» «f.name») {
   	    «IF f.isObservableProperty()-»
 	  	this.«f.name».set(«f.name»);
         «ELSE-»

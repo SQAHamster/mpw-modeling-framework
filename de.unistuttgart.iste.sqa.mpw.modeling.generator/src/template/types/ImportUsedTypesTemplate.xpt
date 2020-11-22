@@ -9,6 +9,9 @@
 	«IF !interface && eAllOperations.exists(o|o.isCommand())-»
     import «getModulePackage()».commands.*;
 	«ENDIF-»
+	«IF eAllOperations.exists(o|o.isCommand())-»
+    import «getModulePackage()».command.*;
+	«ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
 	    eOperations.exists(o|o.isPropertyGetter())-»
 	import javafx.beans.property.*;

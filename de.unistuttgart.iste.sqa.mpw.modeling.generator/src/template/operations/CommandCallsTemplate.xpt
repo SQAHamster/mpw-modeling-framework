@@ -5,8 +5,8 @@
 «DEFINE CommandDefinitions FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isCommand()) AS c»
 	  @Override
-	  public void «c.name»() {
-	      new «c.name.toFirstUpper()»Command(this).execute();
+	  public void «c.name»(CommandStack commandStack) {
+	      new «c.name.toFirstUpper()»Command(this, commandStack).execute();
 	  }
       «ENDFOREACH»
 «ENDDEFINE»

@@ -8,6 +8,7 @@
         import static de.unistuttgart.hamster.framework.FrameworkAssert.*;
     	«EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
     	import «getModulePackage()».mpw.*;
+    	import «getModulePackage()».command.*;
     	import static «getModulePackage()».mpw.Direction.*;
     	
 		public class «name.toFirstUpper()»Command {
@@ -35,7 +36,7 @@
 «ENDDEFINE»
 
 «DEFINE UnitExpand FOR Unit»
-	«getVisibility()» void «name»(«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH») {
+	«getVisibility()» void «name»(«IF name != "execute"»«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
 	«EXPAND UnitExpandBody FOR this»
 	}
 «ENDDEFINE»
