@@ -8,7 +8,7 @@
   <foreignModel>Hamster.ecore</foreignModel>
   <foreignModel>HamsterViewModel.ecore</foreignModel>
   <foreignModel>MiniProgrammingWorld.ecore</foreignModel>
-  <foreignModel>ViewModel.ecore</foreignModel>
+  <foreignModel>stereotypes/ViewModel.ecore</foreignModel>
   <genPackages prefix="Command" disposableProviderFactory="true" ecorePackage="Command.ecore#/">
     <genDataTypes ecoreDataType="Command.ecore#//Object"/>
     <genClasses image="false" ecoreClass="Command.ecore#//PrimitiveCommand">
@@ -124,9 +124,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Location/row"/>
     </genClasses>
   </genPackages>
-  <genPackages prefix="Viewmodel" disposableProviderFactory="true" ecorePackage="ViewModel.ecore#/">
-    <genClasses image="false" ecoreClass="ViewModel.ecore#//Presenter"/>
-    <genClasses image="false" ecoreClass="ViewModel.ecore#//ViewModel"/>
-    <genClasses image="false" ecoreClass="ViewModel.ecore#//ViewStereotype"/>
+  <genPackages prefix="Viewmodel" disposableProviderFactory="true" ecorePackage="stereotypes/ViewModel.ecore#/">
+    <genClasses image="false" ecoreClass="stereotypes/ViewModel.ecore#//Presenter"/>
+    <genClasses image="false" ecoreClass="stereotypes/ViewModel.ecore#//ViewModel"/>
+    <genClasses image="false" ecoreClass="stereotypes/ViewModel.ecore#//ViewStereotype"/>
   </genPackages>
 </genmodel:GenModel>
