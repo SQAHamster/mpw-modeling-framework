@@ -44,8 +44,8 @@
 «DEFINE UnitExpandBody FOR Unit»«ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR ConditionalUnit»
-    «FOREACH conditions AS c»
-    if («c.condition.toPropertyGetters()») {
+    if«FOREACH conditions AS c SEPARATOR " else if "-»
+    («c.condition.toPropertyGetters()») {
 	«EXPAND UnitInvokeExpand FOR c.unit»
 	}
     «ENDFOREACH»
@@ -83,8 +83,9 @@
     «EXPAND InstanceDefinition FOREACH instanceConditions»
     «EXPAND ReferenceDefinition FOREACH referenceConditions»
     «EXPAND AttributeDefinition FOREACH attributeConditions»
-    «EXPAND RemoveModificationDefinition FOREACH modifications»
-    «EXPAND CreateModificationDefinition FOREACH modifications»
+    «EXPAND RemoveModificationDefinition FOREACH modifications.select(m|m.action == Action::DELETE)»
+    «EXPAND CreateModificationDefinition FOREACH modifications.select(m|m.action == Action::CREATE)»
+    «EXPAND AttributeModificationDefinition FOREACH modifications.select(m|m.action == Action::MODIFY)»
     }
     «EXPAND FindObjectDefinition FOREACH referenceConditions.typeSelect(ManyReferenceCondition).select(r|!r.isCreate)»
 «ENDDEFINE»
@@ -142,10 +143,10 @@
 «ENDDEFINE»
 
 «DEFINE RemoveModificationDefinition FOR Modification»
-	«IF this.action == Action::DELETE && this.instance != null»
+	«IF this.instance != null»
 	// remove instance: «this.action» «this.instance.variableName» «this.instance.typeName»
 	«ENDIF»
-    «IF this.action == Action::DELETE && this.reference != null»
+    «IF this.reference != null»
     // remove reference: «this.action» «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
     «IF this.reference.metaType == SingleReferenceCondition»
         «this.reference.source.variableName».«setter(this.reference.referenceName)»(null);
@@ -156,10 +157,10 @@
 «ENDDEFINE»
 
 «DEFINE CreateModificationDefinition FOR Modification»
-	«IF this.action == Action::CREATE && this.instance != null»
+	«IF this.instance != null»
 	// create instance: «this.action» «this.instance.variableName» «this.instance.typeName»
 	«ENDIF»
-    «IF this.action == Action::CREATE && this.reference != null»
+    «IF this.reference != null»
     // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
     «IF this.reference.metaType == SingleReferenceCondition»
 	    «this.reference.source.variableName».«setter(this.reference.referenceName)»(«this.reference.target.variableName»);
@@ -167,6 +168,11 @@
 		«this.reference.source.variableName».«getter(this.reference.referenceName)»().add(«this.reference.target.variableName»);
     «ENDIF»
     «ENDIF»
+«ENDDEFINE»
+
+«DEFINE AttributeModificationDefinition FOR Modification»
+	// set attribute: «this.attribute.instance.variableName».«this.attribute.attributeName» := «this.attribute.attributeValueLiteral»
+	«this.attribute.instance.variableName».«this.attribute.attributeName.setter()»(«this.newAttributeValue»);
 «ENDDEFINE»
 
 «DEFINE FindObjectDefinition FOR ManyReferenceCondition»
