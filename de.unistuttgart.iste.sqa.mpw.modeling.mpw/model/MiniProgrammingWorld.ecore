@@ -2,8 +2,6 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mpw" nsURI="http://www.mpw.uni-stuttgart.de/mpw" nsPrefix="mpw">
   <eClassifiers xsi:type="ecore:EClass" name="Actor" abstract="true" eSuperTypes="#//TileContent">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
-        eType="ecore:EClass Command.ecore#//CommandStack" changeable="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//Direction"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Prop" abstract="true" eSuperTypes="#//TileContent"/>
@@ -26,16 +24,14 @@
   <eClassifiers xsi:type="ecore:EClass" name="Stage" abstract="true" eSuperTypes="Command.ecore#//Entity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="tiles" upperBound="-1"
         eType="#//Tile" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
-        eType="ecore:EClass Command.ecore#//CommandStack" changeable="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tileContents" upperBound="-1"
         eType="#//TileContent" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MiniProgrammingWorld" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" lowerBound="1" eType="#//Stage"
-        containment="true"/>
+        derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
-        eType="ecore:EClass Command.ecore#//CommandStack" containment="true"/>
+        eType="ecore:EClass Command.ecore#//CommandStack" changeable="false" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Location">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>

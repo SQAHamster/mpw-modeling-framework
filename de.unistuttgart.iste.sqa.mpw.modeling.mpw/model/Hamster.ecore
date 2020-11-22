@@ -8,4 +8,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="Territory" eSuperTypes="MiniProgrammingWorld.ecore#//Stage"/>
   <eClassifiers xsi:type="ecore:EClass" name="Grain" eSuperTypes="MiniProgrammingWorld.ecore#//Prop"/>
   <eClassifiers xsi:type="ecore:EClass" name="Wall" eSuperTypes="MiniProgrammingWorld.ecore#//Prop"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HamsterGame" eSuperTypes="MiniProgrammingWorld.ecore#//MiniProgrammingWorld">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultHamster" lowerBound="1"
+        eType="#//Hamster" changeable="false" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="territory" lowerBound="1"
+        eType="#//Territory" changeable="false" containment="true"/>
+  </eClassifiers>
 </ecore:EPackage>
