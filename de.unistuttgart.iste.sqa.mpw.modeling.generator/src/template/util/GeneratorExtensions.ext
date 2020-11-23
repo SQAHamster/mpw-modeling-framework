@@ -8,3 +8,4 @@ extension template::util::ObservablePropertyGeneratorExtensions reexport;
 extension template::util::MetaModelGeneratorExtensions reexport;
 extension template::util::OperationGeneratorExtensions reexport;
 extension template::util::CommandGeneratorExtensions reexport;
+extension template::properties::PropertyExtensions reexport;

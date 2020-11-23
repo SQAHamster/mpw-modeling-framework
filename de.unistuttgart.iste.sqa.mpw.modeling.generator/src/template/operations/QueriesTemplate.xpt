@@ -1,12 +1,46 @@
 «IMPORT ecore»
+«IMPORT querydsl»
 
 «EXTENSION template::util::GeneratorExtensions»
 
 «DEFINE QueryDefinitions FOR EClass»
-	  «FOREACH eAllOperations.select(o|o.isQuery()).reject(o|o.isPropertyGetter()) AS q»
+	  «FOREACH getQueriesForType().reject(q|eAllOperations.exists(o|o.name == q.context.name && o.isPropertyGetter())) AS q»
 	  @Override
-	  public «q.operationToJavaType()» «q.name»() {
-	      throw new RuntimeException("not implemented");
+	  public «getQueryResultType(q)» «q.context.name»() {
+	      return «EXPAND ExpressionDefinition FOR q.expressions.get(0)-»;
 	  }
       «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR Expression-»
+    «IF this.metaType == ImpliesExpression-»
+      «EXPAND ImpliesExpressionDefinition FOR (ImpliesExpression)this-»
+    «ELSEIF this.metaType == OrExpression-»
+      «EXPAND OrExpressionDefinition FOR (OrExpression)this-»
+    «ELSEIF this.metaType == AndExpression-»
+      «EXPAND AndExpressionDefinition FOR (AndExpression)this-»
+    «ELSEIF this.metaType == EqualityExpression-»
+      «EXPAND EqualityExpressionDefinition FOR (EqualityExpression)this-»
+    «ELSE-»
+      «statements.collect(s|s.convertForQueryStatement()).joinToString(".").toPropertyGetters()-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE ImpliesExpressionDefinition FOR ImpliesExpression-»
+    («EXPAND ExpressionDefinition FOR left») 
+    ? («EXPAND ExpressionDefinition FOR right») 
+    : true
+«ENDDEFINE»
+
+«DEFINE OrExpressionDefinition FOR OrExpression-»
+    «EXPAND ExpressionDefinition FOR left» || «EXPAND ExpressionDefinition FOR right-»
+«ENDDEFINE»
+
+«DEFINE AndExpressionDefinition FOR AndExpression-»
+    «EXPAND ExpressionDefinition FOR left» 
+    && «EXPAND ExpressionDefinition FOR right-»
+«ENDDEFINE»
+
+«DEFINE EqualityExpressionDefinition FOR EqualityExpression-»
+    «EXPAND ExpressionDefinition FOR left» == «EXPAND ExpressionDefinition FOR right-»
 «ENDDEFINE»

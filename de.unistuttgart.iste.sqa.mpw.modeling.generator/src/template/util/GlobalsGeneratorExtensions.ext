@@ -1,16 +1,21 @@
 import ecore;
 import commandgt;
+import querydsl;
 
 String getModulePackage() : GLOBALVAR module_package;
 
-// Only dummy data until real queries are modeled
-List[String] getQueriesForType(EClass class) : 
+List[Model] getQueriesForType(EClass class) : 
     getQueries()
-    .collect(e|e.split("\\|"))
-    .select(e|e.get(0) == class.name)
-    .collect(e|e.get(1));
+    .select(q|q.isForClass(class.name));
 
-private List[String] getQueries() : GLOBALVAR queries;
+Model getQueryForOperation(EOperation operation) : 
+    getQueries()
+    .selectFirst(q|q.^context.name == operation.name && q.isForClass(operation.eContainingClass.name));
+    
+private isForClass(Model this, String className) :
+    ^context.className == className.replaceAll("ReadOnly|Concrete", "");
+
+private List[Model] getQueries() : GLOBALVAR queries;
 
 List[String] getCommandsForType(EClass class) : 
     getCommands()

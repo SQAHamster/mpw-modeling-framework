@@ -1,5 +1,8 @@
 import ecore;
 
+extension template::properties::PropertyExtensions;
+extension template::util::OperationGeneratorExtensions;
+
 getter(String this) :
 	"get"+this.toFirstUpper();
 	
@@ -33,7 +36,8 @@ isPrimitive(EClassifier this) :
     (this.name == "EInt" || this.name == "EBoolean" || this.name == "EString");
 
 featureToJavaType(EStructuralFeature this) : elementToJavaType();
-operationToJavaType(EOperation this) : elementToJavaType();
+operationToJavaType(EOperation this) : 
+    if (isQuery()) then getQueryForOperation(this).getQueryResultType() else elementToJavaType();
 	
 private elementToJavaType(ETypedElement this) :
     if (this.eType == null) then "void" 

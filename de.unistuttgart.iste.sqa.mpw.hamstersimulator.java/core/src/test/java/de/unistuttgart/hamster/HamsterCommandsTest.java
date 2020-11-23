@@ -179,11 +179,11 @@ public class HamsterCommandsTest {
 	}
 
 	private void assertFrontIsClear() {
-//		TODO assertTrue(sut.frontIsClear());
+		assertTrue(sut.frontIsClear());
 	}
 
 	private void assertFrontIsNotClear() {
-//		TODO assertFalse(sut.frontIsClear());
+		assertFalse(sut.frontIsClear());
 	}
 
 	//</editor-fold>

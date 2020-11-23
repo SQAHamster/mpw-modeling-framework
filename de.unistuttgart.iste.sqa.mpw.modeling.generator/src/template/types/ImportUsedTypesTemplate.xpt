@@ -9,8 +9,19 @@
 	«IF !interface && eAllOperations.exists(o|o.isCommand())-»
     import «getModulePackage()».commands.*;
 	«ENDIF-»
+	«REM»dummy: import for queries the Location, but later resolve by ecore-return type«ENDREM-»
+	«IF interface && name.startsWith("ReadOnly") && eAllOperations.exists(o|o.isQuery())-»
+    import «getModulePackage()».mpw.Location;
+	«ENDIF-»
+	«IF !interface && name.startsWith("Concrete") && eAllOperations.exists(o|o.isQuery())-»
+    import static «getModulePackage()».mpw.Direction.*;
+    import java.util.stream.Collectors;
+	«ENDIF-»
 	«IF eAllOperations.exists(o|o.isCommand())-»
     import «getModulePackage()».command.*;
+	«ENDIF-»
+	«IF name.startsWith("Concrete")-»
+    import «getModulePackage()».mpw.*;
 	«ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
 	    eOperations.exists(o|o.isPropertyGetter())-»

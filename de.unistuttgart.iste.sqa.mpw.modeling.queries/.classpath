@@ -9,6 +9,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-gen"/>
 	<classpathentry kind="src" path="xtend-gen"/>
+	<classpathentry kind="src" path="model"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.modeling.commands"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.modeling.mpw"/>
 	<classpathentry kind="output" path="bin"/>

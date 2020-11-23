@@ -32,10 +32,16 @@ Statement:
 	target='self' | target=Direction | target=ID;
 
 NavigatedStatement returns Statement:
-    ('.' target=ID) | ('->' target=CollectionMethod);
+    ('.' target=ID) | ('->' collectionTarget=CollectionMethod);
     
 CollectionMethod:
-	('notEmpty' | 'isEmpty') '()';
+	SimpleCollectionMethod | ParametrizedCollectionMethod;
+    
+SimpleCollectionMethod:
+	method=('notEmpty' | 'isEmpty' ) '()';
+    
+ParametrizedCollectionMethod:
+	('typeSelect(' typeSelect=ID ')');
 	
 Context:
 	'context' className=ID kind=ContextKind name=ID ':';

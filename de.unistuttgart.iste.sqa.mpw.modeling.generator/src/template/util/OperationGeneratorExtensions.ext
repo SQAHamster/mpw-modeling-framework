@@ -7,7 +7,8 @@ operationToSignature(EOperation this) :
     let parameters = if (isCommand()) then "CommandStack commandStack" else eParameters.collect(e|e.eType.name.toJavaType() + " " + e.name).joinToString(", ") :
     operationToJavaType() + " " + effectiveOperationName() + "(" + parameters + ")";
 
-private effectiveOperationName(EOperation this) : if (isPropertyGetter()) then name.getter() else name;
+private effectiveOperationName(EOperation this) : 
+    if (isPropertyGetter()) then name.getter() else name;
 
 hasPropertyGetterOperation(EStructuralFeature this) :
     let class = (EClass)eContainer :

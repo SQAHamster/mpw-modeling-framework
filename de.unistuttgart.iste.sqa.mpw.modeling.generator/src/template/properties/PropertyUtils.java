@@ -7,6 +7,7 @@ public class PropertyUtils {
 	private static final Pattern pattern = Pattern.compile("[\\w]+(\\.[\\w]+)+(\\(\\))?");
 	
 	public static String toPropertyGetters(String s) {
+		s = s.replaceAll("(\\(\\w+)\\.(class::\\w+\\))", "$1_$2");
 		StringBuilder sb = new StringBuilder();
 		
 		int lastIndex = 0;
@@ -26,7 +27,7 @@ public class PropertyUtils {
 		
 		sb.append(s.substring(lastIndex));
 		
-		return sb.toString();
+		return sb.toString().replaceAll("(\\(\\w+)\\_(class::\\w+\\))", "$1.$2");
 	}
 	
 	private static String replacePropertyPathPart(String s) {

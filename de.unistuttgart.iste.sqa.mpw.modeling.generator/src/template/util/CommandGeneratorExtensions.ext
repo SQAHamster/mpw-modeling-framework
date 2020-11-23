@@ -9,9 +9,6 @@ getCommandJavaPackagePath(Transformation this) :
 getCommandJavaPackageName(Transformation this) :
   getModulePackage() + ".commands";
 
-String toPropertyGetters(String s) :
-    JAVA template.properties.PropertyUtils.toPropertyGetters(java.lang.String);
-
 getConcreteName(EClass this) : "Concrete" + name;
 
 getConcreteTypeName(InstanceCondition this) :
