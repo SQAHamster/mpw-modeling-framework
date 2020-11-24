@@ -1,37 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="command" nsURI="http://www.mpw.uni-stuttgart.de/command" nsPrefix="command">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="In this package the metamodel for commands and its related roles like Entity or CommandStack are defined. Commands are the meta-type for behavior in a MPW."/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="PrimitiveCommand" abstract="true" eSuperTypes="#//Command">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Defines a primitive command which can set, add or removes values regarding to a property of an Entity."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
         eType="#//Entity"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SetPropertyCommand" eSuperTypes="#//PrimitiveCommand">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A primitive command which sets a generic value (Object) to a property."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldValue" eType="#//Object"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValue" eType="#//Object"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AddEntityCommand" eSuperTypes="#//PrimitiveCommand">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A primitive command which adds an entity to a collection property."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entityToAdd" lowerBound="1"
         eType="#//Entity"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RemoveEntityCommand" eSuperTypes="#//PrimitiveCommand">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A primitive command which removes an entity from a collection property."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entityToRemove" lowerBound="1"
         eType="#//Entity"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CommandStack">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Tracks the executed Commands which allow to undo and redo their behavior."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stack" upperBound="-1"
         eType="#//Command" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Command" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Defines the basic type for PrimitiveCommand or CompositeCommand which represent behavior which can be executed. It provides the ability to: execute, undo or redo.&#xD;&#xA;&#xD;&#xA;Commands are processed in context of an Actor or the Stage."/>
+    </eAnnotations>
     <eOperations name="execute"/>
     <eOperations name="undo"/>
     <eOperations name="redo"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompositeCommand" abstract="true" eSuperTypes="#//Command">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A more complex type of commands which makes use of multiple sub-commands. Usually the sub-commands are PrimitiveCommands.&#xD;&#xA;&#xD;&#xA;Example Hamster-Simulation: Game commands: Move, PickGrain, PutGrain or TurnLeft. Editor commands: InitTerritory or InitHamster."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subCommands" upperBound="-1"
         eType="#//Command" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Entity" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class of an entity which defines property modifications used by commands. It makes use of the generic type Object to provide a reflection-like possibility to set values by property-names.&#xD;&#xA;&#xD;&#xA;Note: In Java it can be simply realized by reflection, but in languages like C++ not."/>
+    </eAnnotations>
     <eOperations name="setProperty">
       <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eParameters name="value" eType="#//Object"/>
@@ -45,5 +72,9 @@
       <eParameters name="entity" eType="#//Entity"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceTypeName="objectType"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceTypeName="objectType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents a base type of any value. In java this is simply the type `java.lang.Object`. In C++ this may be an union of possible values: it can be a primitive value like integers, booleans or strings. Alternatively it can be a reference/pointer."/>
+    </eAnnotations>
+  </eClassifiers>
 </ecore:EPackage>

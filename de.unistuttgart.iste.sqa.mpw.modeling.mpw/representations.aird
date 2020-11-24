@@ -22,7 +22,7 @@
       </ownedRepresentationDescriptors>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_e6U-kRt2EeuBToo0ySntrA" name="viewmodel class diagram" repPath="#_e6TJYBt2EeuBToo0ySntrA" changeId="a277670b-5a29-4695-9715-170261bbb84b">
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
-        <target xmi:type="ecore:EPackage" href="model/ViewModel.ecore#/"/>
+        <target xmi:type="ecore:EPackage" href="model/stereotypes/ViewModel.ecore#/"/>
       </ownedRepresentationDescriptors>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_in4rARxeEeuBToo0ySntrA" name="mpw class diagram" repPath="#_in210BxeEeuBToo0ySntrA" changeId="a54feeef-7e6c-46c7-b1da-39c523cac396">
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
@@ -733,8 +733,8 @@
       <data xmi:type="diagram:ComputedStyleDescriptionRegistry" uid="_e6VloRt2EeuBToo0ySntrA"/>
     </ownedAnnotationEntries>
     <ownedDiagramElements xmi:type="diagram:DNodeList" uid="_wgj9sCHSEeuIe8ThlKTqTw" name="Presenter" tooltipText="" outgoingEdges="_-g2opiHSEeuIe8ThlKTqTw" width="12" height="10">
-      <target xmi:type="ecore:EClass" href="model/ViewModel.ecore#//Presenter"/>
-      <semanticElements xmi:type="ecore:EClass" href="model/ViewModel.ecore#//Presenter"/>
+      <target xmi:type="ecore:EClass" href="model/stereotypes/ViewModel.ecore#//Presenter"/>
+      <semanticElements xmi:type="ecore:EClass" href="model/stereotypes/ViewModel.ecore#//Presenter"/>
       <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
       <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
       <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
@@ -745,8 +745,8 @@
       <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']"/>
     </ownedDiagramElements>
     <ownedDiagramElements xmi:type="diagram:DNodeList" uid="_14nngCHSEeuIe8ThlKTqTw" name="ViewModel" tooltipText="" outgoingEdges="_-6c0aSHSEeuIe8ThlKTqTw" width="12" height="10">
-      <target xmi:type="ecore:EClass" href="model/ViewModel.ecore#//ViewModel"/>
-      <semanticElements xmi:type="ecore:EClass" href="model/ViewModel.ecore#//ViewModel"/>
+      <target xmi:type="ecore:EClass" href="model/stereotypes/ViewModel.ecore#//ViewModel"/>
+      <semanticElements xmi:type="ecore:EClass" href="model/stereotypes/ViewModel.ecore#//ViewModel"/>
       <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
       <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
       <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
@@ -757,8 +757,8 @@
       <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']"/>
     </ownedDiagramElements>
     <ownedDiagramElements xmi:type="diagram:DNodeList" uid="_6jSm4CHSEeuIe8ThlKTqTw" name="ViewStereotype" tooltipText="" incomingEdges="_-g2opiHSEeuIe8ThlKTqTw _-6c0aSHSEeuIe8ThlKTqTw" width="12" height="10">
-      <target xmi:type="ecore:EClass" href="model/ViewModel.ecore#//ViewStereotype"/>
-      <semanticElements xmi:type="ecore:EClass" href="model/ViewModel.ecore#//ViewStereotype"/>
+      <target xmi:type="ecore:EClass" href="model/stereotypes/ViewModel.ecore#//ViewStereotype"/>
+      <semanticElements xmi:type="ecore:EClass" href="model/stereotypes/ViewModel.ecore#//ViewStereotype"/>
       <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
       <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
       <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
@@ -769,8 +769,8 @@
       <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']"/>
     </ownedDiagramElements>
     <ownedDiagramElements xmi:type="diagram:DEdge" uid="_-g2opiHSEeuIe8ThlKTqTw" sourceNode="_wgj9sCHSEeuIe8ThlKTqTw" targetNode="_6jSm4CHSEeuIe8ThlKTqTw">
-      <target xmi:type="ecore:EClass" href="model/ViewModel.ecore#//Presenter"/>
-      <semanticElements xmi:type="ecore:EClass" href="model/ViewModel.ecore#//Presenter"/>
+      <target xmi:type="ecore:EClass" href="model/stereotypes/ViewModel.ecore#//Presenter"/>
+      <semanticElements xmi:type="ecore:EClass" href="model/stereotypes/ViewModel.ecore#//Presenter"/>
       <ownedStyle xmi:type="diagram:EdgeStyle" uid="_-g2opyHSEeuIe8ThlKTqTw" lineStyle="dash" targetArrow="InputClosedArrow" routingStyle="tree">
         <description xmi:type="style:EdgeStyleDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@edgeMappings[name='EC%20ESupertypes']/@conditionnalStyles.0/@style"/>
         <beginLabelStyle xmi:type="diagram:BeginLabelStyle" uid="_-g2oqCHSEeuIe8ThlKTqTw" showIcon="false">
@@ -781,8 +781,8 @@
       <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@edgeMappings[name='EC%20ESupertypes']"/>
     </ownedDiagramElements>
     <ownedDiagramElements xmi:type="diagram:DEdge" uid="_-6c0aSHSEeuIe8ThlKTqTw" sourceNode="_14nngCHSEeuIe8ThlKTqTw" targetNode="_6jSm4CHSEeuIe8ThlKTqTw">
-      <target xmi:type="ecore:EClass" href="model/ViewModel.ecore#//ViewModel"/>
-      <semanticElements xmi:type="ecore:EClass" href="model/ViewModel.ecore#//ViewModel"/>
+      <target xmi:type="ecore:EClass" href="model/stereotypes/ViewModel.ecore#//ViewModel"/>
+      <semanticElements xmi:type="ecore:EClass" href="model/stereotypes/ViewModel.ecore#//ViewModel"/>
       <ownedStyle xmi:type="diagram:EdgeStyle" uid="_-6c0aiHSEeuIe8ThlKTqTw" lineStyle="dash" targetArrow="InputClosedArrow" routingStyle="tree">
         <description xmi:type="style:EdgeStyleDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@edgeMappings[name='EC%20ESupertypes']/@conditionnalStyles.0/@style"/>
         <beginLabelStyle xmi:type="diagram:BeginLabelStyle" uid="_-6c0ayHSEeuIe8ThlKTqTw" showIcon="false">
@@ -798,7 +798,7 @@
     <activatedLayers xmi:type="description_1:AdditionalLayer" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@additionalLayers[name='Package']"/>
     <activatedLayers xmi:type="description_1:AdditionalLayer" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@additionalLayers[name='Validation']"/>
     <activatedLayers xmi:type="description_1:AdditionalLayer" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Archetype']/@ownedRepresentationExtensions[name='Entities%20With%20Archetypes']/@layers[name='Archetypes']"/>
-    <target xmi:type="ecore:EPackage" href="model/ViewModel.ecore#/"/>
+    <target xmi:type="ecore:EPackage" href="model/stereotypes/ViewModel.ecore#/"/>
   </diagram:DSemanticDiagram>
   <diagram:DSemanticDiagram uid="_in210BxeEeuBToo0ySntrA">
     <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_in4rAhxeEeuBToo0ySntrA" source="GMF_DIAGRAMS">

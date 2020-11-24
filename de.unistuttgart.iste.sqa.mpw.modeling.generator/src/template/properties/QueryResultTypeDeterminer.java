@@ -73,14 +73,14 @@ public class QueryResultTypeDeterminer {
 	}
 	
 	private Class<?> getMethodType(Class<?> cls, String name) throws Exception {
-		var result = getMethodTypeREcursively(cls, name);
+		var result = getMethodTypeRecursively(cls, name);
 		if (result == null) {
 			throw new IllegalArgumentException("query " + model.getContext().getName() + ": method with name " + name + " not found in class: " + cls.getSimpleName());
 		}
 		return result;
 	}
 	
-	private static Class<?> getMethodTypeREcursively(Class<?> cls, String name) throws Exception {
+	private static Class<?> getMethodTypeRecursively(Class<?> cls, String name) throws Exception {
 		var propertyDescriptors = Introspector.getBeanInfo(cls).getPropertyDescriptors();
 		for (var pd : propertyDescriptors) {
 		    Method readMethod = pd.getReadMethod();
@@ -89,7 +89,7 @@ public class QueryResultTypeDeterminer {
 			}
 		}
 		for (var inheritedInterface : cls.getInterfaces()) {
-			var result = getMethodTypeREcursively(inheritedInterface, name);
+			var result = getMethodTypeRecursively(inheritedInterface, name);
 			if (result != null) {
 				return result;
 			}
