@@ -19,14 +19,56 @@ class QueryDslParsingTest {
 	ParseHelper<Model> parseHelper
 	
 	@Test
-	def void loadModel() {
+	def void givenSimpleQuery_whenParse_thenSucceeds() {
 		val result = parseHelper.parse('''
 			context Hamster
 			query myQuery: self;
 		''')
-		Assertions.assertNotNull(result)
-		val errors = result.eResource.errors
+		assertModel(result, '''
+		    Model:
+		      context: Context myQuery:
+		        className: Hamster
+		        kind: query
+		      expressions: [
+		        Expression:
+		          statements: [
+		            Statement:
+		              target: self
+		          ]
+		      ]
+		''')
+	}
+	
+	@Test
+	def void givenPreconditionUsingQuery_whenParse_thenSucceeds() {
+		val result = parseHelper.parse('''
+			context Hamster
+			precondition myCommand: self.myQuery();
+		''')
+		assertModel(result, '''
+		    Model:
+		      context: Context myCommand:
+		        className: Hamster
+		        kind: precondition
+		      expressions: [
+		        Expression:
+		          statements: [
+		            Statement:
+		              target: self
+		            Statement:
+		              target: myQuery
+		          ]
+		      ]
+		''')
+	}
+	
+	private def assertModel(Model actualModel, String expected) {
+		Assertions.assertNotNull(actualModel)
+		val errors = actualModel.eResource.errors
 		Assertions.assertTrue(errors.isEmpty, '''Unexpected errors: «errors.join(", ")»''')
+		
+		var actual = ModelInstanceStringifier.toString(actualModel);
+		Assertions.assertEquals(expected.trim(), actual);
 	}
 	
 }

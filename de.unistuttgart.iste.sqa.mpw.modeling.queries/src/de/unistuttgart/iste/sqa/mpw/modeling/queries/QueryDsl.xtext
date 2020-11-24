@@ -32,7 +32,7 @@ Statement:
 	target='self' | target=Direction | target=ID;
 
 NavigatedStatement returns Statement:
-    ('.' target=ID) | ('->' collectionTarget=CollectionMethod);
+    ('.' target=ID ("()")?) | ('->' collectionTarget=CollectionMethod);
     
 CollectionMethod:
 	SimpleCollectionMethod | ParametrizedCollectionMethod;
@@ -47,7 +47,7 @@ Context:
 	'context' className=ID kind=ContextKind name=ID ':';
 	
 enum ContextKind:
-    QUERY = 'query' | PRE = 'pre' | POST = 'post';
+    QUERY = 'query' | PRE = 'precondition' | POST = 'postcondition' | INV = 'invariant';
     
 Direction:
 	('EAST' | 'WEST' | 'SOUTH' | 'NORTH');
