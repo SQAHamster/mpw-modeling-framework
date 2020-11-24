@@ -2,6 +2,7 @@ package template.properties;
 
 import java.beans.Introspector;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -10,14 +11,16 @@ import template.types.MpwTypesUtils;
 
 public class QueryResultTypeDeterminer {
 	private final Model model;
+	private final List<Model> allQueries;
 	
-	private QueryResultTypeDeterminer(Model model) {
+	private QueryResultTypeDeterminer(Model model, List<Model> allQueries) {
 		super();
 		this.model = model;
+		this.allQueries = allQueries;
 	}
 
-	public static String determineQueryType(Model model) throws Exception {
-		return new QueryResultTypeDeterminer(model).determineTypeForQueryModel();
+	public static String determineQueryType(Model model, List<Model> allQueries) throws Exception {
+		return new QueryResultTypeDeterminer(model, allQueries).determineTypeForQueryModel();
 	}
 	
 	private String determineTypeForQueryModel() throws Exception {
@@ -68,7 +71,7 @@ public class QueryResultTypeDeterminer {
 	}
 	
 	private Class<?> handleCollectionTarget(Class<?> currentType, CollectionMethod target) throws Exception {
-		// 		mpw.MpwPackage.Literals.TILE__CONTENTS.getEGenericType()
+		// dummy: later by intermediate query result type model
 		return boolean.class;
 	}
 	
@@ -80,7 +83,7 @@ public class QueryResultTypeDeterminer {
 		return result;
 	}
 	
-	private static Class<?> getMethodTypeRecursively(Class<?> cls, String name) throws Exception {
+	private Class<?> getMethodTypeRecursively(Class<?> cls, String name) throws Exception {
 		var propertyDescriptors = Introspector.getBeanInfo(cls).getPropertyDescriptors();
 		for (var pd : propertyDescriptors) {
 		    Method readMethod = pd.getReadMethod();
@@ -92,6 +95,13 @@ public class QueryResultTypeDeterminer {
 			var result = getMethodTypeRecursively(inheritedInterface, name);
 			if (result != null) {
 				return result;
+			}
+		}
+		for (var otherQuery : allQueries) {
+			var context = otherQuery.getContext();
+			if (context.getName().equals(name) && context.getClassName().equals(cls.getSimpleName())) {
+				// dummy: later by intermediate query result type model
+				return boolean.class;
 			}
 		}
 		return null;

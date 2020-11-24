@@ -37,6 +37,9 @@
 
 «DEFINE UnitExpand FOR Unit»
 	«getVisibility()» void «name»(«IF name != "execute"»«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
+	«IF this == ((Transformation)eContainer).mainUnit-»
+	«EXPAND Preconditions FOR this»
+	«ENDIF-»
 	«EXPAND UnitExpandBody FOR this»
 	}
 «ENDDEFINE»
@@ -79,6 +82,9 @@
 
 «DEFINE UnitExpand FOR Rule»
     «getVisibility()» void «name»() {
+    «IF this == ((Transformation)eContainer).mainUnit-»
+    «EXPAND Preconditions FOR this»
+    «ENDIF-»
     «EXPAND VariableDefinition FOREACH variables»
     «EXPAND InstanceDefinition FOREACH instanceConditions»
     «EXPAND ReferenceDefinition FOREACH referenceConditions»
@@ -223,4 +229,14 @@
 	«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)»
 	«EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)»
 	«ENDLET»
+«ENDDEFINE»
+
+«DEFINE Preconditions FOR Unit»
+	«LET (Transformation)this.eContainer AS transformation-»
+	«FOREACH getPreconditionsForCommand(transformation) AS p-»
+	if ((«EXPAND template::operations::QueriesTemplate::PreconditionExpressionDefinition FOR p.expressions.get(0)-») == false) {
+	    throw new RuntimeException("precondition violation");
+	}
+	«ENDFOREACH-»
+	«ENDLET-»
 «ENDDEFINE»

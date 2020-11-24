@@ -43,7 +43,7 @@ helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
   };
   readOnlyRole.eOperations += self.eAllStructuralFeatures->select(f|f.changeable)
             											 ->map transformFeatureToGetterOperation();
-  var queriesForThisType := Queries->select(q|q.context.className = baseName);
+  var queriesForThisType := Queries->select(q|q.context.className = baseName and q.context.kind = ContextKind::QUERY);
   readOnlyRole.eOperations += queriesForThisType->reject(q|readOnlyRole.eAllOperations->exists(o|o.name = q.context.name))
   									 			->map transformQueryToOperation();
   readOnlyRole.eOperations->select(o|queriesForThisType->exists(q|q.context.name = o.name))

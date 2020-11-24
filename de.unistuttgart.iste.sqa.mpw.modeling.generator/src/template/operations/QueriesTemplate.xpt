@@ -7,7 +7,11 @@
 	  «FOREACH getQueriesForType().reject(q|eAllOperations.exists(o|o.name == q.context.name && o.isPropertyGetter())) AS q»
 	  @Override
 	  public «getQueryResultType(q)» «q.context.name»() {
-	      return «EXPAND ExpressionDefinition FOR q.expressions.get(0)-»;
+	      try {
+  	          return «EXPAND ExpressionDefinition FOR q.expressions.get(0)-»;
+	      } catch (Exception e) {
+	          return «IF getQueryResultType(q) == "boolean"»false«ELSE»null«ENDIF»;
+	      }
 	  }
       «ENDFOREACH»
 «ENDDEFINE»
@@ -24,6 +28,21 @@
     «ELSE-»
       «statements.collect(s|s.convertForQueryStatement()).joinToString(".").toPropertyGetters()-»
 	«ENDIF-»
+«ENDDEFINE»
+
+«REM»dirty temporary solution: will later be designed more cleanly«ENDREM»
+«DEFINE PreconditionExpressionDefinition FOR Expression-»
+    «IF this.metaType == ImpliesExpression-»
+      «EXPAND ImpliesExpressionDefinition FOR (ImpliesExpression)this-»
+    «ELSEIF this.metaType == OrExpression-»
+      «EXPAND OrExpressionDefinition FOR (OrExpression)this-»
+    «ELSEIF this.metaType == AndExpression-»
+      «EXPAND AndExpressionDefinition FOR (AndExpression)this-»
+    «ELSEIF this.metaType == EqualityExpression-»
+      «EXPAND EqualityExpressionDefinition FOR (EqualityExpression)this-»
+    «ELSE-»
+      «statements.collect(s|s.convertForQueryStatement()).replaceAll("this", "thisInstance").joinToString(".").toPropertyGetters()-»
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE ImpliesExpressionDefinition FOR ImpliesExpression-»

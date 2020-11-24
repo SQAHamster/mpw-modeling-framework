@@ -12,10 +12,16 @@ Model getQueryForOperation(EOperation operation) :
     getQueries()
     .selectFirst(q|q.^context.name == operation.name && q.isForClass(operation.eContainingClass.name));
     
+List[Model] getPreconditionsForCommand(Transformation transformation) : 
+    getPreconditions()
+    .select(q|q.isForClass(transformation.targetClass.name) && q.^context.name == transformation.name);
+    
 private isForClass(Model this, String className) :
     ^context.className == className.replaceAll("ReadOnly|Concrete", "");
 
-private List[Model] getQueries() : GLOBALVAR queries;
+List[Model] getQueries() : getQueriesVar().select(q|q.^context.kind == ContextKind::QUERY);
+List[Model] getPreconditions() : getQueriesVar().select(q|q.^context.kind == ContextKind::PRE);
+private List[Model] getQueriesVar() : GLOBALVAR queries;
 
 List[String] getCommandsForType(EClass class) : 
     getCommands()

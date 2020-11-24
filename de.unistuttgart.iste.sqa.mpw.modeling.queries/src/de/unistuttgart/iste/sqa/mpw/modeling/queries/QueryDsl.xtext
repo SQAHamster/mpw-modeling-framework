@@ -6,15 +6,15 @@ Model:
 	(context=Context) (expressions+=Expression)+ ';';
 	
 Expression:
-	OrExpression
-;
-
-OrExpression returns Expression:
-	ImpliesExpression ({OrExpression.left=current} 'or' right=ImpliesExpression)*
+	ImpliesExpression
 ;
 
 ImpliesExpression returns Expression:
-	AndExpression ({ImpliesExpression.left=current} 'implies' right=AndExpression)*
+	OrExpression ({ImpliesExpression.left=current} 'implies' right=OrExpression)*
+;
+
+OrExpression returns Expression:
+	AndExpression ({OrExpression.left=current} 'or' right=AndExpression)*
 ;
 
 AndExpression returns Expression:
@@ -22,7 +22,11 @@ AndExpression returns Expression:
 ;
 
 EqualityExpression returns Expression:
-	PropertyPathExpression ({EqualityExpression.left=current} operation=('='|'<>') right=PropertyPathExpression)*
+	PrimaryExpression ({EqualityExpression.left=current} operation=('='|'<>') right=PrimaryExpression)*
+;
+
+PrimaryExpression returns Expression:
+    '(' Expression ')' | {Not} "!" expression=PrimaryExpression | PropertyPathExpression
 ;
 
 PropertyPathExpression returns Expression:
@@ -32,7 +36,7 @@ Statement:
 	target='self' | target=Direction | target=ID;
 
 NavigatedStatement returns Statement:
-    ('.' target=ID ("()")?) | ('->' collectionTarget=CollectionMethod);
+    ('.' target=IdBracket) | ('->' collectionTarget=CollectionMethod);
     
 CollectionMethod:
 	SimpleCollectionMethod | ParametrizedCollectionMethod;
@@ -51,3 +55,5 @@ enum ContextKind:
     
 Direction:
 	('EAST' | 'WEST' | 'SOUTH' | 'NORTH');
+	
+IdBracket: ID '()'?;
