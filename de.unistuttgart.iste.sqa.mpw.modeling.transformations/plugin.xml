@@ -14,4 +14,20 @@
             genModel="model/transformations.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated transformations -->
+      <package
+            uri="http://www.mpw.uni-stuttgart.de/behavior/query"
+            class="query.QueryPackage"
+            genModel="model/transformations.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated transformations -->
+      <package
+            uri="http://www.mpw.uni-stuttgart.de/behavior/query/expressions"
+            class="query.expressions.ExpressionsPackage"
+            genModel="model/transformations.genmodel"/>
+   </extension>
+
 </plugin>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="query" nsURI="http://www.mpw.uni-stuttgart.de/behavior/query"
+    nsPrefix="query">
+  <eClassifiers xsi:type="ecore:EClass" name="Module">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//ExpressionalElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpressionalElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" unique="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mainExpression" lowerBound="1"
+        eType="#//expressions/Expression"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="#//ExpressionalElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contextClass" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValueLiteral" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eType" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint" eSuperTypes="#//ExpressionalElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandConstraint" eSuperTypes="#//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="commandName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Precondition" eSuperTypes="#//CommandConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Postcondition" eSuperTypes="#//CommandConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassInvariant" eSuperTypes="#//Constraint"/>
+  <eSubpackages name="expressions" nsURI="http://www.mpw.uni-stuttgart.de/behavior/query/expressions"
+      nsPrefix="expressions">
+    <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BinaryExpression" eSuperTypes="#//expressions/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" lowerBound="1" eType="#//expressions/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" lowerBound="1" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AndExpression" eSuperTypes="#//expressions/BinaryExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OrExpression" eSuperTypes="#//expressions/BinaryExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ImpliesExpression" eSuperTypes="#//expressions/BinaryExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CompareExpression" eSuperTypes="#//expressions/BinaryExpression">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" lowerBound="1"
+          eType="#//expressions/CompareOperator"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="CompareOperator">
+      <eLiterals name="EQUALITY" literal="=="/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StatementsExpression" eSuperTypes="#//expressions/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+          eType="#//expressions/Statement" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="next" eType="#//expressions/Statement"
+          eOpposite="#//expressions/Statement/previous"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="previous" eType="#//expressions/Statement"
+          eOpposite="#//expressions/Statement/next"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SelfStatement" eSuperTypes="#//expressions/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contextClass" lowerBound="1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FeatureStatement" eSuperTypes="#//expressions/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="QueryStatement" eSuperTypes="#//expressions/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1"
+          eType="#//Query"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

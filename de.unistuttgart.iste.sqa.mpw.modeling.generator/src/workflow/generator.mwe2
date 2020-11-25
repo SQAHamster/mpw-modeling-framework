@@ -27,6 +27,7 @@ var targetCoreSimulatorProject = "${targetSimulatorProject}/core"
 
 var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/RoleTransformation.qvto"
 var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/CommandTransformation.qvto"
+var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/QueryTransformation.qvto"
 var simulatorTargetSrcGen = "${projectRoot}/${targetCoreSimulatorProject}/src/main/generated"
 
 Workflow {
@@ -34,6 +35,7 @@ Workflow {
 	bean = StandaloneSetup { 
 		platformUri="${projectRoot}"
 		registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/CommandGraphTransformation.ecore"
+		registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/QueryBehaviors.ecore"
 		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
 	}
 	
@@ -70,6 +72,13 @@ Workflow {
 	}
 	
 	component = components.QvtoTransformator {
+		transformationUri = queryTransformationUri
+		modelSlot = "queries"
+		targetModelSlot = "newQueries"
+		sourceTargetRelationship = "NEW_TARGET"
+	}
+	
+	component = components.QvtoTransformator {
 		transformationUri = commandTransformationUri
 		modelSlot = "commands"
 		sourceTargetRelationship = "NEW_TARGET"
@@ -91,6 +100,10 @@ Workflow {
 
 	component = components.XmiWriter {
 		modelSlot = "queries"
+	}
+
+	component = components.XmiWriter {
+		modelSlot = "newQueries"
 	}
 	
 	/* check model */

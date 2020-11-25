@@ -14,5 +14,11 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-14
 Export-Package: commandgt,
  commandgt.impl,
- commandgt.util
+ commandgt.util,
+ query,
+ query.expressions,
+ query.expressions.impl,
+ query.expressions.util,
+ query.impl,
+ query.util
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.transformations

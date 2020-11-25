@@ -1,0 +1,28 @@
+modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+	
+modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
+modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
+
+transformation TransformQueryDsl2Query(in inModel:Input, out outModel:QueryModel);
+
+main() {
+    var elements := inModel.rootObjects()[Input::Model]->map toElement();
+}
+
+mapping Input::Model::toElement() : QueryModel::ExpressionalElement
+    disjuncts Input::Model::toQuery, Input::Model::toPrecondition, Input::Model::toPostcondition { }
+
+mapping Input::Model::toQuery() : QueryModel::Query
+	when { self.context.kind = ContextKind::QUERY; } {
+	name := self.context.name;
+}
+
+mapping Input::Model::toPrecondition() : QueryModel::Precondition
+    when { self.context.kind = ContextKind::PRE; } {
+    name := self.context.name;
+}
+
+mapping Input::Model::toPostcondition() : QueryModel::Postcondition
+    when { self.context.kind = ContextKind::POST; } {
+    name := self.context.name;
+}

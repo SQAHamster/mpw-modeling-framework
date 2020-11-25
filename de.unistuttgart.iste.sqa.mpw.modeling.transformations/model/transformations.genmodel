@@ -5,6 +5,7 @@
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="5.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
   <foreignModel>CommandGraphTransformation.ecore</foreignModel>
+  <foreignModel>QueryBehaviors.ecore</foreignModel>
   <genPackages prefix="Commandgt" disposableProviderFactory="true" ecorePackage="CommandGraphTransformation.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="CommandGraphTransformation.ecore#//Action">
       <genEnumLiterals ecoreEnumLiteral="CommandGraphTransformation.ecore#//Action/DELETE"/>
@@ -91,5 +92,65 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Condition/condition"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Condition/unit"/>
     </genClasses>
+  </genPackages>
+  <genPackages prefix="Query" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#/">
+    <genClasses ecoreClass="QueryBehaviors.ecore#//Module">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//Module/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//ExpressionalElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//ExpressionalElement/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//ExpressionalElement/mainExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//Query">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//Query/contextClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Query/defaultValueLiteral"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Query/lowerBound"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Query/upperBound"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//Query/eType"/>
+    </genClasses>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//Constraint"/>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//CommandConstraint">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//CommandConstraint/commandName"/>
+    </genClasses>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//Precondition"/>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//Postcondition"/>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//ClassInvariant"/>
+    <nestedGenPackages prefix="Expressions" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#//expressions">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="QueryBehaviors.ecore#//expressions/CompareOperator">
+        <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//expressions/CompareOperator/EQUALITY"/>
+      </genEnums>
+      <genClasses image="false" ecoreClass="QueryBehaviors.ecore#//expressions/Expression"/>
+      <genClasses ecoreClass="QueryBehaviors.ecore#//expressions/BinaryExpression">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//expressions/BinaryExpression/lhs"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//expressions/BinaryExpression/rhs"/>
+      </genClasses>
+      <genClasses ecoreClass="QueryBehaviors.ecore#//expressions/AndExpression"/>
+      <genClasses ecoreClass="QueryBehaviors.ecore#//expressions/OrExpression"/>
+      <genClasses ecoreClass="QueryBehaviors.ecore#//expressions/ImpliesExpression"/>
+      <genClasses ecoreClass="QueryBehaviors.ecore#//expressions/CompareExpression">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//expressions/CompareExpression/operator"/>
+      </genClasses>
+      <genClasses ecoreClass="QueryBehaviors.ecore#//expressions/StatementsExpression">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//expressions/StatementsExpression/statements"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="QueryBehaviors.ecore#//expressions/Statement">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference QueryBehaviors.ecore#//expressions/Statement/next"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference QueryBehaviors.ecore#//expressions/Statement/previous"/>
+      </genClasses>
+      <genClasses ecoreClass="QueryBehaviors.ecore#//expressions/SelfStatement">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference QueryBehaviors.ecore#//expressions/SelfStatement/contextClass"/>
+      </genClasses>
+      <genClasses ecoreClass="QueryBehaviors.ecore#//expressions/FeatureStatement">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference QueryBehaviors.ecore#//expressions/FeatureStatement/feature"/>
+      </genClasses>
+      <genClasses ecoreClass="QueryBehaviors.ecore#//expressions/QueryStatement">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference QueryBehaviors.ecore#//expressions/QueryStatement/query"/>
+      </genClasses>
+    </nestedGenPackages>
   </genPackages>
 </genmodel:GenModel>
