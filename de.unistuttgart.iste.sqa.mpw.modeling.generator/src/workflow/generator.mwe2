@@ -34,7 +34,7 @@ Workflow {
 	/* set up EMF for standalone execution */
 	bean = StandaloneSetup { 
 		platformUri="${projectRoot}"
-		registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/CommandGraphTransformation.ecore"
+		registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/CommandBehaviors.ecore"
 		registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/QueryBehaviors.ecore"
 		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
 	}

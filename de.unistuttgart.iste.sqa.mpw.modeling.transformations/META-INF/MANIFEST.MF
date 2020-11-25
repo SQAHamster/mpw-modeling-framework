@@ -12,9 +12,9 @@ Require-Bundle: org.eclipse.core.runtime,
  de.unistuttgart.iste.sqa.mpw.modeling.queries;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-14
-Export-Package: commandgt,
- commandgt.impl,
- commandgt.util,
+Export-Package: command,
+ command.impl,
+ command.util,
  query,
  query.expressions,
  query.expressions.impl,

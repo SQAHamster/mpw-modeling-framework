@@ -4,98 +4,103 @@
     modelPluginID="de.unistuttgart.iste.sqa.mpw.modeling.transformations" modelName="Transformations"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="5.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
-  <foreignModel>CommandGraphTransformation.ecore</foreignModel>
+  <foreignModel>CommandBehaviors.ecore</foreignModel>
   <foreignModel>QueryBehaviors.ecore</foreignModel>
-  <genPackages prefix="Commandgt" disposableProviderFactory="true" ecorePackage="CommandGraphTransformation.ecore#/">
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="CommandGraphTransformation.ecore#//Action">
-      <genEnumLiterals ecoreEnumLiteral="CommandGraphTransformation.ecore#//Action/DELETE"/>
-      <genEnumLiterals ecoreEnumLiteral="CommandGraphTransformation.ecore#//Action/CREATE"/>
-      <genEnumLiterals ecoreEnumLiteral="CommandGraphTransformation.ecore#//Action/MODIFY"/>
+  <genPackages prefix="Command" disposableProviderFactory="true" ecorePackage="CommandBehaviors.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="CommandBehaviors.ecore#//Action">
+      <genEnumLiterals ecoreEnumLiteral="CommandBehaviors.ecore#//Action/DELETE"/>
+      <genEnumLiterals ecoreEnumLiteral="CommandBehaviors.ecore#//Action/CREATE"/>
+      <genEnumLiterals ecoreEnumLiteral="CommandBehaviors.ecore#//Action/MODIFY"/>
     </genEnums>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//Transformation">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Transformation/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Transformation/units"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Transformation/mainUnit"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Transformation/roleName"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Transformation/targetClass"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//Module">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Module/transformations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Module/name"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="CommandGraphTransformation.ecore#//Unit">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Unit/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Unit/parameters"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Unit/mainUnit"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//Transformation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Transformation/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Transformation/units"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Transformation/mainUnit"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Transformation/roleName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Transformation/targetClass"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//Rule">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Rule/thisInstance"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Rule/instanceConditions"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Rule/variableAssignments"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Rule/referenceConditions"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Rule/attributeConditions"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Rule/modifications"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Rule/variables"/>
+    <genClasses image="false" ecoreClass="CommandBehaviors.ecore#//Unit">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Unit/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Unit/parameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Unit/mainUnit"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//AttributeCondition">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//AttributeCondition/instance"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//AttributeCondition/attributeName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//AttributeCondition/attributeValueLiteral"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//AttributeCondition/isCreate"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//Rule">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Rule/thisInstance"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Rule/instanceConditions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Rule/variableAssignments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Rule/referenceConditions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Rule/attributeConditions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Rule/modifications"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Rule/variables"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//InstanceCondition">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//InstanceCondition/variableName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//InstanceCondition/typeName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//InstanceCondition/isCreate"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//AttributeCondition">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//AttributeCondition/instance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//AttributeCondition/attributeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//AttributeCondition/attributeValueLiteral"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//AttributeCondition/isCreate"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="CommandGraphTransformation.ecore#//ReferenceCondition">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//ReferenceCondition/source"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//ReferenceCondition/target"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//ReferenceCondition/referenceName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//ReferenceCondition/isCreate"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//ReferenceCondition/type"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//InstanceCondition">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//InstanceCondition/variableName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//InstanceCondition/typeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//InstanceCondition/isCreate"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//SingleReferenceCondition">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//SingleReferenceCondition/isForbid"/>
+    <genClasses image="false" ecoreClass="CommandBehaviors.ecore#//ReferenceCondition">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//ReferenceCondition/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//ReferenceCondition/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//ReferenceCondition/referenceName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//ReferenceCondition/isCreate"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//ReferenceCondition/type"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//ManyReferenceCondition"/>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//Modification">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Modification/reference"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Modification/instance"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Modification/attribute"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Modification/newAttributeValue"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Modification/action"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//SingleReferenceCondition">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//SingleReferenceCondition/isForbid"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//VariableAssignment">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//VariableAssignment/variableName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//VariableAssignment/value"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//ManyReferenceCondition"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//Modification">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Modification/reference"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Modification/instance"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Modification/attribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Modification/newAttributeValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Modification/action"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//VariableDeclaration">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//VariableDeclaration/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//VariableDeclaration/name"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//VariableAssignment">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableAssignment/variableName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableAssignment/value"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//SequentialUnit">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//SequentialUnit/targetInvocations"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//VariableDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableDeclaration/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableDeclaration/name"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//IteratedUnit">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//IteratedUnit/repeat"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//IteratedUnit/targetInvocation"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//SequentialUnit">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//SequentialUnit/targetInvocations"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//Invocation">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Invocation/targetMethodName"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Invocation/mappedParameters"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//IteratedUnit">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//IteratedUnit/repeat"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//IteratedUnit/targetInvocation"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//Parameter">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Parameter/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Parameter/name"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//Invocation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Invocation/targetMethodName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Invocation/mappedParameters"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//ConditionalUnit">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//ConditionalUnit/conditions"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//Parameter">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Parameter/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Parameter/name"/>
     </genClasses>
-    <genClasses ecoreClass="CommandGraphTransformation.ecore#//Condition">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Condition/condition"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Condition/unit"/>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//ConditionalUnit">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//ConditionalUnit/conditions"/>
+    </genClasses>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//Condition">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Condition/condition"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Condition/unit"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Query" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#/">
     <genClasses ecoreClass="QueryBehaviors.ecore#//Module">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//Module/elements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Module/name"/>
     </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//ExpressionalElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//ExpressionalElement/name"/>
@@ -115,7 +120,8 @@
     <genClasses ecoreClass="QueryBehaviors.ecore#//Precondition"/>
     <genClasses ecoreClass="QueryBehaviors.ecore#//Postcondition"/>
     <genClasses ecoreClass="QueryBehaviors.ecore#//ClassInvariant"/>
-    <nestedGenPackages prefix="Expressions" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#//expressions">
+    <nestedGenPackages prefix="Expressions" basePackage="query" disposableProviderFactory="true"
+        ecorePackage="QueryBehaviors.ecore#//expressions">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="QueryBehaviors.ecore#//expressions/CompareOperator">
         <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//expressions/CompareOperator/EQUALITY"/>
       </genEnums>

@@ -1,4 +1,4 @@
-import commandgt;
+import command;
 import ecore;
 
 extension template::util::GlobalsGeneratorExtensions reexport;

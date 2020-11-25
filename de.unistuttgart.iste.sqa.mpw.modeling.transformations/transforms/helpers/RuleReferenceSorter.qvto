@@ -1,9 +1,9 @@
 modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
-modeltype Commandgt uses "http://www.mpw.uni-stuttgart.de/commandgt";
+modeltype CommandModel uses "http://www.mpw.uni-stuttgart.de/behavior/command";
 
 library RuleReferenceSorter;
 
-helper Commandgt::Rule::sortReferences(): OrderedSet(ReferenceCondition) {
+helper CommandModel::Rule::sortReferences(): OrderedSet(ReferenceCondition) {
     var sortedResult: OrderedSet(ReferenceCondition);
     var lhsReferences = self.referenceConditions->select(r|not r.isCreate);
 

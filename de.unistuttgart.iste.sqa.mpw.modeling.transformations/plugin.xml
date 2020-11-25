@@ -9,8 +9,8 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated transformations -->
       <package
-            uri="http://www.mpw.uni-stuttgart.de/commandgt"
-            class="commandgt.CommandgtPackage"
+            uri="http://www.mpw.uni-stuttgart.de/behavior/command"
+            class="command.CommandPackage"
             genModel="model/transformations.genmodel"/>
    </extension>
 

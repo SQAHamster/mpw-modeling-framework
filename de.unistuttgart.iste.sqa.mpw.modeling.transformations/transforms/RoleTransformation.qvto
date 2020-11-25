@@ -1,11 +1,12 @@
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
-modeltype Commandgt uses commandgt('http://www.mpw.uni-stuttgart.de/commandgt');
-modeltype QueryDsl uses querydsl('http://www.mpw.uni-stuttgart.de/querydsl');
+
+modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
+modeltype QueryDsl uses 'http://www.mpw.uni-stuttgart.de/querydsl';
 
 transformation RoleTransformation(inout ecore: Ecore);
 
 configuration property Queries: List(QueryDsl::Model);
-configuration property Commands: List(Commandgt::Transformation);
+configuration property Commands: List(CommandModel::Transformation);
 
 main() {
   ecore.rootObjects()[EPackage]->map transformClasses();
@@ -78,7 +79,7 @@ mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {
 	eAnnotations += "isPropertyGetter".toMarkerAnnotation();
 }
 
-mapping Commandgt::Transformation::transformCommandToOperation() : EOperation {
+mapping CommandModel::Transformation::transformCommandToOperation() : EOperation {
 	name := self.name;
 	eAnnotations += "isCommand".toMarkerAnnotation();
 }
