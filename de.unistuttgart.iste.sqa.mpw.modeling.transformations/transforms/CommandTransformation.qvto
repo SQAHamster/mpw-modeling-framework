@@ -26,6 +26,7 @@ mapping Henshin::Module::toTransformation() : Commandgt::Transformation {
   	mainUnit := createConditionalMainUnitForRules(result);
   };
   mainUnit.name := "execute";
+  mainUnit.mainUnit := true;
   mainUnit.parameters += object Commandgt::Parameter {
     name := "commandStack";
     type := "CommandStack";  	

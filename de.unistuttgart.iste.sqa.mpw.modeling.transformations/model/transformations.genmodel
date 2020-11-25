@@ -21,6 +21,7 @@
     <genClasses image="false" ecoreClass="CommandGraphTransformation.ecore#//Unit">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Unit/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Unit/parameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandGraphTransformation.ecore#//Unit/mainUnit"/>
     </genClasses>
     <genClasses ecoreClass="CommandGraphTransformation.ecore#//Rule">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandGraphTransformation.ecore#//Rule/thisInstance"/>

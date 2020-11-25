@@ -36,8 +36,8 @@
 «ENDDEFINE»
 
 «DEFINE UnitExpand FOR Unit»
-	«getVisibility()» void «name»(«IF name != "execute"»«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
-	«IF this == ((Transformation)eContainer).mainUnit-»
+	«getVisibility()» void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
+	«IF mainUnit-»
 	«EXPAND Preconditions FOR this»
 	«ENDIF-»
 	«EXPAND UnitExpandBody FOR this»
@@ -82,7 +82,7 @@
 
 «DEFINE UnitExpand FOR Rule»
     «getVisibility()» void «name»() {
-    «IF this == ((Transformation)eContainer).mainUnit-»
+    «IF mainUnit-»
     «EXPAND Preconditions FOR this»
     «ENDIF-»
     «EXPAND VariableDefinition FOREACH variables»
