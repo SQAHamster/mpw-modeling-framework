@@ -1,0 +1,9 @@
+library EmfHelpers;
+
+helper Element::root() : Element {
+    var element := self;
+    while (element.container() != null) {
+    	element := element.container();
+    };
+    return element;
+}

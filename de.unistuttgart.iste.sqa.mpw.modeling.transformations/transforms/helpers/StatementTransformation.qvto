@@ -1,3 +1,5 @@
+import helpers.EmfHelpers;
+
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
 modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
@@ -7,6 +9,9 @@ library StatementTransformation;
 
 configuration property Queries: List(querydsl::Model);
 configuration property EntityModels: List(EPackage);
+
+// remember the "current" statement / expression's type of the input model (to use in when blocks)
+property currentExpressionType: Dict(Input::Expression, ecore::EClassifier);
 
 mapping Input::Statement::toStatement() : QueryModel::Statement
     disjuncts Input::Statement::toSelfStatement,
@@ -25,13 +30,18 @@ abstract mapping Input::Statement::toStatementBase() : QueryModel::Statement {
 
 mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement inherits Input::Statement::toStatementBase
     when { self.target = "self"; } {
+    result.eType := self.parentModel().context.className.resolveone(ecore::EClass);
+    currentExpressionType->put(self.parentExpression(), result.eType);
 }
 
 mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement inherits Input::Statement::toStatementBase
     when {
-        let predecessor = self.parentExpression() in
-        Queries->exists(q|q.context.kind = querydsl::ContextKind::QUERY and q.context.name + "()" = self.target /*and q.context.className = ??? previous statement type */ ); 
-    } {
+        Queries->exists(q|q.context.kind = querydsl::ContextKind::QUERY 
+                      and q.context.name + "()" = self.target
+                      and currentExpressionType->get(self.parentExpression()).name = q.context.className); } {
+    /*_query := Queries->any(q|q.context.kind = querydsl::ContextKind::QUERY 
+                      and q.context.name + "()" = self.target
+                      and currentExpressionType->get(self.parentExpression()).name = q.context.className).resolveone(QueryModel::QueryStatement);*/
 }
 
 mapping Input::Statement::toFeatureStatement() : QueryModel::FeatureStatement inherits Input::Statement::toStatementBase {
@@ -41,3 +51,8 @@ mapping Input::Statement::toFeatureStatement() : QueryModel::FeatureStatement in
 helper Input::Statement::parentExpression() : Input::Expression {
 	return self.container().oclAsType(querydsl::Expression);
 }
+
+helper Input::Statement::parentModel() : Input::Model {
+	return self.root().oclAsType(Input::Model);
+}
+
