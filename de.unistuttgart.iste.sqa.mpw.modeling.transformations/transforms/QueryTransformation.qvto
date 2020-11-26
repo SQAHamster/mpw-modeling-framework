@@ -5,6 +5,8 @@ modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
 transformation TransformQueryDsl2Query(in inModel:Input, out outModel:QueryModel);
 
+configuration property EntityModels: List(EPackage);
+
 main() {
     var elements := inModel.rootObjects()[Input::Model]->map toElement();
 }
@@ -12,17 +14,47 @@ main() {
 mapping Input::Model::toElement() : QueryModel::ExpressionalElement
     disjuncts Input::Model::toQuery, Input::Model::toPrecondition, Input::Model::toPostcondition { }
 
+abstract mapping Input::Model::toElementBase() : QueryModel::ExpressionalElement {
+    name := self.context.name;
+    // mainExpression := self.expressions->first().map toExpression();
+}
+
 mapping Input::Model::toQuery() : QueryModel::Query
+    inherits Input::Model::toElementBase
 	when { self.context.kind = ContextKind::QUERY; } {
-	name := self.context.name;
+	contextClass := self.context.className.toContextClass();
 }
 
 mapping Input::Model::toPrecondition() : QueryModel::Precondition
+    inherits Input::Model::toElementBase
     when { self.context.kind = ContextKind::PRE; } {
-    name := self.context.name;
 }
 
 mapping Input::Model::toPostcondition() : QueryModel::Postcondition
+    inherits Input::Model::toElementBase
     when { self.context.kind = ContextKind::POST; } {
-    name := self.context.name;
 }
+
+helper String::toContextClass() : ecore::EClass {
+	return EntityModels->collect(p|p.getEClassifier(self))->selectOne(c|c != null).oclAsType(ecore::EClass);
+}
+
+mapping Input::Expression::toExpression() : QueryModel::expressions::Expression
+    disjuncts Input::ImpliesExpression::toImpliesExpression,
+              Input::OrExpression::toOrExpression,
+              Input::AndExpression::toAndExpression,
+              Input::EqualityExpression::toEqualityExpression {}
+
+mapping Input::ImpliesExpression::toImpliesExpression() : QueryModel::expressions::ImpliesExpression {
+}
+
+mapping Input::OrExpression::toOrExpression() : QueryModel::expressions::OrExpression {
+}
+
+mapping Input::AndExpression::toAndExpression() : QueryModel::expressions::AndExpression {
+}
+
+mapping Input::EqualityExpression::toEqualityExpression() : QueryModel::expressions::CompareExpression {
+}
+
+

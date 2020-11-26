@@ -71,6 +71,7 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 			var context = new ExecutionContextImpl();
 			context.setLog(new QvtoLogger(getName(eObject), log));
 			
+			context.setConfigProperty("EntityModels", workflowContext.get("entityModels"));
 			context.setConfigProperty("Queries", workflowContext.get("queries"));
 			context.setConfigProperty("Commands", workflowContext.get("commands"));
 			context.setConfigProperty("SourceModelUri", eObject.eResource().getURI().toString());

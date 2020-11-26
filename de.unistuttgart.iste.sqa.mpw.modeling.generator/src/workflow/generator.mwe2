@@ -78,6 +78,10 @@ Workflow {
 		sourceTargetRelationship = "NEW_TARGET"
 	}
 	
+    component = components.XmiWriter {
+        modelSlot = "newQueries"
+    }
+	
 	component = components.QvtoTransformator {
 		transformationUri = commandTransformationUri
 		modelSlot = "commands"
@@ -100,10 +104,6 @@ Workflow {
 
 	component = components.XmiWriter {
 		modelSlot = "queries"
-	}
-
-	component = components.XmiWriter {
-		modelSlot = "newQueries"
 	}
 	
 	/* check model */
