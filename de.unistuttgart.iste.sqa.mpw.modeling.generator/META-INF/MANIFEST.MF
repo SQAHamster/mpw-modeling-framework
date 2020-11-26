@@ -23,7 +23,8 @@ Require-Bundle: org.eclipse.xtend.profiler;resolution:=optional,
  org.eclipse.emf.henshin.model;bundle-version="1.7.0",
  de.unistuttgart.iste.sqa.mpw.modeling.queries,
  org.junit,
- org.junit.jupiter.api
+ org.junit.jupiter.api,
+ de.unistuttgart.iste.sqa.mpw.modeling.transformations;bundle-version="0.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-14
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.generator
 Import-Package: org.eclipse.emf.mwe2.ecore,

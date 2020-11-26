@@ -1,0 +1,43 @@
+modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+	
+modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
+modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
+
+library StatementTransformation;
+
+configuration property Queries: List(querydsl::Model);
+configuration property EntityModels: List(EPackage);
+
+mapping Input::Statement::toStatement() : QueryModel::Statement
+    disjuncts Input::Statement::toSelfStatement,
+              Input::Statement::toQueryStatement,
+              Input::Statement::toFeatureStatement { }
+
+abstract mapping Input::Statement::toStatementBase() : QueryModel::Statement {
+    init {
+    	var statementIndex := self.parentExpression().statements->indexOf(self);
+    	if (statementIndex > 0) {
+    		var predecessorInput := self.parentExpression().statements->at(statementIndex-1);
+    		result.previous := predecessorInput.resolveoneIn(Input::Statement::toStatement);
+    	}
+    }
+}
+
+mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement inherits Input::Statement::toStatementBase
+    when { self.target = "self"; } {
+}
+
+mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement inherits Input::Statement::toStatementBase
+    when {
+        let predecessor = self.parentExpression() in
+        Queries->exists(q|q.context.kind = querydsl::ContextKind::QUERY and q.context.name + "()" = self.target /*and q.context.className = ??? previous statement type */ ); 
+    } {
+}
+
+mapping Input::Statement::toFeatureStatement() : QueryModel::FeatureStatement inherits Input::Statement::toStatementBase {
+    // feature := self.target;
+}
+
+helper Input::Statement::parentExpression() : Input::Expression {
+	return self.container().oclAsType(querydsl::Expression);
+}

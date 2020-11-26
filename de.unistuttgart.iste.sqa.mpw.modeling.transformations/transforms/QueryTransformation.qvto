@@ -1,3 +1,5 @@
+import helpers.ExpressionTransformation;
+
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
 modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
@@ -16,45 +18,22 @@ mapping Input::Model::toElement() : QueryModel::ExpressionalElement
 
 abstract mapping Input::Model::toElementBase() : QueryModel::ExpressionalElement {
     name := self.context.name;
-    // mainExpression := self.expressions->first().map toExpression();
+    mainExpression := self.expressions->first().map toExpression();
 }
 
-mapping Input::Model::toQuery() : QueryModel::Query
-    inherits Input::Model::toElementBase
+mapping Input::Model::toQuery() : QueryModel::Query inherits Input::Model::toElementBase
 	when { self.context.kind = ContextKind::QUERY; } {
 	contextClass := self.context.className.toContextClass();
 }
 
-mapping Input::Model::toPrecondition() : QueryModel::Precondition
-    inherits Input::Model::toElementBase
+mapping Input::Model::toPrecondition() : QueryModel::Precondition inherits Input::Model::toElementBase
     when { self.context.kind = ContextKind::PRE; } {
 }
 
-mapping Input::Model::toPostcondition() : QueryModel::Postcondition
-    inherits Input::Model::toElementBase
+mapping Input::Model::toPostcondition() : QueryModel::Postcondition inherits Input::Model::toElementBase
     when { self.context.kind = ContextKind::POST; } {
 }
 
 helper String::toContextClass() : ecore::EClass {
 	return EntityModels->collect(p|p.getEClassifier(self))->selectOne(c|c != null).oclAsType(ecore::EClass);
 }
-
-mapping Input::Expression::toExpression() : QueryModel::expressions::Expression
-    disjuncts Input::ImpliesExpression::toImpliesExpression,
-              Input::OrExpression::toOrExpression,
-              Input::AndExpression::toAndExpression,
-              Input::EqualityExpression::toEqualityExpression {}
-
-mapping Input::ImpliesExpression::toImpliesExpression() : QueryModel::expressions::ImpliesExpression {
-}
-
-mapping Input::OrExpression::toOrExpression() : QueryModel::expressions::OrExpression {
-}
-
-mapping Input::AndExpression::toAndExpression() : QueryModel::expressions::AndExpression {
-}
-
-mapping Input::EqualityExpression::toEqualityExpression() : QueryModel::expressions::CompareExpression {
-}
-
-

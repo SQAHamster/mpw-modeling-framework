@@ -16,9 +16,6 @@ Export-Package: command,
  command.impl,
  command.util,
  query,
- query.expressions,
- query.expressions.impl,
- query.expressions.util,
  query.impl,
  query.util
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.transformations
