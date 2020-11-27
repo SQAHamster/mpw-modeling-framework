@@ -1,4 +1,8 @@
+modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+
 library EmfHelpers;
+
+configuration property EntityModels: List(EPackage);
 
 helper Element::root() : Element {
     var element := self;
@@ -6,4 +10,8 @@ helper Element::root() : Element {
     	element := element.container();
     };
     return element;
+}
+
+query findClassifierForName(name: String) : ecore::EClassifier {
+    return EntityModels->collect(p|p.getEClassifier(name))->selectOne(c|c != null).oclAsType(ecore::EClass)
 }

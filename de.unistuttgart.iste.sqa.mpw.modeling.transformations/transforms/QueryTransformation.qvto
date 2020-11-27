@@ -17,13 +17,22 @@ mapping Input::Model::toElement() : QueryModel::ExpressionalElement
     disjuncts Input::Model::toQuery, Input::Model::toPrecondition, Input::Model::toPostcondition { }
 
 abstract mapping Input::Model::toElementBase() : QueryModel::ExpressionalElement {
-    name := self.context.name;
-	contextClass := self.context.className.map toContextClass();
-    mainExpression := self.expressions->first().map toExpression();
+    init {
+        result.name := self.context.name;
+        result.contextClass := self.context.className.map toContextClass();
+        result.mainExpression := self.expressions->first().map toExpression();
+    }
 }
 
 mapping Input::Model::toQuery() : QueryModel::Query inherits Input::Model::toElementBase
 	when { self.context.kind = ContextKind::QUERY; } {
+	
+	if (result.mainExpression.oclIsTypeOf(QueryModel::StatementsExpression)) {
+		var statementExpression := result.mainExpression.oclAsType(QueryModel::StatementsExpression);
+		result.eType := statementExpression.statements->last().eType;
+	} else {
+		result.eType := ecore::EBoolean.oclAsType(ecore::EClassifier);
+	}
 }
 
 mapping Input::Model::toPrecondition() : QueryModel::Precondition inherits Input::Model::toElementBase
@@ -35,5 +44,5 @@ mapping Input::Model::toPostcondition() : QueryModel::Postcondition inherits Inp
 }
 
 mapping String::toContextClass() : ecore::EClass {
-	init { result := EntityModels->collect(p|p.getEClassifier(self))->selectOne(c|c != null).oclAsType(ecore::EClass) }
+	init { result := findClassifierForName(self).oclAsType(ecore::EClass); }
 }

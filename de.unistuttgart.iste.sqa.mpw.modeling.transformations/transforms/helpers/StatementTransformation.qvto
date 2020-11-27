@@ -11,12 +11,15 @@ configuration property Queries: List(querydsl::Model);
 configuration property EntityModels: List(EPackage);
 
 // remember the "current" statement / expression's type of the input model (to use in when blocks)
-property currentExpressionType: Dict(Input::Expression, ecore::EClassifier);
+property currentExpressionTypes: Dict(Input::Expression, ecore::EClassifier);
+property currentExpressionTypeCollectionInfo: Dict(Input::Expression, ecore::EBoolean);
 
 mapping Input::Statement::toStatement() : QueryModel::Statement
     disjuncts Input::Statement::toSelfStatement,
               Input::Statement::toQueryStatement,
-              Input::Statement::toFeatureStatement { }
+              Input::Statement::toFeatureStatement,
+              Input::Statement::toCollectionMethodStatement,
+              Input::Statement::toEnumLiteralStatement { }
 
 abstract mapping Input::Statement::toStatementBase() : QueryModel::Statement {
     init {
@@ -26,26 +29,69 @@ abstract mapping Input::Statement::toStatementBase() : QueryModel::Statement {
     		result.previous := predecessorInput.resolveoneIn(Input::Statement::toStatement);
     	}
     }
+    end {
+        result.debugName := self.toDebugName();
+        currentExpressionTypes->put(self.parentExpression(), result.eType);
+        currentExpressionTypeCollectionInfo->put(self.parentExpression(), result.isCollection);
+    }
 }
 
-mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement inherits Input::Statement::toStatementBase
+mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement merges Input::Statement::toStatementBase
     when { self.target = "self"; } {
-    result.eType := self.parentModel().context.className.resolveone(ecore::EClass);
-    currentExpressionType->put(self.parentExpression(), result.eType);
+    eType := self.parentModel().context.className.resolveone(ecore::EClass);
 }
 
-mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement inherits Input::Statement::toStatementBase
-    when {
-        Queries->exists(q|q.context.kind = querydsl::ContextKind::QUERY 
-                      and q.context.name + "()" = self.target
-                      and currentExpressionType->get(self.parentExpression()).name = q.context.className); } {
-    /*_query := Queries->any(q|q.context.kind = querydsl::ContextKind::QUERY 
-                      and q.context.name + "()" = self.target
-                      and currentExpressionType->get(self.parentExpression()).name = q.context.className).resolveone(QueryModel::QueryStatement);*/
+mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement merges Input::Statement::toStatementBase
+    when { self.isBasedOnQuery(); } {
+    var inputQuery := Queries->any(q|isStatementMatchingQuery(self, q));
+    _query := inputQuery.resolveone(QueryModel::Query);
+    eType := _query.eType;
 }
 
-mapping Input::Statement::toFeatureStatement() : QueryModel::FeatureStatement inherits Input::Statement::toStatementBase {
-    // feature := self.target;
+mapping Input::Statement::toFeatureStatement() : QueryModel::FeatureStatement merges Input::Statement::toStatementBase
+    when { self.getCurrentExpressionType().oclIsTypeOf(ecore::EClass) and self.target != null; } {
+    var eClass := self.getCurrentExpressionType().oclAsType(ecore::EClass);
+    
+    feature := eClass.eAllStructuralFeatures->any(f|f.name = self.target);
+    isCollection := feature.upperBound = -1;
+    eType := feature.eType;
+}
+
+mapping Input::Statement::toCollectionMethodStatement() : QueryModel::CollectionMethodStatement merges Input::Statement::toStatementBase
+    when { self.getCurrentExpressionTypeIsCollection() = true and self.collectionTarget != null; } {
+    var eClass := self.getCurrentExpressionType().oclAsType(ecore::EClass);
+    
+    var isSimple := self.collectionTarget.oclIsTypeOf(Input::SimpleCollectionMethod);
+    var simpleCollectionMethod := self.collectionTarget.oclAsType(Input::SimpleCollectionMethod);
+    var parametrizedCollectionMethod := self.collectionTarget.oclAsType(Input::ParametrizedCollectionMethod);
+    
+    switch {
+        case (isSimple and simpleCollectionMethod.method = "notEmpty") {
+            eType := ecore::EBoolean.oclAsType(ecore::EClassifier);
+            isCollection := false;
+            methodType := QueryModel::CollectionMethodType::NOT_EMPTY;
+        }
+        case (isSimple and simpleCollectionMethod.method = "isEmpty") {
+            eType := ecore::EBoolean.oclAsType(ecore::EClassifier);
+            isCollection := false;
+            methodType := QueryModel::CollectionMethodType::IS_EMPTY;
+        }
+        case (not isSimple and parametrizedCollectionMethod.typeSelect != null) {
+            eType := findClassifierForName(parametrizedCollectionMethod.typeSelect);
+            isCollection := true;
+            methodType := QueryModel::CollectionMethodType::TYPE_SELECT;
+            parameters += eType.oclAsType(ecore::EObject);
+        }
+        else {
+            assert(false);
+        }
+    };
+}
+
+mapping Input::Statement::toEnumLiteralStatement() : QueryModel::EnumLiteralStatement merges Input::Statement::toStatementBase
+    when { self.isEnumLiteral(); } {
+    enumLiteral := EntityModels->collect(m|m.allSubobjectsOfType(ecore::EEnumLiteral))->flatten()->any(l|l.name = self.target);
+    eType := enumLiteral.container().oclAsType(ecore::EEnum);
 }
 
 helper Input::Statement::parentExpression() : Input::Expression {
@@ -56,3 +102,47 @@ helper Input::Statement::parentModel() : Input::Model {
 	return self.root().oclAsType(Input::Model);
 }
 
+query Input::Statement::isBasedOnQuery() : Boolean {
+    return Queries->exists(q|isStatementMatchingQuery(self, q));
+}
+
+query isStatementMatchingQuery(s: Input::Statement, q: Input::Model) : Boolean {
+    return q.context.kind = querydsl::ContextKind::QUERY 
+           and q.context.name + "()" = s.target
+           and currentExpressionTypes->get(s.parentExpression()).name = q.context.className;
+}
+
+query Input::Statement::isEnumLiteral() : Boolean {
+    return EntityModels->collect(m|m.allSubobjectsOfType(ecore::EEnumLiteral))->flatten()->exists(l|l.name = self.target);
+}
+
+/* returns the current expression type which is defined by the previous statement */
+query Input::Statement::getCurrentExpressionType() : ecore::EClassifier {
+    return currentExpressionTypes->get(self.parentExpression());
+}
+
+query Input::Statement::getCurrentExpressionTypeIsCollection() : ecore::EBoolean {
+    return currentExpressionTypeCollectionInfo->get(self.parentExpression());
+}
+
+query ecore::EString::findClass() : ecore::EClassifier {
+    return EntityModels->collect(p|p.getEClassifier(self))->selectOne(c|c != null).oclAsType(ecore::EClass)
+}
+
+/* create a display string which is helpful when viewing as XMI */
+query Input::Statement::toDebugName() : ecore::EString {
+    if (self.target != null) {
+        return self.target;
+    };
+    
+    var simpleCollectionMethod := self.collectionTarget.oclAsType(Input::SimpleCollectionMethod);
+    if (simpleCollectionMethod != null) {
+        return simpleCollectionMethod.method;
+    };
+    var parametrizedCollectionMethod := self.collectionTarget.oclAsType(Input::ParametrizedCollectionMethod);
+    if (parametrizedCollectionMethod != null) {
+        return parametrizedCollectionMethod.typeSelect;
+    };
+    
+    return "?";
+}
