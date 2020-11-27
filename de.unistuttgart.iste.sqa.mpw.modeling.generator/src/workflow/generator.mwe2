@@ -35,10 +35,8 @@ Workflow {
 	bean = StandaloneSetup { 
 		platformUri="${projectRoot}"
 		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
-		registerGenModelFile="${platformUriPrefix}/${transformationsProject}/model/inputs/inputs.genmodel"
 		registerGenModelFile="${platformUriPrefix}/${transformationsProject}/model/transformations.genmodel"
-		registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/CommandBehaviors.ecore"
-		registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/QueryBehaviors.ecore"
+		registerGenModelFile="${platformUriPrefix}/${transformationsProject}/model/inputs/inputs.genmodel"
 	}
 	
 	/** instantiate metamodel */
@@ -90,7 +88,7 @@ Workflow {
 		sourceTargetRelationship = "NEW_TARGET"
 	}
 	
-	component = components.QvtoTransformator {
+    component = components.QvtoTransformator {
 		transformationUri = roleTransformationUri
 		modelSlot = "entityModels"
 	}
