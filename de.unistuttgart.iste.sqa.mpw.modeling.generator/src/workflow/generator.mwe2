@@ -34,9 +34,11 @@ Workflow {
 	/* set up EMF for standalone execution */
 	bean = StandaloneSetup { 
 		platformUri="${projectRoot}"
+		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
+		registerGenModelFile="${platformUriPrefix}/${transformationsProject}/model/inputs/inputs.genmodel"
+		registerGenModelFile="${platformUriPrefix}/${transformationsProject}/model/transformations.genmodel"
 		registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/CommandBehaviors.ecore"
 		registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/QueryBehaviors.ecore"
-		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
 	}
 	
 	/** instantiate metamodel */
