@@ -8,13 +8,17 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.henshin.model;visibility:=reexport,
  org.eclipse.m2m.qvt.oml,
- de.unistuttgart.iste.sqa.mpw.modeling.queries;bundle-version="1.0.0"
+ de.unistuttgart.iste.sqa.mpw.modeling.queries;bundle-version="1.0.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-14
 Export-Package: command,
  command.impl,
  command.util,
+ inputs,
+ inputs.impl,
+ inputs.util,
  query,
  query.impl,
  query.util

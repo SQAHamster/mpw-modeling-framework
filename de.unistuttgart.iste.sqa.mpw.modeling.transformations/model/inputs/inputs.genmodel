@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/de.unistuttgart.iste.sqa.mpw.modeling.transformations/src-gen"
+    modelPluginID="de.unistuttgart.iste.sqa.mpw.modeling.transformations" modelName="Transformations"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="5.0" copyrightFields="false" usedGenPackages="../../../org.eclipse.emf.henshin.model/model/henshin.genmodel#//henshin ../../../de.unistuttgart.iste.sqa.mpw.modeling.queries/model/generated/QueryDsl.genmodel#//querydsl"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>TransformationInputs.ecore</foreignModel>
+  <genPackages prefix="Inputs" disposableProviderFactory="true" ecorePackage="TransformationInputs.ecore#/">
+    <genClasses ecoreClass="TransformationInputs.ecore#//HenshinCommandInputs">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TransformationInputs.ecore#//HenshinCommandInputs/modules"/>
+    </genClasses>
+    <genClasses ecoreClass="TransformationInputs.ecore#//QueryInputs">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TransformationInputs.ecore#//QueryInputs/models"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

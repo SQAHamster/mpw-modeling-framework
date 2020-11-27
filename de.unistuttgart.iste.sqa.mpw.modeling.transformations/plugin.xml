@@ -22,4 +22,12 @@
             genModel="model/transformations.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated inputs -->
+      <package
+            uri="http://www.mpw.uni-stuttgart.de/transformation/inputs"
+            class="inputs.InputsPackage"
+            genModel="model/inputs/inputs.genmodel"/>
+   </extension>
+
 </plugin>
