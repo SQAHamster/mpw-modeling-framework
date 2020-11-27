@@ -44,7 +44,7 @@ mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement merges I
 mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement merges Input::Statement::toStatementBase
     when { self.isBasedOnQuery(); } {
     var inputQuery := Queries->any(q|isStatementMatchingQuery(self, q));
-    _query := inputQuery.resolveone(QueryModel::Query);
+    _query := inputQuery.late resolveone(QueryModel::Query);
     eType := _query.eType;
 }
 

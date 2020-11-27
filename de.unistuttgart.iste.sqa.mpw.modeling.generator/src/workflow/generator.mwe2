@@ -73,7 +73,7 @@ Workflow {
 	
 	component = components.QvtoTransformator {
 		transformationUri = queryTransformationUri
-		modelSlot = "queries"
+		modelSlot = "queriesComposition"
 		targetModelSlot = "newQueries"
 		sourceTargetRelationship = "NEW_TARGET"
 	}

@@ -2,21 +2,27 @@ import helpers.ExpressionTransformation;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
-modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
+modeltype Input uses "http://www.mpw.uni-stuttgart.de/transformation/inputs";
+modeltype QueryInput uses "http://www.mpw.uni-stuttgart.de/querydsl";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
-transformation TransformQueryDsl2Query(in inModel:Input, out outModel:QueryModel);
+transformation TransformQueryDsl2Query(in inModel: QueryInput, out outModel: QueryModel);
 
 configuration property EntityModels: List(EPackage);
 
 main() {
-    var elements := inModel.rootObjects()[Input::Model]->map toElement();
+    inModel.rootObjects()[Input::QueryInputs]->map toQueryModel();
 }
 
-mapping Input::Model::toElement() : QueryModel::ExpressionalElement
-    disjuncts Input::Model::toQuery, Input::Model::toPrecondition, Input::Model::toPostcondition { }
+mapping Input::QueryInputs::toQueryModel() : QueryModel::Module {
+    name := "queries";
+    elements := self.models->map toElement();
+}
 
-abstract mapping Input::Model::toElementBase() : QueryModel::ExpressionalElement {
+mapping QueryInput::Model::toElement() : QueryModel::ExpressionalElement
+    disjuncts QueryInput::Model::toQuery, QueryInput::Model::toPrecondition, QueryInput::Model::toPostcondition { }
+
+abstract mapping QueryInput::Model::toElementBase() : QueryModel::ExpressionalElement {
     init {
         result.name := self.context.name;
         result.contextClass := self.context.className.map toContextClass();
@@ -24,7 +30,7 @@ abstract mapping Input::Model::toElementBase() : QueryModel::ExpressionalElement
     }
 }
 
-mapping Input::Model::toQuery() : QueryModel::Query inherits Input::Model::toElementBase
+mapping QueryInput::Model::toQuery() : QueryModel::Query inherits QueryInput::Model::toElementBase
 	when { self.context.kind = ContextKind::QUERY; } {
 	
 	if (result.mainExpression.oclIsTypeOf(QueryModel::StatementsExpression)) {
@@ -35,11 +41,11 @@ mapping Input::Model::toQuery() : QueryModel::Query inherits Input::Model::toEle
 	}
 }
 
-mapping Input::Model::toPrecondition() : QueryModel::Precondition inherits Input::Model::toElementBase
+mapping QueryInput::Model::toPrecondition() : QueryModel::Precondition inherits QueryInput::Model::toElementBase
     when { self.context.kind = ContextKind::PRE; } {
 }
 
-mapping Input::Model::toPostcondition() : QueryModel::Postcondition inherits Input::Model::toElementBase
+mapping QueryInput::Model::toPostcondition() : QueryModel::Postcondition inherits QueryInput::Model::toElementBase
     when { self.context.kind = ContextKind::POST; } {
 }
 
