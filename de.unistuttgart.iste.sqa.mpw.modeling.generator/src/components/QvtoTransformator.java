@@ -57,15 +57,48 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 
 	@Override
 	protected void invokeInternal(WorkflowContext workflowContext, ProgressMonitor monitor, Issues issues) {
-		var transformationURI = URI.createURI(transformationUri);
-		var executor = new TransformationExecutor(transformationURI);
-		
-		int successfulTransformationsCount = 0;
-		
-		var modelInstances = (List<?>)workflowContext.get(getModelSlot());
+		var executor = new ModelToModelTransformationExecutor(workflowContext, issues, transformationUri);
+
 		var resultInstances = new ArrayList<EObject>();
-		for (var instance : modelInstances) {
-			var eObject = (EObject)instance;
+		Object slotContent = workflowContext.get(getModelSlot());
+		
+		if (slotContent instanceof List<?>) {
+			var modelInstances = (List<?>)slotContent;
+			for (var instance : modelInstances) {
+				var resultInstance = executor.transformNext((EObject)instance);
+				resultInstances.add(resultInstance);
+			}
+		} else if (slotContent instanceof EObject) {
+			var resultInstance = executor.transformNext((EObject)slotContent);
+			resultInstances.add(resultInstance);
+		} else {
+			throw new IllegalArgumentException("can only accept list of EObjects or single EObject instances");
+		}
+		
+		log.info("Transformed " + executor.getSuccessfulTransformationsCount() + " models successfully with " + executor.getTransformationName());
+		
+		workflowContext.set(getTargetModelSlot(), resultInstances);
+
+	}
+	
+	private class ModelToModelTransformationExecutor {
+		private final TransformationExecutor internalExecutor;
+		private final URI transformationURI;
+		
+		private final WorkflowContext workflowContext;
+		private final Issues issues;
+		
+		private int successfulTransformationsCount;
+		
+		public ModelToModelTransformationExecutor(WorkflowContext workflowContext, Issues issues, String uri) {
+			this.workflowContext = workflowContext;
+			this.issues = issues;
+			
+			this.transformationURI = URI.createURI(transformationUri);
+			this.internalExecutor = new TransformationExecutor(transformationURI);
+		}
+
+		EObject transformNext(EObject eObject) {
 			var input = new BasicModelExtent(Arrays.asList(eObject));
 			
 			var context = new ExecutionContextImpl();
@@ -74,17 +107,27 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 			context.setConfigProperty("EntityModels", workflowContext.get("entityModels"));
 			context.setConfigProperty("Queries", workflowContext.get("queries"));
 			context.setConfigProperty("Commands", workflowContext.get("commands"));
-			context.setConfigProperty("SourceModelUri", eObject.eResource().getURI().toString());
+			if (eObject.eResource() != null) {
+				context.setConfigProperty("SourceModelUri", eObject.eResource().getURI().toString());
+			}
+			
+			final EObject resultObject;
 			
 			ExecutionDiagnostic result;
 			if (sourceTargetRelationship == SourceTargetRelationship.EXISTING_TARGET) {
-				result = executor.execute(context, input);
-				resultInstances.add(eObject);
+				result = internalExecutor.execute(context, input);
+				resultObject = eObject;
 			} else {
 				var output = new BasicModelExtent();
-				result = executor.execute(context, input, output);
+				result = internalExecutor.execute(context, input, output);
 				List<EObject> contents = output.getContents();
-				resultInstances.addAll(contents);
+				
+				if (contents.size() > 0) {
+					resultObject = contents.get(0);
+				} else {
+					resultObject = null;
+					log.error("failed to transform any model for " + getTransformationName() + " on " + getName(eObject));
+				}
 				
 				if (contents.size() > 1) {
 					log.warn("created more than 1 content (" + contents.size() + ")");
@@ -99,13 +142,20 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 				var status = BasicDiagnostic.toIStatus(result);
 				issues.addError(status.getMessage());
 			}
+			
+			return resultObject;
+		}
+
+		public int getSuccessfulTransformationsCount() {
+			return successfulTransformationsCount;
 		}
 		
-		log.info("Transformed " + successfulTransformationsCount + " models successfully with " + transformationURI.lastSegment());
+		public String getTransformationName() {
+			return transformationURI.lastSegment();
+		}
 		
-		workflowContext.set(getTargetModelSlot(), resultInstances);
-
 	}
+	
 	
 	private static String getName(EObject object) {
 		if (object instanceof ENamedElement) {
