@@ -13,3 +13,10 @@ Query getQueryForOperation(EOperation operation) :
 List[Query] getQueries() : getQueryModules().first().elements.typeSelect(Query);
 List[Precondition] getPreconditions() : getQueryModules().first().elements.typeSelect(Precondition);
 private List[queryBehavior::Module] getQueryModules() : GLOBALVAR queries;
+
+Transformation getCommandForOperation(EOperation operation) : 
+    getCommands()
+    // TODO embed commands also as annotation to avoid this name endsWith check
+    .select(c|operation.eContainingClass.name.endsWith(c.targetClass.name) && c.name == operation.name);
+
+private List[Transformation] getCommands() : GLOBALVAR commands;

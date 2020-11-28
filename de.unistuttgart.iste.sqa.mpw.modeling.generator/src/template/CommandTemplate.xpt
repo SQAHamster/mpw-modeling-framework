@@ -90,6 +90,7 @@
     «EXPAND VariableDefinition FOREACH variables»
     «EXPAND InstanceDefinition FOREACH instanceConditions»
     «EXPAND ReferenceDefinition FOREACH referenceConditions»
+    «EXPAND VariableAssignmentDefinition FOREACH variableAssignments»
     «EXPAND AttributeDefinition FOREACH attributeConditions»
     «EXPAND RemoveModificationDefinition FOREACH modifications.select(m|m.action == Action::DELETE)»
     «EXPAND CreateModificationDefinition FOREACH modifications.select(m|m.action == Action::CREATE)»
@@ -109,7 +110,7 @@
 «DEFINE InstanceDefinition FOR InstanceCondition»
 	«IF isCreate»
 		// new instance: «this.variableName»:«this.typeName»
-    	«this.typeName» «this.variableName» = HamsterFactoryImpl.eINSTANCE.create«this.typeName»();
+    	«this.typeName» «this.variableName» = new «this.typeName»();
 	«ENDIF»
 «ENDDEFINE»
 
@@ -144,13 +145,16 @@
 «ENDDEFINE»
 
 «DEFINE VariableAssignmentDefinition FOR VariableAssignment»
-    «variableName» = «value»;
+    «variableName» = «value.toPropertyGetters()»;
 «ENDDEFINE»
 
 «DEFINE AttributeDefinition FOR AttributeCondition»
-	«IF !this.isCreate»
+	«IF this.isCreate»
+	    // set attribute condition «instance.variableName».«attributeName» := «attributeValueLiteral»
+	    «instance.variableName».«attributeName.setter()»(«attributeValueLiteral»);
+	«ELSE»	
 		// assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
-		assertAttributeCondition("«instance.variableName».«attributeName» == «attributeValueLiteral»", «toPropertyGetters(instance.variableName + "." + attributeName)» == «attributeValueLiteral»);	
+		assertAttributeCondition("«instance.variableName».«attributeName» == «attributeValueLiteral»", «toPropertyGetters(instance.variableName + "." + attributeName)» == «attributeValueLiteral»);
 	«ENDIF»
 «ENDDEFINE»
 

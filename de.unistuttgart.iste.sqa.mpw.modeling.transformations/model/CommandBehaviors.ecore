@@ -35,7 +35,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="instanceConditions" upperBound="-1"
         eType="#//InstanceCondition" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="variableAssignments" upperBound="-1"
-        eType="#//AttributeCondition" containment="true"/>
+        eType="#//VariableAssignment" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="referenceConditions" upperBound="-1"
         eType="#//ReferenceCondition" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeConditions" upperBound="-1"

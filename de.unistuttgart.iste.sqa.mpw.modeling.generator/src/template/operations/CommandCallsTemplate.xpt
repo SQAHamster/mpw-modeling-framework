@@ -3,10 +3,10 @@
 «EXTENSION template::util::GeneratorExtensions»
 
 «DEFINE CommandDefinitions FOR EClass»
-	  «FOREACH eAllOperations.select(o|o.isCommand()) AS c»
+	  «FOREACH eAllOperations.select(o|o.isCommand()) AS o»
 	  @Override
-	  public void «c.name»(CommandStack commandStack) {
-	      new «c.name.toFirstUpper()»Command(this, commandStack).execute();
+	  public void «o.name»(«FOREACH o.getCommandForOperation().mainUnit.parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH») {
+	      new «o.name.toFirstUpper()»Command(this«FOREACH o.getCommandForOperation().mainUnit.parameters AS p», «p.name»«ENDFOREACH»).execute();
 	  }
       «ENDFOREACH»
 «ENDDEFINE»

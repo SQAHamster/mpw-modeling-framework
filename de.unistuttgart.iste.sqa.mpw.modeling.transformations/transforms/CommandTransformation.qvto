@@ -69,6 +69,7 @@ mapping Henshin::Rule::toRule() : CommandModel::Rule {
   variables := self.parameters->map toVariableDeclaration();
   attributeConditions := self.lhs.nodes.allSubobjectsOfType(Attribute)->map toAttributeCondition();
   attributeConditions += self.rhs.nodes.allSubobjectsOfType(Attribute)[action.toString() = "create"]->map toCreateAttributeCondition();
+  variableAssignments := self.lhs.nodes.allSubobjectsOfType(Attribute)->map toVariableAssignment();
   
   referenceConditions := self.lhs.edges[type.upperBound <> -1]->map toReferenceCondition();
   referenceConditions += self.rhs.edges[type.upperBound <> -1 and action.toString() = "create"]->map toCreateReferenceCondition(self);
@@ -160,30 +161,39 @@ mapping Henshin::Parameter::toVariableDeclaration() : CommandModel::VariableDecl
   type := self.type.name;
 }
 
-mapping Henshin::Attribute::toAttributeCondition() : CommandModel::AttributeCondition {
-  var inName = self.type.name;
-  
-  attributeName := inName;
-  attributeValueLiteral := self.value.toEffectiveValueLiteral();
-  if (self.type.eType.name = "EBoolean") {
-  	attributeName := "is" + inName.substring(1, 1).toUpper();
-  	if (inName.size() >= 2) {
-  		attributeName := attributeName + inName.substring(2, inName.size());
-  	} endif;
-  } endif;
-  instance := self.node.resolveone(CommandModel::InstanceCondition);
-  
-  var rule = self.node.graph.getRule();
-  // isVariableAssignment := rule.parameters->exists(p|p.name = result.attributeValueLiteral);
+mapping Henshin::Attribute::toAttributeCondition() : CommandModel::AttributeCondition
+    when { not self.isVariableAssignment(); } {
+    var inName = self.type.name;
+    
+    attributeName := inName;
+    attributeValueLiteral := self.value.toEffectiveValueLiteral();
+    if (self.type.eType.name = "EBoolean") {
+    	attributeName := "is" + inName.substring(1, 1).toUpper();
+    	if (inName.size() >= 2) {
+    		attributeName := attributeName + inName.substring(2, inName.size());
+    	} endif;
+    } endif;
+    instance := self.node.resolveone(CommandModel::InstanceCondition);
 }
 
-helper String::toEffectiveValueLiteral() : EString {
+mapping Henshin::Attribute::toVariableAssignment() : CommandModel::VariableAssignment
+    when { self.isVariableAssignment(); } {
+    variableName := self.value;
+    value := self.node.resolveone(CommandModel::InstanceCondition).variableName + "." + self.type.name;
+}
+
+query Henshin::Attribute::isVariableAssignment() : Boolean {
+  var rule = self.node.graph.getRule();
+  var attributeValueLiteral := self.value.toEffectiveValueLiteral();
+  return self.node.graph = rule.lhs and rule.parameters->exists(p|p.name = attributeValueLiteral);
+}
+
+query String::toEffectiveValueLiteral() : EString {
 	return self.replaceAll("\"(WEST|NORTH|SOUTH|EAST)\"", "$1");
 }
 
-mapping Henshin::Attribute::toCreateAttributeCondition() : CommandModel::AttributeCondition {
-  // init { result := self.toAttributeCondition() } // todo check how to correctly reuse mapping in QVTo
-  isCreate := true;
+mapping Henshin::Attribute::toCreateAttributeCondition() : CommandModel::AttributeCondition merges Henshin::Attribute::toAttributeCondition {
+    isCreate := true;
 }
 
 
@@ -204,6 +214,10 @@ mapping Henshin::Edge::toCreateReferenceCondition(rule: Henshin::Rule) : Command
   		target := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
   	} endif;
   };
+  
+  if (source = null) {
+  	source := self.source.resolveone(CommandModel::InstanceCondition); // search in rhs
+  } endif;
   
   if (target = null) {
   	target := self.target.resolveone(CommandModel::InstanceCondition); // search in rhs
