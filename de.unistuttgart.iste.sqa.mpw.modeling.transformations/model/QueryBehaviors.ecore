@@ -32,6 +32,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="Postcondition" eSuperTypes="#//CommandConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="ClassInvariant" eSuperTypes="#//Constraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NotExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inner" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BinaryExpression" eSuperTypes="#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" lowerBound="1" eType="#//Expression"
         containment="true"/>

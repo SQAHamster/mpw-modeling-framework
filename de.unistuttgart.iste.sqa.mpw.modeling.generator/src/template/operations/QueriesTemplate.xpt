@@ -18,6 +18,10 @@
 
 «DEFINE ExpressionDefinition FOR Expression-»«ENDDEFINE»
 
+«DEFINE ExpressionDefinition FOR NotExpression-»
+    !(«EXPAND ExpressionDefinition FOR inner-»)
+«ENDDEFINE»
+
 «DEFINE ExpressionDefinition FOR ImpliesExpression-»
     («EXPAND ExpressionDefinition FOR lhs») 
     ? («EXPAND ExpressionDefinition FOR rhs») 

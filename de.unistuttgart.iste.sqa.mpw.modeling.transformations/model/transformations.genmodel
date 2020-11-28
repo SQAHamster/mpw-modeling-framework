@@ -132,6 +132,9 @@
     <genClasses ecoreClass="QueryBehaviors.ecore#//Postcondition"/>
     <genClasses ecoreClass="QueryBehaviors.ecore#//ClassInvariant"/>
     <genClasses image="false" ecoreClass="QueryBehaviors.ecore#//Expression"/>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//NotExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//NotExpression/inner"/>
+    </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//BinaryExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//BinaryExpression/lhs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//BinaryExpression/rhs"/>

@@ -8,11 +8,16 @@ modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 library ExpressionTransformation;
 
 mapping Input::Expression::toExpression() : QueryModel::Expression
-    disjuncts Input::ImpliesExpression::toImpliesExpression,
+    disjuncts Input::Not::toImpliesExpression,
+              Input::ImpliesExpression::toImpliesExpression,
               Input::OrExpression::toOrExpression,
               Input::AndExpression::toAndExpression,
               Input::EqualityExpression::toEqualityExpression,
               Input::Expression::toStatementExpression {}
+
+mapping Input::Not::toImpliesExpression() : QueryModel::NotExpression {
+    inner := self.expression.map toExpression();
+}
 
 mapping Input::ImpliesExpression::toImpliesExpression() : QueryModel::ImpliesExpression {
     lhs := self.left.map toExpression();

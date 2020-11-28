@@ -6,6 +6,7 @@
 «DEFINE main FOR Transformation»
     «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Command.java"»package «this.getCommandJavaPackageName()»;
     	
+    	import de.unistuttgart.hamster.framework.*;
         import static de.unistuttgart.hamster.framework.FrameworkAssert.*;
     	«EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
     	import «getModulePackage()».mpw.*;
@@ -252,6 +253,6 @@
 
 «DEFINE ConstraintDefinition FOR Constraint»
 	if ((«EXPAND template::operations::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
-	    throw new RuntimeException("precondition violation");
+	    throw new CommandConstraintException("violation of precondition for command");
 	}
 «ENDDEFINE»
