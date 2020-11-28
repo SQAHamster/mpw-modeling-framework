@@ -16,7 +16,7 @@ hasPropertyGetterOperation(EStructuralFeature this) :
     
 isPropertyGetter(EOperation this) : isMarkedWith("isPropertyGetter");
     
-isCommand(EOperation this) : isMarkedWith("isCommand");
+isCommand(EOperation this) : isMarkedWith("command");
     
 isQuery(EOperation this) : isMarkedWith("query");
 

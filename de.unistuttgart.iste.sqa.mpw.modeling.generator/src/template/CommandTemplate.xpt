@@ -1,4 +1,5 @@
 «IMPORT commandBehavior»
+«IMPORT queryBehavior»
 
 «EXTENSION template::util::GeneratorExtensions»
 
@@ -37,11 +38,15 @@
 
 «DEFINE UnitExpand FOR Unit»
 	«getVisibility()» void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
-	«IF mainUnit-»
-	«EXPAND Preconditions FOR this»
-	«ENDIF-»
+    «IF mainUnit-»
+        «EXPAND PreconditionsDefinition FOR this»
+    «ENDIF-»
 	«EXPAND UnitExpandBody FOR this»
+    «IF mainUnit-»
+        «EXPAND PostconditionsDefinition FOR this»
+    «ENDIF-»
 	}
+	«EXPAND PostUnitExpand FOR this»
 «ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR Unit»«ENDDEFINE»
@@ -80,11 +85,7 @@
     «name»();
 «ENDDEFINE»
 
-«DEFINE UnitExpand FOR Rule»
-    «getVisibility()» void «name»() {
-    «IF mainUnit-»
-    «EXPAND Preconditions FOR this»
-    «ENDIF-»
+«DEFINE UnitExpandBody FOR Rule»
     «EXPAND VariableDefinition FOREACH variables»
     «EXPAND InstanceDefinition FOREACH instanceConditions»
     «EXPAND ReferenceDefinition FOREACH referenceConditions»
@@ -92,7 +93,11 @@
     «EXPAND RemoveModificationDefinition FOREACH modifications.select(m|m.action == Action::DELETE)»
     «EXPAND CreateModificationDefinition FOREACH modifications.select(m|m.action == Action::CREATE)»
     «EXPAND AttributeModificationDefinition FOREACH modifications.select(m|m.action == Action::MODIFY)»
-    }
+«ENDDEFINE»
+
+«DEFINE PostUnitExpand FOR Unit»«ENDDEFINE»
+
+«DEFINE PostUnitExpand FOR Rule»
     «EXPAND FindObjectDefinition FOREACH referenceConditions.typeSelect(ManyReferenceCondition).select(r|!r.isCreate)»
 «ENDDEFINE»
 
@@ -231,12 +236,22 @@
 	«ENDLET»
 «ENDDEFINE»
 
-«DEFINE Preconditions FOR Unit»
+«DEFINE PreconditionsDefinition FOR Unit»
 	«LET (Transformation)this.eContainer AS transformation-»
-	«FOREACH getPreconditionsForCommand(transformation) AS p-»
-	if ((«EXPAND template::operations::QueriesTemplate::ExpressionDefinition FOR p.mainExpression-») == false) {
+	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(Precondition)-»
+	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-»
+	«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE PostconditionsDefinition FOR Unit»
+	«LET (Transformation)this.eContainer AS transformation-»
+	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(Postcondition)-»
+	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-»
+	«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE ConstraintDefinition FOR Constraint»
+	if ((«EXPAND template::operations::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
 	    throw new RuntimeException("precondition violation");
 	}
-	«ENDFOREACH-»
-	«ENDLET-»
 «ENDDEFINE»

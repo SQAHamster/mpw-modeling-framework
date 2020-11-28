@@ -10,17 +10,6 @@ List[Query] getQueriesForType(EClass class) :
 Query getQueryForOperation(EOperation operation) : 
     operation.eAnnotations.selectFirst(a|a.source == "query").contents.first();
     
-List[Precondition] getPreconditionsForCommand(Transformation transformation) : 
-    getPreconditions()
-    .select(q|/*q.contextClass.name == transformation.targetClass.name && */q.commandName == transformation.name);
-    
 List[Query] getQueries() : getQueryModules().first().elements.typeSelect(Query);
 List[Precondition] getPreconditions() : getQueryModules().first().elements.typeSelect(Precondition);
 private List[queryBehavior::Module] getQueryModules() : GLOBALVAR queries;
-
-List[String] getCommandsForType(EClass class) : 
-    getCommands()
-    .collect(c|c.roleName.toFirstUpper() + c.targetClass.name)
-    .select(n|n == class.name);
-
-private List[Transformation] getCommands() : GLOBALVAR commands;
