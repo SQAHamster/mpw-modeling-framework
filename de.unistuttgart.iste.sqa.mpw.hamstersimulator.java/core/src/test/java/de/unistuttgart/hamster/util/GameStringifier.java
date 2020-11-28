@@ -1,6 +1,5 @@
 package de.unistuttgart.hamster.util;
 
-import de.unistuttgart.hamster.hamster.ConcreteHamster;
 import de.unistuttgart.hamster.hamster.Grain;
 import de.unistuttgart.hamster.hamster.HamsterGame;
 import de.unistuttgart.hamster.hamster.Wall;
@@ -8,7 +7,7 @@ import de.unistuttgart.hamster.mpw.Location;
 import de.unistuttgart.hamster.mpw.Tile;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.function.Consumer;
 
 public class GameStringifier {
 	
@@ -70,13 +69,7 @@ public class GameStringifier {
 		var actual = new StringBuilder();
 
 		var hamster = game.getDefaultHamster();
-		var tiles = game.getTerritory().getTiles();
-		final var upperLeftTile = tiles.get(0);
-		var firstOfRowTile = upperLeftTile;
-
-		var currentTile = upperLeftTile;
-
-		while (currentTile != null) {
+		iterateTiles(game, currentTile -> {
 			if (hamster.getCurrentTile() == currentTile) {
 				actual.append(DirectionTestHelper.toDirection(hamster.getDirection()));
 			} else if (currentTile.getContents().stream().anyMatch(Wall.class::isInstance)) {
@@ -89,15 +82,44 @@ public class GameStringifier {
 
 			if (currentTile.getEast() == null) {
 				actual.append(';');
+			}
+		});
+
+		return actual.toString();
+	}
+
+	public static String grainsOnTerritoryToString(HamsterGame game) {
+		var actual = new StringBuilder();
+
+		iterateTiles(game, currentTile -> {
+			var grainsCount = currentTile.getContents().stream().filter(Grain.class::isInstance).count();
+			actual.append(grainsCount);
+
+			if (currentTile.getEast() == null) {
+				actual.append(';');
+			}
+		});
+
+		return actual.toString();
+	}
+
+	private static void iterateTiles(HamsterGame game, Consumer<Tile> lambda) {
+		var tiles = game.getTerritory().getTiles();
+		final var upperLeftTile = tiles.get(0);
+		var firstOfRowTile = upperLeftTile;
+
+		var currentTile = upperLeftTile;
+
+		while (currentTile != null) {
+			lambda.accept(currentTile);
+
+			if (currentTile.getEast() == null) {
 				firstOfRowTile = firstOfRowTile.getSouth();
 				currentTile = firstOfRowTile;
 			} else {
 				currentTile = currentTile.getEast();
 			}
 		}
-
-		return actual.toString();
-
 	}
 
 	private static Tile newTile(int x, int y) {
