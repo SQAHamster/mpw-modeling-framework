@@ -35,8 +35,12 @@ Workflow {
 	bean = StandaloneSetup { 
 		platformUri="${projectRoot}"
 		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
-		registerGenModelFile="${platformUriPrefix}/${transformationsProject}/model/transformations.genmodel"
-		registerGenModelFile="${platformUriPrefix}/${transformationsProject}/model/inputs/inputs.genmodel"
+		registerGeneratedEPackage="command.CommandPackage"
+        registerGeneratedEPackage="query.QueryPackage"
+        registerGeneratedEPackage="inputs.InputsPackage"
+        registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/CommandBehaviors.ecore"
+        registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/QueryBehaviors.ecore"
+        registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/inputs/TransformationInputs.ecore"
 	}
 	
 	/** instantiate metamodel */
@@ -74,12 +78,12 @@ Workflow {
 	component = components.QvtoTransformator {
 		transformationUri = queryTransformationUri
 		modelSlot = "queriesComposition"
-		targetModelSlot = "newQueries"
+		targetModelSlot = "queries"
 		sourceTargetRelationship = "NEW_TARGET"
 	}
 	
     component = components.XmiWriter {
-        modelSlot = "newQueries"
+        modelSlot = "queries"
     }
 	
 	component = components.QvtoTransformator {
