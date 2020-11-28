@@ -295,21 +295,14 @@ helper Sequence(String)::joinToString(separator: String) : String {
 }
 
 helper CommandModel::Transformation::obtainConstraints() : List(QueryModel::Constraint) {
-	var queryModule := Queries->first();
+	var queryModule := Queries->first().deepclone();
     var constraintsForThisCommand: List(QueryModel::Constraint);
     constraintsForThisCommand += queryModule.elements->selectByType(QueryModel::ClassInvariant)
-                                                     ->select(q|q.contextClass.name = self.targetClass.name)
-                                                     ->collect(c|c.clone());
+                                                     ->select(q|q.contextClass.name = self.targetClass.name);
     constraintsForThisCommand += queryModule.elements->selectByKind(QueryModel::CommandConstraint)
-                                                     ->select(q|q.contextClass.name = self.targetClass.name and q.commandName = self.name)
-                                                     ->collect(c|c.clone());
-    return constraintsForThisCommand;
-}
+                                                     ->select(q|q.contextClass.name = self.targetClass.name and q.commandName = self.name);
+                                                     
+    outModel.removeElement(queryModule); // remove unused parts from outModel
 
-query CommandModel::Transformation::findInvariants() : List(QueryModel::ClassInvariant) {
-    var constraintsForThisCommand: List(QueryModel::ClassInvariant);
-    constraintsForThisCommand += object QueryModel::ClassInvariant {
-    	
-    };
     return constraintsForThisCommand;
 }

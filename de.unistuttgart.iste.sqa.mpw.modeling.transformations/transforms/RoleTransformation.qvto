@@ -46,23 +46,41 @@ helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
             											 ->map transformFeatureToGetterOperation();
   
   var queryModule := Queries->first();
-  var queriesForThisType := queryModule.elements->selectByType(QueryModel::Query)
-                                                ->select(q|q.contextClass = self);
+  var queriesForThisType := self.getQueriesForThisType();
   
   readOnlyRole.eOperations += queriesForThisType->reject(q|readOnlyRole.eAllOperations
                                                            ->exists(o|o.name = q.name))
   									 			->map transformQueryToOperation();
-  									 			
-  readOnlyRole.eAllOperations->forEach(o) {
-                              var queryForThisOperation := queriesForThisType->any(q|q.name = o.name);
-                              if (queryForThisOperation != null) {
-                                  var annotation := "query".toMarkerAnnotation();
-                                  annotation.contents += queryForThisOperation.oclAsType(ecore::EObject);
-                                  o.eAnnotations += annotation;
-                              };
-						  };
+  
+  readOnlyRole.embedQueriesInOperations(queriesForThisType);
+  
   self.ePackage.eClassifiers += readOnlyRole;
   return readOnlyRole;
+}
+
+mapping QueryModel::Query::transformQueryToOperation() : EOperation {
+	name := self.name;
+	eType := self.eType;
+	if (self.isCollection) {
+        upperBound := -1; 
+	};
+}
+
+helper ecore::EClass::embedQueriesInOperations(queries: Set(QueryModel::Query)) {
+  self.eAllOperations->forEach(o) {
+      var queryForThisOperation := queries->any(q|q.name = o.name);
+      if (queryForThisOperation != null) {
+          var annotation := "query".toMarkerAnnotation();
+          annotation.contents += queryForThisOperation.oclAsType(ecore::EObject).deepclone();
+          o.eAnnotations += annotation;
+      };
+  };
+}
+
+query ecore::EClass::getQueriesForThisType() : Set(QueryModel::Query) {
+    var queryModule := Queries->first();
+    return queryModule.elements->selectByType(QueryModel::Query)
+                               ->select(q|q.contextClass = self);
 }
 
 helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ecore::EClass {
@@ -76,12 +94,9 @@ helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ec
   return roleClass;
 }
 
-mapping QueryModel::Query::transformQueryToOperation() : EOperation {
+mapping CommandModel::Transformation::transformCommandToOperation() : EOperation {
 	name := self.name;
-	eType := self.eType;
-	if (self.isCollection) {
-        upperBound := -1; 
-	};
+	eAnnotations += "command".toMarkerAnnotation();
 }
 
 mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {
@@ -91,14 +106,8 @@ mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {
 	eAnnotations += "isPropertyGetter".toMarkerAnnotation();
 }
 
-mapping CommandModel::Transformation::transformCommandToOperation() : EOperation {
-	name := self.name;
-	eAnnotations += "isCommand".toMarkerAnnotation();
-}
-
 helper String::toMarkerAnnotation() : EAnnotation {
 	return object EAnnotation {
 	    source := self;
 	};
 }
-
