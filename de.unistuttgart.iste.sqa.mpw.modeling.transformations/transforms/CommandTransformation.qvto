@@ -25,17 +25,19 @@ mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
   mainUnit := self.units->any(u|u.name = self.name).resolveone(CommandModel::Unit);
   
   if (mainUnit = null) {
-  	mainUnit := createConditionalMainUnitForRules(result);
+  	  mainUnit := createConditionalMainUnitForRules(result);
   };
   mainUnit.name := "execute";
   mainUnit.mainUnit := true;
   mainUnit.parameters += object CommandModel::Parameter {
-    name := "commandStack";
-    type := "CommandStack";  	
+      name := "commandStack";
+      type := "CommandStack";  	
   };
   
   units->forEach(u) {
-  	u.parameters := u.parameters->select(p|p.name != "self");
+      u.parameters->select(p|p.name = "self")->forEach(p) {
+      	  outModel.removeElement(p);
+      };
   };
   
   constraints := result.obtainConstraints();
