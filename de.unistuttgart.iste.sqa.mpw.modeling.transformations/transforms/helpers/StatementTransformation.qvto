@@ -39,6 +39,15 @@ abstract mapping Input::Statement::toStatementBase() : QueryModel::Statement {
 mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement merges Input::Statement::toStatementBase
     when { self.target = "self"; } {
     eType := self.parentModel().context.className.resolveone(ecore::EClass);
+    selfAlias := self.determineSelfAlias();
+}
+
+query Input::Statement::determineSelfAlias() : String {
+    if (self.parentModel().context.kind = ContextKind::QUERY) {
+        return "this";
+    } else {
+        return "thisInstance";
+    };
 }
 
 mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement merges Input::Statement::toStatementBase

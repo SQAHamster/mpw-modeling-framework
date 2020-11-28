@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -16,6 +17,7 @@ import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
+import org.eclipse.xtext.EcoreUtil2;
 
 import de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl.Model;
 
@@ -39,7 +41,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 			save((EObject)resource);
 		}
 	}
-	
+
 	private void save(EObject object) {
 		try {
 			Map<String, String> saveOptions = new HashMap<String, String>();
@@ -55,7 +57,9 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 			resourceFactoryRegistry.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
 			
 			var resource = resourceSet.createResource(URI.createURI(fileUri));
-			resource.getContents().add(EcoreUtil.copy(object));
+			EObject copiedObject = EcoreUtil.copy(object);
+			removeAnnotationContents(copiedObject);
+			resource.getContents().add(copiedObject);
 			resource.save(saveOptions);
 			
 			log.debug(fileUri + " created.");
@@ -70,6 +74,16 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 		}
 		var nameFeature = object.eClass().getEStructuralFeature("name");
 		return "" + object.eGet(nameFeature);
+	}
+	
+	/**
+	 * opening XMI files with complex annotation contents comes with errors, so remove them.
+	 */
+	private void removeAnnotationContents(EObject eObject) {
+		var annotations = EcoreUtil2.getAllContentsOfType(eObject, EAnnotation.class);
+		for (var annotation : annotations) {
+			annotation.getContents().clear();
+		}
 	}
 	
 }

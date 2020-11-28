@@ -1,15 +1,15 @@
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
 modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
-modeltype QueryDsl uses 'http://www.mpw.uni-stuttgart.de/querydsl';
+modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 
 transformation RoleTransformation(inout ecore: Ecore);
 
-configuration property Queries: List(QueryDsl::Model);
+configuration property Queries: List(QueryModel::Module);
 configuration property Commands: List(CommandModel::Transformation);
 
 main() {
-  ecore.rootObjects()[EPackage]->map transformClasses();
+    ecore.rootObjects()[EPackage]->map transformClasses();
 }
 
 mapping Ecore::EPackage::transformClasses() {
@@ -44,12 +44,22 @@ helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
   };
   readOnlyRole.eOperations += self.eAllStructuralFeatures->select(f|f.changeable)
             											 ->map transformFeatureToGetterOperation();
-  var queriesForThisType := Queries->select(q|q.context.className = baseName and q.context.kind = ContextKind::QUERY);
-  readOnlyRole.eOperations += queriesForThisType->reject(q|readOnlyRole.eAllOperations->exists(o|o.name = q.context.name))
+  
+  var queryModule := Queries->first();
+  var queriesForThisType := queryModule.elements->selectByType(QueryModel::Query)
+                                                ->select(q|q.contextClass = self);
+  
+  readOnlyRole.eOperations += queriesForThisType->reject(q|readOnlyRole.eAllOperations
+                                                           ->exists(o|o.name = q.name))
   									 			->map transformQueryToOperation();
-  readOnlyRole.eOperations->select(o|queriesForThisType->exists(q|q.context.name = o.name))
-						  ->forEach(o) {
-						 	 o.eAnnotations += "isQuery".toMarkerAnnotation();
+  									 			
+  readOnlyRole.eAllOperations->forEach(o) {
+                              var queryForThisOperation := queriesForThisType->any(q|q.name = o.name);
+                              if (queryForThisOperation != null) {
+                                  var annotation := "query".toMarkerAnnotation();
+                                  annotation.contents += queryForThisOperation.oclAsType(ecore::EObject);
+                                  o.eAnnotations += annotation;
+                              };
 						  };
   self.ePackage.eClassifiers += readOnlyRole;
   return readOnlyRole;
@@ -66,10 +76,12 @@ helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ec
   return roleClass;
 }
 
-mapping QueryDsl::Model::transformQueryToOperation() : EOperation {
-	name := self.context.name;
-	eType := EBoolean.oclAsType(EClassifier);
-	eAnnotations += "isQuery".toMarkerAnnotation();
+mapping QueryModel::Query::transformQueryToOperation() : EOperation {
+	name := self.name;
+	eType := self.eType;
+	if (self.isCollection) {
+        upperBound := -1; 
+	};
 }
 
 mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {
@@ -86,9 +98,7 @@ mapping CommandModel::Transformation::transformCommandToOperation() : EOperation
 
 helper String::toMarkerAnnotation() : EAnnotation {
 	return object EAnnotation {
-	  details += object EStringToStringMapEntry {
-	  	  key := self;
-	  };
+	    source := self;
 	};
 }
 

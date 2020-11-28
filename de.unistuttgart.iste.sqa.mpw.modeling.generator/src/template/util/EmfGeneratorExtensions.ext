@@ -36,8 +36,7 @@ isPrimitive(EClassifier this) :
     (this.name == "EInt" || this.name == "EBoolean" || this.name == "EString");
 
 featureToJavaType(EStructuralFeature this) : elementToJavaType();
-operationToJavaType(EOperation this) : 
-    if (isQuery()) then getQueryForOperation(this).getQueryResultType() else elementToJavaType();
+operationToJavaType(EOperation this) : elementToJavaType();
 	
 private elementToJavaType(ETypedElement this) :
     if (this.eType == null) then "void" 

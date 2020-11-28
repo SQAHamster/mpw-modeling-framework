@@ -234,7 +234,7 @@
 «DEFINE Preconditions FOR Unit»
 	«LET (Transformation)this.eContainer AS transformation-»
 	«FOREACH getPreconditionsForCommand(transformation) AS p-»
-	if ((«EXPAND template::operations::QueriesTemplate::PreconditionExpressionDefinition FOR p.expressions.get(0)-») == false) {
+	if ((«EXPAND template::operations::QueriesTemplate::ExpressionDefinition FOR p.mainExpression-») == false) {
 	    throw new RuntimeException("precondition violation");
 	}
 	«ENDFOREACH-»

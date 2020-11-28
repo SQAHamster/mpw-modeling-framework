@@ -1,0 +1,40 @@
+«IMPORT ecore»
+«IMPORT query»
+
+«EXTENSION template::util::GeneratorExtensions»
+
+«DEFINE StatementsDefinitions FOR StatementsExpression-»
+    «FOREACH statements AS s SEPARATOR "."-»
+        «EXPAND StatementDefinition FOR s-»
+    «ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR Statement»«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR SelfStatement-»
+    «selfAlias»
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR FeatureStatement-»
+    «feature.name.getter()»()
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR CollectionMethodStatement-»
+    «IF methodType == CollectionMethodType::NOT_EMPTY-»
+        size() > 0
+    «ELSEIF methodType == CollectionMethodType::IS_EMPTY-»
+        isEmpty()
+    «ELSEIF methodType == CollectionMethodType::TYPE_SELECT-»
+        «LET ((EClassifier)parameters.get(0)).name AS typeSelectName-»
+        stream().filter(«typeSelectName».class::isInstance).map(«typeSelectName».class::cast).collect(Collectors.toList())
+        «ENDLET-»
+    «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR EnumLiteralStatement-»
+    «enumLiteral»
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR QueryStatement-»
+    «query.name»()
+«ENDDEFINE»

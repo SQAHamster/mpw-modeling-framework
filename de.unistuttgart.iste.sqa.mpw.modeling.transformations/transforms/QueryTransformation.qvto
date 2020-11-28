@@ -38,15 +38,18 @@ mapping QueryInput::Model::toQuery() : QueryModel::Query inherits QueryInput::Mo
 		result.eType := statementExpression.statements->last().eType;
 	} else {
 		result.eType := ecore::EBoolean.oclAsType(ecore::EClassifier);
-	}
+	};
+	defaultValueLiteral := result.eType.defaultValue.toString();
 }
 
 mapping QueryInput::Model::toPrecondition() : QueryModel::Precondition inherits QueryInput::Model::toElementBase
     when { self.context.kind = ContextKind::PRE; } {
+    commandName := self.context.name;
 }
 
 mapping QueryInput::Model::toPostcondition() : QueryModel::Postcondition inherits QueryInput::Model::toElementBase
     when { self.context.kind = ContextKind::POST; } {
+    commandName := self.context.name;
 }
 
 mapping String::toContextClass() : ecore::EClass {

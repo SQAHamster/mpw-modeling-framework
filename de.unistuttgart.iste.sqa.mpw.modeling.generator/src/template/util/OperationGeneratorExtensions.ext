@@ -18,7 +18,7 @@ isPropertyGetter(EOperation this) : isMarkedWith("isPropertyGetter");
     
 isCommand(EOperation this) : isMarkedWith("isCommand");
     
-isQuery(EOperation this) : isMarkedWith("isQuery");
+isQuery(EOperation this) : isMarkedWith("query");
 
 private isMarkedWith(EOperation this, String key) :
-    eAnnotations.exists(a|a.details.exists(d|d.key == key));
+    eAnnotations.exists(a|a.source == key || a.details.exists(d|d.key == key));

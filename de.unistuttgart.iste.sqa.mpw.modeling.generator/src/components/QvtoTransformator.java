@@ -10,7 +10,6 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot;
@@ -20,10 +19,7 @@ import org.eclipse.m2m.qvt.oml.ExecutionContextImpl;
 import org.eclipse.m2m.qvt.oml.ExecutionDiagnostic;
 import org.eclipse.m2m.qvt.oml.TransformationExecutor;
 
-import components.helpers.GenmodelEcorePackageInitializer;
 import components.helpers.QvtoLogger;
-import query.QueryPackage;
-import query.impl.QueryPackageImpl;
 
 public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 	private final static Logger log = Logger.getLogger(QvtoTransformator.class.getName());
@@ -61,8 +57,6 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 
 	@Override
 	protected void invokeInternal(WorkflowContext workflowContext, ProgressMonitor monitor, Issues issues) {
-		GenmodelEcorePackageInitializer.initializeMissingEcorePackagesFromGlobalGenModels();
-		
 		var executor = new ModelToModelTransformationExecutor(workflowContext, issues, transformationUri);
 
 		var resultInstances = new ArrayList<EObject>();
@@ -84,7 +78,6 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 		log.info("Transformed " + executor.getSuccessfulTransformationsCount() + " models successfully with " + executor.getTransformationName());
 		
 		workflowContext.set(getTargetModelSlot(), resultInstances);
-
 	}
 	
 	private class ModelToModelTransformationExecutor {
@@ -107,7 +100,6 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 			var input = new BasicModelExtent(Arrays.asList(eObject));
 			
 			var context = new ExecutionContextImpl();
-			Registry.INSTANCE.put(QueryPackage.eNS_URI, QueryPackageImpl.eINSTANCE);
 			
 			context.setLog(new QvtoLogger(getName(eObject), log));
 			

@@ -1,16 +1,4 @@
-import querydsl;
-
 extension template::util::GlobalsGeneratorExtensions reexport;
 
 String toPropertyGetters(String s) :
     JAVA template.properties.PropertyUtils.toPropertyGetters(java.lang.String);
-
-String getQueryResultType(Model model) :
-    getQueryResultType(model, getQueries());
-
-private String getQueryResultType(Model model, List[Model] otherQueries) :
-    JAVA template.properties.QueryResultTypeDeterminer.determineQueryType(
-        de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl.Model, java.util.List);
-    
-String convertForQueryStatement(Statement this) :
-	JAVA template.properties.QueryCodifier.convertForQueryStatement(de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl.Statement);
