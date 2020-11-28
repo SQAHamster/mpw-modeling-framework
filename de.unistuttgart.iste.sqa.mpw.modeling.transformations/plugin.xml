@@ -10,7 +10,7 @@
       <!-- @generated transformations -->
       <package
             uri="http://www.mpw.uni-stuttgart.de/behavior/command"
-            class="command.CommandPackage"
+            class="commandBehavior.CommandPackage"
             genModel="model/transformations.genmodel"/>
    </extension>
 
@@ -18,15 +18,14 @@
       <!-- @generated transformations -->
       <package
             uri="http://www.mpw.uni-stuttgart.de/behavior/query"
-            class="query.QueryPackage"
+            class="queryBehavior.QueryPackage"
             genModel="model/transformations.genmodel"/>
    </extension>
-
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated inputs -->
       <package
             uri="http://www.mpw.uni-stuttgart.de/transformation/inputs"
-            class="inputs.InputsPackage"
+            class="behaviorInputs.InputsPackage"
             genModel="model/inputs/inputs.genmodel"/>
    </extension>
 

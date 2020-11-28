@@ -6,7 +6,7 @@ import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 
-import inputs.impl.InputsFactoryImpl;
+import behaviorInputs.impl.InputsFactoryImpl;
 
 public class CommandReader extends MultiResourceReader {
 	

@@ -1,5 +1,5 @@
 «IMPORT ecore»
-«IMPORT query»
+«IMPORT queryBehavior»
 
 «EXTENSION template::util::GeneratorExtensions»
 

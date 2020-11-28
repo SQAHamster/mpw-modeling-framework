@@ -1,6 +1,6 @@
 import ecore;
-import command;
-import query;
+import commandBehavior;
+import queryBehavior;
 
 String getModulePackage() : GLOBALVAR module_package;
 
@@ -16,7 +16,7 @@ List[Precondition] getPreconditionsForCommand(Transformation transformation) :
     
 List[Query] getQueries() : getQueryModules().first().elements.typeSelect(Query);
 List[Precondition] getPreconditions() : getQueryModules().first().elements.typeSelect(Precondition);
-private List[query::Module] getQueryModules() : GLOBALVAR queries;
+private List[queryBehavior::Module] getQueryModules() : GLOBALVAR queries;
 
 List[String] getCommandsForType(EClass class) : 
     getCommands()

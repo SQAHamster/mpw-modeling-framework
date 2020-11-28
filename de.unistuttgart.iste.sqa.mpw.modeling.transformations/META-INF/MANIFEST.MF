@@ -13,13 +13,13 @@ Require-Bundle: org.eclipse.core.runtime,
  de.unistuttgart.iste.sqa.mpw.modeling.queries;bundle-version="1.0.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-14
-Export-Package: command,
- command.impl,
- command.util,
- inputs,
- inputs.impl,
- inputs.util,
- query,
- query.impl,
- query.util
+Export-Package: commandBehavior,
+ commandBehavior.impl,
+ commandBehavior.util,
+ queryBehavior,
+ queryBehavior.impl,
+ queryBehavior.util,
+ behaviorInputs,
+ behaviorInputs.impl,
+ behaviorInputs.util
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.transformations

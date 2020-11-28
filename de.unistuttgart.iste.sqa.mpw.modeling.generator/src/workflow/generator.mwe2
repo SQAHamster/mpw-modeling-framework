@@ -35,9 +35,9 @@ Workflow {
 	bean = StandaloneSetup { 
 		platformUri="${projectRoot}"
 		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
-		registerGeneratedEPackage="command.CommandPackage"
-        registerGeneratedEPackage="query.QueryPackage"
-        registerGeneratedEPackage="inputs.InputsPackage"
+		registerGeneratedEPackage="commandBehavior.CommandPackage"
+        registerGeneratedEPackage="queryBehavior.QueryPackage"
+        registerGeneratedEPackage="behaviorInputs.InputsPackage"
         registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/CommandBehaviors.ecore"
         registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/QueryBehaviors.ecore"
         registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/inputs/TransformationInputs.ecore"
@@ -92,6 +92,10 @@ Workflow {
 		sourceTargetRelationship = "NEW_TARGET"
 	}
 	
+	component = components.XmiWriter {
+		modelSlot = "commands"
+	}
+	
     component = components.QvtoTransformator {
 		transformationUri = roleTransformationUri
 		modelSlot = "entityModels"
@@ -100,14 +104,6 @@ Workflow {
 	component = components.XmiWriter {
 		modelSlot = "entityModels"
 		fileExtension = "ecore"
-	}
-	
-	component = components.XmiWriter {
-		modelSlot = "commands"
-	}
-
-	component = components.XmiWriter {
-		modelSlot = "queries"
 	}
 	
 	/* check model */

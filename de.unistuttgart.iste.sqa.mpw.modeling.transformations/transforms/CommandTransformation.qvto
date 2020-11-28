@@ -4,15 +4,17 @@ modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
 modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
 modeltype CommandModel uses "http://www.mpw.uni-stuttgart.de/behavior/command";
+modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
 transformation TransformHenshin2Commandgt(in inModel:Henshin, out outModel:CommandModel);
 
+configuration property Queries: List(QueryModel::Module);
 configuration property SourceModelUri: String;
 
 property number : Integer = 0;
 
 main() {
-  inModel.rootObjects()[Module]->map toTransformation();
+    inModel.rootObjects()[Module]->map toTransformation();
 }
 
 mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
@@ -35,6 +37,11 @@ mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
   units->forEach(u) {
   	u.parameters := u.parameters->select(p|p.name != "this");
   };
+  
+  constraints := result.obtainConstraints();
+  usedQueries := constraints->collect(c|c.allSubobjectsOfType(QueryModel::QueryStatement))
+                            ->collect(s|s._query)
+                            ->asOrderedSet();
 }
 
 helper Henshin::Module::findTargetClass() : ecore::EClass {
@@ -285,4 +292,24 @@ helper Sequence(String)::joinToString(separator: String) : String {
 	  first := false;		
 	};
 	return str;
-} 
+}
+
+helper CommandModel::Transformation::obtainConstraints() : List(QueryModel::Constraint) {
+	var queryModule := Queries->first();
+    var constraintsForThisCommand: List(QueryModel::Constraint);
+    constraintsForThisCommand += queryModule.elements->selectByType(QueryModel::ClassInvariant)
+                                                     ->select(q|q.contextClass.name = self.targetClass.name)
+                                                     ->collect(c|c.clone());
+    constraintsForThisCommand += queryModule.elements->selectByKind(QueryModel::CommandConstraint)
+                                                     ->select(q|q.contextClass.name = self.targetClass.name and q.commandName = self.name)
+                                                     ->collect(c|c.clone());
+    return constraintsForThisCommand;
+}
+
+query CommandModel::Transformation::findInvariants() : List(QueryModel::ClassInvariant) {
+    var constraintsForThisCommand: List(QueryModel::ClassInvariant);
+    constraintsForThisCommand += object QueryModel::ClassInvariant {
+    	
+    };
+    return constraintsForThisCommand;
+}
