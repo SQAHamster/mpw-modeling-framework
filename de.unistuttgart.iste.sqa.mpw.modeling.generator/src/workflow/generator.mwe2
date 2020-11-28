@@ -38,9 +38,6 @@ Workflow {
 		registerGeneratedEPackage="commandBehavior.CommandPackage"
         registerGeneratedEPackage="queryBehavior.QueryPackage"
         registerGeneratedEPackage="behaviorInputs.InputsPackage"
-        registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/CommandBehaviors.ecore"
-        registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/QueryBehaviors.ecore"
-        registerEcoreFile="${platformUriPrefix}/${transformationsProject}/model/inputs/TransformationInputs.ecore"
 	}
 	
 	/** instantiate metamodel */
