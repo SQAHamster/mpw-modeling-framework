@@ -4,12 +4,12 @@
   <imports href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#/"/>
   <units xsi:type="henshin:Rule" xmi:id="_FUGCUSZhEeuiY_E2amZoVQ" name="initDefaultHamster">
     <lhs xmi:id="_FUGCUiZhEeuiY_E2amZoVQ" name="Lhs">
-      <nodes xmi:id="_FUGCUyZhEeuiY_E2amZoVQ" name="this">
+      <nodes xmi:id="_FUGCUyZhEeuiY_E2amZoVQ" name="self">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
       </nodes>
     </lhs>
     <rhs xmi:id="_FUGCWCZhEeuiY_E2amZoVQ" name="Rhs">
-      <nodes xmi:id="_FUGCWSZhEeuiY_E2amZoVQ" name="this">
+      <nodes xmi:id="_FUGCWSZhEeuiY_E2amZoVQ" name="self">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
       </nodes>
     </rhs>

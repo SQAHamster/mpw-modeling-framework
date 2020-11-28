@@ -4,15 +4,15 @@ package henshin
 
 context Module
 
--- all rules need a "this" instance
+-- all rules need a "self" instance
 def: allRules : Sequence(Rule) = units->select(oclIsTypeOf(Rule))->collect(oclAsType(Rule))
-inv allRulesHaveThis: allRules ->forAll(lhs.nodes->exists(n|n.name = 'this'))
+inv allRulesHaveThis: allRules ->forAll(lhs.nodes->exists(n|n.name = 'self'))
 
 -- if there is single main unit, each rule has to be distinguishable by attribute conditions on this
 def: noSingleMainUnit : Boolean = (units->size() > 0 and units->forAll(oclIsTypeOf(Rule)))
-inv mainUnitsAreDistinguishable: noSingleMainUnit implies allRules->collect(thisNode)->forAll(attributes->notEmpty())
+inv mainUnitsAreDistinguishable: noSingleMainUnit implies allRules->collect(selfNode)->forAll(attributes->notEmpty())
 
 context Rule
-def: thisNode : Node = lhs.nodes->any(name = 'this')
+def: selfNode : Node = lhs.nodes->any(name = 'self')
 
 endpackage

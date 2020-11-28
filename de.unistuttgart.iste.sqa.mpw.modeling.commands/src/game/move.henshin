@@ -4,7 +4,7 @@
   <imports href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#/"/>
   <units xsi:type="henshin:Rule" xmi:id="_CYLcYCXtEeuiY_E2amZoVQ" name="moveNorth">
     <lhs xmi:id="_CYnhQCXtEeuiY_E2amZoVQ" name="Lhs">
-      <nodes xmi:id="_dOn6YCXtEeuiY_E2amZoVQ" name="this" outgoing="_9-lUACXuEeuiY_E2amZoVQ">
+      <nodes xmi:id="_dOn6YCXtEeuiY_E2amZoVQ" name="self" outgoing="_9-lUACXuEeuiY_E2amZoVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
         <attributes xmi:id="_2RukgCaHEeuiY_E2amZoVQ" value="&quot;NORTH&quot;">
           <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor/direction"/>
@@ -24,7 +24,7 @@
       </edges>
     </lhs>
     <rhs xmi:id="_CYnhQSXtEeuiY_E2amZoVQ" name="Rhs">
-      <nodes xmi:id="_dOn6YSXtEeuiY_E2amZoVQ" name="this" outgoing="_z_5dUCXuEeuiY_E2amZoVQ">
+      <nodes xmi:id="_dOn6YSXtEeuiY_E2amZoVQ" name="self" outgoing="_z_5dUCXuEeuiY_E2amZoVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
         <attributes xmi:id="_2RvyoCaHEeuiY_E2amZoVQ" value="&quot;NORTH&quot;">
           <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor/direction"/>
@@ -49,7 +49,7 @@
   </units>
   <units xsi:type="henshin:Rule" xmi:id="_o4x4ICZgEeuiY_E2amZoVQ" name="moveSouth">
     <lhs xmi:id="_o4x4ISZgEeuiY_E2amZoVQ" name="Lhs">
-      <nodes xmi:id="_o4x4IiZgEeuiY_E2amZoVQ" name="this" outgoing="_o4x4JiZgEeuiY_E2amZoVQ">
+      <nodes xmi:id="_o4x4IiZgEeuiY_E2amZoVQ" name="self" outgoing="_o4x4JiZgEeuiY_E2amZoVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
         <attributes xmi:id="_5RF4oCaHEeuiY_E2amZoVQ" value="&quot;SOUTH&quot;">
           <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor/direction"/>
@@ -69,7 +69,7 @@
       </edges>
     </lhs>
     <rhs xmi:id="_o4x4JyZgEeuiY_E2amZoVQ" name="Rhs">
-      <nodes xmi:id="_o4x4KCZgEeuiY_E2amZoVQ" name="this" outgoing="_o4x4LCZgEeuiY_E2amZoVQ">
+      <nodes xmi:id="_o4x4KCZgEeuiY_E2amZoVQ" name="self" outgoing="_o4x4LCZgEeuiY_E2amZoVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
         <attributes xmi:id="_5RF4oSaHEeuiY_E2amZoVQ" value="&quot;SOUTH&quot;">
           <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor/direction"/>
@@ -94,7 +94,7 @@
   </units>
   <units xsi:type="henshin:Rule" xmi:id="_p5lN8iZgEeuiY_E2amZoVQ" name="moveWest">
     <lhs xmi:id="_p5lN8yZgEeuiY_E2amZoVQ" name="Lhs">
-      <nodes xmi:id="_p5lN9CZgEeuiY_E2amZoVQ" name="this" outgoing="_p5lN-CZgEeuiY_E2amZoVQ">
+      <nodes xmi:id="_p5lN9CZgEeuiY_E2amZoVQ" name="self" outgoing="_p5lN-CZgEeuiY_E2amZoVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
         <attributes xmi:id="__KyP4CaHEeuiY_E2amZoVQ" value="&quot;WEST&quot;">
           <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor/direction"/>
@@ -114,7 +114,7 @@
       </edges>
     </lhs>
     <rhs xmi:id="_p5lN-SZgEeuiY_E2amZoVQ" name="Rhs">
-      <nodes xmi:id="_p5lN-iZgEeuiY_E2amZoVQ" name="this" outgoing="_p5lN_iZgEeuiY_E2amZoVQ">
+      <nodes xmi:id="_p5lN-iZgEeuiY_E2amZoVQ" name="self" outgoing="_p5lN_iZgEeuiY_E2amZoVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
         <attributes xmi:id="__KyP4SaHEeuiY_E2amZoVQ" value="&quot;WEST&quot;">
           <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor/direction"/>
@@ -139,7 +139,7 @@
   </units>
   <units xsi:type="henshin:Rule" xmi:id="_FUGCUSZhEeuiY_E2amZoVQ" name="moveEast">
     <lhs xmi:id="_FUGCUiZhEeuiY_E2amZoVQ" name="Lhs">
-      <nodes xmi:id="_FUGCUyZhEeuiY_E2amZoVQ" name="this" outgoing="_FUGCVyZhEeuiY_E2amZoVQ">
+      <nodes xmi:id="_FUGCUyZhEeuiY_E2amZoVQ" name="self" outgoing="_FUGCVyZhEeuiY_E2amZoVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
         <attributes xmi:id="_AAnrsCaIEeuiY_E2amZoVQ" value="&quot;EAST&quot;">
           <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor/direction"/>
@@ -159,7 +159,7 @@
       </edges>
     </lhs>
     <rhs xmi:id="_FUGCWCZhEeuiY_E2amZoVQ" name="Rhs">
-      <nodes xmi:id="_FUGCWSZhEeuiY_E2amZoVQ" name="this" outgoing="_FUGCXSZhEeuiY_E2amZoVQ">
+      <nodes xmi:id="_FUGCWSZhEeuiY_E2amZoVQ" name="self" outgoing="_FUGCXSZhEeuiY_E2amZoVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
         <attributes xmi:id="_AAnrsSaIEeuiY_E2amZoVQ" value="&quot;EAST&quot;">
           <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor/direction"/>

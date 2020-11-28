@@ -4,7 +4,7 @@
   <imports href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#/"/>
   <units xsi:type="henshin:Rule" xmi:id="_hCUK0CZjEeuiY_E2amZoVQ" name="putGrain">
     <lhs xmi:id="_hCXOICZjEeuiY_E2amZoVQ" name="Lhs">
-      <nodes xmi:id="_kg6YoCZjEeuiY_E2amZoVQ" name="this" outgoing="_rkhlUCZjEeuiY_E2amZoVQ _0xY9gCZjEeuiY_E2amZoVQ">
+      <nodes xmi:id="_kg6YoCZjEeuiY_E2amZoVQ" name="self" outgoing="_rkhlUCZjEeuiY_E2amZoVQ _0xY9gCZjEeuiY_E2amZoVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
       </nodes>
       <nodes xmi:id="_ookxkCZjEeuiY_E2amZoVQ" name="position" incoming="_rkhlUCZjEeuiY_E2amZoVQ">
@@ -21,7 +21,7 @@
       </edges>
     </lhs>
     <rhs xmi:id="_hCXOISZjEeuiY_E2amZoVQ" name="Rhs">
-      <nodes xmi:id="_kg6YoSZjEeuiY_E2amZoVQ" name="this" outgoing="_rkhlUSZjEeuiY_E2amZoVQ">
+      <nodes xmi:id="_kg6YoSZjEeuiY_E2amZoVQ" name="self" outgoing="_rkhlUSZjEeuiY_E2amZoVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Hamster"/>
       </nodes>
       <nodes xmi:id="_ookxkSZjEeuiY_E2amZoVQ" name="position" incoming="_rkhlUSZjEeuiY_E2amZoVQ" outgoing="_uyKmACZjEeuiY_E2amZoVQ">

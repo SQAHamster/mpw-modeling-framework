@@ -35,7 +35,7 @@ mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
   };
   
   units->forEach(u) {
-  	u.parameters := u.parameters->select(p|p.name != "this");
+  	u.parameters := u.parameters->select(p|p.name != "self");
   };
   
   constraints := result.obtainConstraints();
@@ -45,7 +45,7 @@ mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
 }
 
 helper Henshin::Module::findTargetClass() : ecore::EClass {
-	return self.units[Rule]->first().lhs.nodes->any(n|n.name = "this").type;
+	return self.units[Rule]->first().lhs.nodes->any(n|n.name = "self").type;
 }
 
 helper String::toRole() : String {
@@ -83,7 +83,7 @@ mapping Henshin::Rule::toRule() : CommandModel::Rule {
   
   thisInstance := self.lhs.nodes->any(n|n.type.eSuperTypes->exists(t|t.name = 'Actor')).resolveone(CommandModel::InstanceCondition);
   if (thisInstance = null) {
-  	thisInstance := self.lhs.nodes->any(n|n.name = "this").resolveone(CommandModel::InstanceCondition);
+  	thisInstance := self.lhs.nodes->any(n|n.name = "self").resolveone(CommandModel::InstanceCondition);
   } endif;
   
   referenceConditions := result.sortReferences();
