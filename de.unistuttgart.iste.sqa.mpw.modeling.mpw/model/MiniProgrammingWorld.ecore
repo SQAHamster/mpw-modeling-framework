@@ -16,16 +16,20 @@
         eOpposite="#//Tile/south"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="east" eType="#//Tile" eOpposite="#//Tile/west"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="west" eType="#//Tile" eOpposite="#//Tile/east"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stage" eType="#//Stage"
+        eOpposite="#//Stage/tiles"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TileContent" abstract="true" eSuperTypes="Command.ecore#//Entity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="currentTile" eType="#//Tile"
         eOpposite="#//Tile/contents"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stage" eType="#//Stage"
+        eOpposite="#//Stage/tileContents"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Stage" abstract="true" eSuperTypes="Command.ecore#//Entity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="tiles" upperBound="-1"
-        eType="#//Tile" containment="true"/>
+        eType="#//Tile" containment="true" eOpposite="#//Tile/stage"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tileContents" upperBound="-1"
-        eType="#//TileContent" containment="true"/>
+        eType="#//TileContent" containment="true" eOpposite="#//TileContent/stage"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MiniProgrammingWorld" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" lowerBound="1" eType="#//Stage"

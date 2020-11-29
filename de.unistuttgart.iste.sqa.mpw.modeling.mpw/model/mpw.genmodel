@@ -109,9 +109,11 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/north"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/east"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/west"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/stage"/>
     </genClasses>
     <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//TileContent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//TileContent/currentTile"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//TileContent/stage"/>
     </genClasses>
     <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//Stage">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/tiles"/>
