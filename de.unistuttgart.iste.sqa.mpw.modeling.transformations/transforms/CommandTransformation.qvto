@@ -65,6 +65,8 @@ mapping Henshin::Rule::toRule() : CommandModel::Rule {
   number := 0;
 
   name := self.name;
+  parameters := self.parameters->map toParameter();
+    
   instanceConditions := self.lhs.nodes->map toInstanceCondition();
   instanceConditions += self.rhs.nodes[action.toString() = "create"]->map toCreateInstanceCondition();
  
@@ -134,7 +136,7 @@ mapping Henshin::Unit::toInvocation(parentUnit: Henshin::Unit) : CommandModel::I
 }
 
 mapping Henshin::Node::toInstanceCondition() : CommandModel::InstanceCondition {
-  typeName := self.type.name;
+  typeName := self.type.toTypeName();
   variableName := self.name;
   if variableName = null then {
   	variableName := "o" + number.toString();
@@ -143,7 +145,7 @@ mapping Henshin::Node::toInstanceCondition() : CommandModel::InstanceCondition {
 }
 
 mapping Henshin::Node::toCreateInstanceCondition() : CommandModel::InstanceCondition {
-  typeName := self.type.name;
+  typeName := self.type.toTypeName();
   variableName := self.name;
   isCreate := true;
   if variableName = null then {
@@ -152,15 +154,16 @@ mapping Henshin::Node::toCreateInstanceCondition() : CommandModel::InstanceCondi
   } endif
 }
 
-mapping Henshin::Parameter::toParameter() : CommandModel::Parameter {
+mapping Henshin::Parameter::toParameter() : CommandModel::Parameter
+  when { self.kind = ParameterKind::IN; } {
   name := self.name;
-  type := self.type.name;  
+  type := self.type.toTypeName();  
 }
 
-
-mapping Henshin::Parameter::toVariableDeclaration() : CommandModel::VariableDeclaration {
+mapping Henshin::Parameter::toVariableDeclaration() : CommandModel::VariableDeclaration
+  when { self.kind = ParameterKind::VAR; } {
   name := self.name;
-  type := self.type.name;
+  type := self.type.toTypeName();
 }
 
 mapping Henshin::Attribute::toAttributeCondition() : CommandModel::AttributeCondition
@@ -175,7 +178,7 @@ mapping Henshin::Attribute::toAttributeCondition() : CommandModel::AttributeCond
     		attributeName := attributeName + inName.substring(2, inName.size());
     	} endif;
     } endif;
-    instance := self.node.resolveone(CommandModel::InstanceCondition);
+    instance := self.node.resolveInstance();
 }
 
 mapping Henshin::Attribute::toVariableAssignment() : CommandModel::VariableAssignment
@@ -321,4 +324,27 @@ helper CommandModel::Transformation::obtainConstraints() : List(QueryModel::Cons
     outModel.removeElement(queryModule); // remove unused parts from outModel
 
     return constraintsForThisCommand;
+}
+
+query Henshin::Node::resolveInstance() : CommandModel::InstanceCondition {
+    var res := self.resolveone(CommandModel::InstanceCondition);
+    
+    if (res = null) {
+	    self.graph.getRule().mappings->forEach(m) {
+	  	    if (m.image = self) {
+	  		    res := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
+	        } elif (m.origin = self) {
+	  		    res := m.image.resolveone(CommandModel::InstanceCondition); // search in rhs
+	        } endif;
+	    };
+    };
+
+    return res;
+}
+
+query ecore::EClassifier::toTypeName() : String {
+    if (self.oclAsType(EClass).eSuperTypes->exists(t|t.name = "Stage" or t.name = "Actor")) {
+    	return "Concrete" + self.name;
+    };
+	return self.name;
 }

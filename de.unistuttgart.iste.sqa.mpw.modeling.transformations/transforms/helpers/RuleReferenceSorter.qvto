@@ -13,6 +13,8 @@ helper CommandModel::Rule::sortReferences(): OrderedSet(ReferenceCondition) {
 	var i: Integer := 0;
 	
 	reachableInstances += self.thisInstance;
+	var parameterNames := self.parameters->collect(p|p.name)->asSet();
+	reachableInstances += self.instanceConditions->select(o|parameterNames->includes(o.variableName));
 	
 	while (sortedResult->size() != allReferencesCount) {
 		var anyAdded := false;

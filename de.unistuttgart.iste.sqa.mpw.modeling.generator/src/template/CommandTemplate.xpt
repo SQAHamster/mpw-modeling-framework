@@ -151,10 +151,10 @@
 «DEFINE AttributeDefinition FOR AttributeCondition»
 	«IF this.isCreate»
 	    // set attribute condition «instance.variableName».«attributeName» := «attributeValueLiteral»
-	    «instance.variableName».«attributeName.setter()»(«attributeValueLiteral»);
+	    «instance.variableName».«attributeName.setter()»(«attributeValueLiteral.toPropertyGetters()»);
 	«ELSE»	
 		// assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
-		assertAttributeCondition("«instance.variableName».«attributeName» == «attributeValueLiteral»", «toPropertyGetters(instance.variableName + "." + attributeName)» == «attributeValueLiteral»);
+		assertAttributeCondition("«instance.variableName».«attributeName» == «attributeValueLiteral.toPropertyGetters()»", «toPropertyGetters(instance.variableName + "." + attributeName)» == «attributeValueLiteral.toPropertyGetters()»);
 	«ENDIF»
 «ENDDEFINE»
 
@@ -219,7 +219,7 @@
 
 «DEFINE AttributeConditionsForFindObjectDefinition FOR AttributeCondition»
 	// attribute check: «instance.variableName»: «this.attributeName»
-	if («toPropertyGetters(instance.variableName + "." + this.attributeName)» != «attributeValueLiteral») {
+	if («toPropertyGetters(instance.variableName + "." + this.attributeName)» != «attributeValueLiteral.toPropertyGetters()») {
 		continue;
 	}
 «ENDDEFINE»
