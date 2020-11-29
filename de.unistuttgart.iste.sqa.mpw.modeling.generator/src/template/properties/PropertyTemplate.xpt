@@ -60,24 +60,51 @@
 «ENDDEFINE»
 
 «DEFINE SetPropertyValueDefinitions FOR EClass»
-	  «FOREACH eStructuralFeatures.select(e|e.changeable).reject(e|e.isCollection()) AS f»
-	  «IF f.derived»protected«ELSE»public«ENDIF» void «f.name.setter()»(«f.featureToJavaType()» «f.name») {
-  	    «IF f.isObservableProperty()-»
-	  	this.«f.name».set(«f.name»);
-        «ELSE-»
-	  	this.«f.name» = «f.name»;
+    «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
+	«IF f.derived»protected«ELSE»public«ENDIF» void «f.adderOrSetter()»(«f.featureToSingleJavaType()» «f.adderOrSetterParameterName()») {
+	    «IF f.isReference() && f.isCollection()-»
+	        «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f»
+	    «ELSE-»
+	        «EXPAND SimpleSetterForFeatureDefinition FOR f»
 	    «ENDIF-»
-	    «REM»
-	    «IF EReference.isInstance(f)-»
-	    «LET (EReference)f AS r-»
-	    «IF r.eOpposite != null-»
-	    «f.name».«r.eOpposite.name.setter()»(«f.name.getter()»());
-	    «ENDIF-»
-	    «ENDLET-»
-	    «ENDIF-»
-	    «ENDREM»
 	  }
       «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE MultiReferenceAdderForFeatureDefinition FOR EReference»
+    «IF eOpposite != null-»
+        if («adderOrSetterParameterName()».«eOpposite.name.getter()»() != this) {
+    «ENDIF-»
+          
+    this.«name».add(«adderOrSetterParameterName()»);
+          
+    «IF eOpposite != null-»
+        «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
+        }
+    «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE SimpleSetterForFeatureDefinition FOR EStructuralFeature»
+    «IF isReference()-»
+        if (this.«name.getter()»() != «name») {
+    «ENDIF-»
+          
+    «IF isObservableProperty()-»
+        this.«name».set(«name»);
+    «ELSE-»
+        this.«name» = «name»;
+    «ENDIF-»
+          
+    «IF isReference()-»
+        «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
+        }
+    «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE CallSetterForOppositeDefinition FOR EReference»
+      «IF eOpposite != null-»
+      «adderOrSetterParameterName()».«eOpposite.adderOrSetter()»(this);
+      «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE GetPropertyDefinitions FOR EClass»

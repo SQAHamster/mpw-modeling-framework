@@ -181,7 +181,7 @@
     «IF this.reference.metaType == SingleReferenceCondition»
 	    «this.reference.source.variableName».«setter(this.reference.referenceName)»(«this.reference.target.variableName»);
 	«ELSE»
-		«this.reference.source.variableName».«getter(this.reference.referenceName)»().add(«this.reference.target.variableName»);
+		«this.reference.source.variableName».«adder(this.reference.referenceName)»(«this.reference.target.variableName»);
     «ENDIF»
     «ENDIF»
 «ENDDEFINE»

@@ -4,13 +4,27 @@ extension template::properties::PropertyExtensions;
 extension template::util::OperationGeneratorExtensions;
 
 getter(String this) :
-	"get"+this.toFirstUpper();
+	"get" + this.toFirstUpper();
 	
 setter(String this) :
-	"set"+this.toFirstUpper();
+	"set" + this.toFirstUpper();
+	
+adder(String this) :
+	"add" + this.toSingleName().toFirstUpper();
+
+adderOrSetter(EStructuralFeature this) :
+    if (isCollection()) then name.adder() else name.setter();
+
+adderOrSetterParameterName(EStructuralFeature this) :
+    if (isCollection()) then name.toSingleName() else name;
+    
+private toSingleName(String this) : if (endsWith("s")) then subString(0, length-1) else this;
 	
 isCollection(ETypedElement this) :
     upperBound == -1;
+    
+isReference(EStructuralFeature this) :
+    EReference.isInstance(this);
 	
 isConstructorInjectedProperty(EStructuralFeature this) :
     !this.changeable && !this.isContainment() && !this.derived;
@@ -35,6 +49,7 @@ isBuiltInType(EClassifier this) :
 isPrimitive(EClassifier this) :
     (this.name == "EInt" || this.name == "EBoolean" || this.name == "EString");
 
+featureToSingleJavaType(EStructuralFeature this) : this.eType.name.toJavaType();
 featureToJavaType(EStructuralFeature this) : elementToJavaType();
 operationToJavaType(EOperation this) : elementToJavaType();
 	
