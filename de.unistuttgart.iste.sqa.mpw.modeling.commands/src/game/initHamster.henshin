@@ -48,15 +48,14 @@
     <parameterMappings xmi:id="_ZlcdUTJbEeuWCcs7oPobTg" source="_dgG2gDIjEeupAp5-xI7a9A" target="_IERxoDIkEeupAp5-xI7a9A"/>
     <parameterMappings xmi:id="_ZldEYDJbEeuWCcs7oPobTg" source="_IERxoDIkEeupAp5-xI7a9A" target="_dgG2gDIjEeupAp5-xI7a9A"/>
   </units>
-  <units xsi:type="henshin:IteratedUnit" xmi:id="_CvbM0DIkEeupAp5-xI7a9A" name="addGrain" subUnit="_CvbM0DIkEeupAp5-xI7a9A" iterations="grainCount">
+  <units xsi:type="henshin:IteratedUnit" xmi:id="_CvbM0DIkEeupAp5-xI7a9A" name="addMultipleGrain" subUnit="_JkUoEDIkEeupAp5-xI7a9A" iterations="grainCount">
     <parameters xmi:id="_VpaFkDJbEeuWCcs7oPobTg" name="territory" kind="IN">
       <type xsi:type="ecore:EClass" href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Territory"/>
     </parameters>
     <parameters xmi:id="_IERxoDIkEeupAp5-xI7a9A" name="grainCount" kind="IN">
       <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </parameters>
-    <parameterMappings xmi:id="_XkPakDJbEeuWCcs7oPobTg" source="_VpaFkDJbEeuWCcs7oPobTg" target="_VpaFkDJbEeuWCcs7oPobTg"/>
-    <parameterMappings xmi:id="_XkPakTJbEeuWCcs7oPobTg" source="_VpaFkDJbEeuWCcs7oPobTg" target="_VpaFkDJbEeuWCcs7oPobTg"/>
+    <parameterMappings xmi:id="_T7QEMDJnEeuu_uKvvP5GUQ" source="_VpaFkDJbEeuWCcs7oPobTg" target="_QMAowDJbEeuWCcs7oPobTg"/>
   </units>
   <units xsi:type="henshin:Rule" xmi:id="_JkUoEDIkEeupAp5-xI7a9A" name="addGrain">
     <parameters xmi:id="_QMAowDJbEeuWCcs7oPobTg" name="territory" kind="IN">
