@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.unistuttgart.hamster.framework.CommandConstraintException;
+import de.unistuttgart.hamster.hamster.ConcreteHamster;
 import de.unistuttgart.hamster.hamster.GameHamster;
 import de.unistuttgart.hamster.hamster.Grain;
 import de.unistuttgart.hamster.hamster.HamsterGame;
@@ -215,12 +216,13 @@ public class HamsterCommandsTest {
 
 	private void andGrainOn(int columnIndex, int rowIndex) {
 		var tile = getTileAt(columnIndex, rowIndex);
-		tile.getContents().add(new Grain());
+		tile.addContent(new Grain());
 	}
 
 	private void andGrainsInMouth(int count) {
+		var concreteHamster = (ConcreteHamster) this.sut;
 		for (int i = 0; i < count; i++) {
-			sut.getGrains().add(new Grain());
+			concreteHamster.addGrain(new Grain());
 		}
 	}
 

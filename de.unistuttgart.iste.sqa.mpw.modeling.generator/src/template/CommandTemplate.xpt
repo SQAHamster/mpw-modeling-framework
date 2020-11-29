@@ -167,7 +167,7 @@
     «IF this.reference.metaType == SingleReferenceCondition»
         «this.reference.source.variableName».«setter(this.reference.referenceName)»(null);
     «ELSE»
-		«this.reference.source.variableName».«getter(this.reference.referenceName)»().remove(«this.reference.target.variableName»);
+		«this.reference.source.variableName».«remover(this.reference.referenceName)»(«this.reference.target.variableName»);
     «ENDIF»
     «ENDIF»
 «ENDDEFINE»

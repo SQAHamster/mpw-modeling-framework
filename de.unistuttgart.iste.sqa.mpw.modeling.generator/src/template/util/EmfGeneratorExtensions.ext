@@ -11,12 +11,21 @@ setter(String this) :
 	
 adder(String this) :
 	"add" + this.toSingleName().toFirstUpper();
+	
+remover(String this) :
+	"remove" + this.toSingleName().toFirstUpper();
 
 adderOrSetter(EStructuralFeature this) :
     if (isCollection()) then name.adder() else name.setter();
 
-adderOrSetterParameterName(EStructuralFeature this) :
+modifierParameterName(EStructuralFeature this) :
     if (isCollection()) then name.toSingleName() else name;
+
+previousFieldName(EStructuralFeature this) :
+    "previous" + modifierParameterName().toFirstUpper();
+    
+modifierVisibility(EStructuralFeature this) :
+    if (derived) then "protected" else "public";
     
 private toSingleName(String this) : if (endsWith("s")) then subString(0, length-1) else this;
 	

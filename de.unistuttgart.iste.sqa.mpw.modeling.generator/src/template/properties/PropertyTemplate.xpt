@@ -61,22 +61,29 @@
 
 «DEFINE SetPropertyValueDefinitions FOR EClass»
     «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
-	«IF f.derived»protected«ELSE»public«ENDIF» void «f.adderOrSetter()»(«f.featureToSingleJavaType()» «f.adderOrSetterParameterName()») {
-	    «IF f.isReference() && f.isCollection()-»
-	        «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f»
-	    «ELSE-»
-	        «EXPAND SimpleSetterForFeatureDefinition FOR f»
-	    «ENDIF-»
-	  }
-      «ENDFOREACH»
+	«f.modifierVisibility()» void «f.adderOrSetter()»(«f.featureToSingleJavaType()» «f.modifierParameterName()») {
+	     «IF f.isReference() && f.isCollection()-»
+	         «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f»
+	     «ELSE-»
+	         «EXPAND SimpleSetterForFeatureDefinition FOR f»
+	     «ENDIF-»
+	 }
+	 «IF f.isCollection()-»
+	 «f.modifierVisibility()» void «f.name.remover()»(«f.featureToSingleJavaType()» «f.modifierParameterName()») {
+	     «IF f.isReference()-»
+	         «EXPAND MultiReferenceRemoverForFeatureDefinition FOR (EReference)f»
+	     «ENDIF-»
+	 }
+	 «ENDIF-»
+    «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE MultiReferenceAdderForFeatureDefinition FOR EReference»
     «IF eOpposite != null-»
-        if («adderOrSetterParameterName()».«eOpposite.name.getter()»() != this) {
+        if («modifierParameterName()».«eOpposite.name.getter()»() != this) {
     «ENDIF-»
           
-    this.«name».add(«adderOrSetterParameterName()»);
+    this.«name».add(«modifierParameterName()»);
           
     «IF eOpposite != null-»
         «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
@@ -84,9 +91,23 @@
     «ENDIF-»
 «ENDDEFINE»
 
+«DEFINE MultiReferenceRemoverForFeatureDefinition FOR EReference»
+    «IF eOpposite != null-»
+        if («modifierParameterName()».«eOpposite.name.getter()»() == this) {
+    «ENDIF-»
+          
+    this.«name».remove(«modifierParameterName()»);
+          
+    «IF eOpposite != null-»
+            «modifierParameterName()».«eOpposite.name.setter()»(null);
+        }
+    «ENDIF-»
+«ENDDEFINE»
+
 «DEFINE SimpleSetterForFeatureDefinition FOR EStructuralFeature»
     «IF isReference()-»
-        if (this.«name.getter()»() != «name») {
+        var «previousFieldName()» = this.«name.getter()»();
+        if («previousFieldName()» != «name») {
     «ENDIF-»
           
     «IF isObservableProperty()-»
@@ -97,13 +118,28 @@
           
     «IF isReference()-»
         «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
+        «EXPAND CallSetterForUnsetOppositeDefinition FOR (EReference)this-»
         }
     «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE CallSetterForOppositeDefinition FOR EReference»
       «IF eOpposite != null-»
-      «adderOrSetterParameterName()».«eOpposite.adderOrSetter()»(this);
+      if («modifierParameterName()» != null) {
+          «modifierParameterName()».«eOpposite.adderOrSetter()»(this);
+      }
+      «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE CallSetterForUnsetOppositeDefinition FOR EReference»
+      «IF eOpposite != null-»
+      if («previousFieldName()» != null) {
+	      «IF eOpposite.isCollection()-»
+          «previousFieldName()».«eOpposite.name.remover()»(this);
+	      «ELSE-»
+          «previousFieldName()».«eOpposite.name.setter()»(null);
+	      «ENDIF-»
+      }
       «ENDIF-»
 «ENDDEFINE»
 
