@@ -176,11 +176,15 @@
             <element xmi:type="henshin:Attribute" href="initTerritory.henshin#_QwYv8DGREeuDH7pHwTyKiw"/>
             <layoutConstraint xmi:type="notation:Location" xmi:id="_QwbMMTGREeuDH7pHwTyKiw"/>
           </children>
+          <children xmi:type="notation:Node" xmi:id="_yyH4QDJHEeuWCcs7oPobTg" type="3002">
+            <element xmi:type="henshin:Attribute" href="initTerritory.henshin#_yxzIIDJHEeuWCcs7oPobTg"/>
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_yyH4QTJHEeuWCcs7oPobTg"/>
+          </children>
           <styles xmi:type="notation:SortingStyle" xmi:id="_O_AR5TGREeuDH7pHwTyKiw"/>
           <styles xmi:type="notation:FilteringStyle" xmi:id="_O_AR5jGREeuDH7pHwTyKiw"/>
         </children>
         <element xmi:type="henshin:Node" href="initTerritory.henshin#_O-_DwDGREeuDH7pHwTyKiw"/>
-        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_O_AR4TGREeuDH7pHwTyKiw" x="201" y="-29"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_O_AR4TGREeuDH7pHwTyKiw" x="191" y="-65"/>
       </children>
       <children xmi:type="notation:Shape" xmi:id="_V9fG8DGREeuDH7pHwTyKiw" type="3001" fontName="Segoe UI">
         <children xmi:type="notation:DecorationNode" xmi:id="_V9fG8jGREeuDH7pHwTyKiw" type="5002"/>

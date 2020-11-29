@@ -139,6 +139,9 @@
         <attributes xmi:id="_QwYv8DGREeuDH7pHwTyKiw" value="y">
           <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Location/row"/>
         </attributes>
+        <attributes xmi:id="_yxzIIDJHEeuWCcs7oPobTg" value="0">
+          <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Location/column"/>
+        </attributes>
       </nodes>
       <nodes xmi:id="_V9ef4DGREeuDH7pHwTyKiw" name="self" outgoing="_XK2R8DGREeuDH7pHwTyKiw">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Territory"/>
@@ -162,6 +165,9 @@
               <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Location"/>
               <attributes xmi:id="_QwYv8jGREeuDH7pHwTyKiw" value="y">
                 <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Location/row"/>
+              </attributes>
+              <attributes xmi:id="_yx2ygTJHEeuWCcs7oPobTg" value="0">
+                <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Location/column"/>
               </attributes>
             </nodes>
             <nodes xmi:id="_V9ef4zGREeuDH7pHwTyKiw" outgoing="_XK2R8jGREeuDH7pHwTyKiw">
@@ -200,6 +206,9 @@
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Location"/>
         <attributes xmi:id="_QwYv8TGREeuDH7pHwTyKiw" value="y">
           <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Location/row"/>
+        </attributes>
+        <attributes xmi:id="_yx2ygDJHEeuWCcs7oPobTg" value="0">
+          <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Location/column"/>
         </attributes>
       </nodes>
       <nodes xmi:id="_V9ef4TGREeuDH7pHwTyKiw" name="self" outgoing="_XK2R8TGREeuDH7pHwTyKiw _OSxEQDIQEeuu_uKvvP5GUQ">
