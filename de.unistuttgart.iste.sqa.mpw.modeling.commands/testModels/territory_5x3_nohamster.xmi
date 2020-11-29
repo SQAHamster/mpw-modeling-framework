@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ASCII"?>
+<hamster:Territory xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:hamster="http://www.mpw.uni-stuttgart.de/hamster" xsi:schemaLocation="http://www.mpw.uni-stuttgart.de/hamster platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore">
+  <tiles south="//@tiles.5" east="//@tiles.1">
+    <location/>
+  </tiles>
+  <tiles south="//@tiles.6" east="//@tiles.2" west="//@tiles.0">
+    <location column="1"/>
+  </tiles>
+  <tiles south="//@tiles.7" east="//@tiles.3" west="//@tiles.1">
+    <location column="2"/>
+  </tiles>
+  <tiles south="//@tiles.8" east="//@tiles.4" west="//@tiles.2">
+    <location column="3"/>
+  </tiles>
+  <tiles south="//@tiles.9" west="//@tiles.3">
+    <location column="4"/>
+  </tiles>
+  <tiles south="//@tiles.10" north="//@tiles.0" east="//@tiles.6">
+    <location row="1"/>
+  </tiles>
+  <tiles south="//@tiles.11" north="//@tiles.1" east="//@tiles.7" west="//@tiles.5">
+    <location column="1" row="1"/>
+  </tiles>
+  <tiles south="//@tiles.12" north="//@tiles.2" east="//@tiles.8" west="//@tiles.6">
+    <location column="2" row="1"/>
+  </tiles>
+  <tiles south="//@tiles.13" north="//@tiles.3" east="//@tiles.9" west="//@tiles.7">
+    <location column="3" row="1"/>
+  </tiles>
+  <tiles south="//@tiles.14" north="//@tiles.4" west="//@tiles.8">
+    <location column="4" row="1"/>
+  </tiles>
+  <tiles north="//@tiles.5" east="//@tiles.11">
+    <location row="2"/>
+  </tiles>
+  <tiles north="//@tiles.6" east="//@tiles.12" west="//@tiles.10">
+    <location column="1" row="2"/>
+  </tiles>
+  <tiles north="//@tiles.7" east="//@tiles.13" west="//@tiles.11">
+    <location column="2" row="2"/>
+  </tiles>
+  <tiles north="//@tiles.8" east="//@tiles.14" west="//@tiles.12">
+    <location column="3" row="2"/>
+  </tiles>
+  <tiles north="//@tiles.9" west="//@tiles.13">
+    <location column="4" row="2"/>
+  </tiles>
+</hamster:Territory>
