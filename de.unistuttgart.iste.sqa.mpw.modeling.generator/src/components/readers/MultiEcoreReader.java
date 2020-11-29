@@ -1,4 +1,4 @@
-package components;
+package components.readers;
 
 public class MultiEcoreReader extends MultiResourceReader {
 

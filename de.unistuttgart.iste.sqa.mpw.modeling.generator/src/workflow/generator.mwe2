@@ -8,6 +8,9 @@ import org.eclipse.xtend.check.CheckComponent
 import org.eclipse.xpand2.Generator
 import org.eclipse.xpand2.output.JavaBeautifier
 import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
+import components.readers.*
+import components.writers.*
+import components.transformators.*
 
 var platformUriPrefix = "platform:/resource"
 var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
@@ -56,49 +59,49 @@ Workflow {
 	} */
 
 	/* load model and store it in slots */
-	component = components.MultiEcoreReader {
+	component = MultiEcoreReader {
 		projectName = mpwModelProject
 		excludeModel = "ViewModel"
 		modelSlot = "entityModels"
 	}
 	
-	component = components.QueryReader {
+	component = QueryReader {
 		projectName = queriesModelProject
 		modelSlot = "queries"
 	}
 	
-	component = components.CommandReader {
+	component = CommandReader {
 		projectName = commandsModelProject
 		modelSlot = "commands"
 	}
 	
-	component = components.QvtoTransformator {
+	component = QvtoTransformator {
 		transformationUri = queryTransformationUri
 		modelSlot = "queriesComposition"
 		targetModelSlot = "queries"
 		sourceTargetRelationship = "NEW_TARGET"
 	}
 	
-    component = components.XmiWriter {
+    component = XmiWriter {
         modelSlot = "queries"
     }
 	
-	component = components.QvtoTransformator {
+	component = QvtoTransformator {
 		transformationUri = commandTransformationUri
 		modelSlot = "commands"
 		sourceTargetRelationship = "NEW_TARGET"
 	}
 	
-	component = components.XmiWriter {
+	component = XmiWriter {
 		modelSlot = "commands"
 	}
 	
-    component = components.QvtoTransformator {
+    component = QvtoTransformator {
 		transformationUri = roleTransformationUri
 		modelSlot = "entityModels"
 	}
 	
-	component = components.XmiWriter {
+	component = XmiWriter {
 		modelSlot = "entityModels"
 		fileExtension = "ecore"
 	}
@@ -167,7 +170,7 @@ Workflow {
 	}
 
     /* copy framework util code */
-    component = components.DirectoryCopyer {
+    component = DirectoryCopyer {
     	sourcePath = "${projectRoot}/${generatorProject}/src-framework"
     	targetPath = simulatorTargetSrcGen
     }

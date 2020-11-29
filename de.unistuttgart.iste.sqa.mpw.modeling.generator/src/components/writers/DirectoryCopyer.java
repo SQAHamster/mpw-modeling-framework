@@ -1,4 +1,4 @@
-package components;
+package components.writers;
 
 import java.io.IOException;
 import java.nio.file.Files;
