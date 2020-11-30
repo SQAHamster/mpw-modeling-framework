@@ -97,6 +97,7 @@
     «EXPAND VariableAssignmentDefinition FOREACH variableAssignments»
     «EXPAND AttributeDefinition FOREACH attributeConditions»
     «EXPAND RemoveModificationDefinition FOREACH modifications.select(m|m.action == Action::DELETE)»
+    «EXPAND ClearModificationDefinition FOREACH modifications.select(m|m.action == Action::CLEAR)»
     «EXPAND CreateModificationDefinition FOREACH modifications.select(m|m.action == Action::CREATE)»
     «EXPAND AttributeModificationDefinition FOREACH modifications.select(m|m.action == Action::MODIFY)»
 «ENDDEFINE»
@@ -126,7 +127,7 @@
 «DEFINE ReferenceDefinition FOR ReferenceCondition»
 	«IF this.metaType == SingleReferenceCondition»
       «EXPAND SingleReferenceDefinition FOR (SingleReferenceCondition)this»
-    «ELSE»
+    «ELSEIF this.metaType == ManyReferenceCondition»
       «EXPAND ManyReferenceDefinition FOR (ManyReferenceCondition)this»
 	«ENDIF»
 «ENDDEFINE»
@@ -173,6 +174,15 @@
     «ELSE»
         «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
     «ENDIF»
+    «ENDIF»
+«ENDDEFINE»
+
+«DEFINE ClearModificationDefinition FOR Modification»
+    «IF this.reference.metaType == ClearReferenceCondition»
+        // clear references: «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
+        while («this.reference.source.variableName».«this.reference.referenceName.getter()»().size() > 0) {
+            «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»().get(0));
+        }
     «ENDIF»
 «ENDDEFINE»
 

@@ -80,6 +80,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ManyReferenceCondition" eSuperTypes="#//ReferenceCondition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClearReferenceCondition" eSuperTypes="#//ReferenceCondition"/>
   <eClassifiers xsi:type="ecore:EClass" name="Modification">
     <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//ReferenceCondition"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="instance" eType="#//InstanceCondition"/>
@@ -92,6 +93,7 @@
     <eLiterals name="DELETE"/>
     <eLiterals name="CREATE" value="1"/>
     <eLiterals name="MODIFY" value="2" literal="MODIFY"/>
+    <eLiterals name="CLEAR" value="3" literal="CLEAR"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VariableAssignment">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"

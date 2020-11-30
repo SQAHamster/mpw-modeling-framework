@@ -66,6 +66,7 @@ mapping Henshin::Rule::toRule() : CommandModel::Rule {
     
   instanceConditions := self.lhs.nodes->map toInstanceCondition();
   instanceConditions += self.rhs.nodes[action.toString() = "create"]->map toCreateInstanceCondition();
+  instanceConditions += self.getDeleteStarNodes()->map toInstanceCondition();
  
   variables := self.parameters->map toVariableDeclaration();
   attributeConditions := self.lhs.nodes.allSubobjectsOfType(Attribute)->map toAttributeCondition();
@@ -75,11 +76,13 @@ mapping Henshin::Rule::toRule() : CommandModel::Rule {
   referenceConditions := self.lhs.edges[type.upperBound <> -1]->map toReferenceCondition();
   referenceConditions += self.rhs.edges[type.upperBound <> -1 and action.toString() = "create"]->map toCreateReferenceCondition(self);
   referenceConditions += self.lhs.getNACs().allSubobjectsOfType(Edge)[action.toString() = "forbid"]->map toForbidReferenceCondition(self);
+  referenceConditions += self.getDeleteStarEdges()->map toClearReferenceCondition();
   
   referenceConditions += self.lhs.edges[type.upperBound = -1]->map toManyReferenceCondition();
   referenceConditions += self.rhs.edges[type.upperBound = -1 and action.toString() = "create"]->map toCreateManyReferenceCondition(self);
   
   modifications := self.lhs.edges[action.toString() = "delete"]->map toDeleteEdgeModifications();
+  modifications += self.getDeleteStarEdges()->map toClearEdgeModifications();
   modifications += self.rhs.edges[action.toString() = "create"]->map toAddEdgeModifications();
   modifications += self.lhs.allSubobjectsOfType(Attribute)[isModification()]->map toAttributeModifications();
   
@@ -91,6 +94,14 @@ mapping Henshin::Rule::toRule() : CommandModel::Rule {
   referenceConditions := result.sortReferences();
   
   thisInstance.variableName := "thisInstance";
+}
+
+query Henshin::Rule::getDeleteStarNodes() : Set(Node) {
+    return self.getAllMultiRules()->first().lhs.nodes[action.toString() = "delete*"];
+}
+
+query Henshin::Rule::getDeleteStarEdges() : Set(Edge) {
+	return self.getAllMultiRules()->first().lhs.edges[action.toString() = "delete*"];
 }
 
 helper Henshin::Attribute::isModification() : Boolean {
@@ -271,6 +282,25 @@ mapping Henshin::Edge::toAddEdgeModifications() : CommandModel::Modification {
 mapping Henshin::Edge::toDeleteEdgeModifications() : CommandModel::Modification {
   reference := self.resolveone(CommandModel::ReferenceCondition);
   action := CommandModel::Action::DELETE;
+}
+
+/*
+ * Note: in henshin multi delete references are placed on sub-rules, so their real origins have to be determined by multi-mappings.
+ */
+mapping Henshin::Edge::toClearReferenceCondition() : CommandModel::ClearReferenceCondition {
+  assert(self.target.attributes->isEmpty()); // only support clear without conditions
+  
+  var multiMappings := self.graph.getRule().multiMappings;
+  var originSource := multiMappings->selectOne(m|m.image = self.source).origin;
+  
+  referenceName := self.type.name;
+  source := originSource.resolveone(CommandModel::InstanceCondition);
+  target := self.target.resolveone(CommandModel::InstanceCondition);
+}
+
+mapping Henshin::Edge::toClearEdgeModifications() : CommandModel::Modification {
+  reference := self.resolveone(CommandModel::ReferenceCondition);
+  action := CommandModel::Action::CLEAR;
 }
 
 mapping Henshin::Attribute::toAttributeModifications() : CommandModel::Modification {
