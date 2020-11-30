@@ -3,8 +3,6 @@ package de.unistuttgart.hamster.command.impl;
 import de.unistuttgart.hamster.command.AddEntityCommand;
 import de.unistuttgart.hamster.command.impl.utils.CommandUtils;
 
-import static de.unistuttgart.hamster.command.impl.utils.CommandUtils.toFirstUpper;
-
 public class AddEntityCommandImpl extends AddEntityCommand {
 
 	public AddEntityCommandImpl() {
@@ -24,12 +22,18 @@ public class AddEntityCommandImpl extends AddEntityCommand {
 
 	@Override
 	public void undo() {
-		throw new RuntimeException("not implemented");
+		try {
+			var entity = getEntity();
+			var method = CommandUtils.findRemoveMethod(entity, getPropertyName());
+			method.invoke(entity, getEntityToAdd());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void redo() {
-		throw new RuntimeException("not implemented");
+		execute();
 	}
 
 }

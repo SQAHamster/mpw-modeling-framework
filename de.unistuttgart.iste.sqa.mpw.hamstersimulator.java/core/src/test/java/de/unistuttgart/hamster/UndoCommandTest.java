@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UndoCommandTest {
 	
 	@Test
-	public void testInitHamsterOn1x1_and4Grains() {
+	public void testUndo() {
 		HamsterGame game = GameStringifier.createFromString(" >*;" +
 															"   ;");
 		var commandStack = game.getCommandStack();

@@ -22,12 +22,18 @@ public class SetPropertyCommandImpl extends SetPropertyCommand {
 
 	@Override
 	public void undo() {
-		throw new RuntimeException("not implemented");
+		try {
+			var entity = getEntity();
+			var method = CommandUtils.findSetMethod(entity, getPropertyName());
+			method.invoke(getEntity(), getOldValue());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void redo() {
-		throw new RuntimeException("not implemented");
+		execute();
 	}
 
 }
