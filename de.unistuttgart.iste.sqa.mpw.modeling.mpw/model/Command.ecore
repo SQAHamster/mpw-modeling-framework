@@ -64,20 +64,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Entity" abstract="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Base class of an entity which defines property modifications used by commands. It makes use of the generic type Object to provide a reflection-like possibility to set values by property-names.&#xD;&#xA;&#xD;&#xA;Note: In Java it can be simply realized by reflection, but in languages like C++ not."/>
+      <details key="documentation" value="Base class of an entity which defines property modifications used by commands. It makes use of the generic type Object to provide a reflection-like possibility to set values by property-names.&#xD;&#xA;&#xD;&#xA;Note: In Java it can be simply realized by reflection, but in languages like C++ a reflection-like modification access-layer will be generated."/>
     </eAnnotations>
-    <eOperations name="setProperty">
-      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="value" eType="#//Object"/>
-    </eOperations>
-    <eOperations name="addReference">
-      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="entity" eType="#//Entity"/>
-    </eOperations>
-    <eOperations name="removeReference">
-      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="entity" eType="#//Entity"/>
-    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceTypeName="objectType">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

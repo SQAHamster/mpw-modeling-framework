@@ -26,16 +26,7 @@
       «EXPAND template::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
       «FOREACH eOperations AS o»
-      «IF o.isBuiltInOperation()-»
-      «IF o.containsUntypedGenericCode()-»
-      @SuppressWarnings("unchecked")
-      «ENDIF-»
-      public «o.operationToSignature()» {
-          «EXPAND template::operations::BuiltInOperationsTemplate::BuiltInOperationImpl FOR o»
-      }
-      «ELSE-»
       public abstract «o.operationToSignature()»;
-      «ENDIF-»
       «ENDFOREACH»
     }
     «ENDFILE»

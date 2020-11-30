@@ -1,6 +1,5 @@
 import ecore;
 
-extension template::operations::BuiltInOperationsExtensions;
 extension template::operations::OperationGeneratorExtensions;
 extension template::util::GlobalsGeneratorExtensions;
 extension util::Extensions;
@@ -17,7 +16,7 @@ needsImplSubclass(EClassifier this) :
 	EClass.isInstance(this) && !isViewModelType() && eClass.getManualImplementedOperations().size > 0 && !eClass.abstract;
 
 getManualImplementedOperations(EClass this) :
-    getUserDefinedOperations().reject(o|o.isGenerated());
+    eAllOperations.reject(o|o.isGenerated());
 
 private isGenerated(EOperation this) :
     isCommand() || isQuery() || isPropertyGetter();
