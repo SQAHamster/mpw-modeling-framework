@@ -14,6 +14,8 @@
     	import de.unistuttgart.hamster.command.impl.*;
     	import static «getModulePackage()».mpw.Direction.*;
     	
+    	«REM»TODO JML«constraints.toJml()»«ENDREM-»
+    	«documentation.toJavaDoc()»
 		public class «name.toFirstUpper()»Command extends CompositeCommandBase {
 			private final «targetClass.getConcreteName()» thisInstance;
 			«IF mainUnit != null»

@@ -21,6 +21,7 @@
         resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="usedQueries" upperBound="-1"
         eType="ecore:EClass QueryBehaviors.ecore#//Query" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Unit" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

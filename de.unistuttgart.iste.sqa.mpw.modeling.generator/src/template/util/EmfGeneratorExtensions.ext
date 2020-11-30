@@ -88,3 +88,8 @@ defaultValueOf(EStructuralFeature f) :
     
 List[EClassifier] getUsedTypes(EOperation this) :
     this.eParameters.collect(p|p.eType).union({this.eType}.reject(r|r == null));
+    
+toJavaDoc(String this) :
+    if (length > 0) then 
+        "/** " + this + " */"
+    else "";

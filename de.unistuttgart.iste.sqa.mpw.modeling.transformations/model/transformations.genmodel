@@ -24,6 +24,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Transformation/targetClass"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Transformation/constraints"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Transformation/usedQueries"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Transformation/documentation"/>
     </genClasses>
     <genClasses image="false" ecoreClass="CommandBehaviors.ecore#//Unit">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Unit/name"/>

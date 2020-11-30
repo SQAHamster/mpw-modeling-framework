@@ -1,4 +1,5 @@
 import commandBehavior;
+import queryBehavior;
 import ecore;
 
 extension template::util::GlobalsGeneratorExtensions;
@@ -32,3 +33,15 @@ commandSetter() : "executeSetProperty";
 commandAdder() : "executeAddReference";
     
 commandRemover() : "executeRemoveReference";
+
+toJml(List[Constraint] this) : 
+    if (size > 0) then 
+    "/*@\n" +
+    collect(c|"@ " + c.toJmlKeyword() + " " + c.name + "\n").toString("") +
+    "@*/"
+    else "";
+    
+private toJmlKeyword(Constraint this) :
+    if (Precondition.isInstance(this)) then "requires"
+    else if (Postcondition.isInstance(this)) then "ensures"
+    else "invariant";

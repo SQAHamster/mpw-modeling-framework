@@ -19,6 +19,7 @@ main() {
 
 mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
   name := self.name;
+  documentation := self.description;
   targetClass := self.findTargetClass();
   roleName := SourceModelUri.toRole();
   units := self.units->map toUnit();
