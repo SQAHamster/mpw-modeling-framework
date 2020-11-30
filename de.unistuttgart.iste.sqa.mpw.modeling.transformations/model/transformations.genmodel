@@ -121,6 +121,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//ExpressionalElement/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//ExpressionalElement/mainExpression"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//ExpressionalElement/contextClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//ExpressionalElement/documentation"/>
     </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//Query">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Query/defaultValueLiteral"/>

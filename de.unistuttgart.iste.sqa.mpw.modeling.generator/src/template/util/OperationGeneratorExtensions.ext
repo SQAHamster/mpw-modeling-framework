@@ -6,7 +6,11 @@ extension template::util::GlobalsGeneratorExtensions;
 
 operationToSignature(EOperation this) :
     let parameters = if (isCommand()) then toCommandParameterList() else eParameters.collect(e|e.eType.name.toJavaType() + " " + e.name).joinToString(", ") :
-    operationToJavaType() + " " + effectiveOperationName() + "(" + parameters + ")";
+    documentationToJavaDoc() + operationToJavaType() + " " + effectiveOperationName() + "(" + parameters + ")";
+
+documentationToJavaDoc(EOperation this) :
+    let documentationDetail = eAnnotations.collect(a|a.details).flatten().selectFirst(d|d.key == "documentation") :
+    if (documentationDetail != null) then documentationDetail.value.toJavaDoc() else "";
 
 private toCommandParameterList(EOperation this) :
     "CommandStack commandStack" + getCommandForOperation().mainUnit.parameters.collect(p|", " + p.type.toJavaType() + " " + p.name).toString("");

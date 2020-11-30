@@ -25,9 +25,17 @@ mapping QueryInput::Model::toElement() : QueryModel::ExpressionalElement
 abstract mapping QueryInput::Model::toElementBase() : QueryModel::ExpressionalElement {
     init {
         result.name := self.context.name;
+        result.documentation := self.documentation.trimMarkers();
         result.contextClass := self.context.className.map toContextClass();
         result.mainExpression := self.expressions->first().map toExpression();
     }
+}
+
+helper String::trimMarkers() : String {
+    if (self.size() >= 5 and self.startsWith("/**") and self.endsWith("*/")) {
+    	return self.substring(4, self.size()-2).trim();
+    };
+    return self;
 }
 
 mapping QueryInput::Model::toQuery() : QueryModel::Query inherits QueryInput::Model::toElementBase

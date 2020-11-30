@@ -73,8 +73,26 @@ helper ecore::EClass::embedQueriesInOperations(queries: Set(QueryModel::Query)) 
           var annotation := "query".toMarkerAnnotation();
           annotation.contents += queryForThisOperation.oclAsType(ecore::EObject).deepclone();
           o.eAnnotations += annotation;
+          
+          var documentationAnnotation := queryForThisOperation.createDocumentationAnnotation();
+          if (documentationAnnotation != null) {
+              o.eAnnotations += documentationAnnotation;
+          };
       };
   };
+}
+
+helper QueryModel::Query::createDocumentationAnnotation() : EAnnotation {
+    if (self.documentation.length() > 0) {
+        return object EAnnotation {
+            source := "documentation";  
+            details += object EStringToStringMapEntry {
+                key := "documentation";
+                value := self.documentation;
+            };
+        };
+    };
+    return null;
 }
 
 query ecore::EClass::getQueriesForThisType() : Set(QueryModel::Query) {
