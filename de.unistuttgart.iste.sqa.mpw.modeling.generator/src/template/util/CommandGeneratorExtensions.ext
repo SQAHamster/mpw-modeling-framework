@@ -27,8 +27,8 @@ getVariableNameForFindReference(ManyReferenceCondition this) :
 isPolymorphic(ManyReferenceCondition this) :
   this.type.eType.name != this.target.typeName;
     
-commandSetter() : "commandStack.executeSetProperty";
+commandSetter() : "executeSetProperty";
     
-commandAdder() : "commandStack.executeAddReference";
+commandAdder() : "executeAddReference";
     
-commandRemover() : "commandStack.executeRemoveReference";
+commandRemover() : "executeRemoveReference";

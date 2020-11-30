@@ -1,11 +1,8 @@
 package de.unistuttgart.hamster;
 
-import de.unistuttgart.hamster.command.Command;
 import de.unistuttgart.hamster.hamster.HamsterGame;
 import de.unistuttgart.hamster.util.GameStringifier;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,13 +24,14 @@ public class UndoCommandTest {
 
 		hamster.move(commandStack);
 
-		List<Command> stack = commandStack.getStack();
-		for (int i = stack.size() - 1; i >= 0; i--) {
-			Command command = stack.get(i);
-			command.undo();
-		}
-
+		commandStack.undo();
 		String actual = GameStringifier.toString(game);
+		assertEquals("  v;" +
+				     "   ;", actual);
+
+		commandStack.undoAll();
+
+		actual = GameStringifier.toString(game);
 		assertEquals(" >*;" +
 				     "   ;", actual);
 	}

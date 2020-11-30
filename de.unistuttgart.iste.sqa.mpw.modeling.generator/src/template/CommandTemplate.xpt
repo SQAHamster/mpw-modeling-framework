@@ -11,9 +11,10 @@
     	«EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
     	import «getModulePackage()».mpw.*;
     	import «getModulePackage()».command.*;
+    	import de.unistuttgart.hamster.command.impl.*;
     	import static «getModulePackage()».mpw.Direction.*;
     	
-		public class «name.toFirstUpper()»Command {
+		public class «name.toFirstUpper()»Command extends CompositeCommandBase {
 			private final «targetClass.getConcreteName()» thisInstance;
 			«IF mainUnit != null»
 			«FOREACH mainUnit.parameters AS p»
@@ -38,6 +39,7 @@
 «ENDDEFINE»
 
 «DEFINE UnitExpand FOR Unit»
+    «IF mainUnit»@Override«ENDIF-»
 	«getVisibility()» void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
     «IF mainUnit-»
         «EXPAND PreconditionsDefinition FOR this»

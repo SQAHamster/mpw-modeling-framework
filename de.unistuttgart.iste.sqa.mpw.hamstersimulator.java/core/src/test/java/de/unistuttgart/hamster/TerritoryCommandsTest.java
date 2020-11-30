@@ -14,7 +14,7 @@ public class TerritoryCommandsTest {
 		HamsterGame game = GameStringifier.createFromString("");
 
 		var sut = game.getTerritory();
-		sut.initTerritory(5, 3, game.getCommandStack());
+		sut.initTerritory(game.getCommandStack(), 5, 3);
 
 		assertEquals(15, sut.getTiles().size());
 
@@ -30,7 +30,7 @@ public class TerritoryCommandsTest {
 															"   ;");
 
 		var sut = game.getTerritory();
-		sut.addGrainsToTile(locationOf(2, 0), 1, game.getCommandStack());
+		sut.addGrainsToTile(game.getCommandStack(), locationOf(2, 0), 1);
 
 		var actual = GameStringifier.grainsOnTerritoryToString(game);
 		assertEquals("  1;" +
@@ -43,7 +43,7 @@ public class TerritoryCommandsTest {
 															"   ;");
 
 		var sut = game.getTerritory();
-		sut.addGrainsToTile(locationOf(1, 1), 2, game.getCommandStack());
+		sut.addGrainsToTile(game.getCommandStack(), locationOf(1, 1), 2);
 
 		var actual = GameStringifier.grainsOnTerritoryToString(game);
 		assertEquals("   ;" +
@@ -56,7 +56,7 @@ public class TerritoryCommandsTest {
 															"   ;");
 
 		var sut = game.getTerritory();
-		sut.addWallToTile(locationOf(2, 0), game.getCommandStack());
+		sut.addWallToTile(game.getCommandStack(), locationOf(2, 0));
 
 		var actual = GameStringifier.toString(game);
 		assertEquals("  M;" +

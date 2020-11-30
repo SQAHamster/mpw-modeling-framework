@@ -1,7 +1,7 @@
 package de.unistuttgart.hamster.command.impl;
 
+import de.unistuttgart.hamster.command.Command;
 import de.unistuttgart.hamster.command.CommandStack;
-import de.unistuttgart.hamster.command.Entity;
 
 public class CommandStackImpl extends CommandStack {
 
@@ -10,36 +10,37 @@ public class CommandStackImpl extends CommandStack {
 	}
 
 	@Override
-	public void executeSetProperty(Entity entity, String propertyName, Object oldValue, Object newValue) {
-		var command = new SetPropertyCommandImpl();
-		command.setEntity(entity);
-		command.setOldValue(oldValue);
-		command.setNewValue(newValue);
-		command.setPropertyName(propertyName);
-
+	public void execute(Command command) {
 		addToStack(command);
 		command.execute();
 	}
 
 	@Override
-	public void executeAddReference(Entity entity, String propertyName, Entity entityToAdd) {
-		var command = new AddEntityCommandImpl();
-		command.setEntity(entity);
-		command.setEntityToAdd(entityToAdd);
-		command.setPropertyName(propertyName);
+	public void undo() {
+		var stack = getStack();
+		if (stack.isEmpty()) {
+			throw new IllegalStateException("cannot undo with empty stack");
+		}
 
-		addToStack(command);
-		command.execute();
+		var command = stack.remove(stack.size() - 1);
+		command.undo();
 	}
 
 	@Override
-	public void executeRemoveReference(Entity entity, String propertyName, Entity entityToRemove) {
-		var command = new RemoveEntityCommandImpl();
-		command.setEntity(entity);
-		command.setEntityToRemove(entityToRemove);
-		command.setPropertyName(propertyName);
+	public void redo() {
+		throw new RuntimeException("not implemented");
+	}
 
-		addToStack(command);
-		command.execute();
+	@Override
+	public void undoAll() {
+		var stack = getStack();
+		while (stack.size() > 0) {
+			undo();
+		}
+	}
+
+	@Override
+	public void redoAll() {
+		throw new RuntimeException("not implemented");
 	}
 }

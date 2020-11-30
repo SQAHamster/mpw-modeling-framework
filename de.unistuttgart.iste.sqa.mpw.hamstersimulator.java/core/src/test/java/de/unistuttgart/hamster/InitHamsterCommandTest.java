@@ -16,7 +16,7 @@ public class InitHamsterCommandTest {
 															"   ;");
 
 		var sut = game.getDefaultHamster();
-		sut.initHamster(game.getTerritory(), locationOf(1, 1), Direction.SOUTH, 4, game.getCommandStack());
+		sut.initHamster(game.getCommandStack(), game.getTerritory(), locationOf(1, 1), Direction.SOUTH, 4);
 
 		String actual = GameStringifier.toString(game);
 		assertEquals("   ;" +

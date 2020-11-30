@@ -29,10 +29,6 @@ mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
   };
   mainUnit.name := "execute";
   mainUnit.mainUnit := true;
-  mainUnit.parameters += object CommandModel::Parameter {
-      name := "commandStack";
-      type := "CommandStack";  	
-  };
   
   units->forEach(u) {
       u.parameters->select(p|p.name = "self")->forEach(p) {
