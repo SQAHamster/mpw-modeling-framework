@@ -1,2 +1,3 @@
+/** Get the current hamster looking direction. */
 context Hamster
 query direction: self.direction;

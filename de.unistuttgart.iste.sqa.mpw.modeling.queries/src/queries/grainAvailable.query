@@ -1,2 +1,3 @@
+/** Checks the hamster's current tile for grain. */
 context Hamster
 query grainAvailable: self.currentTile.contents->typeSelect(Grain)->notEmpty();

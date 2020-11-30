@@ -1,3 +1,4 @@
+/** Checks the front of the hamster. */
 context Hamster
 query frontIsClear: 
         ( self.direction = WEST  implies self.currentTile.west.contents->typeSelect(Wall)->isEmpty() )
