@@ -60,7 +60,45 @@ public class TerritoryCommandsTest {
 
 		var actual = GameStringifier.toString(game);
 		assertEquals("  M;" +
-				     "   ;", actual.replace('0', ' '));
+				     "   ;", actual);
+	}
+
+	@Test
+	public void givenOneGrainOnTile_whenClearTile_thenTileIsEmpty() {
+		HamsterGame game = GameStringifier.createFromString("v *;" +
+															" M ;");
+
+		var sut = game.getTerritory();
+		sut.clearTile(game.getCommandStack(), locationOf(2, 0));
+
+		var actual = GameStringifier.toString(game);
+		assertEquals("v  ;" +
+				     " M ;", actual);
+	}
+
+	@Test
+	public void givenFiveGrainsOnTile_whenClearTile_thenTileIsEmpty() {
+		HamsterGame game = GameStringifier.createFromString(" ;");
+
+		var sut = game.getTerritory();
+		sut.addGrainsToTile(game.getCommandStack(), locationOf(0, 0), 5);
+		sut.clearTile(game.getCommandStack(), locationOf(0, 0));
+
+		var actual = GameStringifier.toString(game);
+		assertEquals(" ;", actual);
+	}
+
+	@Test
+	public void givenWallOnTile_whenClearTile_thenTileIsEmpty() {
+		HamsterGame game = GameStringifier.createFromString("v *;" +
+															" M ;");
+
+		var sut = game.getTerritory();
+		sut.clearTile(game.getCommandStack(), locationOf(1, 1));
+
+		var actual = GameStringifier.toString(game);
+		assertEquals("v *;" +
+				     "   ;", actual);
 	}
 
 	private Location locationOf(int column, int row) {
