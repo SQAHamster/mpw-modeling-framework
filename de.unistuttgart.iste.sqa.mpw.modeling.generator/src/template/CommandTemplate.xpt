@@ -1,7 +1,7 @@
 «IMPORT commandBehavior»
 «IMPORT queryBehavior»
 
-«EXTENSION template::util::GeneratorExtensions»
+«EXTENSION template::GeneratorExtensions»
 
 «DEFINE main FOR Transformation»
     «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Command.java"»package «this.getCommandJavaPackageName()»;
@@ -270,7 +270,7 @@
 «ENDDEFINE»
 
 «DEFINE ConstraintDefinition FOR Constraint»
-	if ((«EXPAND template::operations::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
+	if ((«EXPAND template::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
 	    throw new CommandConstraintException("violation of precondition for command");
 	}
 «ENDDEFINE»

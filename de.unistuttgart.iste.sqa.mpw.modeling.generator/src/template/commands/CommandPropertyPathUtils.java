@@ -1,9 +1,12 @@
-package template.properties;
+package template.commands;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PropertyUtils {
+/**
+ * Helper class to generate code from property paths used in commands, e.g. in attribute conditions. 
+ */
+public class CommandPropertyPathUtils {
 	private static final Pattern pattern = Pattern.compile("[\\w]+(\\.[\\w]+)+(\\(\\))?");
 	
 	public static String toPropertyGetters(String s) {

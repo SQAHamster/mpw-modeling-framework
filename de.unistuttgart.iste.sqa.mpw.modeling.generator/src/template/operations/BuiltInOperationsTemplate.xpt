@@ -1,6 +1,6 @@
 «IMPORT ecore»
 
-«EXTENSION template::util::GeneratorExtensions»
+«EXTENSION template::GeneratorExtensions»
 
 «DEFINE BuiltInOperationImpl FOR EOperation»
 «IF name == setPropertyName()-»

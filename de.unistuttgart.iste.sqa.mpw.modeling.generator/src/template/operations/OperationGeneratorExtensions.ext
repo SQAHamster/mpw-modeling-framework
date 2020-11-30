@@ -1,8 +1,12 @@
 import ecore;
 
-extension util::Extensions reexport;
-extension template::util::EmfGeneratorExtensions reexport;
+extension template::types::EmfGeneratorExtensions;
 extension template::util::GlobalsGeneratorExtensions;
+extension util::Extensions;
+
+/*
+ * Extensions related to EOperations.
+ */
 
 operationToSignature(EOperation this) :
     let parameters = if (isCommand()) then toCommandParameterList() else eParameters.collect(e|e.eType.name.toJavaType() + " " + e.name).joinToString(", ") :
@@ -13,7 +17,7 @@ documentationToJavaDoc(EOperation this) :
     if (documentationDetail != null) then documentationDetail.value.toJavaDoc() else "";
 
 private toCommandParameterList(EOperation this) :
-    "CommandStack commandStack" + getCommandForOperation().mainUnit.parameters.collect(p|", " + p.type.toJavaType() + " " + p.name).toString("");
+    "CommandStack commandStack" + getCommandForOperation().mainUnit.parameters.collect(p|", " + p.type.toJavaType() + " " + p.name).joinToString("");
 
 private effectiveOperationName(EOperation this) : 
     if (isPropertyGetter()) then name.getter() else name;

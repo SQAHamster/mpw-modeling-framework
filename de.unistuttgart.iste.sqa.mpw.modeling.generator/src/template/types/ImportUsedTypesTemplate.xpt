@@ -1,6 +1,6 @@
 «IMPORT ecore»
 
-«EXTENSION template::util::GeneratorExtensions»
+«EXTENSION template::GeneratorExtensions»
 
 «DEFINE ImportDefinitions FOR EClass»
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»

@@ -1,6 +1,6 @@
 «IMPORT ecore»
 
-«EXTENSION template::util::GeneratorExtensions»
+«EXTENSION template::GeneratorExtensions»
 
 «DEFINE main FOR List[EPackage]»
     «EXPAND EcoreFile FOREACH this»
@@ -20,8 +20,8 @@
     public «IF needsImplSubclass() || abstract»abstract«ENDIF» class «this.name» «this.toInheritance()» {
       «EXPAND template::properties::PropertyTemplate::PropertyDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::ConstructorDefinition FOR this»
-      «EXPAND template::operations::QueriesTemplate::QueryDefinitions FOR this»
-      «EXPAND template::operations::CommandCallsTemplate::CommandDefinitions FOR this»
+      «EXPAND template::QueriesTemplate::QueryDefinitions FOR this»
+      «EXPAND template::commands::CommandCallsTemplate::CommandDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»

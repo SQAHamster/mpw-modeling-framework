@@ -1,7 +1,7 @@
 «IMPORT ecore»
 «IMPORT queryBehavior»
 
-«EXTENSION template::util::GeneratorExtensions»
+«EXTENSION template::GeneratorExtensions»
 
 «DEFINE QueryDefinitions FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
@@ -42,5 +42,5 @@
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR StatementsExpression-»
-    «EXPAND template::operations::StatementsTemplate::StatementsDefinitions FOR this-»
+    «EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-»
 «ENDDEFINE»

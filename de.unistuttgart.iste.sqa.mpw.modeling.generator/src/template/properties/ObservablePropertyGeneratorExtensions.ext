@@ -1,6 +1,10 @@
 import ecore;
 
-extension template::util::EmfGeneratorExtensions reexport;
+extension template::types::EmfGeneratorExtensions;
+
+/*
+ * Extensions related to EStructuralFeatures which shall be generated as observable properties.
+ */
 
 isObservableProperty(EStructuralFeature this) :
     this.changeable && !this.derived && this.eContainingClass.eAllSuperTypes.notExists(t|t.name == "Command");

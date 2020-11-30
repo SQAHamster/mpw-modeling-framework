@@ -2,8 +2,8 @@ import commandBehavior;
 import queryBehavior;
 import ecore;
 
+extension template::types::EmfGeneratorExtensions;
 extension template::util::GlobalsGeneratorExtensions;
-extension template::util::EmfGeneratorExtensions;
 
 getCommandJavaPackagePath(Transformation this) :
   this.getCommandJavaPackageName().replaceAll("\\.", "/");
@@ -45,3 +45,7 @@ private toJmlKeyword(Constraint this) :
     if (Precondition.isInstance(this)) then "requires"
     else if (Postcondition.isInstance(this)) then "ensures"
     else "invariant";
+    
+String toPropertyGetters(String s) :
+    JAVA template.commands.CommandPropertyPathUtils.toPropertyGetters(java.lang.String);
+

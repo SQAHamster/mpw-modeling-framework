@@ -1,0 +1,14 @@
+import ecore;
+
+/*
+ * Top-level extension file which reexports all other extension files.
+ */
+
+extension util::Extensions reexport;
+extension template::types::EmfGeneratorExtensions reexport;
+extension template::types::MetaModelGeneratorExtensions reexport;
+extension template::properties::ObservablePropertyGeneratorExtensions reexport;
+extension template::operations::BuiltInOperationsExtensions reexport;
+extension template::operations::OperationGeneratorExtensions reexport;
+extension template::commands::CommandGeneratorExtensions reexport;
+extension template::util::GlobalsGeneratorExtensions reexport;

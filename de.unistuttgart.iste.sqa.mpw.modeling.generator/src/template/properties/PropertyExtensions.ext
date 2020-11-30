@@ -1,4 +1,0 @@
-extension template::util::GlobalsGeneratorExtensions reexport;
-
-String toPropertyGetters(String s) :
-    JAVA template.properties.PropertyUtils.toPropertyGetters(java.lang.String);

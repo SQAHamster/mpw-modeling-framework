@@ -1,9 +1,13 @@
 import ecore;
 
-extension util::Extensions reexport;
-extension template::operations::BuiltInOperationsExtensions reexport;
-extension template::util::GlobalsGeneratorExtensions reexport;
-extension template::util::OperationGeneratorExtensions reexport;
+extension template::operations::BuiltInOperationsExtensions;
+extension template::operations::OperationGeneratorExtensions;
+extension template::util::GlobalsGeneratorExtensions;
+extension util::Extensions;
+
+/*
+ * Extensions related to the MPW Metamodel types.
+ */
 
 isStereotype(EClassifier this) :
     EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewStereotype");

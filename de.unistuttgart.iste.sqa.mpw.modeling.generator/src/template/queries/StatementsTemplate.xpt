@@ -1,7 +1,7 @@
 «IMPORT ecore»
 «IMPORT queryBehavior»
 
-«EXTENSION template::util::GeneratorExtensions»
+«EXTENSION template::GeneratorExtensions»
 
 «DEFINE StatementsDefinitions FOR StatementsExpression-»
     «FOREACH statements AS s SEPARATOR "."-»

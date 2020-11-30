@@ -1,8 +1,11 @@
 import ecore;
 
-extension template::properties::PropertyExtensions;
-extension template::util::OperationGeneratorExtensions;
-extension template::util::MetaModelGeneratorExtensions;
+extension template::operations::OperationGeneratorExtensions;
+extension template::types::MetaModelGeneratorExtensions;
+
+/*
+ * Extensions related to EMF Metamodel types.
+ */
 
 getter(String this) :
 	"get" + this.toFirstUpper();

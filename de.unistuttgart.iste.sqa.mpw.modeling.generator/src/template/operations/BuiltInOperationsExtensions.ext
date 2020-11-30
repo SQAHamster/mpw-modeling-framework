@@ -1,6 +1,10 @@
 import ecore;
 
-extension util::Extensions reexport;
+extension util::Extensions;
+
+/*
+ * Extensions related to built in operations.
+ */
 
 setPropertyName() : "setProperty";
 addReferenceName() : "addReference";

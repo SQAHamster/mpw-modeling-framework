@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import template.properties.PropertyUtils;
+import template.commands.CommandPropertyPathUtils;
 
 public class PropertyUtilsTest {
 	@Test
@@ -64,6 +64,6 @@ public class PropertyUtilsTest {
 	}
 	
 	private String convertToPropertyPaths(String s) {
-		return PropertyUtils.toPropertyGetters(s);
+		return CommandPropertyPathUtils.toPropertyGetters(s);
 	}
 }

@@ -1,6 +1,6 @@
 «IMPORT ecore»
 
-«EXTENSION template::util::GeneratorExtensions»
+«EXTENSION template::GeneratorExtensions»
 
 «DEFINE PropertyDefinitions FOR EClass»
 	  «FOREACH eStructuralFeatures AS f»
