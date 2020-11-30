@@ -13,7 +13,7 @@
 «ENDDEFINE»
 
 «DEFINE JavaClass FOR EClass»
-    «FILE this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
     
     «EXPAND template::types::ImportUsedTypesTemplate::ImportDefinitions FOR this»
     
@@ -40,7 +40,7 @@
     }
     «ENDFILE»
     «IF needsImplSubclass()»
-    «FILE this.ePackage.toJavaPackagePath() + "/impl/" + name + "Impl.java"»package «this.ePackage.toJavaPackageName()».impl;
+    «FILE "java/" + this.ePackage.toJavaPackagePath() + "/impl/" + name + "Impl.java"»package «this.ePackage.toJavaPackageName()».impl;
     
     «EXPAND template::types::ImportUsedTypesTemplate::ImplImportDefinitions FOR this»
     
@@ -58,7 +58,7 @@
 «ENDDEFINE»
 
 «DEFINE JavaInterface FOR EClass»
-    «FILE this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
     
     «EXPAND template::types::ImportUsedTypesTemplate::ImportDefinitions FOR this»
     
@@ -74,7 +74,7 @@
 «ENDDEFINE»
 
 «DEFINE JavaEnum FOR EEnum»
-    «FILE this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
     
     public enum «this.name» {
       «FOREACH eLiterals AS l SEPARATOR ", "»

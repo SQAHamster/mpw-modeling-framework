@@ -31,7 +31,8 @@ var targetCoreSimulatorProject = "${targetSimulatorProject}/core"
 var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/RoleTransformation.qvto"
 var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/CommandTransformation.qvto"
 var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/QueryTransformation.qvto"
-var simulatorTargetSrcGen = "${projectRoot}/${targetCoreSimulatorProject}/src/main/generated"
+var simulatorTargetSrc = "${projectRoot}/${targetCoreSimulatorProject}/src/main"
+var simulatorTargetSrcGenerated = "${simulatorTargetSrc}/generated"
 
 Workflow {
 	/* set up EMF for standalone execution */
@@ -115,8 +116,7 @@ Workflow {
 
 	/** Clear output directory */
 	component = DirectoryCleaner {
-		directory = simulatorTargetSrcGen
-		exclude = "impl"
+		directory = simulatorTargetSrcGenerated
 	}
 
 	/* generate entities */
@@ -136,7 +136,7 @@ Workflow {
 		metaModel = mm_emf
 		expand = "template::EcoreEntitiesTemplate::main FOR entityModels"
 		outlet = {
-			path = simulatorTargetSrcGen
+			path = simulatorTargetSrc
 			overwrite = false
 			postprocessor = formatter_java
 			fileEncoding = "ISO-8859-1"
@@ -160,7 +160,7 @@ Workflow {
 		metaModel = mm_emf
 		expand = "template::CommandTemplate::main FOREACH commands"
 		outlet = {
-			path = simulatorTargetSrcGen
+			path = simulatorTargetSrcGenerated
 			postprocessor = formatter_java
 			fileEncoding = "ISO-8859-1"
 		}
@@ -169,11 +169,9 @@ Workflow {
 		}
 	}
 	
-	// TODO copy impl classes to src/
-
     /* copy framework util code */
     component = DirectoryCopyer {
     	sourcePath = "${projectRoot}/${generatorProject}/src-framework"
-    	targetPath = simulatorTargetSrcGen
+    	targetPath = simulatorTargetSrcGenerated
     }
 }
