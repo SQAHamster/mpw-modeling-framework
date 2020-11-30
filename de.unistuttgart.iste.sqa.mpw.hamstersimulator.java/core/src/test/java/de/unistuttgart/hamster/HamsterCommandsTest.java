@@ -151,9 +151,9 @@ public class HamsterCommandsTest {
 	}
 	//</editor-fold>
 
-	//<editor-fold desc="Feature: frontIsFree">
+	//<editor-fold desc="Feature: frontIsClear">
 	@Test
-	public void givenHamsterInAnyDirection_andFrontCellIsEmpty_whenCheckFrontIsFree_thenIsTrue() {
+	public void givenHamsterInAnyDirection_andFrontCellIsEmpty_whenCheckFrontIsClear_thenIsTrue() {
 		withTerritorium(" <;");
 		assertFrontIsClear();
 
@@ -166,8 +166,9 @@ public class HamsterCommandsTest {
 		withTerritorium("v; ;");
 		assertFrontIsClear();
 	}
+
 	@Test
-	public void givenHamsterInAnyDirection_andFrontCellIsWall_whenCheckFrontIsNotFree_thenIsTrue() {
+	public void givenHamsterInAnyDirection_andFrontCellIsWall_whenCheckFrontIsNotClear_thenIsTrue() {
 		withTerritorium("M<;");
 		assertFrontIsNotClear();
 
@@ -180,8 +181,24 @@ public class HamsterCommandsTest {
 		withTerritorium("v;M;");
 		assertFrontIsNotClear();
 	}
+
 	@Test
-	public void givenHamsterInAnyDirection_andFrontCellIsEndOfMap_whenCheckFrontIsNotFree_thenIsTrue() {
+	public void givenHamsterInAnyDirection_andFrontCellIsGrain_whenCheckFrontIsClear_thenIsTrue() {
+		withTerritorium("*<;");
+		assertFrontIsClear();
+
+		withTerritorium(">*;");
+		assertFrontIsClear();
+
+		withTerritorium("*;^;");
+		assertFrontIsClear();
+
+		withTerritorium("v;*;");
+		assertFrontIsClear();
+	}
+
+	@Test
+	public void givenHamsterInAnyDirection_andFrontCellIsEndOfMap_whenCheckFrontIsNotClear_thenIsTrue() {
 		withTerritorium("<;");
 		assertFrontIsNotClear();
 

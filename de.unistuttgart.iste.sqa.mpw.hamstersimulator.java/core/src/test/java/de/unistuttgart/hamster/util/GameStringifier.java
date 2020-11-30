@@ -17,7 +17,7 @@ public class GameStringifier {
 
 		String[] parts = map.split(";");
 		int height = parts.length;
-		var tiles = game.getTerritory().getTiles();
+		var territory = game.getTerritory();
 
 		// dummy: replace later by Location, when it implements hashcode/equals correctly
 		var coordinateToTileMap = new HashMap<String, Tile>();
@@ -30,19 +30,17 @@ public class GameStringifier {
 
 			for (int x = 0; x < width; x++) {
 				var tile = newTile(x, y);
-				tiles.add(tile);
+				territory.addToTiles(tile);
 
 				coordinateToTileMap.put(String.format("%d,%d", x, y), tile);
 
 				if (x > 0) {
 					var west = coordinateToTileMap.get(String.format("%d,%d", x - 1, y));
 					tile.setWest(west);
-					west.setEast(tile);
 				}
 				if (y > 0) {
 					var north = coordinateToTileMap.get(String.format("%d,%d", x, y - 1));
 					tile.setNorth(north);
-					north.setSouth(tile);
 				}
 
 				switch (chars[x]) {
@@ -53,8 +51,11 @@ public class GameStringifier {
 						hamster.setCurrentTile(tile);
 						hamster.setDirection(DirectionTestHelper.toDirection(chars[x]));
 						break;
+					case '*':
+						tile.addToContents(new Grain());
+						break;
 					case 'M':
-						tile.getContents().add(new Wall());
+						tile.addToContents(new Wall());
 						break;
 				}
 			}
