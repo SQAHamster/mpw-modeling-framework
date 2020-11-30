@@ -3,7 +3,11 @@ grammar de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl with org.eclipse.
 generate querydsl "http://www.mpw.uni-stuttgart.de/querydsl"
 
 Model:
-	(context=Context) (expressions+=Expression)+ ';';
+	(documentation=ModelDocumentation)? (context=Context) (expressions+=Expression)+ ';';
+	
+ModelDocumentation:
+    DOCUMENTATION
+;
 	
 Expression:
 	ImpliesExpression
@@ -57,3 +61,9 @@ Direction:
 	('EAST' | 'WEST' | 'SOUTH' | 'NORTH');
 	
 IdBracket: ID '()'?;
+
+terminal DOCUMENTATION : '/**' -> '*/' ;
+@Override 
+terminal ML_COMMENT : '/*' (!'*') -> '*/' ;
+@Override 
+terminal SL_COMMENT : '//' !('\n'|'\r')* ('\r'? '\n')? ;

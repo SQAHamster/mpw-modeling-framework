@@ -61,6 +61,29 @@ class QueryDslParsingTest {
 		      ]
 		''')
 	}
+    
+    @Test
+    def void givenQueryWithDocumentation_whenParse_thenDocumentationIsParsed() {
+        val result = parseHelper.parse('''
+            /** This query returns something useful. */
+            context Hamster
+            query myCommand: self;
+        ''')
+        assertModel(result, '''
+            Model:
+              documentation: /** This query returns something useful. */
+              context: Context myCommand:
+                className: Hamster
+                kind: query
+              expressions: [
+                Expression:
+                  statements: [
+                    Statement:
+                      target: self
+                  ]
+              ]
+        ''')
+    }
 	
 	private def assertModel(Model actualModel, String expected) {
 		Assertions.assertNotNull(actualModel)
