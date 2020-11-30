@@ -13,7 +13,7 @@ import behaviorInputs.impl.InputsFactoryImpl;
 public class QueryReader extends MultiResourceReader {
 
 	public QueryReader() {
-		super(".query", "src/queries");
+		super(".query", "src-modeling");
 		new QueryDslStandaloneSetup().createInjectorAndDoEMFRegistration();
 	}
 	
