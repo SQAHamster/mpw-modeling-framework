@@ -8,8 +8,9 @@ extension template::util::OperationGeneratorExtensions reexport;
 isStereotype(EClassifier this) :
     EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewStereotype");
 
-needsImplSubclass(EClass this) :
-	!isViewModelType() && getManualImplementedOperations().size > 0 && !abstract;
+needsImplSubclass(EClassifier this) :
+    let eClass = (EClass)this :
+	EClass.isInstance(this) && !isViewModelType() && eClass.getManualImplementedOperations().size > 0 && !eClass.abstract;
 
 getManualImplementedOperations(EClass this) :
     getUserDefinedOperations().reject(o|o.isGenerated());

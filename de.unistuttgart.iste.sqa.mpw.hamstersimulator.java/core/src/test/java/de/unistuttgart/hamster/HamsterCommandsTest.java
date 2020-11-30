@@ -216,13 +216,13 @@ public class HamsterCommandsTest {
 
 	private void andGrainOn(int columnIndex, int rowIndex) {
 		var tile = getTileAt(columnIndex, rowIndex);
-		tile.addContent(new Grain());
+		tile.addToContents(new Grain());
 	}
 
 	private void andGrainsInMouth(int count) {
 		var concreteHamster = (ConcreteHamster) this.sut;
 		for (int i = 0; i < count; i++) {
-			concreteHamster.addGrain(new Grain());
+			concreteHamster.addToGrains(new Grain());
 		}
 	}
 

@@ -1,7 +1,8 @@
 import commandBehavior;
 import ecore;
 
-extension template::util::GlobalsGeneratorExtensions reexport;
+extension template::util::GlobalsGeneratorExtensions;
+extension template::util::EmfGeneratorExtensions;
 
 getCommandJavaPackagePath(Transformation this) :
   this.getCommandJavaPackageName().replaceAll("\\.", "/");
@@ -26,3 +27,8 @@ getVariableNameForFindReference(ManyReferenceCondition this) :
 isPolymorphic(ManyReferenceCondition this) :
   this.type.eType.name != this.target.typeName;
     
+commandSetter() : "commandStack.executeSetProperty";
+    
+commandAdder() : "commandStack.executeAddReference";
+    
+commandRemover() : "commandStack.executeRemoveReference";

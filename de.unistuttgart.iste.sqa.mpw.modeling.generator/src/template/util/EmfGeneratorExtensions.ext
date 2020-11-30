@@ -2,6 +2,7 @@ import ecore;
 
 extension template::properties::PropertyExtensions;
 extension template::util::OperationGeneratorExtensions;
+extension template::util::MetaModelGeneratorExtensions;
 
 getter(String this) :
 	"get" + this.toFirstUpper();
@@ -10,10 +11,10 @@ setter(String this) :
 	"set" + this.toFirstUpper();
 	
 adder(String this) :
-	"add" + this.toSingleName().toFirstUpper();
-	
+    "addTo" + this.toFirstUpper();
+    
 remover(String this) :
-	"remove" + this.toSingleName().toFirstUpper();
+    "removeFrom" + this.toFirstUpper();
 
 adderOrSetter(EStructuralFeature this) :
     if (isCollection()) then name.adder() else name.setter();
@@ -69,6 +70,7 @@ private elementToJavaType(ETypedElement this) :
 
 featureToFieldInstantiation(EStructuralFeature this) :
 	if (this.upperBound == -1) then "new ArrayList<>()"
+	else if (this.eType.needsImplSubclass()) then "new " + this.eType.ePackage.toJavaPackageName() + ".impl." + this.eType.name + "Impl()"
 	else "new " + this.eType.name.toUnboxedJavaTypeName() + "()";
 	
 toUnboxedJavaTypeName(String this) :

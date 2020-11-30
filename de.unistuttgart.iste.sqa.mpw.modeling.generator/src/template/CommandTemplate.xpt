@@ -165,9 +165,9 @@
     «IF this.reference != null»
     // remove reference: «this.action» «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
     «IF this.reference.metaType == SingleReferenceCondition»
-        «this.reference.source.variableName».«setter(this.reference.referenceName)»(null);
+        «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), null);
     «ELSE»
-		«this.reference.source.variableName».«remover(this.reference.referenceName)»(«this.reference.target.variableName»);
+        «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
     «ENDIF»
     «ENDIF»
 «ENDDEFINE»
@@ -179,16 +179,16 @@
     «IF this.reference != null»
     // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
     «IF this.reference.metaType == SingleReferenceCondition»
-	    «this.reference.source.variableName».«setter(this.reference.referenceName)»(«this.reference.target.variableName»);
+        «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
 	«ELSE»
-		«this.reference.source.variableName».«adder(this.reference.referenceName)»(«this.reference.target.variableName»);
+	    «commandAdder()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
     «ENDIF»
     «ENDIF»
 «ENDDEFINE»
 
 «DEFINE AttributeModificationDefinition FOR Modification»
-	// set attribute: «this.attribute.instance.variableName».«this.attribute.attributeName» := «this.attribute.attributeValueLiteral»
-	«this.attribute.instance.variableName».«this.attribute.attributeName.setter()»(«this.newAttributeValue»);
+	// set attribute: «this.attribute.instance.variableName».«this.attribute.attributeName» := «this.newAttributeValue»
+	«commandSetter()»(«this.attribute.instance.variableName», "«this.attribute.attributeName»", «this.attribute.instance.variableName».«this.attribute.attributeName.getter()»(), «this.newAttributeValue»);
 «ENDDEFINE»
 
 «DEFINE FindObjectDefinition FOR ManyReferenceCondition»

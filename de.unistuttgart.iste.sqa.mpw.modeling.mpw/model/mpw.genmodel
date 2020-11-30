@@ -27,6 +27,22 @@
     </genClasses>
     <genClasses ecoreClass="Command.ecore#//CommandStack">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Command.ecore#//CommandStack/stack"/>
+      <genOperations ecoreOperation="Command.ecore#//CommandStack/executeSetProperty">
+        <genParameters ecoreParameter="Command.ecore#//CommandStack/executeSetProperty/entity"/>
+        <genParameters ecoreParameter="Command.ecore#//CommandStack/executeSetProperty/propertyName"/>
+        <genParameters ecoreParameter="Command.ecore#//CommandStack/executeSetProperty/oldValue"/>
+        <genParameters ecoreParameter="Command.ecore#//CommandStack/executeSetProperty/newValue"/>
+      </genOperations>
+      <genOperations ecoreOperation="Command.ecore#//CommandStack/executeAddReference">
+        <genParameters ecoreParameter="Command.ecore#//CommandStack/executeAddReference/entity"/>
+        <genParameters ecoreParameter="Command.ecore#//CommandStack/executeAddReference/propertyName"/>
+        <genParameters ecoreParameter="Command.ecore#//CommandStack/executeAddReference/entityToAdd"/>
+      </genOperations>
+      <genOperations ecoreOperation="Command.ecore#//CommandStack/executeRemoveReference">
+        <genParameters ecoreParameter="Command.ecore#//CommandStack/executeRemoveReference/entity"/>
+        <genParameters ecoreParameter="Command.ecore#//CommandStack/executeRemoveReference/propertyName"/>
+        <genParameters ecoreParameter="Command.ecore#//CommandStack/executeRemoveReference/entityToRemove"/>
+      </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="Command.ecore#//Command">
       <genOperations ecoreOperation="Command.ecore#//Command/execute"/>

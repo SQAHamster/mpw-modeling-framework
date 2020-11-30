@@ -1,0 +1,33 @@
+package de.unistuttgart.hamster.command.impl;
+
+import de.unistuttgart.hamster.command.RemoveEntityCommand;
+import de.unistuttgart.hamster.command.impl.utils.CommandUtils;
+
+public class RemoveEntityCommandImpl extends RemoveEntityCommand {
+
+	public RemoveEntityCommandImpl() {
+
+	}
+
+	@Override
+	public void execute() {
+		try {
+			var entity = getEntity();
+			var method = CommandUtils.findRemoveMethod(entity, getPropertyName());
+			method.invoke(entity, getEntityToRemove());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void undo() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
+	public void redo() {
+		throw new RuntimeException("not implemented");
+	}
+
+}
