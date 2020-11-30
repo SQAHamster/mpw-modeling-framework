@@ -9,7 +9,7 @@ operationToSignature(EOperation this) :
     operationToJavaType() + " " + effectiveOperationName() + "(" + parameters + ")";
 
 private toCommandParameterList(EOperation this) :
-    getCommandForOperation().mainUnit.parameters.collect(p|p.type.toJavaType() + " " + p.name).toString(", ");
+    "CommandStack commandStack" + getCommandForOperation().mainUnit.parameters.collect(p|", " + p.type.toJavaType() + " " + p.name).toString("");
 
 private effectiveOperationName(EOperation this) : 
     if (isPropertyGetter()) then name.getter() else name;

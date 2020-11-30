@@ -37,22 +37,13 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Tracks the executed Commands which allow to undo and redo their behavior."/>
     </eAnnotations>
-    <eOperations name="executeSetProperty">
-      <eParameters name="entity" eType="#//Entity"/>
-      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="oldValue" eType="#//Object"/>
-      <eParameters name="newValue" eType="#//Object"/>
+    <eOperations name="execute">
+      <eParameters name="command" eType="#//Command"/>
     </eOperations>
-    <eOperations name="executeAddReference">
-      <eParameters name="entity" eType="#//Entity"/>
-      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="entityToAdd" eType="#//Entity"/>
-    </eOperations>
-    <eOperations name="executeRemoveReference">
-      <eParameters name="entity" eType="#//Entity"/>
-      <eParameters name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="entityToRemove" eType="#//Entity"/>
-    </eOperations>
+    <eOperations name="undo"/>
+    <eOperations name="redo"/>
+    <eOperations name="undoAll"/>
+    <eOperations name="redoAll"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stack" upperBound="-1"
         eType="#//Command" containment="true"/>
   </eClassifiers>
@@ -69,7 +60,7 @@
       <details key="documentation" value="A more complex type of commands which makes use of multiple sub-commands. Usually the sub-commands are PrimitiveCommands.&#xD;&#xA;&#xD;&#xA;Example Hamster-Simulation: Game commands: Move, PickGrain, PutGrain or TurnLeft. Editor commands: InitTerritory or InitHamster."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subCommands" upperBound="-1"
-        eType="#//Command" containment="true"/>
+        eType="#//Command" changeable="false" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Entity" abstract="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

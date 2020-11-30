@@ -6,6 +6,9 @@
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
     import java.util.List;
 	«ENDIF-»
+    «IF eStructuralFeatures.exists(e|e.isCollection() && !e.changeable)-»
+    import java.util.ArrayList;
+    «ENDIF-»
 	«IF !interface && eAllOperations.exists(o|o.isCommand())-»
     import «getModulePackage()».commands.*;
 	«ENDIF-»

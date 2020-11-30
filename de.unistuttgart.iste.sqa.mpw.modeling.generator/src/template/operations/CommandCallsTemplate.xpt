@@ -5,8 +5,9 @@
 «DEFINE CommandDefinitions FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isCommand()) AS o»
 	  @Override
-	  public void «o.name»(«FOREACH o.getCommandForOperation().mainUnit.parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH») {
-	      new «o.name.toFirstUpper()»Command(this«FOREACH o.getCommandForOperation().mainUnit.parameters AS p», «p.name»«ENDFOREACH»).execute();
+	  public void «o.name»(CommandStack commandStack«FOREACH o.getCommandForOperation().mainUnit.parameters AS p», «p.type.toJavaType()» «p.name»«ENDFOREACH») {
+	      var command = new «o.name.toFirstUpper()»Command(this«FOREACH o.getCommandForOperation().mainUnit.parameters AS p», «p.name»«ENDFOREACH»);
+	      commandStack.execute(command);
 	  }
       «ENDFOREACH»
 «ENDDEFINE»
