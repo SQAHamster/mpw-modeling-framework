@@ -104,7 +104,8 @@
   </genPackages>
   <genPackages prefix="Query" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="QueryBehaviors.ecore#//CompareOperator">
-      <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CompareOperator/EQUALITY"/>
+      <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CompareOperator/EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CompareOperator/NOT_EQUAL"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="QueryBehaviors.ecore#//CollectionMethodType">
       <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CollectionMethodType/NOT_EMPTY"/>

@@ -51,7 +51,8 @@
         eType="#//CompareOperator"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="CompareOperator">
-    <eLiterals name="EQUALITY" literal="=="/>
+    <eLiterals name="EQUAL" literal="=="/>
+    <eLiterals name="NOT_EQUAL" value="1" literal="!="/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StatementsExpression" eSuperTypes="#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"

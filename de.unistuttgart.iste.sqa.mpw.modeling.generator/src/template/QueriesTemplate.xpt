@@ -38,7 +38,7 @@
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR CompareExpression-»
-    «EXPAND ExpressionDefinition FOR lhs» «IF operator == CompareOperator::EQUALITY»==«ELSE»!=«ENDIF» «EXPAND ExpressionDefinition FOR rhs-»
+    «EXPAND ExpressionDefinition FOR lhs» «operator.toOperatorCode()» «EXPAND ExpressionDefinition FOR rhs-»
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR StatementsExpression-»

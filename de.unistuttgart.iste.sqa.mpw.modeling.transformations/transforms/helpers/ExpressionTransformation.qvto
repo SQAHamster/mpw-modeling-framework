@@ -37,6 +37,16 @@ mapping Input::AndExpression::toAndExpression() : QueryModel::AndExpression {
 mapping Input::EqualityExpression::toEqualityExpression() : QueryModel::CompareExpression {
     lhs := self.left.map toExpression();
     rhs := self.right.map toExpression();
+    operator := self.operation.toOperator();
+}
+
+query String::toOperator() : QueryModel::CompareOperator {
+    switch {
+        case (self = "=") return QueryModel::CompareOperator::EQUAL;
+        case (self = "<>") return QueryModel::CompareOperator::NOT_EQUAL;
+    };
+    assert (false) with log('invalid operator ' + self);
+    return null;
 }
 
 mapping Input::Expression::toStatementExpression() : QueryModel::StatementsExpression

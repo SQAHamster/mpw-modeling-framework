@@ -1,0 +1,12 @@
+import queryBehavior;
+
+/*
+ * Extensions related to the generation of queries.
+ */
+
+toOperatorCode(CompareOperator this) :
+    switch (this) {
+       case CompareOperator::EQUAL: "=="
+       case CompareOperator::NOT_EQUAL: "!="
+       default: ""
+    };

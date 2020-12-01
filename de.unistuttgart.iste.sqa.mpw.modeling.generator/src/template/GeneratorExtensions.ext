@@ -10,4 +10,5 @@ extension template::types::MetaModelGeneratorExtensions reexport;
 extension template::properties::ObservablePropertyGeneratorExtensions reexport;
 extension template::operations::OperationGeneratorExtensions reexport;
 extension template::commands::CommandGeneratorExtensions reexport;
+extension template::queries::QueryGeneratorExtensions reexport;
 extension template::util::GlobalsGeneratorExtensions reexport;
