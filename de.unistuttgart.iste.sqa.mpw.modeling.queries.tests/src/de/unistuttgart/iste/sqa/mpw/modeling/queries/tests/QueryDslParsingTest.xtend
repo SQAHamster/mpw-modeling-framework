@@ -56,7 +56,7 @@ class QueryDslParsingTest {
 		            Statement:
 		              target: self
 		            Statement:
-		              target: myQuery
+		              target: myQuery()
 		          ]
 		      ]
 		''')
