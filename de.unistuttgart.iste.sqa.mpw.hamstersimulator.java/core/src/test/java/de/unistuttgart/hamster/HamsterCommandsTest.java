@@ -21,14 +21,14 @@ public class HamsterCommandsTest {
 	//<editor-fold desc="Feature: move">
 	@Test
 	public void givenHamsterEast_whenMove_thenMovedToRight() {
-		withTerritorium(
+		withTerritory(
 				  "  M;"
 				+ "> M;"
 				+ "  M;");
 
 		move();
 
-		assertTerritorium(
+		assertTerritory(
 				  "  M;"
 				+ " >M;"
 				+ "  M;");
@@ -36,14 +36,14 @@ public class HamsterCommandsTest {
 
 	@Test
 	public void givenHamsterNorth_whenMove_thenMovedToNorth() {
-		withTerritorium(
+		withTerritory(
 				  "  M;"
 				+ "^ M;"
 				+ "  M;");
 
 		move();
 
-		assertTerritorium(
+		assertTerritory(
 				  "^ M;"
 				+ "  M;"
 				+ "  M;");
@@ -51,14 +51,14 @@ public class HamsterCommandsTest {
 
 	@Test
 	public void givenHamsterSouth_whenMove_thenMovedToSouth() {
-		withTerritorium(
+		withTerritory(
 				  "  M;"
 				+ "v M;"
 				+ "  M;");
 
 		move();
 
-		assertTerritorium(
+		assertTerritory(
 				  "  M;"
 				+ "  M;"
 				+ "v M;");
@@ -66,14 +66,14 @@ public class HamsterCommandsTest {
 
 	@Test
 	public void givenHamsterWest_whenMove_thenMovedToWest() {
-		withTerritorium(
+		withTerritory(
 				  "  M;"
 				+ " <M;"
 				+ "  M;");
 
 		move();
 
-		assertTerritorium(
+		assertTerritory(
 				  "  M;"
 				+ "< M;"
 				+ "  M;");
@@ -84,7 +84,7 @@ public class HamsterCommandsTest {
 
 	@Test
 	public void givenHamsterWithGrainAvailable_whenPickGrain_thenPickedGrain() {
-		withTerritorium(">;");
+		withTerritory(">;");
 		andGrainOn(0, 0);
 
 		pickGrain();
@@ -95,7 +95,7 @@ public class HamsterCommandsTest {
 
 	@Test
 	public void givenHamsterWithGrainInMouth_whenPutGrain_thenPutGrainOnTile() {
-		withTerritorium(">;");
+		withTerritory(">;");
 		andGrainsInMouth(1);
 
 		putGrain();
@@ -106,7 +106,7 @@ public class HamsterCommandsTest {
 
 	@Test
 	public void givenHamsterWithNoGrainAvailable_whenPickGrain_ThenExceptionIsThrown() {
-		withTerritorium(">;");
+		withTerritory(">;");
 
 		assertThrows(CommandConstraintException.class, () -> {
 			pickGrain();
@@ -115,7 +115,7 @@ public class HamsterCommandsTest {
 
 	@Test
 	public void givenHamsterWithEmptyMouth_whenPutGrain_ThenExceptionIsThrown() {
-		withTerritorium(">;");
+		withTerritory(">;");
 
 		assertThrows(CommandConstraintException.class, () -> {
 			putGrain();
@@ -127,94 +127,94 @@ public class HamsterCommandsTest {
 	//<editor-fold desc="Feature: turnLeft">
 	@Test
 	public void givenHamsterEast_whenTurnLeft_thenDirectionIsNorth() {
-		withTerritorium(">;");
+		withTerritory(">;");
 		turnLeft();
-		assertTerritorium("^;");
+		assertTerritory("^;");
 	}
 	@Test
 	public void givenHamsterNorth_whenTurnLeft_thenDirectionIsWest() {
-		withTerritorium("^;");
+		withTerritory("^;");
 		turnLeft();
-		assertTerritorium("<;");
+		assertTerritory("<;");
 	}
 	@Test
 	public void givenHamsterWest_whenTurnLeft_thenDirectionIsSouth() {
-		withTerritorium("<;");
+		withTerritory("<;");
 		turnLeft();
-		assertTerritorium("v;");
+		assertTerritory("v;");
 	}
 	@Test
 	public void givenHamsterSouth_whenTurnLeft_thenDirectionIsEast() {
-		withTerritorium("v;");
+		withTerritory("v;");
 		turnLeft();
-		assertTerritorium(">;");
+		assertTerritory(">;");
 	}
 	//</editor-fold>
 
 	//<editor-fold desc="Feature: frontIsClear">
 	@Test
 	public void givenHamsterInAnyDirection_andFrontCellIsEmpty_whenCheckFrontIsClear_thenIsTrue() {
-		withTerritorium(" <;");
+		withTerritory(" <;");
 		assertFrontIsClear();
 
-		withTerritorium("> ;");
+		withTerritory("> ;");
 		assertFrontIsClear();
 
-		withTerritorium(" ;^;");
+		withTerritory(" ;^;");
 		assertFrontIsClear();
 
-		withTerritorium("v; ;");
+		withTerritory("v; ;");
 		assertFrontIsClear();
 	}
 
 	@Test
 	public void givenHamsterInAnyDirection_andFrontCellIsWall_whenCheckFrontIsNotClear_thenIsTrue() {
-		withTerritorium("M<;");
+		withTerritory("M<;");
 		assertFrontIsNotClear();
 
-		withTerritorium(">M;");
+		withTerritory(">M;");
 		assertFrontIsNotClear();
 
-		withTerritorium("M;^;");
+		withTerritory("M;^;");
 		assertFrontIsNotClear();
 
-		withTerritorium("v;M;");
+		withTerritory("v;M;");
 		assertFrontIsNotClear();
 	}
 
 	@Test
 	public void givenHamsterInAnyDirection_andFrontCellIsGrain_whenCheckFrontIsClear_thenIsTrue() {
-		withTerritorium("*<;");
+		withTerritory("*<;");
 		assertFrontIsClear();
 
-		withTerritorium(">*;");
+		withTerritory(">*;");
 		assertFrontIsClear();
 
-		withTerritorium("*;^;");
+		withTerritory("*;^;");
 		assertFrontIsClear();
 
-		withTerritorium("v;*;");
+		withTerritory("v;*;");
 		assertFrontIsClear();
 	}
 
 	@Test
 	public void givenHamsterInAnyDirection_andFrontCellIsEndOfMap_whenCheckFrontIsNotClear_thenIsTrue() {
-		withTerritorium("<;");
+		withTerritory("<;");
 		assertFrontIsNotClear();
 
-		withTerritorium(">;");
+		withTerritory(">;");
 		assertFrontIsNotClear();
 
-		withTerritorium("^;");
+		withTerritory("^;");
 		assertFrontIsNotClear();
 
-		withTerritorium("v;");
+		withTerritory("v;");
 		assertFrontIsNotClear();
 	}
 	
 	@Test
 	public void givenHamsterBeforeWall_whenMove_ThenExceptionIsThrown() {
-		withTerritorium("M<;");
+		withTerritory("M<;");
 		
 		assertThrows(CommandConstraintException.class, () -> {
 			move();			
@@ -226,7 +226,7 @@ public class HamsterCommandsTest {
 
 	//<editor-fold desc="helpers">
 
-	private void withTerritorium(String map) {
+	private void withTerritory(String map) {
 		game = GameStringifier.createFromString(map);
 		sut = game.getDefaultHamster();
 	}
@@ -259,7 +259,7 @@ public class HamsterCommandsTest {
 		 sut.putGrain(game.getCommandStack());
 	}
 
-	private void assertTerritorium(String expected) {
+	private void assertTerritory(String expected) {
 		String actual = GameStringifier.toString(game);
 		assertEquals(expected, actual);
 	}

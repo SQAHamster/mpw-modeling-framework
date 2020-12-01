@@ -1,104 +1,137 @@
 package de.unistuttgart.hamster;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import de.unistuttgart.hamster.hamster.HamsterGame;
+import de.unistuttgart.hamster.hamster.*;
 import de.unistuttgart.hamster.mpw.Location;
+import de.unistuttgart.hamster.mpw.Tile;
 import de.unistuttgart.hamster.util.GameStringifier;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TerritoryCommandsTest {
+	private HamsterGame game;
+	private EditorTerritory sut;
 	
 	@Test
-	public void testInit3x5() {
-		HamsterGame game = GameStringifier.createFromString("");
+	public void givenEmptyTerritory_whenInitializeTo5x3_thenHas5Rows_and3Columns_andAllAreEmpty() {
+		withTerritory("");
 
-		var sut = game.getTerritory();
-		sut.initTerritory(game.getCommandStack(), 5, 3);
+		initTerritory(5, 3);
 
-		assertEquals(15, sut.getTiles().size());
+		assertTerritory("     ;"
+				      + "     ;"
+				      + "     ;");
+	}
 
+	@Test
+	public void givenEmptyTerritory3x2_whenAddOneGrainTo2x0_thenOneGrainIsPlacedOn2x0() {
+		withTerritory("   ;" +
+					  "   ;");
+
+		addGrainsToTile(locationOf(2, 0), amountOf(1));
+
+		assertGrainsOnTerritory("  1;" +
+				                "   ;");
+	}
+
+	@Test
+	public void givenEmptyTerritory3x2_whenAddTwoGrainsTo1x1_thenTwoGrainsArePlacedOn1x1() {
+		withTerritory("   ;" +
+				      "   ;");
+
+		addGrainsToTile(locationOf(1, 1), amountOf(2));
+
+		assertGrainsOnTerritory("   ;" +
+				                " 2 ;");
+	}
+
+	@Test
+	public void givenEmptyTerritory3x2_whenAddWallTo2x0_thenWallIsPlacedOn2x0() {
+		withTerritory("   ;" +
+					  "   ;");
+
+		addWallToTile(locationOf(2, 0));
+
+		assertTerritory("  M;" +
+				        "   ;");
+	}
+
+	@Test
+	public void givenTerritory3x2_andHamsterOn0x0_andWallOn1x1_andGrainOn2x0_whenClearTile2x0_thenTile2x0IsEmpty() {
+		withTerritory("v *;" +
+					  " M ;");
+
+		clearTile(locationOf(2, 0));
+
+		assertTerritory("v  ;" +
+				        " M ;");
+	}
+
+	@Test
+	public void givenTerritory3x2_andHamsterOn0x0_andWallOn1x1_andGrainOn2x0_whenClearTile1x1_thenTile1x1IsEmpty() {
+		withTerritory("v *;" +
+				      " M ;");
+
+		clearTile(locationOf(1, 1));
+
+		assertTerritory("v *;" +
+				        "   ;");
+	}
+
+	@Test
+	public void givenTerritory1x1_andFiveGrainsOn0x0_whenClearTile0x0_thenTile0x0IsEmpty() {
+		withTerritory(" ;");
+		addGrainsToTile(locationOf(0, 0), amountOf(5));
+
+		clearTile(locationOf(0, 0));
+
+		assertTerritory(" ;");
+	}
+
+	//<editor-fold desc="helpers">
+
+	private void withTerritory(String map) {
+		game = GameStringifier.createFromString(map);
+		sut = game.getTerritory();
+	}
+
+	private void initTerritory(int columnsCount, int rowsCount) {
+		sut.initTerritory(game.getCommandStack(), columnsCount, rowsCount);
+	}
+
+	private void addGrainsToTile(Location location, int amount) {
+		sut.addGrainsToTile(game.getCommandStack(), location, amount);
+	}
+
+	private void addWallToTile(Location location) {
+		sut.addWallToTile(game.getCommandStack(), location);
+	}
+
+	private void clearTile(Location location) {
+		sut.clearTile(game.getCommandStack(), location);
+	}
+
+	private void assertGrainsOnTerritory(String expected) {
+		var actual = GameStringifier.grainsOnTerritoryToString(game);
+		assertEquals(expected, actual.replace('0', ' '));
+	}
+
+	private void assertTerritory(String expected) {
 		String actual = GameStringifier.toString(game);
-		assertEquals("     ;"
-				   + "     ;"
-				   + "     ;", actual);
+		assertEquals(expected, actual);
 	}
 
-	@Test
-	public void testAddGrain() {
-		HamsterGame game = GameStringifier.createFromString("   ;" +
-															"   ;");
-
-		var sut = game.getTerritory();
-		sut.addGrainsToTile(game.getCommandStack(), locationOf(2, 0), 1);
-
-		var actual = GameStringifier.grainsOnTerritoryToString(game);
-		assertEquals("  1;" +
-				     "   ;", actual.replace('0', ' '));
+	private Tile getTileAt(int columnIndex, int rowIndex) {
+		var tileOptional = game.getTerritory().getTiles().stream()
+				.filter(t -> t.getLocation().getColumn() == columnIndex &&
+						t.getLocation().getRow() == rowIndex)
+				.findFirst();
+		assert(tileOptional.isPresent());
+		return tileOptional.get();
 	}
 
-	@Test
-	public void testAddTwoGrain() {
-		HamsterGame game = GameStringifier.createFromString("   ;" +
-															"   ;");
-
-		var sut = game.getTerritory();
-		sut.addGrainsToTile(game.getCommandStack(), locationOf(1, 1), 2);
-
-		var actual = GameStringifier.grainsOnTerritoryToString(game);
-		assertEquals("   ;" +
-				     " 2 ;", actual.replace('0', ' '));
-	}
-
-	@Test
-	public void testAddWall() {
-		HamsterGame game = GameStringifier.createFromString("   ;" +
-															"   ;");
-
-		var sut = game.getTerritory();
-		sut.addWallToTile(game.getCommandStack(), locationOf(2, 0));
-
-		var actual = GameStringifier.toString(game);
-		assertEquals("  M;" +
-				     "   ;", actual);
-	}
-
-	@Test
-	public void givenOneGrainOnTile_whenClearTile_thenTileIsEmpty() {
-		HamsterGame game = GameStringifier.createFromString("v *;" +
-															" M ;");
-
-		var sut = game.getTerritory();
-		sut.clearTile(game.getCommandStack(), locationOf(2, 0));
-
-		var actual = GameStringifier.toString(game);
-		assertEquals("v  ;" +
-				     " M ;", actual);
-	}
-
-	@Test
-	public void givenFiveGrainsOnTile_whenClearTile_thenTileIsEmpty() {
-		HamsterGame game = GameStringifier.createFromString(" ;");
-
-		var sut = game.getTerritory();
-		sut.addGrainsToTile(game.getCommandStack(), locationOf(0, 0), 5);
-		sut.clearTile(game.getCommandStack(), locationOf(0, 0));
-
-		var actual = GameStringifier.toString(game);
-		assertEquals(" ;", actual);
-	}
-
-	@Test
-	public void givenWallOnTile_whenClearTile_thenTileIsEmpty() {
-		HamsterGame game = GameStringifier.createFromString("v *;" +
-															" M ;");
-
-		var sut = game.getTerritory();
-		sut.clearTile(game.getCommandStack(), locationOf(1, 1));
-
-		var actual = GameStringifier.toString(game);
-		assertEquals("v *;" +
-				     "   ;", actual);
+	private int amountOf(int amount) {
+		return amount;
 	}
 
 	private Location locationOf(int column, int row) {
@@ -108,7 +141,6 @@ public class TerritoryCommandsTest {
 		return location;
 	}
 
-
-
+	//</editor-fold>
 
 }
