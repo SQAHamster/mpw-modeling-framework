@@ -4,6 +4,7 @@
 «EXTENSION template::GeneratorExtensions»
 
 «DEFINE StatementsDefinitions FOR StatementsExpression-»
+    «IF statements.size == 0»null«ENDIF-»
     «FOREACH statements AS s SEPARATOR "."-»
         «EXPAND StatementDefinition FOR s-»
     «ENDFOREACH-»

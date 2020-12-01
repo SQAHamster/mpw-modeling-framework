@@ -37,7 +37,7 @@ PropertyPathExpression returns Expression:
     statements+=Statement statements+=(NavigatedStatement)*;
     
 Statement:
-	target='self' | target=Direction | target=ID;
+	target='self' | target='null' | target=Direction | target=ID;
 
 NavigatedStatement returns Statement:
     ('.' target=IdBracket) | ('->' collectionTarget=CollectionMethod);
