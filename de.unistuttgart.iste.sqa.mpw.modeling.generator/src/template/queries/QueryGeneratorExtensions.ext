@@ -8,5 +8,16 @@ toOperatorCode(CompareOperator this) :
     switch (this) {
        case CompareOperator::EQUAL: "=="
        case CompareOperator::NOT_EQUAL: "!="
+       case CompareOperator::GREATER: ">"
+       case CompareOperator::SMALLER: "<"
+       case CompareOperator::GREATER_EQUAL: ">="
+       case CompareOperator::SMALLER_EQUAL: "<="
+       default: ""
+    };
+
+toOperatorCode(CalculationOperator this) :
+    switch (this) {
+       case CalculationOperator::PLUS: "+"
+       case CalculationOperator::MINUS: "-"
        default: ""
     };

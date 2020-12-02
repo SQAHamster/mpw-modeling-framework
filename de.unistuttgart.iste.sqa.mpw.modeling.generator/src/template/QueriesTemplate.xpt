@@ -22,6 +22,10 @@
     !(«EXPAND ExpressionDefinition FOR inner-»)
 «ENDDEFINE»
 
+«DEFINE ExpressionDefinition FOR OldExpression-»
+    oldValue
+«ENDDEFINE»
+
 «DEFINE ExpressionDefinition FOR ImpliesExpression-»
     («EXPAND ExpressionDefinition FOR lhs») 
     ? («EXPAND ExpressionDefinition FOR rhs») 
@@ -39,6 +43,14 @@
 
 «DEFINE ExpressionDefinition FOR CompareExpression-»
     «EXPAND ExpressionDefinition FOR lhs» «operator.toOperatorCode()» «EXPAND ExpressionDefinition FOR rhs-»
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR CalculationExpression-»
+    «EXPAND ExpressionDefinition FOR lhs» «operator.toOperatorCode()» «EXPAND ExpressionDefinition FOR rhs-»
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR ConstantExpression-»
+    «literal-»
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR StatementsExpression-»

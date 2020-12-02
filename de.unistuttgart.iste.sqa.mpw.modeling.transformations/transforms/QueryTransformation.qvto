@@ -38,12 +38,7 @@ helper String::trimMarkers() : String {
 
 mapping QueryInput::Query::toElement() : QueryModel::Query inherits QueryInput::Element::toElementBase {
     result.name := self.name;
-	if (result.mainExpression.oclIsTypeOf(QueryModel::StatementsExpression)) {
-		var statementExpression := result.mainExpression.oclAsType(QueryModel::StatementsExpression);
-		result.eType := statementExpression.statements->last().eType;
-	} else {
-		result.eType := ecore::EBoolean.oclAsType(ecore::EClassifier);
-	};
+	result.eType := result.mainExpression.eType;
 	defaultValueLiteral := result.eType.defaultValue.toString();
 }
 

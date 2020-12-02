@@ -104,13 +104,22 @@
     </genClasses>
   </genPackages>
   <genPackages prefix="Query" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="QueryBehaviors.ecore#//CalculationOperator">
+      <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CalculationOperator/PLUS"/>
+      <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CalculationOperator/MINUS"/>
+    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="QueryBehaviors.ecore#//CompareOperator">
       <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CompareOperator/EQUAL"/>
       <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CompareOperator/NOT_EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CompareOperator/GREATER"/>
+      <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CompareOperator/SMALLER"/>
+      <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CompareOperator/GREATER_EQUAL"/>
+      <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CompareOperator/SMALLER_EQUAL"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="QueryBehaviors.ecore#//CollectionMethodType">
       <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CollectionMethodType/NOT_EMPTY"/>
       <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CollectionMethodType/IS_EMPTY"/>
+      <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CollectionMethodType/SIZE"/>
       <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CollectionMethodType/TYPE_SELECT"/>
     </genEnums>
     <genClasses image="false" ecoreClass="QueryBehaviors.ecore#//TypedElement">
@@ -141,13 +150,22 @@
     <genClasses ecoreClass="QueryBehaviors.ecore#//NotExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//NotExpression/inner"/>
     </genClasses>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//OldExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//OldExpression/inner"/>
+    </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//BinaryExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//BinaryExpression/lhs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//BinaryExpression/rhs"/>
     </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//AndExpression"/>
     <genClasses ecoreClass="QueryBehaviors.ecore#//OrExpression"/>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//CalculationExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//CalculationExpression/operator"/>
+    </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//ImpliesExpression"/>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//ConstantExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//ConstantExpression/literal"/>
+    </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//CompareExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//CompareExpression/operator"/>
     </genClasses>
@@ -168,12 +186,12 @@
     <genClasses ecoreClass="QueryBehaviors.ecore#//QueryStatement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//QueryStatement/query"/>
     </genClasses>
-    <genClasses ecoreClass="QueryBehaviors.ecore#//EnumLiteralStatement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//EnumLiteralStatement/enumLiteral"/>
-    </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//CollectionMethodStatement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//CollectionMethodStatement/parameters"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//CollectionMethodStatement/methodType"/>
+    </genClasses>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//EnumLiteralStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//EnumLiteralStatement/enumLiteral"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

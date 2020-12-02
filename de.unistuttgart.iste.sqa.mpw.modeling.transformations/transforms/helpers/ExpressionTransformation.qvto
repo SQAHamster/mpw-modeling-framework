@@ -8,48 +8,125 @@ modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 library ExpressionTransformation;
 
 mapping Input::Expression::toExpression() : QueryModel::Expression
-    disjuncts Input::Not::toImpliesExpression,
+    disjuncts Input::NotExpression::toNotExpression,
+              Input::OldValueExpression::toOldExpression,
               Input::ImpliesExpression::toImpliesExpression,
               Input::OrExpression::toOrExpression,
               Input::AndExpression::toAndExpression,
               Input::EqualityExpression::toEqualityExpression,
-              Input::Expression::toStatementExpression {}
+              Input::PlusExpression::toCalculationExpression,
+              Input::MinusExpression::toCalculationExpression,
+              Input::BoolConstant::toConstantExpression,
+              Input::IntConstant::toConstantExpression,
+              Input::StringConstant::toConstantExpression,
+              Input::NullConstant::toConstantExpression,
+              Input::StatementsExpression::toStatementExpression {}
 
-mapping Input::Not::toImpliesExpression() : QueryModel::NotExpression {
+mapping Input::NotExpression::toNotExpression() : QueryModel::NotExpression {
     inner := self.expression.map toExpression();
+    
+    assert(inner.eType = EBoolean.oclAsType(EClassifier) and not inner.isCollection);
+    eType := EBoolean.oclAsType(EClassifier);
+}
+
+mapping Input::OldValueExpression::toOldExpression() : QueryModel::OldExpression {
+    inner := self.expression.map toExpression();
+    assert(not inner.isCollection);
+    eType := inner.eType;
 }
 
 mapping Input::ImpliesExpression::toImpliesExpression() : QueryModel::ImpliesExpression {
     lhs := self.left.map toExpression();
     rhs := self.right.map toExpression();
+    
+    assert(lhs.eType = EBoolean.oclAsType(EClassifier) and not lhs.isCollection);
+    assert(rhs.eType = EBoolean.oclAsType(EClassifier) and not rhs.isCollection);
+    eType := EBoolean.oclAsType(EClassifier);
 }
 
 mapping Input::OrExpression::toOrExpression() : QueryModel::OrExpression {
     lhs := self.left.map toExpression();
     rhs := self.right.map toExpression();
+    
+    assert(lhs.eType = EBoolean.oclAsType(EClassifier) and not lhs.isCollection);
+    assert(rhs.eType = EBoolean.oclAsType(EClassifier) and not rhs.isCollection);
+    eType := EBoolean.oclAsType(EClassifier);
 }
 
 mapping Input::AndExpression::toAndExpression() : QueryModel::AndExpression {
     lhs := self.left.map toExpression();
     rhs := self.right.map toExpression();
+    
+    assert(lhs.eType = EBoolean.oclAsType(EClassifier) and not lhs.isCollection);
+    assert(rhs.eType = EBoolean.oclAsType(EClassifier) and not rhs.isCollection);
+    eType := EBoolean.oclAsType(EClassifier);
 }
 
 mapping Input::EqualityExpression::toEqualityExpression() : QueryModel::CompareExpression {
     lhs := self.left.map toExpression();
     rhs := self.right.map toExpression();
     operator := self.operation.toOperator();
+    
+    assert(not lhs.isCollection and not rhs.isCollection);
+    eType := EBoolean.oclAsType(EClassifier);
 }
 
 query String::toOperator() : QueryModel::CompareOperator {
     switch {
         case (self = "=") return QueryModel::CompareOperator::EQUAL;
         case (self = "<>") return QueryModel::CompareOperator::NOT_EQUAL;
+        case (self = ">") return QueryModel::CompareOperator::GREATER;
+        case (self = "<") return QueryModel::CompareOperator::SMALLER;
+        case (self = ">=") return QueryModel::CompareOperator::GREATER_EQUAL;
+        case (self = "<=") return QueryModel::CompareOperator::SMALLER_EQUAL;
     };
     assert (false) with log('invalid operator ' + self);
     return null;
 }
 
-mapping Input::Expression::toStatementExpression() : QueryModel::StatementsExpression
+mapping Input::PlusExpression::toCalculationExpression() : QueryModel::CalculationExpression {
+    lhs := self.left.map toExpression();
+    rhs := self.right.map toExpression();
+    operator := CalculationOperator::PLUS;
+    
+    assert(lhs.eType = EInt.oclAsType(EClassifier) and not lhs.isCollection);
+    assert(rhs.eType = EInt.oclAsType(EClassifier) and not rhs.isCollection);
+    eType := EInt.oclAsType(EClassifier);
+}
+
+mapping Input::MinusExpression::toCalculationExpression() : QueryModel::CalculationExpression {
+    lhs := self.left.map toExpression();
+    rhs := self.right.map toExpression();
+    operator := CalculationOperator::MINUS;
+    
+    assert(lhs.eType = EInt.oclAsType(EClassifier) and not lhs.isCollection);
+    assert(rhs.eType = EInt.oclAsType(EClassifier) and not rhs.isCollection);
+    eType := EInt.oclAsType(EClassifier);
+}
+
+mapping Input::BoolConstant::toConstantExpression() : QueryModel::ConstantExpression {
+    _literal := self.value;
+    eType := EBoolean.oclAsType(EClassifier);
+}
+
+mapping Input::IntConstant::toConstantExpression() : QueryModel::ConstantExpression {
+    _literal := self.value.toString();
+    eType := EInt.oclAsType(EClassifier);
+}
+
+mapping Input::StringConstant::toConstantExpression() : QueryModel::ConstantExpression {
+    _literal := self.value;
+    eType := EString.oclAsType(EClassifier);
+}
+
+mapping Input::NullConstant::toConstantExpression() : QueryModel::ConstantExpression {
+    _literal := "null";
+    eType := EObject.oclAsType(EClassifier);
+}
+
+mapping Input::StatementsExpression::toStatementExpression() : QueryModel::StatementsExpression
     when { self.statements->notEmpty(); } {
     statements += self.statements->map toStatement();
+    eType := statements->last().eType;
+    isCollection := statements->last().isCollection;
 }

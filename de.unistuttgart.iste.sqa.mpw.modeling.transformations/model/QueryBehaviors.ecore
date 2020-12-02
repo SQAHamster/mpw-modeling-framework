@@ -32,8 +32,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="Precondition" eSuperTypes="#//CommandConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="Postcondition" eSuperTypes="#//CommandConstraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="ClassInvariant" eSuperTypes="#//Constraint"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true" eSuperTypes="#//TypedElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="NotExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inner" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OldExpression" eSuperTypes="#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inner" lowerBound="1" eType="#//Expression"
         containment="true"/>
   </eClassifiers>
@@ -45,7 +49,19 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AndExpression" eSuperTypes="#//BinaryExpression"/>
   <eClassifiers xsi:type="ecore:EClass" name="OrExpression" eSuperTypes="#//BinaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CalculationExpression" eSuperTypes="#//BinaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" lowerBound="1"
+        eType="#//CalculationOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CalculationOperator">
+    <eLiterals name="PLUS" literal="+"/>
+    <eLiterals name="MINUS" value="1" literal="-"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ImpliesExpression" eSuperTypes="#//BinaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstantExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="literal" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompareExpression" eSuperTypes="#//BinaryExpression">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" lowerBound="1"
         eType="#//CompareOperator"/>
@@ -53,6 +69,10 @@
   <eClassifiers xsi:type="ecore:EEnum" name="CompareOperator">
     <eLiterals name="EQUAL" literal="=="/>
     <eLiterals name="NOT_EQUAL" value="1" literal="!="/>
+    <eLiterals name="GREATER" value="2" literal=">"/>
+    <eLiterals name="SMALLER" value="3" literal="&lt;"/>
+    <eLiterals name="GREATER_EQUAL" value="4" literal=">="/>
+    <eLiterals name="SMALLER_EQUAL" value="5" literal="&lt;="/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StatementsExpression" eSuperTypes="#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
@@ -76,10 +96,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="QueryStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1" eType="#//Query"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EnumLiteralStatement" eSuperTypes="#//Statement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="enumLiteral" lowerBound="1"
-        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EEnumLiteral"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CollectionMethodStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
@@ -89,6 +105,11 @@
   <eClassifiers xsi:type="ecore:EEnum" name="CollectionMethodType">
     <eLiterals name="NOT_EMPTY" literal="NOT_EMPTY"/>
     <eLiterals name="IS_EMPTY" value="1" literal="IS_EMPTY"/>
-    <eLiterals name="TYPE_SELECT" value="2" literal="TYPE_SELECT"/>
+    <eLiterals name="SIZE" value="2" literal="SIZE"/>
+    <eLiterals name="TYPE_SELECT" value="3" literal="TYPE_SELECT"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumLiteralStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumLiteral" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EEnumLiteral"/>
   </eClassifiers>
 </ecore:EPackage>

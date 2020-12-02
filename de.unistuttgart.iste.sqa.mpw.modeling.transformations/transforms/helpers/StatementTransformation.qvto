@@ -86,6 +86,12 @@ mapping Input::Statement::toCollectionMethodStatement() : QueryModel::Collection
             isCollection := false;
             methodType := QueryModel::CollectionMethodType::IS_EMPTY;
         }
+        case (isSimple and simpleCollectionMethod.method = "size") {
+            eType := findClassifierForName(parametrizedCollectionMethod.typeSelect);
+            eType := ecore::EInt.oclAsType(ecore::EClassifier);
+            isCollection := false;
+            methodType := QueryModel::CollectionMethodType::SIZE;
+        }
         case (not isSimple and parametrizedCollectionMethod.typeSelect != null) {
             eType := findClassifierForName(parametrizedCollectionMethod.typeSelect);
             isCollection := true;
@@ -130,8 +136,8 @@ query ecore::EString::findClass() : ecore::EClassifier {
     return EntityModels->collect(p|p.getEClassifier(self))->selectOne(c|c != null).oclAsType(ecore::EClass)
 }
 
-helper Input::Statement::parentExpression() : Input::Expression {
-    return self.container().oclAsType(querydsl::Expression);
+helper Input::Statement::parentExpression() : Input::StatementsExpression {
+    return self.container().oclAsType(querydsl::StatementsExpression);
 }
 
 helper Input::Statement::parentContext() : Input::Context {
