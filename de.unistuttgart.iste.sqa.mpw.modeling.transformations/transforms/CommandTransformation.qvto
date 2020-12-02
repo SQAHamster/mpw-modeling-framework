@@ -41,6 +41,7 @@ mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
   usedQueries := constraints->collect(c|c.allSubobjectsOfType(QueryModel::QueryStatement))
                             ->collect(s|s._query)
                             ->asOrderedSet();
+  isInit := self.annotations->exists(a|a.key = "isInit" and a.value = "true");
 }
 
 helper Henshin::Module::findTargetClass() : ecore::EClass {

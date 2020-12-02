@@ -258,7 +258,9 @@
 «DEFINE PreconditionsDefinition FOR Unit»
 	«LET (Transformation)this.eContainer AS transformation-»
 	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(Precondition)-»
-	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-»
+	«IF !transformation.isInit-»
+        «EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-»
+	«ENDIF-»
 	«ENDLET-»
 «ENDDEFINE»
 
