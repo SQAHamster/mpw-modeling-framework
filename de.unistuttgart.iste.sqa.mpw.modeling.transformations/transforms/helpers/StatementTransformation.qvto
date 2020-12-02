@@ -39,12 +39,12 @@ abstract mapping Input::Statement::toStatementBase() : QueryModel::Statement {
 
 mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement merges Input::Statement::toStatementBase
     when { self.target = "self"; } {
-    eType := self.parentModel().context.className.resolveone(ecore::EClass);
+    eType := self.parentContext().className.resolveone(ecore::EClass);
     selfAlias := self.determineSelfAlias();
 }
 
 query Input::Statement::determineSelfAlias() : String {
-    if (self.parentModel().context.kind = ContextKind::QUERY) {
+    if (self.parentElement().oclIsTypeOf(Input::Query)) {
         return "this";
     } else {
         return "thisInstance";
@@ -53,7 +53,7 @@ query Input::Statement::determineSelfAlias() : String {
 
 mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement merges Input::Statement::toStatementBase
     when { self.isBasedOnQuery(); } {
-    var inputQuery := Queries->any(q|isStatementMatchingQuery(self, q));
+    var inputQuery := getAllQueries()->any(q|isStatementMatchingQuery(self, q));
     _query := inputQuery.late resolveone(QueryModel::Query);
     eType := _query.eType;
 }
@@ -104,22 +104,13 @@ mapping Input::Statement::toEnumLiteralStatement() : QueryModel::EnumLiteralStat
     eType := enumLiteral.container().oclAsType(ecore::EEnum);
 }
 
-helper Input::Statement::parentExpression() : Input::Expression {
-	return self.container().oclAsType(querydsl::Expression);
-}
-
-helper Input::Statement::parentModel() : Input::Model {
-	return self.root().oclAsType(Input::Model);
-}
-
 query Input::Statement::isBasedOnQuery() : Boolean {
-    return Queries->exists(q|isStatementMatchingQuery(self, q));
+    return getAllQueries()->exists(q|isStatementMatchingQuery(self, q));
 }
 
-query isStatementMatchingQuery(s: Input::Statement, q: Input::Model) : Boolean {
-    return q.context.kind = querydsl::ContextKind::QUERY 
-           and q.context.name + "()" = s.target
-           and currentExpressionTypes->get(s.parentExpression()).name = q.context.className;
+query isStatementMatchingQuery(s: Input::Statement, queryElement: Input::Query) : Boolean {
+    return queryElement.name + "()" = s.target
+           and currentExpressionTypes->get(s.parentExpression()).name = queryElement.context().className;
 }
 
 query Input::Statement::isEnumLiteral() : Boolean {
@@ -137,6 +128,31 @@ query Input::Statement::getCurrentExpressionTypeIsCollection() : ecore::EBoolean
 
 query ecore::EString::findClass() : ecore::EClassifier {
     return EntityModels->collect(p|p.getEClassifier(self))->selectOne(c|c != null).oclAsType(ecore::EClass)
+}
+
+helper Input::Statement::parentExpression() : Input::Expression {
+    return self.container().oclAsType(querydsl::Expression);
+}
+
+helper Input::Statement::parentContext() : Input::Context {
+    return self.root().oclAsType(Input::Context);
+}
+
+query Input::Element::context() : Input::Context {
+    return self.container().oclAsType(Input::Context);
+}
+
+helper Input::Statement::parentElement() : Input::Element {
+    var current := self.container();
+    while (current != null and not current.oclIsKindOf(Input::Element)) {
+        current := current.container();
+    };
+    return current.oclAsType(Input::Element);
+}
+
+query getAllQueries() : List(Input::Query) {
+    return Queries->collect(model|model.subobjectsOfType(Input::Query))
+                  ->flatten();
 }
 
 /* create a display string which is helpful when viewing as XMI */

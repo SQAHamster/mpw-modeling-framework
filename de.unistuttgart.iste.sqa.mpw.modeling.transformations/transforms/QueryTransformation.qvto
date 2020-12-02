@@ -16,20 +16,15 @@ main() {
 
 mapping Input::QueryInputs::toQueryModel() : QueryModel::Module {
     name := "queries";
-    elements := self.models->map toElement();
+    elements := self.models->collect(subobjectsOfKind(QueryInput::Element))->flatten()->map toElement();
 }
 
-mapping QueryInput::Model::toElement() : QueryModel::ExpressionalElement
-    disjuncts QueryInput::Model::toQuery, 
-              QueryInput::Model::toPrecondition, 
-              QueryInput::Model::toPostcondition, 
-              QueryInput::Model::toInvariant { }
+abstract mapping QueryInput::Element::toElement() : QueryModel::ExpressionalElement;
 
-abstract mapping QueryInput::Model::toElementBase() : QueryModel::ExpressionalElement {
+abstract mapping QueryInput::Element::toElementBase() : QueryModel::ExpressionalElement {
     init {
-        result.name := self.context.name;
         result.documentation := self.documentation.trimMarkers();
-        result.contextClass := self.context.className.map toContextClass();
+        result.contextClass := self.context().className.map toContextClass();
         result.mainExpression := self.expressions->first().map toExpression();
     }
 }
@@ -41,9 +36,8 @@ helper String::trimMarkers() : String {
     return self;
 }
 
-mapping QueryInput::Model::toQuery() : QueryModel::Query inherits QueryInput::Model::toElementBase
-	when { self.context.kind = ContextKind::QUERY; } {
-	
+mapping QueryInput::Query::toElement() : QueryModel::Query inherits QueryInput::Element::toElementBase {
+    result.name := self.name;
 	if (result.mainExpression.oclIsTypeOf(QueryModel::StatementsExpression)) {
 		var statementExpression := result.mainExpression.oclAsType(QueryModel::StatementsExpression);
 		result.eType := statementExpression.statements->last().eType;
@@ -53,20 +47,26 @@ mapping QueryInput::Model::toQuery() : QueryModel::Query inherits QueryInput::Mo
 	defaultValueLiteral := result.eType.defaultValue.toString();
 }
 
-mapping QueryInput::Model::toPrecondition() : QueryModel::Precondition inherits QueryInput::Model::toElementBase
-    when { self.context.kind = ContextKind::PRE; } {
-    commandName := self.context.name;
+mapping QueryInput::CommandConstraint::toCommandConstraintBase() : QueryModel::CommandConstraint inherits QueryInput::Element::toElementBase {
+    result.name := self.context().className + "_" + self.name;
 }
 
-mapping QueryInput::Model::toPostcondition() : QueryModel::Postcondition inherits QueryInput::Model::toElementBase
-    when { self.context.kind = ContextKind::POST; } {
-    commandName := self.context.name;
+mapping QueryInput::Precondition::toElement() : QueryModel::Precondition inherits QueryInput::CommandConstraint::toCommandConstraintBase {
+    commandName := self.name;
 }
 
-mapping QueryInput::Model::toInvariant() : QueryModel::ClassInvariant inherits QueryInput::Model::toElementBase
-    when { self.context.kind = ContextKind::INV; } {
+mapping QueryInput::Postcondition::toElement() : QueryModel::Postcondition inherits QueryInput::CommandConstraint::toCommandConstraintBase {
+    commandName := self.name;
+}
+
+mapping QueryInput::Invariant::toElement() : QueryModel::ClassInvariant inherits QueryInput::Element::toElementBase {
+    result.name := self.context().className + "_invariant";
 }
 
 mapping String::toContextClass() : ecore::EClass {
 	init { result := findClassifierForName(self).oclAsType(ecore::EClass); }
+}
+
+query QueryInput::Element::context() : QueryInput::Context {
+    return self.container().oclAsType(QueryInput::Context);
 }

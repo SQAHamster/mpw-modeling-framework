@@ -19,8 +19,6 @@ import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xtext.EcoreUtil2;
 
-import de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl.Model;
-
 public class XmiWriter extends WorkflowComponentWithModelSlot {
 	private final static Logger log = Logger.getLogger(XmiWriter.class.getName());
 	
@@ -69,9 +67,6 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	}
 
 	private String getName(EObject object) {
-		if (object instanceof Model) {
-			return ((Model) object).getContext().getName();
-		}
 		var nameFeature = object.eClass().getEStructuralFeature("name");
 		return "" + object.eGet(nameFeature);
 	}
