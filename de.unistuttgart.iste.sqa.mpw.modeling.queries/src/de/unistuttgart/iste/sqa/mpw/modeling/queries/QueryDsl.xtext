@@ -3,10 +3,43 @@ grammar de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl with org.eclipse.
 generate querydsl "http://www.mpw.uni-stuttgart.de/querydsl"
 
 Model:
-	(documentation=ModelDocumentation)? (context=Context) (expressions+=Expression)+ ';';
+	Context
+;
 	
-ModelDocumentation:
-    DOCUMENTATION
+Context:
+	'context' className=ID (elements+=Element)+
+;
+	
+Element:
+	Query | CommandConstraint | Invariant
+;
+
+Query:
+	(documentation=DOCUMENTATION)? 'query' name=ID ':' (expressions+=Expression ';')
+;
+
+CommandConstraint:
+	Precondition | Postcondition
+;
+
+Precondition:
+	(documentation=DOCUMENTATION)? 'precondition' 'for' name=ID ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
+;
+
+Postcondition:
+	(documentation=DOCUMENTATION)? 'postcondition' 'for' name=ID ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
+;
+
+ParameterList:
+	parameters+=Parameter (',' parameters+=Parameter)*
+;
+
+Parameter:
+	variableName=ID typeName=ID
+;
+
+Invariant:
+	(documentation=DOCUMENTATION)? 'invariant' ':' (expressions+=Expression ';')
 ;
 	
 Expression:
@@ -37,7 +70,7 @@ PropertyPathExpression returns Expression:
     statements+=Statement statements+=(NavigatedStatement)*;
     
 Statement:
-	target='self' | target='null' | target=Direction | target=ID;
+	target='self' | target='null' | target='true' | target='false' | target=Direction | target=ID;
 
 NavigatedStatement returns Statement:
     ('.' target=IdBracket) | ('->' collectionTarget=CollectionMethod);
@@ -50,12 +83,6 @@ SimpleCollectionMethod:
     
 ParametrizedCollectionMethod:
 	('typeSelect(' typeSelect=ID ')');
-	
-Context:
-	'context' className=ID kind=ContextKind name=ID ':';
-	
-enum ContextKind:
-    QUERY = 'query' | PRE = 'precondition' | POST = 'postcondition' | INV = 'invariant';
     
 Direction:
 	('EAST' | 'WEST' | 'SOUTH' | 'NORTH');

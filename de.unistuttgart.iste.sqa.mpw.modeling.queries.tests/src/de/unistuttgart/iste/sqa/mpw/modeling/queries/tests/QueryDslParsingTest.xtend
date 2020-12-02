@@ -18,70 +18,151 @@ class QueryDslParsingTest {
 	@Inject
 	ParseHelper<Model> parseHelper
 	
+	// used as default in tests where the expression part is not really relevant
+	val simpleExpression = '''			        
+			        expressions: [
+			          Expression:
+			            statements: [
+			              Statement:
+			                target: true
+			            ]
+			        ]
+	'''
+	
 	@Test
-	def void givenSimpleQuery_whenParse_thenSucceeds() {
+	def void givenSimpleQueryReturningTrue_whenParse_thenQueryWithExpressionAndStatementAreParsed() {
 		val result = parseHelper.parse('''
 			context Hamster
-			query myQuery: self;
+			query myQuery: true;
 		''')
 		assertModel(result, '''
-		    Model:
-		      context: Context myQuery:
-		        className: Hamster
-		        kind: query
-		      expressions: [
-		        Expression:
-		          statements: [
-		            Statement:
-		              target: self
+		    Context:
+		      className: Hamster
+		      elements: [
+		        Query myQuery:
+		          expressions: [
+		            Expression:
+		              statements: [
+		                Statement:
+		                  target: true
+		              ]
 		          ]
 		      ]
 		''')
 	}
 	
 	@Test
-	def void givenPreconditionUsingQuery_whenParse_thenSucceeds() {
+	def void givenTwoSimpleQuerys_whenParse_thenBothQueriesAreParsed() {
 		val result = parseHelper.parse('''
 			context Hamster
-			precondition myCommand: self.myQuery();
+			query myQuery1: true;
+			query myQuery2: true;
 		''')
 		assertModel(result, '''
-		    Model:
-		      context: Context myCommand:
-		        className: Hamster
-		        kind: precondition
-		      expressions: [
-		        Expression:
-		          statements: [
-		            Statement:
-		              target: self
-		            Statement:
-		              target: myQuery()
+		    Context:
+		      className: Hamster
+		      elements: [
+		        Query myQuery1:
+		          «simpleExpression»
+		        Query myQuery2:
+		          «simpleExpression»
+		      ]
+		''')
+	}
+	
+	@Test
+	def void givenPreconditionUsingQuery_whenParse_thenStatementUsingQueryIsParsed() {
+		val result = parseHelper.parse('''
+			context Hamster
+			precondition for myCommand: self.myQuery();
+		''')
+		assertModel(result, '''
+		    Context:
+		      className: Hamster
+		      elements: [
+		        Precondition myCommand:
+		          expressions: [
+		            Expression:
+		              statements: [
+		                Statement:
+		                  target: self
+		                Statement:
+		                  target: myQuery()
+		              ]
 		          ]
 		      ]
 		''')
 	}
     
     @Test
-    def void givenQueryWithDocumentation_whenParse_thenDocumentationIsParsed() {
+    def void givenQueryWithDocumentation_whenParse_thenDocumentationIsParsedForQuery() {
         val result = parseHelper.parse('''
-            /** This query returns something useful. */
             context Hamster
-            query myCommand: self;
+            /** This query returns something useful. */
+            query myQuery: true;
         ''')
         assertModel(result, '''
-            Model:
-              documentation: /** This query returns something useful. */
-              context: Context myCommand:
-                className: Hamster
-                kind: query
-              expressions: [
-                Expression:
-                  statements: [
-                    Statement:
-                      target: self
-                  ]
-              ]
+		    Context:
+		      className: Hamster
+		      elements: [
+		        Query myQuery:
+		          documentation: /** This query returns something useful. */
+		          «simpleExpression»
+		      ]
+        ''')
+    }
+    
+    @Test
+    def void givenInvariantWithDocumentation_whenParse_thenDocumentationIsParsedForInvariant() {
+        val result = parseHelper.parse('''
+            context Hamster
+            /** This invariant checks something useful. */
+            invariant: true;
+        ''')
+        assertModel(result, '''
+		    Context:
+		      className: Hamster
+		      elements: [
+		        Invariant:
+		          documentation: /** This invariant checks something useful. */
+		          «simpleExpression»
+		      ]
+        ''')
+    }
+    
+    @Test
+    def void givenPreconditionWithDocumentation_whenParse_thenDocumentationIsParsedForPrecondition() {
+        val result = parseHelper.parse('''
+            context Hamster
+            /** This precondition checks something useful. */
+            precondition for myCommand: true;
+        ''')
+        assertModel(result, '''
+		    Context:
+		      className: Hamster
+		      elements: [
+		        Precondition myCommand:
+		          documentation: /** This precondition checks something useful. */
+		          «simpleExpression»
+		      ]
+        ''')
+    }
+    
+    @Test
+    def void givenPostconditionWithDocumentation_whenParse_thenDocumentationIsParsedForPostcondition() {
+        val result = parseHelper.parse('''
+            context Hamster
+            /** This postcondition checks something useful. */
+            postcondition for myCommand: true;
+        ''')
+        assertModel(result, '''
+		    Context:
+		      className: Hamster
+		      elements: [
+		        Postcondition myCommand:
+		          documentation: /** This postcondition checks something useful. */
+		          «simpleExpression»
+		      ]
         ''')
     }
 	
@@ -91,7 +172,7 @@ class QueryDslParsingTest {
 		Assertions.assertTrue(errors.isEmpty, '''Unexpected errors: «errors.join(", ")»''')
 		
 		var actual = ModelInstanceStringifier.toString(actualModel);
-		Assertions.assertEquals(expected.trim(), actual);
+		Assertions.assertEquals(expected.trim().replace("\r\n", "\n"), actual);
 	}
 	
 }
