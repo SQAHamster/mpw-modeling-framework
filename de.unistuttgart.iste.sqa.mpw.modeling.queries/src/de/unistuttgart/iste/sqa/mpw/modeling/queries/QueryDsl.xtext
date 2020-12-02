@@ -59,18 +59,36 @@ AndExpression returns Expression:
 ;
 
 EqualityExpression returns Expression:
-	PrimaryExpression ({EqualityExpression.left=current} operation=('='|'<>') right=PrimaryExpression)*
+	ComparisonExpression ({EqualityExpression.left=current} operation=('='|'<>') right=ComparisonExpression)*
+;
+
+ComparisonExpression returns Expression:
+    PlusOrMinusExpression ({ComparisonExpression.left=current} op=(">="|"<="|">"|"<") right=PlusOrMinusExpression)*
+;
+
+PlusOrMinusExpression returns Expression:
+    PrimaryExpression ( ({PlusExpression.left=current} '+' | {MinusExpression.left=current} '-') right=PrimaryExpression)*
 ;
 
 PrimaryExpression returns Expression:
-    '(' Expression ')' | {Not} "!" expression=PrimaryExpression | PropertyPathExpression
+    '(' Expression ')' | {NotExpression} "!" expression=PrimaryExpression | PropertyPathExpression | OldValueExpression | ConstantExpression
+;
+    
+ConstantExpression returns Expression:
+    {IntConstant} value=INT |
+    {StringConstant} value=STRING |
+    {BoolConstant} value=('true'|'false') |
+    {NullConstant} value='null'
 ;
 
+OldValueExpression returns Expression:
+    {OldValueExpression} 'old' '(' expression=PropertyPathExpression ')';
+
 PropertyPathExpression returns Expression:
-    statements+=Statement statements+=(NavigatedStatement)*;
+    {StatementsExpression} statements+=Statement statements+=(NavigatedStatement)*;
     
 Statement:
-	target='self' | target='null' | target='true' | target='false' | target=Direction | target=ID;
+	target='self' | target=Direction | target=ID;
 
 NavigatedStatement returns Statement:
     ('.' target=IdBracket) | ('->' collectionTarget=CollectionMethod);
@@ -79,7 +97,7 @@ CollectionMethod:
 	SimpleCollectionMethod | ParametrizedCollectionMethod;
     
 SimpleCollectionMethod:
-	method=('notEmpty' | 'isEmpty' ) '()';
+	method=('notEmpty' | 'isEmpty' | 'size' ) '()';
     
 ParametrizedCollectionMethod:
 	('typeSelect(' typeSelect=ID ')');

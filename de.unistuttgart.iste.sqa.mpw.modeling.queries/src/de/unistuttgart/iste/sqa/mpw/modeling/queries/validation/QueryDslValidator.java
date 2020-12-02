@@ -3,6 +3,12 @@
  */
 package de.unistuttgart.iste.sqa.mpw.modeling.queries.validation;
 
+import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.xtext.validation.Check;
+
+import de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl.OldValueExpression;
+import de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl.Postcondition;
+
 /**
  * This class contains custom validation rules. 
  *
@@ -10,15 +16,10 @@ package de.unistuttgart.iste.sqa.mpw.modeling.queries.validation;
  */
 public class QueryDslValidator extends AbstractQueryDslValidator {
 	
-//	public static final String INVALID_NAME = "invalidName";
-//
-//	@Check
-//	public void checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.getName().charAt(0))) {
-//			warning("Name should start with a capital",
-//					QueryDslPackage.Literals.GREETING__NAME,
-//					INVALID_NAME);
-//		}
-//	}
-	
+	@Check
+	public void oldValuesOnlyUsedInPostConditions(OldValueExpression statement) {
+		if (EcoreUtil2.getContainerOfType(statement, Postcondition.class) == null) {
+			error("Old value expressions are only allowed in postconditions", null);
+		}
+	}
 }

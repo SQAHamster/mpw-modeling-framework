@@ -21,11 +21,8 @@ class QueryDslParsingTest {
 	// used as default in tests where the expression part is not really relevant
 	val simpleExpression = '''			        
 			        expressions: [
-			          Expression:
-			            statements: [
-			              Statement:
-			                target: true
-			            ]
+			          BoolConstant:
+			            value: true
 			        ]
 	'''
 	
@@ -41,11 +38,8 @@ class QueryDslParsingTest {
 		      elements: [
 		        Query myQuery:
 		          expressions: [
-		            Expression:
-		              statements: [
-		                Statement:
-		                  target: true
-		              ]
+		            BoolConstant:
+		              value: true
 		          ]
 		      ]
 		''')
@@ -82,7 +76,7 @@ class QueryDslParsingTest {
 		      elements: [
 		        Precondition myCommand:
 		          expressions: [
-		            Expression:
+		            StatementsExpression:
 		              statements: [
 		                Statement:
 		                  target: self
@@ -93,6 +87,49 @@ class QueryDslParsingTest {
 		      ]
 		''')
 	}
+
+    @Test
+    def void givenPostconditionUsingOldValue_whenParse_thenStatementOfOldValueIsParsed() {
+        val result = parseHelper.parse('''
+            context Hamster
+            postcondition for myCommand: self.grains->size() = old(self.grains->size()) + 1;
+        ''')
+        assertModel(result, '''
+            Context:
+              className: Hamster
+              elements: [
+                Postcondition myCommand:
+                  expressions: [
+                    EqualityExpression:
+                      operation: =
+                      left: StatementsExpression:
+                        statements: [
+                          Statement:
+                            target: self
+                          Statement:
+                            target: grains
+                          Statement:
+                            collectionTarget: SimpleCollectionMethod:
+                              method: size
+                        ]
+                      right: PlusExpression:
+                        left: OldValueExpression:
+                          expression: StatementsExpression:
+                            statements: [
+                              Statement:
+                                target: self
+                              Statement:
+                                target: grains
+                              Statement:
+                                collectionTarget: SimpleCollectionMethod:
+                                  method: size
+                            ]
+                        right: IntConstant:
+                          value: 1
+                  ]
+              ]
+        ''')
+    }
     
     @Test
     def void givenQueryWithDocumentation_whenParse_thenDocumentationIsParsedForQuery() {
