@@ -1,0 +1,5 @@
+context Hamster
+precondition for initHamster(territory:Territory, location:Location, direction:Direction, grainCount:EInt): 
+    grainCount > 0;
+postcondition for initHamster(territory:Territory, location:Location, direction:Direction, grainCount:EInt): 
+    self.grains->size() = grainCount;
