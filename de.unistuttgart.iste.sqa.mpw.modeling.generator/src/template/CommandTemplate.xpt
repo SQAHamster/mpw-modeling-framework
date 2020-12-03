@@ -45,6 +45,7 @@
 	«getVisibility()» void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
     «IF mainUnit-»
         «EXPAND PreconditionsDefinition FOR this»
+        «EXPAND OldValueVariablesDefinition FOR this»
     «ENDIF-»
 	«EXPAND UnitExpandBody FOR this»
     «IF mainUnit-»
@@ -261,6 +262,12 @@
 	«IF !transformation.isInit-»
         «EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-»
 	«ENDIF-»
+	«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE OldValueVariablesDefinition FOR Unit»
+	«LET (Transformation)this.eContainer AS transformation-»
+	«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH transformation.constraints.typeSelect(Postcondition).collect(c|c.oldValueVariableExpressions).flatten()-»
 	«ENDLET-»
 «ENDDEFINE»
 

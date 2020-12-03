@@ -41,3 +41,7 @@
 «DEFINE StatementDefinition FOR QueryStatement-»
     «query.name»()
 «ENDDEFINE»
+
+«DEFINE StatementDefinition FOR VariableUsageStatement-»
+    «variableReference.variableName»
+«ENDDEFINE»

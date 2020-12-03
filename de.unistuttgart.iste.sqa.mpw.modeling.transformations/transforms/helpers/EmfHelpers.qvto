@@ -15,3 +15,21 @@ helper Element::root() : Element {
 query findClassifierForName(name: String) : ecore::EClassifier {
     return EntityModels->collect(p|p.getEClassifier(name))->selectOne(c|c != null).oclAsType(ecore::EClass)
 }
+
+query Bag(String)::joinToString(separator: String) : String {
+	return self->asSequence()->joinToString(separator);
+}
+
+// note: found no built-in way to join a collection to string, so build a iterative workaround as query.
+query Sequence(String)::joinToString(separator: String) : String {
+	var str := "";
+	var first = true;
+	self->forEach(o) {
+	  if (first = false) {
+	  	str := str + separator;
+	  };
+	  str := str + o.toString();
+	  first := false;		
+	};
+	return str;
+}

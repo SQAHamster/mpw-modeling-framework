@@ -1,4 +1,5 @@
 import helpers.RuleReferenceSorter;
+import helpers.EmfHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
@@ -326,19 +327,6 @@ mapping CommandModel::Rule::toCondition() : CommandModel::Condition {
   var attributeConditions := self.attributeConditions->select(c|c.instance = self.thisInstance);
   assert(attributeConditions->notEmpty());
   condition := attributeConditions->collect(c|"thisInstance." + c.attributeName + "==" + c.attributeValueLiteral)->joinToString(" && ");
-}
-
-helper Sequence(String)::joinToString(separator: String) : String {
-	var str := "";
-	var first = true;
-	self->forEach(o) {
-	  if (first = false) {
-	  	str := str + separator;
-	  };
-	  str := str + o.toString();
-	  first := false;		
-	};
-	return str;
 }
 
 helper CommandModel::Transformation::obtainConstraints() : List(QueryModel::Constraint) {

@@ -30,7 +30,10 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Precondition" eSuperTypes="#//CommandConstraint"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Postcondition" eSuperTypes="#//CommandConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Postcondition" eSuperTypes="#//CommandConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oldValueVariableExpressions"
+        upperBound="-1" eType="#//VariableExpression" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ClassInvariant" eSuperTypes="#//Constraint"/>
   <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true" eSuperTypes="#//TypedElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="NotExpression" eSuperTypes="#//Expression">
@@ -74,6 +77,12 @@
     <eLiterals name="GREATER_EQUAL" value="4" literal=">="/>
     <eLiterals name="SMALLER_EQUAL" value="5" literal="&lt;="/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueExpression" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StatementsExpression" eSuperTypes="#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//Statement" containment="true"/>
@@ -111,5 +120,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="EnumLiteralStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="enumLiteral" lowerBound="1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EEnumLiteral"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableUsageStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variableReference" lowerBound="1"
+        eType="#//VariableExpression"/>
   </eClassifiers>
 </ecore:EPackage>

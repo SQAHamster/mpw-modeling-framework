@@ -50,7 +50,8 @@ mapping QueryInput::Precondition::toElement() : QueryModel::Precondition inherit
     commandName := self.name;
 }
 
-mapping QueryInput::Postcondition::toElement() : QueryModel::Postcondition inherits QueryInput::CommandConstraint::toCommandConstraintBase {
+mapping QueryInput::Postcondition::toElement() : QueryModel::Postcondition merges QueryInput::CommandConstraint::toCommandConstraintBase {
+    oldValueVariableExpressions := self.allSubobjectsOfType(OldValueExpression).map toVariableExpression();
     commandName := self.name;
 }
 

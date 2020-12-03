@@ -1,4 +1,5 @@
 import helpers.StatementTransformation;
+import helpers.EmfHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
@@ -6,6 +7,16 @@ modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
 library ExpressionTransformation;
+
+// has to be mapped separately on beginning
+mapping Input::OldValueExpression::toVariableExpression() : QueryModel::VariableExpression {
+    variableName := self.determineVariableName();
+    valueExpression := self.expression.map toExpression();
+    
+    // old value expressions have to be single values
+    assert(not valueExpression.isCollection);
+    eType := valueExpression.eType;
+}
 
 mapping Input::Expression::toExpression() : QueryModel::Expression
     disjuncts Input::NotExpression::toNotExpression,
@@ -30,9 +41,20 @@ mapping Input::NotExpression::toNotExpression() : QueryModel::NotExpression {
 }
 
 mapping Input::OldValueExpression::toOldExpression() : QueryModel::OldExpression {
-    inner := self.expression.map toExpression();
-    assert(not inner.isCollection);
+    var variableExpression := self.resolveone(QueryModel::VariableExpression);
+    
+    inner := object QueryModel::StatementsExpression {
+        statements += object QueryModel::VariableUsageStatement {
+            variableReference := variableExpression;
+        };
+        eType := variableExpression.eType;
+    };
+    
     eType := inner.eType;
+}
+
+query Input::OldValueExpression::determineVariableName() : String {
+	return "oldValue"; // todo use a more advanced way to choose a variable name: self.expression.allSubobjectsOfKind(Statement)->collect(s|s.target.firstToUpper())->joinToString("");
 }
 
 mapping Input::ImpliesExpression::toImpliesExpression() : QueryModel::ImpliesExpression {

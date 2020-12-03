@@ -54,7 +54,7 @@ query Input::Statement::determineSelfAlias() : String {
 mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement merges Input::Statement::toStatementBase
     when { self.isBasedOnQuery(); } {
     var inputQuery := getAllQueries()->any(q|isStatementMatchingQuery(self, q));
-    _query := inputQuery.late resolveone(QueryModel::Query);
+    _query := inputQuery.late resolveone(QueryModel::Query); // todo: late resolve does not continue the statements below! Rework this.
     eType := _query.eType;
 }
 
@@ -136,11 +136,11 @@ query ecore::EString::findClass() : ecore::EClassifier {
     return EntityModels->collect(p|p.getEClassifier(self))->selectOne(c|c != null).oclAsType(ecore::EClass)
 }
 
-helper Input::Statement::parentExpression() : Input::StatementsExpression {
+query Input::Statement::parentExpression() : Input::StatementsExpression {
     return self.container().oclAsType(querydsl::StatementsExpression);
 }
 
-helper Input::Statement::parentContext() : Input::Context {
+query Input::Statement::parentContext() : Input::Context {
     return self.root().oclAsType(Input::Context);
 }
 
