@@ -24,7 +24,8 @@ mapping Input::Expression::toExpression() : QueryModel::Expression
               Input::ImpliesExpression::toImpliesExpression,
               Input::OrExpression::toOrExpression,
               Input::AndExpression::toAndExpression,
-              Input::EqualityExpression::toEqualityExpression,
+              Input::EqualityExpression::toCompareExpression,
+              Input::ComparisonExpression::toCompareExpression,
               Input::PlusExpression::toCalculationExpression,
               Input::MinusExpression::toCalculationExpression,
               Input::BoolConstant::toConstantExpression,
@@ -84,7 +85,16 @@ mapping Input::AndExpression::toAndExpression() : QueryModel::AndExpression {
     eType := EBoolean.oclAsType(EClassifier);
 }
 
-mapping Input::EqualityExpression::toEqualityExpression() : QueryModel::CompareExpression {
+mapping Input::ComparisonExpression::toCompareExpression() : QueryModel::CompareExpression {
+    lhs := self.left.map toExpression();
+    rhs := self.right.map toExpression();
+    operator := self.op.toOperator();
+    
+    assert(not lhs.isCollection and not rhs.isCollection);
+    eType := EBoolean.oclAsType(EClassifier);
+}
+
+mapping Input::EqualityExpression::toCompareExpression() : QueryModel::CompareExpression {
     lhs := self.left.map toExpression();
     rhs := self.right.map toExpression();
     operator := self.operation.toOperator();
