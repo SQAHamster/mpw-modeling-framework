@@ -1,4 +1,4 @@
-package de.unistuttgart.iste.sqa.mpw.modeling.queries.tests;
+package de.unistuttgart.iste.sqa.mpw.modeling.querydsl.tests;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;

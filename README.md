@@ -20,7 +20,7 @@ Polyglot hamstersimulation, which is based on a Model-Driven-Engineering approac
     * `de.unistuttgart.iste.sqa.mpw.modeling.transformations/model/transformations.genmodel`
 
 * run QueryDsl workflow generation
-    * `de.unistuttgart.iste.sqa.mpw.modeling.queries/src/de/unistuttgart/iste/sqa/mpw/modeling/queries/GenerateQueryDsl.mwe2`
+    * `de.unistuttgart.iste.sqa.mpw.modeling.queries/src/de/unistuttgart/iste/sqa/mpw/modeling/querydsl/GenerateQueryDsl.mwe2`
     
 * run final generation
     * `de.unistuttgart.iste.sqa.mpw.modeling.generator/src/workflow/generator.mwe2`

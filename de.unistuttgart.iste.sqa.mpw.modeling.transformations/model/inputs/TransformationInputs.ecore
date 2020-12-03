@@ -11,6 +11,6 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="QueryInputs">
     <eStructuralFeatures xsi:type="ecore:EReference" name="models" upperBound="-1"
-        eType="ecore:EClass ../../../de.unistuttgart.iste.sqa.mpw.modeling.queries/model/generated/QueryDsl.ecore#//Model"/>
+        eType="ecore:EClass ../../../de.unistuttgart.iste.sqa.mpw.modeling.querydsl/model/generated/QueryDsl.ecore#//Model"/>
   </eClassifiers>
 </ecore:EPackage>

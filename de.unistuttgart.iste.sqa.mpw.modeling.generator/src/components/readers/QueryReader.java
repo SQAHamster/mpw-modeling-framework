@@ -6,8 +6,8 @@ import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 
-import de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDslStandaloneSetup;
-import de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl.Model;
+import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDslStandaloneSetup;
+import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.Model;
 import behaviorInputs.impl.InputsFactoryImpl;
 
 public class QueryReader extends MultiResourceReader {

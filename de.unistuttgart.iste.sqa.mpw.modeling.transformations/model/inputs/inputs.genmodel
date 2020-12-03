@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/de.unistuttgart.iste.sqa.mpw.modeling.transformations/src-gen"
     modelPluginID="de.unistuttgart.iste.sqa.mpw.modeling.transformations" modelName="Transformations"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="5.0" copyrightFields="false" usedGenPackages="../../../org.eclipse.emf.henshin.model/model/henshin.genmodel#//henshin ../../../de.unistuttgart.iste.sqa.mpw.modeling.queries/model/generated/QueryDsl.genmodel#//querydsl"
+    complianceLevel="5.0" copyrightFields="false" usedGenPackages="../../../org.eclipse.emf.henshin.model/model/henshin.genmodel#//henshin ../../../de.unistuttgart.iste.sqa.mpw.modeling.querydsl/model/generated/QueryDsl.genmodel#//querydsl"
     operationReflection="true" importOrganizing="true">
   <foreignModel>TransformationInputs.ecore</foreignModel>
   <genPackages prefix="Inputs" disposableProviderFactory="true" ecorePackage="TransformationInputs.ecore#/">

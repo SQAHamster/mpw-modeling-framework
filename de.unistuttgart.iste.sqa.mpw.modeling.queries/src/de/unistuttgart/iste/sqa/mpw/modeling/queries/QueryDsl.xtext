@@ -1,4 +1,4 @@
-grammar de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl with org.eclipse.xtext.common.Terminals
+grammar de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl with org.eclipse.xtext.common.Terminals
 
 generate querydsl "http://www.mpw.uni-stuttgart.de/querydsl"
 

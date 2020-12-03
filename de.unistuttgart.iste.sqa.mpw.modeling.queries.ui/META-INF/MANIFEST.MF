@@ -1,13 +1,13 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.queries.ui
+Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: de.unistuttgart.iste.sqa.mpw.modeling.queries.ui
+Bundle-Name: de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui
 Bundle-Vendor: My Company
 Bundle-Version: 1.0.0.qualifier
-Bundle-SymbolicName: de.unistuttgart.iste.sqa.mpw.modeling.queries.ui; singleton:=true
+Bundle-SymbolicName: de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui;singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: de.unistuttgart.iste.sqa.mpw.modeling.queries,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.ide,
+Require-Bundle: de.unistuttgart.iste.sqa.mpw.modeling.querydsl,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ide,
  org.eclipse.xtext.ui,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.ui.codetemplates.ui,
@@ -21,7 +21,7 @@ Require-Bundle: de.unistuttgart.iste.sqa.mpw.modeling.queries,
  org.eclipse.xtext.common.types.ui
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-14
-Export-Package: de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.quickfix,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.contentassist,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.internal
-Bundle-Activator: de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.internal.QueriesActivator
+Export-Package: de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.quickfix,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.contentassist,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.internal
+Bundle-Activator: de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.internal.QueriesActivator

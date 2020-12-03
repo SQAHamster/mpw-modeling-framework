@@ -4,48 +4,48 @@
 	<extension
 		point="org.eclipse.ui.editors">
 		<editor
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
 			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
 			default="true"
 			extensions="query"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
 			name="QueryDsl Editor">
 		</editor>
 	</extension>
 	<extension
 		point="org.eclipse.ui.handlers">
 		<handler
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
 			commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
 			<activeWhen>
 				<reference
-					definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened">
+					definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
 		<handler
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
-			commandId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.validate">
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+			commandId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.validate">
 			<activeWhen>
 				<reference
-					definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened">
+					definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
 		<!-- copy qualified name -->
 		<handler
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
 			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
 			<activeWhen>
-				<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened" />
+				<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened" />
 			</activeWhen>
 		</handler>
 		<handler
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
 			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
 			<activeWhen>
 				<and>
-					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.XtextEditor.opened" />
+					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.XtextEditor.opened" />
 					<iterate>
 						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
 					</iterate>
@@ -54,22 +54,22 @@
 		</handler>
 	</extension>
 	<extension point="org.eclipse.core.expressions.definitions">
-		<definition id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened">
+		<definition id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened">
 			<and>
 				<reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
 				<with variable="activeEditor">
 					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
-						value="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
+						value="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
 						forcePluginActivation="true"/>
 				</with>
 			</and>
 		</definition>
-		<definition id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.XtextEditor.opened">
+		<definition id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.XtextEditor.opened">
 			<and>
 				<reference definitionId="isXtextEditorActive"/>
 				<with variable="activeEditor">
 					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
-						value="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
+						value="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
 						forcePluginActivation="true"/>
 				</with>
 			</and>
@@ -78,33 +78,33 @@
 	<extension
 			point="org.eclipse.ui.preferencePages">
 		<page
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
 			name="QueryDsl">
-			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.keyword_QueryDsl"/>
+			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.keyword_QueryDsl"/>
 		</page>
 		<page
-			category="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.coloring"
+			category="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.coloring"
 			name="Syntax Coloring">
-			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.keyword_QueryDsl"/>
+			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.keyword_QueryDsl"/>
 		</page>
 		<page
-			category="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.templates"
+			category="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.templates"
 			name="Templates">
-			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.keyword_QueryDsl"/>
+			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.keyword_QueryDsl"/>
 		</page>
 	</extension>
 	<extension
 			point="org.eclipse.ui.propertyPages">
 		<page
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
 			name="QueryDsl">
-			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.keyword_QueryDsl"/>
+			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.keyword_QueryDsl"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
 			</enabledWhen>
@@ -114,14 +114,14 @@
 	<extension
 		point="org.eclipse.ui.keywords">
 		<keyword
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.keyword_QueryDsl"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.keyword_QueryDsl"
 			label="QueryDsl"/>
 	</extension>
 	<extension
 		point="org.eclipse.ui.commands">
 		<command
 			description="Trigger expensive validation"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.validate"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.validate"
 			name="Validate">
 		</command>
 		<!-- copy qualified name -->
@@ -142,12 +142,12 @@
 		<menuContribution
 			locationURI="popup:#TextEditorContext?after=group.edit">
 			<command
-				commandId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.validate"
+				commandId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.validate"
 				style="push"
 				tooltip="Trigger expensive validation">
 				<visibleWhen checkEnabled="false">
 					<reference
-						definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened">
+						definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened">
 					</reference>
 				</visibleWhen>
 			</command>
@@ -157,7 +157,7 @@
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
 				style="push" tooltip="Copy Qualified Name">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened" />
+					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened" />
 				</visibleWhen>
 			</command>
 		</menuContribution>
@@ -165,7 +165,7 @@
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
 				style="push" tooltip="Copy Qualified Name">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened" />
+					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened" />
 				</visibleWhen>
 			</command>
 		</menuContribution>
@@ -174,7 +174,7 @@
 				style="push" tooltip="Copy Qualified Name">
 				<visibleWhen checkEnabled="false">
 					<and>
-						<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.XtextEditor.opened" />
+						<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.XtextEditor.opened" />
 						<iterate>
 							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
 						</iterate>
@@ -187,7 +187,7 @@
 		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
 			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened">
+					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened">
 					</reference>
 				</visibleWhen>
 			</command>
@@ -195,11 +195,11 @@
 	</extension>
 	<extension point="org.eclipse.ui.handlers">
 		<handler
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
 			commandId="org.eclipse.xtext.ui.editor.FindReferences">
 			<activeWhen>
 				<reference
-					definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened">
+					definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
@@ -208,7 +208,7 @@
 		<content-type
 			base-type="org.eclipse.core.runtime.text"
 			file-extensions="query"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.contenttype"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.contenttype"
 			name="QueryDsl File"
 			priority="normal">
 		</content-type>
@@ -217,17 +217,17 @@
 	<extension
 		point="org.eclipse.emf.ecore.extension_parser">
 		<parser
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
 			type="query">
 		</parser>
 	</extension>
 	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
 		<resourceServiceProvider
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
 			uriExtension="query">
 		</resourceServiceProvider>
 	</extension>
-	<!-- marker definitions for de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl -->
+	<!-- marker definitions for de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl -->
 	<extension
 			id="querydsl.check.fast"
 			name="QueryDsl Problem"
@@ -251,34 +251,34 @@
 	</extension>
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
-			category="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.validator.preferencePage"
+			category="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.validator.preferencePage"
 			name="Errors/Warnings">
-			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.keyword_QueryDsl"/>
+			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.keyword_QueryDsl"/>
 		</page>
 	</extension>
 	<extension point="org.eclipse.xtext.builder.participant">
 		<participant
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
 			fileExtensions="query"/>
 	</extension>
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
-			category="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.compiler.preferencePage"
+			category="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.compiler.preferencePage"
 			name="Compiler">
-			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.keyword_QueryDsl"/>
+			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.keyword_QueryDsl"/>
 		</page>
 	</extension>
 	<extension point="org.eclipse.ui.propertyPages">
 		<page
-			category="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.compiler.propertyPage"
+			category="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.compiler.propertyPage"
 			name="Compiler">
-			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.keyword_QueryDsl"/>
+			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.keyword_QueryDsl"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
 			</enabledWhen>
@@ -289,20 +289,20 @@
 		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
 			<command
 				commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand"
-				id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.OpenGeneratedCode"
+				id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.OpenGeneratedCode"
 				style="push">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened" />
+					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened" />
 				</visibleWhen>
 			</command>
 		</menuContribution>
 	</extension>
 	<extension point="org.eclipse.ui.handlers">
 		<handler
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
 			commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand">
 			<activeWhen>
-				<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened" />
+				<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened" />
 			</activeWhen>
 		</handler>
 	</extension>
@@ -310,11 +310,11 @@
 	<extension
 		point="org.eclipse.ui.handlers">
 		<handler
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
 			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
 			<activeWhen>
 				<reference
-					definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened">
+					definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
@@ -334,33 +334,33 @@
 				style="push"
 				tooltip="Open Quick Outline">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened"/>
+					<reference definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened"/>
 				</visibleWhen>
 			</command>
 		</menuContribution>
 	</extension>
-	<!-- quickfix marker resolution generator for de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl -->
+	<!-- quickfix marker resolution generator for de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl -->
 	<extension
 			point="org.eclipse.ui.ide.markerResolution">
 		<markerResolutionGenerator
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
-			markerType="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.querydsl.check.fast">
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.querydsl.check.fast">
 			<attribute
 				name="FIXABLE_KEY"
 				value="true">
 			</attribute>
 		</markerResolutionGenerator>
 		<markerResolutionGenerator
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
-			markerType="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.querydsl.check.normal">
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.querydsl.check.normal">
 			<attribute
 				name="FIXABLE_KEY"
 				value="true">
 			</attribute>
 		</markerResolutionGenerator>
 		<markerResolutionGenerator
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
-			markerType="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.querydsl.check.expensive">
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.querydsl.check.expensive">
 			<attribute
 				name="FIXABLE_KEY"
 				value="true">
@@ -370,11 +370,11 @@
 	<!-- Rename Refactoring -->
 	<extension point="org.eclipse.ui.handlers">
 		<handler
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
 			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
 			<activeWhen>
 				<reference
-					definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened">
+					definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
@@ -386,7 +386,7 @@
 				style="push">
 				<visibleWhen checkEnabled="false">
 					<reference
-						definitionId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.Editor.opened">
+						definitionId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.Editor.opened">
 					</reference>
 				</visibleWhen>
 			</command>
@@ -394,34 +394,34 @@
 	</extension>
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
-			category="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
-			id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.refactoring"
+			category="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+			id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.refactoring"
 			name="Refactoring">
-			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.keyword_QueryDsl"/>
+			<keywordReference id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.keyword_QueryDsl"/>
 		</page>
 	</extension>
 	<extension point="org.eclipse.compare.contentViewers">
-		<viewer id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.compare.contentViewers"
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+		<viewer id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.compare.contentViewers"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
 			extensions="query">
 		</viewer>
 		<contentTypeBinding
-			contentTypeId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.contenttype"
-			contentViewerId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.compare.contentViewers" />
+			contentTypeId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.contenttype"
+			contentViewerId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.compare.contentViewers" />
 	</extension>
 	<extension point="org.eclipse.compare.contentMergeViewers">
-		<viewer id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.compare.contentMergeViewers"
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+		<viewer id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.compare.contentMergeViewers"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
 			extensions="query" label="QueryDsl Compare">
 		</viewer>
 		<contentTypeBinding
-			contentTypeId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.contenttype"
-			contentMergeViewerId="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.compare.contentMergeViewers" />
+			contentTypeId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.contenttype"
+			contentMergeViewerId="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.compare.contentMergeViewers" />
 	</extension>
 	<extension point="org.eclipse.ui.editors.documentProviders">
-		<provider id="de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl.editors.documentProviders"
-			class="de.unistuttgart.iste.sqa.mpw.modeling.queries.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+		<provider id="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl.editors.documentProviders"
+			class="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.QueryDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
 			extensions="query">
 		</provider>
 	</extension>

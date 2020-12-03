@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.queries
+Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.querydsl
 Bundle-ManifestVersion: 2
-Bundle-Name: de.unistuttgart.iste.sqa.mpw.modeling.queries
+Bundle-Name: de.unistuttgart.iste.sqa.mpw.modeling.querydsl
 Bundle-Vendor: My Company
 Bundle-Version: 1.0.0.qualifier
-Bundle-SymbolicName: de.unistuttgart.iste.sqa.mpw.modeling.queries; singleton:=true
+Bundle-SymbolicName: de.unistuttgart.iste.sqa.mpw.modeling.querydsl;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext,
  org.eclipse.xtext.xbase,
@@ -18,15 +18,15 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.xtext.common.types,
  org.objectweb.asm;bundle-version="[8.0.1,8.1.0)";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-14
-Export-Package: de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.scoping,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl.impl,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.services,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.generator,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.parser.antlr.internal,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.parser.antlr,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.serializer,
- de.unistuttgart.iste.sqa.mpw.modeling.queries,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl.util,
- de.unistuttgart.iste.sqa.mpw.modeling.queries.validation
+Export-Package: de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.scoping,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.impl,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.services,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.generator,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.parser.antlr.internal,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.parser.antlr,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.serializer,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.util,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl.validation
 Import-Package: org.apache.log4j

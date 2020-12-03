@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.henshin.model;visibility:=reexport,
  org.eclipse.m2m.qvt.oml,
- de.unistuttgart.iste.sqa.mpw.modeling.queries;bundle-version="1.0.0";visibility:=reexport
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl;bundle-version="1.0.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-14
 Export-Package: commandBehavior,

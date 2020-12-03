@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <uriMap:MappingContainer xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:uriMap="http:///www.eclipse.org/m2m/qvt/oml/MModelUriMap/1.0.0">
   <mapping sourceURI="http://www.mpw.uni-stuttgart.de/behavior/command" targetURI="platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.transformations/model/CommandBehaviors.ecore"/>
-  <mapping sourceURI="http://www.mpw.uni-stuttgart.de/querydsl" targetURI="platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.queries/model/generated/QueryDsl.ecore"/>
+  <mapping sourceURI="http://www.mpw.uni-stuttgart.de/querydsl" targetURI="platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.querydsl/model/generated/QueryDsl.ecore"/>
   <mapping sourceURI="http://www.mpw.uni-stuttgart.de/behavior/query" targetURI="platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.transformations/model/QueryBehaviors.ecore"/>
   <mapping sourceURI="http://www.mpw.uni-stuttgart.de/transformation/inputs" targetURI="platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.transformations/model/inputs/TransformationInputs.ecore"/>
 </uriMap:MappingContainer>

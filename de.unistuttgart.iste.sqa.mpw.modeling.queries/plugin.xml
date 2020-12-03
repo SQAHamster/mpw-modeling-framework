@@ -4,7 +4,7 @@
 	<extension point="org.eclipse.emf.ecore.generated_package">
 		<package
 			uri = "http://www.mpw.uni-stuttgart.de/querydsl"
-			class = "de.unistuttgart.iste.sqa.mpw.modeling.queries.querydsl.QuerydslPackage"
+			class = "de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.QuerydslPackage"
 			genModel = "model/generated/QueryDsl.genmodel" />
 	</extension>
 </plugin>

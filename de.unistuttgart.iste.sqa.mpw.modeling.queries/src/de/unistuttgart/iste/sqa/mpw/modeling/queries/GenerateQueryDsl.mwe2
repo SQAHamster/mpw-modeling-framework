@@ -1,4 +1,4 @@
-module de.unistuttgart.iste.sqa.mpw.modeling.queries.GenerateQueryDsl
+module de.unistuttgart.iste.sqa.mpw.modeling.querydsl.GenerateQueryDsl
 
 import org.eclipse.emf.mwe.utils.StandaloneSetup
 import org.eclipse.xtext.xtext.generator.*
@@ -16,7 +16,7 @@ Workflow {
 	component = XtextGenerator {
 		configuration = {
 			project = StandardProjectConfig {
-				baseName = "de.unistuttgart.iste.sqa.mpw.modeling.queries"
+				baseName = "de.unistuttgart.iste.sqa.mpw.modeling.querydsl"
 				rootPath = rootPath
 				runtimeTest = {
 					enabled = true
@@ -34,7 +34,7 @@ Workflow {
 			}
 		}
 		language = StandardLanguage {
-			name = "de.unistuttgart.iste.sqa.mpw.modeling.queries.QueryDsl"
+			name = "de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDsl"
 			fileExtensions = "query"
 
 			serializer = {
