@@ -16,7 +16,18 @@ main() {
 
 mapping Input::QueryInputs::toQueryModel() : QueryModel::Module {
     name := "queries";
-    elements := self.models->collect(subobjectsOfKind(QueryInput::Element))->flatten()->map toElement();
+    elements := self.models->collect(subobjectsOfKind(QueryInput::Element))->flatten()->sortElements()->map toElement();
+}
+
+helper Sequence(QueryInput::Element)::sortElements(): Sequence(Element) {
+	return self->sortedBy(e|e.toSortPriority());
+}
+
+query QueryInput::Element::toSortPriority() : Integer {
+	if (self.allSubobjectsOfType(QueryInput::Statement)->select(s|s.isBasedOnQuery())->isEmpty()) {
+	    return 0;
+	};
+	return 1;
 }
 
 abstract mapping QueryInput::Element::toElement() : QueryModel::ExpressionalElement;

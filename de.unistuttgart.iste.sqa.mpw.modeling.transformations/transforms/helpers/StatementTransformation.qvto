@@ -54,7 +54,8 @@ query Input::Statement::determineSelfAlias() : String {
 mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement merges Input::Statement::toStatementBase
     when { self.isBasedOnQuery(); } {
     var inputQuery := getAllQueries()->any(q|isStatementMatchingQuery(self, q));
-    _query := inputQuery.late resolveone(QueryModel::Query); // todo: late resolve does not continue the statements below! Rework this.
+    _query := inputQuery.resolveone(QueryModel::Query);
+    assert(_query != null) with log('query ' + inputQuery.name + ' could not be resolved');
     eType := _query.eType;
 }
 
