@@ -16,6 +16,10 @@
     «selfAlias»
 «ENDDEFINE»
 
+«DEFINE StatementDefinition FOR ParameterUsageStatement-»
+    «parameterName»
+«ENDDEFINE»
+
 «DEFINE StatementDefinition FOR FeatureStatement-»
     «feature.name.getter()»()
 «ENDDEFINE»

@@ -17,6 +17,7 @@ property currentExpressionTypeCollectionInfo: Dict(Input::Expression, ecore::EBo
 
 mapping Input::Statement::toStatement() : QueryModel::Statement
     disjuncts Input::Statement::toSelfStatement,
+              Input::Statement::toParameterUsageStatement,
               Input::Statement::toQueryStatement,
               Input::Statement::toFeatureStatement,
               Input::Statement::toCollectionMethodStatement,
@@ -41,6 +42,14 @@ mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement merges I
     when { self.target = "self"; } {
     eType := self.parentContext().className.resolveone(ecore::EClass);
     selfAlias := self.determineSelfAlias();
+}
+
+mapping Input::Statement::toParameterUsageStatement() : QueryModel::ParameterUsageStatement merges Input::Statement::toStatementBase
+    when { self.parentElement().oclAsType(Input::CommandConstraint).parameterList.parameters->exists(p|p.variableName = self.target); } {
+    var parameter := self.parentElement().oclAsType(Input::CommandConstraint).parameterList.parameters->any(p|p.variableName = self.target);
+    eType := findClassifierForName(parameter.typeName);
+    parameterName := parameter.variableName;
+    isCollection := false;
 }
 
 query Input::Statement::determineSelfAlias() : String {
