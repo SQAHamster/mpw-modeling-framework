@@ -7,20 +7,3 @@ import queryBehavior;
  */
 
 String getModulePackage() : GLOBALVAR module_package;
-
-List[Query] getQueriesForType(EClass class) : 
-    getQueries().select(q|q.contextClass == class);
-
-Query getQueryForOperation(EOperation operation) : 
-    operation.eAnnotations.selectFirst(a|a.source == "query").contents.first();
-    
-List[Query] getQueries() : getQueryModules().first().elements.typeSelect(Query);
-List[Precondition] getPreconditions() : getQueryModules().first().elements.typeSelect(Precondition);
-private List[queryBehavior::Module] getQueryModules() : GLOBALVAR queries;
-
-Transformation getCommandForOperation(EOperation operation) : 
-    getCommands()
-    // TODO embed commands also as annotation to avoid this name endsWith check
-    .select(c|operation.eContainingClass.name.endsWith(c.targetClass.name) && c.name == operation.name);
-
-private List[Transformation] getCommands() : GLOBALVAR commands;

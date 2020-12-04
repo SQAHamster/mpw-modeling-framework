@@ -11,6 +11,9 @@ getCommandJavaPackagePath(Transformation this) :
 getCommandJavaPackageName(Transformation this) :
   getModulePackage() + ".commands";
 
+Transformation getCommandForOperation(EOperation operation) : 
+    operation.eAnnotations.selectFirst(a|a.source == "command").contents.first();
+
 getConcreteName(EClass this) : "Concrete" + name;
 
 getConcreteTypeName(InstanceCondition this) :

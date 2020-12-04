@@ -1,7 +1,7 @@
 import ecore;
 
 extension template::types::EmfGeneratorExtensions;
-extension template::util::GlobalsGeneratorExtensions;
+extension template::commands::CommandGeneratorExtensions;
 extension util::Extensions;
 
 /*

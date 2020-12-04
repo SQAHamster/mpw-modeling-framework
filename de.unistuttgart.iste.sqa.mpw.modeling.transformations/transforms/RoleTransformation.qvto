@@ -114,7 +114,10 @@ helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ec
 
 mapping CommandModel::Transformation::transformCommandToOperation() : EOperation {
 	name := self.name;
-	eAnnotations += "command".toMarkerAnnotation();
+	var annotation := "command".toMarkerAnnotation();
+	eAnnotations += annotation;
+	
+    annotation.contents += self.oclAsType(ecore::EObject).deepclone();
 }
 
 mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {

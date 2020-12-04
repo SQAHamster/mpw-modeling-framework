@@ -1,3 +1,4 @@
+import ecore;
 import queryBehavior;
 
 /*
@@ -21,3 +22,6 @@ toOperatorCode(CalculationOperator this) :
        case CalculationOperator::MINUS: "-"
        default: ""
     };
+
+Query getQueryForOperation(EOperation operation) : 
+    operation.eAnnotations.selectFirst(a|a.source == "query").contents.first();
