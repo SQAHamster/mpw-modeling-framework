@@ -43,6 +43,7 @@ Workflow {
 		registerGeneratedEPackage="commandBehavior.CommandPackage"
         registerGeneratedEPackage="queryBehavior.QueryPackage"
         registerGeneratedEPackage="behaviorInputs.InputsPackage"
+        registerGeneratedEPackage="generationAnnotations.GenerationAnnotationsPackage"
 	}
 	
 	/** instantiate metamodel */

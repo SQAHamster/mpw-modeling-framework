@@ -64,7 +64,7 @@ mapping inout EClass::useFacades() {
     	if (f.eType.isMarkedWithAnnotation("role")) {
     	    var baseName := f.eType.getAnnotationValue("baseName");
     		f.eType := findClassForName(baseName);
-    		f.eAnnotations += object FacadeElementFieldInitialization {
+    		f.eAnnotations += object FacadeElementFieldInitializationAnnotation {
     			field := f;
     		};
     		f.eAnnotations += object EAnnotation {

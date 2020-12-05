@@ -18,7 +18,7 @@
       <!-- @generated transformations -->
       <package
             uri="http://www.mpw.uni-stuttgart.de/generation/annotations"
-            class="generationannotations.GenerationannotationsPackage"
+            class="generationAnnotations.GenerationAnnotationsPackage"
             genModel="model/transformations.genmodel"/>
    </extension>
 

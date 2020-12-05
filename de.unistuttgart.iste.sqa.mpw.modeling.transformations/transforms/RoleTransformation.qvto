@@ -118,6 +118,7 @@ helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ec
 
 mapping CommandModel::Transformation::transformCommandToOperation() : EOperation {
 	name := self.name;
+	
 	var annotation := "command".toMarkerAnnotation();
 	eAnnotations += annotation;
 	

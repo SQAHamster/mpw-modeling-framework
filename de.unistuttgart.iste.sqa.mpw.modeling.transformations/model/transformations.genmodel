@@ -104,28 +104,39 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Condition/unit"/>
     </genClasses>
   </genPackages>
-  <genPackages prefix="Generationannotations" disposableProviderFactory="true" ecorePackage="GenerationAnnotations.ecore#/">
+  <genPackages prefix="GenerationAnnotations" disposableProviderFactory="true" ecorePackage="GenerationAnnotations.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="GenerationAnnotations.ecore#//Visibility">
       <genEnumLiterals ecoreEnumLiteral="GenerationAnnotations.ecore#//Visibility/PRIVATE"/>
       <genEnumLiterals ecoreEnumLiteral="GenerationAnnotations.ecore#//Visibility/PUBLIC"/>
       <genEnumLiterals ecoreEnumLiteral="GenerationAnnotations.ecore#//Visibility/INTERNAL"/>
     </genEnums>
+    <genClasses image="false" ecoreClass="GenerationAnnotations.ecore#//GenerationAnnotation"/>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//ConstructorAnnotation"/>
-    <genClasses image="false" ecoreClass="GenerationAnnotations.ecore#//FieldAssignment">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//FieldAssignment/targetFeature"/>
+    <genClasses image="false" ecoreClass="GenerationAnnotations.ecore#//FieldAssignmentAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//FieldAssignmentAnnotation/targetFeature"/>
     </genClasses>
-    <genClasses ecoreClass="GenerationAnnotations.ecore#//ParameterToFieldAssignment">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//ParameterToFieldAssignment/parameter"/>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//ParameterToFieldAssignmentAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//ParameterToFieldAssignmentAnnotation/parameter"/>
     </genClasses>
-    <genClasses ecoreClass="GenerationAnnotations.ecore#//GetInternalRoleFieldAssignment">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//GetInternalRoleFieldAssignment/parameter"/>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//GetInternalRoleFieldAssignmentAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//GetInternalRoleFieldAssignmentAnnotation/parameter"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="GenerationAnnotations.ecore#//FieldInitialization"/>
-    <genClasses ecoreClass="GenerationAnnotations.ecore#//FacadeElementFieldInitialization">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//FacadeElementFieldInitialization/field"/>
+    <genClasses image="false" ecoreClass="GenerationAnnotations.ecore#//FieldInitializationAnnotation"/>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//FacadeElementFieldInitializationAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//FacadeElementFieldInitializationAnnotation/field"/>
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//VisibilityAnnotation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VisibilityAnnotation/visibility"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//CommandCallAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandCallAnnotation/command"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//QueryCallAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//QueryCallAnnotation/query"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//QueryCallAnnotation/internalRoleField"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//GetPropertyAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//GetPropertyAnnotation/field"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Query" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#/">

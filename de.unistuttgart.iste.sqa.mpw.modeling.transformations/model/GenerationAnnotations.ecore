@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generationannotations" nsURI="http://www.mpw.uni-stuttgart.de/generation/annotations"
-    nsPrefix="generationannotations">
-  <eClassifiers xsi:type="ecore:EClass" name="ConstructorAnnotation"/>
-  <eClassifiers xsi:type="ecore:EClass" name="FieldAssignment" abstract="true" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EAnnotation">
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generationAnnotations" nsURI="http://www.mpw.uni-stuttgart.de/generation/annotations"
+    nsPrefix="generationAnnotations">
+  <eClassifiers xsi:type="ecore:EClass" name="GenerationAnnotation" abstract="true"
+      eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EAnnotation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstructorAnnotation" eSuperTypes="#//GenerationAnnotation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldAssignmentAnnotation" abstract="true"
+      eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetFeature" lowerBound="1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ParameterToFieldAssignment" eSuperTypes="#//FieldAssignment">
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterToFieldAssignmentAnnotation"
+      eSuperTypes="#//FieldAssignmentAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EParameter"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GetInternalRoleFieldAssignment" eSuperTypes="#//FieldAssignment">
+  <eClassifiers xsi:type="ecore:EClass" name="GetInternalRoleFieldAssignmentAnnotation"
+      eSuperTypes="#//FieldAssignmentAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EParameter"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FieldInitialization" abstract="true"
-      eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EAnnotation"/>
-  <eClassifiers xsi:type="ecore:EClass" name="FacadeElementFieldInitialization" eSuperTypes="#//FieldInitialization">
+  <eClassifiers xsi:type="ecore:EClass" name="FieldInitializationAnnotation" abstract="true"
+      eSuperTypes="#//GenerationAnnotation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FacadeElementFieldInitializationAnnotation"
+      eSuperTypes="#//FieldInitializationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VisibilityAnnotation" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EAnnotation">
+  <eClassifiers xsi:type="ecore:EClass" name="VisibilityAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" lowerBound="1"
         eType="#//Visibility"/>
   </eClassifiers>
@@ -28,5 +34,17 @@
     <eLiterals name="PRIVATE"/>
     <eLiterals name="PUBLIC" value="1"/>
     <eLiterals name="INTERNAL" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandCallAnnotation" eSuperTypes="#//GenerationAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="command" lowerBound="1"
+        eType="ecore:EClass CommandBehaviors.ecore#//Transformation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryCallAnnotation" eSuperTypes="#//GenerationAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1" eType="ecore:EClass QueryBehaviors.ecore#//Query"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="internalRoleField" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GetPropertyAnnotation" eSuperTypes="#//GenerationAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -1,6 +1,7 @@
 «IMPORT ecore»
 «IMPORT commandBehavior»
 «IMPORT queryBehavior»
+«IMPORT generationAnnotations»
 
 «EXTENSION template::GeneratorExtensions»
 
@@ -12,20 +13,43 @@
     «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
     
     import de.unistuttgart.hamster.mpw.*;
+    import de.unistuttgart.hamster.commands.*;
     
-    class «name» {
-        «FOREACH eStructuralFeatures AS f»«f.eType.name» «f.name»;
-        «ENDFOREACH»
+    public class «name» {
+        «FOREACH eStructuralFeatures AS f-»
+            private «f.eType.name» «f.name»;
+        «ENDFOREACH-»
         
-        «FOREACH eOperations AS o»«o.operationToJavaType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.name.toJavaType()» «p.name»«ENDFOREACH») {
-            «FOREACH o.eAnnotations.select(a|a.source == "body") AS a»
-                «FOREACH a.eAnnotations.select(an|an.source == "assign") AS nestedAnnotation»
-                    this.«((EReference)nestedAnnotation.references.get(0)).name» = «((EParameter)nestedAnnotation.references.get(1)).name» ;
-                «ENDFOREACH»
-            «ENDFOREACH»
-                throw new RuntimeException("dummy");
+        «FOREACH eOperations AS o-»
+            public «o.operationToJavaType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.name.toJavaType()» «p.name»«ENDFOREACH») {
+            «EXPAND GenerationAnnotation FOREACH o.eAnnotations»
             }
         «ENDFOREACH»
+        «EXPAND GenerationAnnotation FOREACH eAnnotations»
     }
     «ENDFILE»
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR CommandCallAnnotation»
+    var parameters = new «command.name.toFirstUpper()»CommandParameters();
+    parameters.commandStack = game.getCommandStack();
+    «FOREACH command.mainUnit.parameters AS p-»
+         parameters.«p.name» = «IF p.type == "GameTerritory"»«p.name».getInternalTerritory()«ELSE»«p.name»«ENDIF»; «REM»TODO: solve by transformation logic«ENDREM» 
+    «ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR QueryCallAnnotation»
+    return «internalRoleField.name».«query.name»(); 
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR ParameterToFieldAssignmentAnnotation»
+    this.«targetFeature.name» = «parameter.name» ;
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR GetPropertyAnnotation»
+    public «field.featureToJavaType()» «field.name.getter()»() {
+        return this.«field.name»;
+    }
 «ENDDEFINE»

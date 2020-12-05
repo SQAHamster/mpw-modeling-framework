@@ -24,18 +24,30 @@
 			«ENDFOREACH»
 			«ENDIF»
 		
-			public «name.toFirstUpper()»Command(«targetClass.getConcreteName()» self«FOREACH mainUnit.parameters AS p», «p.type.toJavaType()» «p.name»«ENDFOREACH») {
-				this.thisInstance = self;
-				
-				«IF mainUnit != null»
-				«FOREACH mainUnit.parameters AS p»
-				this.«p.name» = «p.name»;
-				«ENDFOREACH»
-				«ENDIF»
+			public «name.toFirstUpper()»Command(«name.toFirstUpper()»CommandParameters parameters) {
+				this.thisInstance = parameters.self;
+				«FOREACH mainUnit.parameters AS p-»
+                   this.«p.name» = parameters.«p.name»;
+                «ENDFOREACH-»
 			}
 		
 			«EXPAND UnitExpand FOR mainUnit»
             «EXPAND UnitExpand FOREACH units.excluding(mainUnit)»
+        }
+    «ENDFILE»
+    «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "CommandParameters.java"»package «this.getCommandJavaPackageName()»;
+        
+        «EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
+        import «getModulePackage()».mpw.*;
+        import «getModulePackage()».command.*;
+        import de.unistuttgart.hamster.command.impl.*;
+        
+        public class «name.toFirstUpper()»CommandParameters {
+            public «targetClass.getConcreteName()» self;
+            public CommandStack commandStack;
+            «FOREACH mainUnit.parameters AS p»
+            public «p.type.toJavaType()» «p.name»;
+            «ENDFOREACH»
         }
     «ENDFILE»
 «ENDDEFINE»
