@@ -1,4 +1,5 @@
 import helpers.AnnotationHelpers;
+import helpers.EmfHelpers;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
@@ -47,6 +48,7 @@ helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
   	interface := true;
   	eAnnotations += toAnnotation("role", "readonly");
   	eAnnotations += toAnnotation("baseName", baseName);
+  	eSuperTypes += findClassForName("Entity");
   };
   readOnlyRole.eOperations += self.eAllStructuralFeatures->select(f|f.changeable)
             											 ->map transformFeatureToGetterOperation();

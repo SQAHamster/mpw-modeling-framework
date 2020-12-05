@@ -1,5 +1,6 @@
 import helpers.RuleReferenceSorter;
 import helpers.EmfHelpers;
+import helpers.BasicHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
@@ -360,7 +361,7 @@ query Henshin::Node::resolveInstance() : CommandModel::InstanceCondition {
 
 query ecore::EClassifier::toTypeName() : String {
     if (self.oclAsType(EClass).eSuperTypes->exists(t|t.name = "Stage" or t.name = "Actor")) {
-    	return "Concrete" + self.name;
+    	return SourceModelUri.toRole().firstToUpper() + self.name;
     };
 	return self.name;
 }
