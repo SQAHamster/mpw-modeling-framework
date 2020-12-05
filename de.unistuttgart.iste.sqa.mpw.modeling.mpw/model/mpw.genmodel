@@ -49,11 +49,12 @@
     <genClasses ecoreClass="Hamster.ecore#//Hamster">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Hamster.ecore#//Hamster/grains"/>
     </genClasses>
-    <genClasses ecoreClass="Hamster.ecore#//Territory"/>
+    <genClasses ecoreClass="Hamster.ecore#//Territory">
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference Hamster.ecore#//Territory/defaultHamster"/>
+    </genClasses>
     <genClasses ecoreClass="Hamster.ecore#//Grain"/>
     <genClasses ecoreClass="Hamster.ecore#//Wall"/>
     <genClasses ecoreClass="Hamster.ecore#//HamsterGame">
-      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference Hamster.ecore#//HamsterGame/defaultHamster"/>
       <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference Hamster.ecore#//HamsterGame/territory"/>
     </genClasses>
   </genPackages>

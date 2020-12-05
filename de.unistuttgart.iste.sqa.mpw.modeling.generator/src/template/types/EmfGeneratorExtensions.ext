@@ -1,4 +1,5 @@
 import ecore;
+import generationannotations;
 
 extension template::operations::OperationGeneratorExtensions;
 extension template::types::MetaModelGeneratorExtensions;
@@ -73,7 +74,8 @@ private elementToJavaType(ETypedElement this) :
 	else this.eType.name.toJavaType();
 
 featureToFieldInstantiation(EStructuralFeature this) :
-	if (this.upperBound == -1) then "new ArrayList<>()"
+    if (this.eAnnotations.typeSelect(FacadeElementFieldInitialization).size > 0) then this.eAnnotations.typeSelect(FacadeElementFieldInitialization).first().toInitialization()
+	else if (this.upperBound == -1) then "new ArrayList<>()"
 	else if (this.eType.needsImplSubclass()) then "new " + this.eType.ePackage.toJavaPackageName() + ".impl." + this.eType.name + "Impl()"
 	else "new " + this.eType.name.toUnboxedJavaTypeName() + "()";
 	
@@ -83,6 +85,9 @@ toUnboxedJavaTypeName(String this) :
 	else if (this == "EString") then "String"
 	else if (this == "EObject") then "Object"
 	else this;
+	
+toInitialization(FacadeElementFieldInitialization this) :
+	"new " + field.eType.name + "(this)";
 	
 defaultValueOf(EStructuralFeature f) :
     if (f.eType == "EInt") then "0"

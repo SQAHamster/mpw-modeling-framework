@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generationannotations" nsURI="http://www.mpw.uni-stuttgart.de/generation/annotations"
+    nsPrefix="generationannotations">
+  <eClassifiers xsi:type="ecore:EClass" name="ConstructorAnnotation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldAssignment" abstract="true" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetFeature" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterToFieldAssignment" eSuperTypes="#//FieldAssignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EParameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GetInternalRoleFieldAssignment" eSuperTypes="#//FieldAssignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EParameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldInitialization" abstract="true"
+      eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EAnnotation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FacadeElementFieldInitialization" eSuperTypes="#//FieldInitialization">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VisibilityAnnotation" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" lowerBound="1"
+        eType="#//Visibility"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Visibility">
+    <eLiterals name="PRIVATE"/>
+    <eLiterals name="PUBLIC" value="1"/>
+    <eLiterals name="INTERNAL" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

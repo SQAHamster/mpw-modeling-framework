@@ -17,6 +17,14 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated transformations -->
       <package
+            uri="http://www.mpw.uni-stuttgart.de/generation/annotations"
+            class="generationannotations.GenerationannotationsPackage"
+            genModel="model/transformations.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated transformations -->
+      <package
             uri="http://www.mpw.uni-stuttgart.de/behavior/query"
             class="queryBehavior.QueryPackage"
             genModel="model/transformations.genmodel"/>

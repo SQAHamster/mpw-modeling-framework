@@ -8,8 +8,6 @@ modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
 transformation TransformQueryDsl2Query(in inModel: QueryInput, out outModel: QueryModel);
 
-configuration property EntityModels: List(EPackage);
-
 main() {
     inModel.rootObjects()[Input::QueryInputs]->map toQueryModel();
 }

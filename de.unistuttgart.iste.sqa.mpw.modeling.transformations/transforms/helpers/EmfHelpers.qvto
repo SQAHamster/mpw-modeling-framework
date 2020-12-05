@@ -4,6 +4,10 @@ library EmfHelpers;
 
 configuration property EntityModels: List(EPackage);
 
+helper addEntityModelToGlobalSearchList(newPackage: EPackage) {
+    EntityModels += newPackage;
+}
+
 helper Element::root() : Element {
     var element := self;
     while (element.container() != null) {
@@ -27,5 +31,9 @@ query findClassifierForName(name: String) : ecore::EClassifier {
 query findInstanceOfMetaClass(name: String) : ecore::EClassifier {
     return EntityModels->collect(p|p.eClassifiers[EClass])
                        ->flatten()
-                       ->selectOne(c|c.eSuperTypes->exists(t|t.name = name));
+                       ->selectOne(c|c.isInstanceOf(name));
+}
+
+query EClass::isInstanceOf(name: String) : Boolean {
+    return self.eSuperTypes->exists(t|t.name = name);
 }

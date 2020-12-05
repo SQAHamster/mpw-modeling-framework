@@ -1,3 +1,5 @@
+import facade.FacadeElementsLibrary;
+
 import helpers.AnnotationHelpers;
 import helpers.EmfHelpers;
 
@@ -5,11 +7,13 @@ modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
 modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
 modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
+modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
 transformation GenerationClassesTransformation(in inEcore: Ecore, out outEcore: Ecore);
 
 configuration property Queries: List(QueryModel::Module);
 configuration property Commands: List(CommandModel::Transformation);
+configuration property EntityModels: List(CommandModel::Transformation);
 
 main() {
     inEcore.rootObjects()[EPackage]->map transformPackage();
@@ -22,7 +26,15 @@ mapping EPackage::transformPackage() : EPackage {
     // eClassifiers := self.eClassifiers->map toClassifier();
     // eClassifiers += self.eClassifiers[EClass]->map toImplClass();
     
-    eClassifiers += self.eClassifiers[EClass][hasAnnotationValue("role", "game")]->map toGameFacadeClass();
+    addEntityModelToGlobalSearchList(result);
+    
+    var facadeClasses := self.eClassifiers[EClass][hasAnnotationValue("role", "game")]->map toGameFacadeClass();
+    eClassifiers += facadeClasses;
+    
+    // generate elements of facade after classes are created, since they may rely on other facade types
+    facadeClasses->map createElements();
+    
+    self.eClassifiers[EClass][isInstanceOf("MiniProgrammingWorld")]->map useFacades();
 }
 
 mapping EClassifier::toClassifier() : EClassifier
@@ -41,60 +53,26 @@ mapping EClass::toImplClass() : EClass {
     name := self.name + "Impl";
 }
 
-abstract mapping EClass::toGameFacadeClassBase() : EClass {
+mapping EClass::toGameFacadeClass() : EClass {
     var baseName := self.getAnnotationValue("baseName");
     name := baseName;
-    eStructuralFeatures += object EReference {
-        name := "game";
-        eType := findInstanceOfMetaClass("MiniProgrammingWorld");	
+}
+
+// MiniProgrammingWorld classes have to use facade classes
+mapping inout EClass::useFacades() {
+    eReferences->forEach(f) {
+    	if (f.eType.isMarkedWithAnnotation("role")) {
+    	    var baseName := f.eType.getAnnotationValue("baseName");
+    		f.eType := findClassForName(baseName);
+    		f.eAnnotations += object FacadeElementFieldInitialization {
+    			field := f;
+    		};
+    		f.eAnnotations += object EAnnotation {
+    			source := "fieldInitialization";
+    			var code := "new " + f.eType.name + "(this)";
+    			contents += code.oclAsType(EObject);
+    		};
+    	}
     };
-    
-    eStructuralFeatures += object EReference {
-        name := "internal" + baseName;
-        eType := findClassifierForName("Game" + baseName); 
-    };
 }
 
-mapping EClass::toGameFacadeClass() : EClass
-    disjuncts EClass::toActorGameFacadeClass,
-              EClass::toStageGameFacadeClass { }
-
-abstract mapping EClass::toActorGameFacadeClass() : EClass inherits EClass::toGameFacadeClassBase
-    when { self.getConcreteClass().eAllSuperTypes->exists(t|t.name = "Actor") } {
-    
-}
-
-abstract mapping EClass::toStageGameFacadeClass() : EClass inherits EClass::toGameFacadeClassBase
-    when { self.getConcreteClass().eAllSuperTypes->exists(t|t.name = "Stage") } {
-    
-    var constructorOperation := object EOperation {
-    	name := result.name;
-    	eParameters += object EParameter {
-    	    name := "game";
-    	    eType := findInstanceOfMetaClass("MiniProgrammingWorld");
-    	};
-    	eAnnotations += "constructor".toMarkerAnnotation();
-    };
-    eOperations += constructorOperation;
-    
-    constructorOperation.eAnnotations += constructorOperation.toAssignParameterToFieldAnnotation("game", "game");
-}
-
-helper EOperation::toAssignParameterToFieldAnnotation(parameterName: String, fieldName: String) : EAnnotation {
-    var parameter := self.eParameters->any(p|p.name = parameterName);
-    var field := self.eContainingClass.eAllStructuralFeatures->any(f|f.name = fieldName);
-	return object EAnnotation {
-            source := "body";
-            eAnnotations += object EAnnotation {
-                source := "assign";
-                _references += field.oclAsType(EObject);
-                _references += parameter.oclAsType(EObject);
-            };
-        };
-}
-
-
-query EClass::getConcreteClass() : EClass {
-	var baseName := self.getAnnotationValue("baseName");
-	return findClassifierForName("Concrete" + baseName).oclAsType(EClass);
-}
