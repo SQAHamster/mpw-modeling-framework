@@ -24,12 +24,23 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	
 	private String fileExtension = "xmi";
 	
+	/** suffix for the folder where the files are placed */
+	private String directorySuffix = "";
+	
 	public void setFileExtension(String fileExtension) {
 		this.fileExtension = fileExtension;
 	}
 
 	public String getFileExtension() {
 		return fileExtension;
+	}
+	
+	public String getDirectorySuffix() {
+		return directorySuffix;
+	}
+
+	public void setDirectorySuffix(String directorySuffix) {
+		this.directorySuffix = directorySuffix;
 	}
 
 	@Override
@@ -46,7 +57,8 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 			saveOptions.put(org.eclipse.emf.ecore.xmi.XMLResource.OPTION_ENCODING, "UTF-8");
 			
 			var name = getName(object);
-			String fileUri = "platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.generator/out/" + object.eClass().getEPackage().getName() + "/" + name + "." + fileExtension;
+			String directoryName = object.eClass().getEPackage().getName() + directorySuffix;
+			String fileUri = "platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.generator/out/" + directoryName + "/" + name + "." + fileExtension;
 			
 			var resourceSet = new ResourceSetImpl();
 

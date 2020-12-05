@@ -1,0 +1,35 @@
+modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+
+library AnnotationHelpers;
+
+helper String::toMarkerAnnotation() : EAnnotation {
+    return object EAnnotation {
+        source := self;
+    };
+}
+
+query EModelElement::isMarkedWithAnnotation(name: String) : Boolean {
+    return self.eAnnotations->exists(a|a.source = name);
+}
+
+helper toAnnotation(key: String, value: String) : EAnnotation {
+    return object EAnnotation {
+        source := key;
+        var entry := object EStringToStringMapEntry {};
+        entry.key := key;
+        entry.value := value;
+        details += entry;
+    };
+}
+
+query EModelElement::getAnnotationValue(key: String) : String {
+    var annotation := self.eAnnotations->any(a|a.source = key);
+    if (annotation != null) {
+    	return annotation.details->first().value;
+    };
+    return null;
+}
+
+query EModelElement::hasAnnotationValue(key: String, value: String) : Boolean {
+    return self.getAnnotationValue(key) = value;
+}

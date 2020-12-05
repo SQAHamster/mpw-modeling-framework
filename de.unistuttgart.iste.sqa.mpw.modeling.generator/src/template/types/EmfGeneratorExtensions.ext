@@ -67,7 +67,8 @@ featureToJavaType(EStructuralFeature this) : elementToJavaType();
 operationToJavaType(EOperation this) : elementToJavaType();
 	
 private elementToJavaType(ETypedElement this) :
-    if (this.eType == null) then "void" 
+    if (isMarkedWithAnnotation("constructor")) then "" 
+    else if (this.eType == null) then "void" 
 	else if (this.upperBound == -1) then "List<" + this.eType.name.toJavaType() + ">"
 	else this.eType.name.toJavaType();
 
@@ -96,3 +97,6 @@ toJavaDoc(String this) :
     if (length > 0) then 
         "/** " + this + " */"
     else "";
+    
+isMarkedWithAnnotation(EModelElement this, String key) : 
+    eAnnotations.exists(a|a.source == key); 

@@ -1,0 +1,26 @@
+«IMPORT ecore»
+«IMPORT commandBehavior»
+«IMPORT queryBehavior»
+
+«EXTENSION template::GeneratorExtensions»
+
+«DEFINE main FOR EPackage»
+    «EXPAND JavaClass FOREACH this.eClassifiers.typeSelect(EClass).reject(c|c.interface)»
+«ENDDEFINE»
+
+«DEFINE JavaClass FOR EClass»
+    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    class «name» {
+        «FOREACH eStructuralFeatures AS f»// «f.eType.name» «f.name»
+        «ENDFOREACH»
+        
+        «FOREACH eOperations AS o»// «o.operationToJavaType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.name» «p.name»«ENDFOREACH»)
+            «FOREACH o.eAnnotations.select(a|a.source == "body") AS a»
+                «FOREACH a.eAnnotations.select(an|an.source == "assign") AS nestedAnnotation»
+                    // this.«((EReference)nestedAnnotation.references.get(0)).name» = «((EParameter)nestedAnnotation.references.get(1)).name» 
+                «ENDFOREACH»
+            «ENDFOREACH»
+        «ENDFOREACH»
+    }
+    «ENDFILE»
+«ENDDEFINE»

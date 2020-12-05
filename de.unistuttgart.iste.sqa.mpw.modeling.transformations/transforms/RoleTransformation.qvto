@@ -1,3 +1,5 @@
+import helpers.AnnotationHelpers;
+
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
 modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
@@ -24,6 +26,8 @@ helper Ecore::EClass::isRelevantType() : Boolean {
 mapping inout Ecore::EClass::transformToRoles() {
   var baseName := self.name;
   self.name := "Concrete" + baseName;
+  eAnnotations += toAnnotation("role", "concrete");
+  eAnnotations += toAnnotation("baseName", baseName);
   
   var readOnlyRole := createReadOnlyRole(baseName);
   
@@ -41,6 +45,8 @@ helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
   	name := "ReadOnly" + baseName;
   	_abstract := true;
   	interface := true;
+  	eAnnotations += toAnnotation("role", "readonly");
+  	eAnnotations += toAnnotation("baseName", baseName);
   };
   readOnlyRole.eOperations += self.eAllStructuralFeatures->select(f|f.changeable)
             											 ->map transformFeatureToGetterOperation();
@@ -84,13 +90,7 @@ helper ecore::EClass::embedQueriesInOperations(queries: Set(QueryModel::Query)) 
 
 helper QueryModel::Query::createDocumentationAnnotation() : EAnnotation {
     if (self.documentation.length() > 0) {
-        return object EAnnotation {
-            source := "documentation";  
-            details += object EStringToStringMapEntry {
-                key := "documentation";
-                value := self.documentation;
-            };
-        };
+        return toAnnotation("documentation", self.documentation);
     };
     return null;
 }
@@ -106,6 +106,8 @@ helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ec
   	name := roleName.firstToUpper() + baseName;
   	_abstract := true;
   	interface := true;
+  	eAnnotations += toAnnotation("role", roleName);
+  	eAnnotations += toAnnotation("baseName", baseName);
   };
   roleClass.eOperations += Commands->select(c|c.roleName = roleName and c.targetClass.name = baseName)->map transformCommandToOperation();
   self.ePackage.eClassifiers += roleClass;
@@ -125,10 +127,4 @@ mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {
 	eType := self.eType;
 	upperBound := self.upperBound;
 	eAnnotations += "isPropertyGetter".toMarkerAnnotation();
-}
-
-helper String::toMarkerAnnotation() : EAnnotation {
-	return object EAnnotation {
-	    source := self;
-	};
 }

@@ -13,7 +13,15 @@ helper Element::root() : Element {
 }
 
 query findClassifierForName(name: String) : ecore::EClassifier {
-    return EntityModels->collect(p|p.getEClassifier(name))->selectOne(c|c != null).oclAsType(ecore::EClass)
+    return EntityModels->collect(p|p.getEClassifier(name))
+                       ->selectOne(c|c != null)
+                        .oclAsType(ecore::EClass);
+}
+
+query findInstanceOfMetaClass(name: String) : ecore::EClassifier {
+    return EntityModels->collect(p|p.eClassifiers[EClass])
+                       ->flatten()
+                       ->selectOne(c|c.eSuperTypes->exists(t|t.name = name));
 }
 
 query Bag(String)::joinToString(separator: String) : String {

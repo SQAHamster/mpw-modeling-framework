@@ -31,6 +31,7 @@ var targetCoreSimulatorProject = "${targetSimulatorProject}/core"
 var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/RoleTransformation.qvto"
 var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/CommandTransformation.qvto"
 var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/QueryTransformation.qvto"
+var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/GenerationClassesTransformation.qvto"
 var simulatorTargetSrc = "${projectRoot}/${targetCoreSimulatorProject}/src/main"
 var simulatorTargetSrcGenerated = "${simulatorTargetSrc}/generated"
 
@@ -106,6 +107,19 @@ Workflow {
 		modelSlot = "entityModels"
 		fileExtension = "ecore"
 	}
+    
+    component = QvtoTransformator {
+        transformationUri = generationClassesTransformationUri
+        modelSlot = "entityModels"
+        targetModelSlot = "generationEcoreModels"
+        sourceTargetRelationship = "NEW_TARGET"
+    }
+    
+    component = XmiWriter {
+        modelSlot = "generationEcoreModels"
+        fileExtension = "ecore"
+        directorySuffix = "_generation"
+    }
 	
 	/* check model */
 	/*component = CheckComponent {
@@ -125,14 +139,6 @@ Workflow {
 			name = "module_package"
 			value = generatedProjectBasePackage
 		}
-		globalVarDef = {
-			name = "queries"
-			value = "queries"
-		}
-		globalVarDef = {
-			name = "commands"
-			value = "commands"
-		}
 		metaModel = mm_emf
 		expand = "template::EcoreEntitiesTemplate::main FOR entityModels"
 		outlet = {
@@ -146,6 +152,26 @@ Workflow {
 		}
 		
 	}
+	
+	/* more generic generation which is based on many annotations on ecore objects, will also later make EcoreEntitiesTemplate mostly obsolete */
+    component = Generator {
+        globalVarDef = {
+            name = "module_package"
+            value = generatedProjectBasePackage
+        }
+        metaModel = mm_emf
+        expand = "template::GenerateClassesTemplate::main FOREACH generationEcoreModels"
+        outlet = {
+            path = simulatorTargetSrc
+            overwrite = false
+            postprocessor = formatter_java
+            fileEncoding = "ISO-8859-1"
+        }
+        resourceManager = ResourceManagerDefaultImpl {
+            fileEncoding = "ISO-8859-1"
+        }
+        
+    }
 	
 	/* generate commands */
 	component = Generator {
