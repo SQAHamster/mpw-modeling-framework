@@ -45,11 +45,13 @@ mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement merges I
 }
 
 mapping Input::Statement::toParameterUsageStatement() : QueryModel::ParameterUsageStatement merges Input::Statement::toStatementBase
-    when { self.commandContext().parameterList.parameters->exists(p|p.variableName = self.target); } {
+    when { self.commandContext() != null and self.commandContext().parameterList.parameters->exists(p|p.variableName = self.target); } {
     var parameter := self.commandContext().parameterList.parameters->any(p|p.variableName = self.target);
     eType := findClassifierForName(parameter.typeName);
     parameterName := parameter.variableName;
     isCollection := false;
+    
+    log("### " + parameterName + ", " + eType.name);
 }
 
 query Input::Statement::determineSelfAlias() : String {
@@ -159,7 +161,7 @@ query Input::Element::context() : Input::Context {
 }
 
 query Input::Statement::commandContext() : Input::CommandContext {
-    return self.container().oclAsType(Input::CommandContext);
+    return self.root().oclAsType(Input::CommandContext);
 }
 
 helper Input::Statement::parentElement() : Input::Element {
