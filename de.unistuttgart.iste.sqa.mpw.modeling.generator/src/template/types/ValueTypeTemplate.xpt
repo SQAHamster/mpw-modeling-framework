@@ -1,0 +1,66 @@
+«IMPORT ecore»
+
+«EXTENSION template::GeneratorExtensions»
+
+«DEFINE ValueTypeTemplate FOR EClass»
+    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    
+    public class «this.name» {
+        «FOREACH eAttributes AS a-»
+        private «a.featureToJavaType()» «a.name»;
+        «ENDFOREACH-»
+        
+        public «name»() {
+        }
+        
+        public «name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToJavaType()» «a.name»«ENDFOREACH») {
+            «FOREACH eAttributes AS a-»
+                this.«a.name» = «a.name»;
+            «ENDFOREACH-»
+        }
+        
+        «FOREACH eAttributes AS a-»
+         public «a.featureToJavaType()» «a.name.getter()»() {
+             return this.«a.name»;
+         }
+         public void «a.name.setter()»(«a.featureToJavaType()» «a.name») {
+             this.«a.name» = «a.name»;
+         }
+        «ENDFOREACH-»
+        
+        @Override
+	    public int hashCode() {
+	        final int prime = 31;
+	        int result = 1;
+            «FOREACH eAttributes AS a-»
+    	        result = prime * result + «a.name»;
+            «ENDFOREACH-»
+	        return result;
+	    }
+        
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final «name» other = («name») obj;
+            «FOREACH eAttributes AS a-»
+                if («a.name» != other.«a.name») {
+                    return false;
+                }
+            «ENDFOREACH-»
+            return true;
+        }
+        
+	    public static «name» from(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToJavaType()» «a.name»«ENDFOREACH») {
+	        return new «name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.name»«ENDFOREACH»);
+	    }
+    }
+    «ENDFILE»
+«ENDDEFINE»

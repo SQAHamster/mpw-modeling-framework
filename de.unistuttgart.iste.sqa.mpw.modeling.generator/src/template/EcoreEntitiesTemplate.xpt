@@ -8,7 +8,8 @@
 «ENDDEFINE»
 
 «DEFINE EcoreFile FOR EPackage»
-    «EXPAND JavaClass FOREACH this.eClassifiers.typeSelect(EClass).reject(c|c.interface)»
+    «EXPAND JavaClass FOREACH this.eClassifiers.typeSelect(EClass).reject(c|c.interface).reject(c|c.isValueType())»
+    «EXPAND template::types::ValueTypeTemplate::ValueTypeTemplate FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.isValueType())»
     «EXPAND JavaInterface FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.interface)»
     «EXPAND JavaEnum FOREACH this.eClassifiers.typeSelect(EEnum)»
 «ENDDEFINE»
