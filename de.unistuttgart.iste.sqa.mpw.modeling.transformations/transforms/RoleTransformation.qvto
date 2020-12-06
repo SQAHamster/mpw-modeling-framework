@@ -57,8 +57,8 @@ helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
   var queriesForThisType := self.getQueriesForThisType();
   
   readOnlyRole.eOperations += queriesForThisType->reject(q|readOnlyRole.eAllOperations
-                                                           ->exists(o|o.name = q.name))
-  									 			->map transformQueryToOperation();
+                                                           ->exists(o|o.isPropertyGetter() and o.getSimplePropertyGetterName() = q.name))
+  									 			           ->map transformQueryToOperation();
   
   readOnlyRole.embedQueriesInOperations(queriesForThisType);
   
@@ -104,16 +104,17 @@ query ecore::EClass::getQueriesForThisType() : Set(QueryModel::Query) {
 }
 
 helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ecore::EClass {
-  var roleClass := object EClass {
-  	name := roleName.firstToUpper() + baseName;
-  	_abstract := true;
-  	interface := true;
-  	eAnnotations += toAnnotation("role", roleName);
-  	eAnnotations += toAnnotation("baseName", baseName);
-  };
-  roleClass.eOperations += Commands->select(c|c.roleName = roleName and c.targetClass.name = baseName)->map transformCommandToOperation();
-  self.ePackage.eClassifiers += roleClass;
-  return roleClass;
+    var roleClass := object EClass {
+  	  name := roleName.firstToUpper() + baseName;
+  	  _abstract := true;
+  	  interface := true;
+  	  eAnnotations += toAnnotation("role", roleName);
+  	  eAnnotations += toAnnotation("baseName", baseName);
+    };
+    roleClass.eOperations += Commands->select(c|c.roleName = roleName and c.targetClass.name = baseName)->map transformCommandToOperation();
+    self.ePackage.eClassifiers += roleClass;
+  
+    return roleClass;
 }
 
 mapping CommandModel::Transformation::transformCommandToOperation() : EOperation {
@@ -130,4 +131,12 @@ mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {
 	eType := self.eType;
 	upperBound := self.upperBound;
 	eAnnotations += "isPropertyGetter".toMarkerAnnotation();
+}
+
+query EOperation::isPropertyGetter() : Boolean {
+    return self.isMarkedWithAnnotation("isPropertyGetter");
+}
+
+query EOperation::getSimplePropertyGetterName() : String {
+    return "get" + self.name.firstToUpper();
 }
