@@ -2,10 +2,8 @@ import ecore;
 import generationAnnotations;
 
 extension template::operations::OperationGeneratorExtensions;
+extension template::properties::PropertyGeneratorExtensions;
 extension template::types::MetaModelGeneratorExtensions;
-
-/* TODO: move CommandPropertyPathUtils to more general place like 'properties' and rename to be independent of "Command" */
-extension template::commands::CommandGeneratorExtensions;
 
 /*
  * Extensions related to EMF Metamodel types.

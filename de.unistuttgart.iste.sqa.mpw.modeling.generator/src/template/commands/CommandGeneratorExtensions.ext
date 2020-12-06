@@ -48,7 +48,3 @@ private toJmlKeyword(Constraint this) :
     if (Precondition.isInstance(this)) then "requires"
     else if (Postcondition.isInstance(this)) then "ensures"
     else "invariant";
-    
-String toPropertyGetters(String s) :
-    JAVA template.commands.CommandPropertyPathUtils.toPropertyGetters(java.lang.String);
-
