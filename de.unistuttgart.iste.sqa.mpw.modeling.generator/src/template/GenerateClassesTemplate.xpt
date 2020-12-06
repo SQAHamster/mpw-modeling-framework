@@ -37,13 +37,20 @@
 
 «DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE-»
 
-«DEFINE GenerationAnnotation FOR CommandCallAnnotation-»
-    var parameters = new «command.name.toFirstUpper()»CommandParameters();
-    parameters.commandStack = game.getCommandStack();
+«DEFINE GenerationAnnotation FOR CommandCreationAnnotation-»
+    var «commandVariableName» = new «command.name.toFirstUpper()»Command(«parametersVariableName»);
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR CommandParameterCreationAnnotation-»
+    var «parametersVariableName» = new «command.name.toFirstUpper()»CommandParameters();
+    «parametersVariableName».commandStack = game.getCommandStack();
     «FOREACH parameterMappings AS mapping-»
-         parameters.«mapping.key» = «mapping.value.toPropertyGetters()»; 
+         «parametersVariableName».«mapping.key» = «mapping.value.toPropertyGetters()»; 
     «ENDFOREACH-»
-    internalHamster.«command.name»(parameters);
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR CommandCallAnnotation-»
+    «targetRoleVariableName».«command.name»(«parametersVariableName»);
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR QueryCallAnnotation-»
@@ -55,16 +62,20 @@
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR ConstructorSimpleFieldInitializationAnnotation-»
-    this.«field.name» = new «constructorTypeName»(«parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ")»);
+    this.«field.name» = «toConstructorCall(constructorTypeName, parameterInputVariablePropertyPaths)»;
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR PropertyPathFieldAssignmentAnnotation-»
     this.«targetFeature.name» = «propertyPath.toPropertyGetters()»;
 «ENDDEFINE»
 
+«DEFINE GenerationAnnotation FOR AddVariableToCollectionAnnotation-»
+    «collectionPropertyPath.toPropertyGetters()».add(«parameterPropertyPath.toPropertyGetters()»);
+«ENDDEFINE»
+
 «DEFINE GenerationAnnotation FOR GetPropertyAnnotation-»
     «getAnnotationValue("documentation").toJavaDoc()»
-    public «field.featureToJavaType()» «field.name.getter()»() {
+    public «getterTypeName.toJavaType()» «getterOperationName»() {
         return this.«field.name»;
     }
     
@@ -76,6 +87,10 @@
 
 «DEFINE GenerationAnnotation FOR PropertyPathReturnAnnotation-»
     return «propertyPath.toPropertyGetters()»;
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR VariableObjectConstructionAnnotation-»
+    var «variableName» = «toConstructorCall(constructorTypeName, parameterInputVariablePropertyPaths)»;
 «ENDDEFINE»
 
 «DEFINE ImportTypeGenerationAnnotation FOR ImportTypeAnnotation-»

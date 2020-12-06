@@ -45,12 +45,34 @@
     <eLiterals name="PUBLIC" value="1"/>
     <eLiterals name="INTERNAL" value="2"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CommandCallAnnotation" eSuperTypes="#//GenerationAnnotation">
+  <eClassifiers xsi:type="ecore:EClass" name="CommandParameterCreationAnnotation"
+      eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="command" lowerBound="1"
         eType="ecore:EClass CommandBehaviors.ecore#//Transformation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameterMappings" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStringToStringMapEntry"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parametersVariableName"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="parameters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandCreationAnnotation" eSuperTypes="#//GenerationAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="command" lowerBound="1"
+        eType="ecore:EClass CommandBehaviors.ecore#//Transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="commandVariableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="command"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parametersVariableName"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="parameters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandCallAnnotation" eSuperTypes="#//GenerationAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="command" lowerBound="1"
+        eType="ecore:EClass CommandBehaviors.ecore#//Transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetRoleVariableName"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parametersVariableName"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="parameters"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="QueryCallAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1" eType="ecore:EClass QueryBehaviors.ecore#//Query"/>
@@ -59,6 +81,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GetPropertyAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="getterTypeName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="getterOperationName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GetPropertyDeclarationAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldTypeName" lowerBound="1"
@@ -81,5 +107,22 @@
   <eClassifiers xsi:type="ecore:EClass" name="ImportTypeAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeQualifiedTypeName"
         lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AddVariableToCollectionAnnotation" eSuperTypes="#//GenerationAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collectionPropertyPath"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="parameters"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterPropertyPath"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="parameters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableObjectConstructionAnnotation"
+      eSuperTypes="#//FieldInitializationAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constructorTypeName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterInputVariablePropertyPaths"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

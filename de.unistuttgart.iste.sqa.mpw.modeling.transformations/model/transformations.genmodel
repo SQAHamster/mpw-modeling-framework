@@ -134,9 +134,20 @@
     <genClasses ecoreClass="GenerationAnnotations.ecore#//VisibilityAnnotation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VisibilityAnnotation/visibility"/>
     </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//CommandParameterCreationAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandParameterCreationAnnotation/command"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandParameterCreationAnnotation/parameterMappings"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//CommandParameterCreationAnnotation/parametersVariableName"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//CommandCreationAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandCreationAnnotation/command"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//CommandCreationAnnotation/commandVariableName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//CommandCreationAnnotation/parametersVariableName"/>
+    </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//CommandCallAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandCallAnnotation/command"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandCallAnnotation/parameterMappings"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//CommandCallAnnotation/targetRoleVariableName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//CommandCallAnnotation/parametersVariableName"/>
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//QueryCallAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//QueryCallAnnotation/query"/>
@@ -144,6 +155,8 @@
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//GetPropertyAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//GetPropertyAnnotation/field"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyAnnotation/getterTypeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyAnnotation/getterOperationName"/>
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation/fieldTypeName"/>
@@ -159,6 +172,15 @@
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//ImportTypeAnnotation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//ImportTypeAnnotation/relativeQualifiedTypeName"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//AddVariableToCollectionAnnotation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//AddVariableToCollectionAnnotation/collectionPropertyPath"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//AddVariableToCollectionAnnotation/parameterPropertyPath"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//VariableObjectConstructionAnnotation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VariableObjectConstructionAnnotation/variableName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VariableObjectConstructionAnnotation/constructorTypeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VariableObjectConstructionAnnotation/parameterInputVariablePropertyPaths"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Query" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#/">

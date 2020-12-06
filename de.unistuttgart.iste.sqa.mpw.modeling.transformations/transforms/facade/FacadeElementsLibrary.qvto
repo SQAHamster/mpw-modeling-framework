@@ -23,13 +23,22 @@ abstract mapping inout EClass::createElementsBase() {
     
     var internalGameRoleField := object EReference {
         name := "internal" + baseName;
-        eType := findClassifierForName("Game" + baseName);
+        eType := findClassifierForName("Concrete" + baseName);
     };
     self.eStructuralFeatures += internalGameRoleField;
     
     self.eAnnotations += object GetPropertyAnnotation {
     	field := internalGameRoleField;
-    	eAnnotations += toAnnotation("documentation", "Get the internal representation of the " + baseName + ".");
+    	getterTypeName := "Game" + baseName;
+    	getterOperationName := "getInternal" + baseName;
+    	eAnnotations += toAnnotation("documentation", "Get the internal game representation of the " + baseName + ".");
+    };
+    
+    self.eAnnotations += object GetPropertyAnnotation {
+    	field := internalGameRoleField;
+    	getterTypeName := "Editor" + baseName;
+    	getterOperationName := "getInternalEditor" + baseName;
+    	eAnnotations += toAnnotation("documentation", "Get the internal editor representation of the " + baseName + ".");
     };
 }
 
@@ -83,7 +92,7 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
         
         var internalActorParameter := object EParameter {
             name := "internal" + baseName;
-            eType := findClassifierForName("Game" + baseName);
+            eType := findClassifierForName("Concrete" + baseName);
         };
         eParameters += internalActorParameter;
         
@@ -119,6 +128,8 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
         eStructuralFeatures += reference;
         self.eAnnotations += object GetPropertyAnnotation {
         	field := reference;
+    	    getterTypeName := field.eType.name;
+    	    getterOperationName := "get" + field.name.firstToUpper();
         };
     };
     
@@ -188,9 +199,13 @@ mapping inout EClass::createCommands() {
   	            name := c.name;
 	        };
             eParameters := c.mainUnit.parameters->map toOperationParameter();
-	        eAnnotations += object CommandCallAnnotation { 
+	        eAnnotations += object CommandParameterCreationAnnotation { 
 	            command := c;
 	            parameterMappings := c.mainUnit.parameters->map toCommandCallParameterMapping();
+            };
+	        eAnnotations += object CommandCallAnnotation { 
+	            command := c;
+	            targetRoleVariableName := "internal" + self.name;
             };
 	        eAnnotations += toAnnotation("documentation", c.documentation);
 	    };

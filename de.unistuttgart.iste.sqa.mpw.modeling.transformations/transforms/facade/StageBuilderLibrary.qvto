@@ -18,7 +18,8 @@ mapping EClass::createBuilderClass() : EClass
     
     result.map createFields();
     result.map createConstructor();
-    
+    result.eOperations += self.eAllOperations[isMarkedWithAnnotation("command")]->collect(o|getCommandForOperation(o))->map toBuilderOperation(result);
+    result.eOperations += result.eOperations[eParameters->exists(p|p.name = "location" and p.eType.name = "Location")]->map cloneSimplifiedBuilderOperation();
     result.map createBuildOperation();
 }
 
@@ -30,6 +31,11 @@ abstract mapping inout EClass::createFields() {
         eType := findClassifierForName("Editor" + self.getBaseName());
     };
     eStructuralFeatures += internalEditorRoleField;
+    
+    self.eStructuralFeatures += object EReference {
+        name := "game";
+        eType := findInstanceOfMetaClass("MiniProgrammingWorld");	
+    };
     
     var resultCommandField := object EReference {
         name := "resultCommand";
@@ -44,16 +50,23 @@ abstract mapping inout EClass::createConstructor() {
 
     var constructorOperation := object EOperation {
     	name := self.name;
-    	var stageParameter := object EParameter {
-    	    name := baseName.firstToLower();
-    	    eType := findClassForName("Editor" + baseName);
+    	
+        var gameParameter := object EParameter {
+    	    name := "game";
+    	    eType := findInstanceOfMetaClass("MiniProgrammingWorld");
     	};
-    	eParameters += stageParameter;
+    	eParameters += gameParameter;
+    	
     	eAnnotations += "constructor".toMarkerAnnotation();
     	
     	eAnnotations += object ParameterToFieldAssignmentAnnotation {
+    		targetFeature := self.getEStructuralFeature("game");
+    		parameter := gameParameter;
+    	};
+    	
+    	eAnnotations += object PropertyPathFieldAssignmentAnnotation {
     		targetFeature := self.getEStructuralFeature(baseName.firstToLower());
-    		parameter := stageParameter;
+    		propertyPath := "game.territory.internalEditor" + baseName;
     	};
     	
     	eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
@@ -70,52 +83,59 @@ abstract mapping inout EClass::createConstructor() {
     
 }
 
-mapping inout EClass::createStageGameFacadeElements() inherits EClass::createElementsBase
-    when { self.getConcreteClass().eAllSuperTypes->exists(t|t.name = "Stage") } {
+mapping Transformation::toBuilderOperation(parentBuilderClass: EClass) : EOperation {
+    name := self.name;
+    eType := parentBuilderClass;
     
-    var baseName := self.name;
-    var concreteClass := self.getConcreteClass();
+    eParameters := self.mainUnit.parameters->map toOperationParameter();
+    eAnnotations += toAnnotation("documentation", self.documentation);
     
-    var actorFields := concreteClass.eReferences->select(r|r.eType.isInstanceOf("Actor"));
-    actorFields->forEach(r) {
-    	var reference := object EReference {
-            name := r.name;
-            eType := r.eType.findFacadeForRoleType();    
-        };
-        eStructuralFeatures += reference;
-        self.eAnnotations += object GetPropertyAnnotation {
-        	field := reference;
-        };
+    eAnnotations += object CommandParameterCreationAnnotation { 
+        command := self;
+        parameterMappings := self.mainUnit.parameters->map toCommandCallParameterMapping();
     };
     
-    var constructorOperation := object EOperation {
-    	name := self.name;
-    	eParameters += object EParameter {
-    	    name := "game";
-    	    eType := findInstanceOfMetaClass("MiniProgrammingWorld");
-    	};
-    	eAnnotations += "constructor".toMarkerAnnotation();
-    	
-    	eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
-    		field := self.getEStructuralFeature("internal" + baseName);
-    		constructorTypeName := concreteClass.name;
-    	};
-    	
-    	eAnnotations += toAnnotation("documentation", "Initialize a new " + baseName + " and link it to its game object.");
-    };
-    eOperations += constructorOperation;
-    
-    constructorOperation.eAnnotations += constructorOperation.map toAssignParameterToFieldAnnotation("game", "game");
-    
-    actorFields->forEach(r) {
-        constructorOperation.eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
-        	field := self.getEStructuralFeature(r.name);
-        	parameterInputVariablePropertyPaths += "game";
-        	parameterInputVariablePropertyPaths += "internal" + baseName + "." + r.name;
-        	constructorTypeName := field.eType.name;
-        };
+    eAnnotations += object CommandCreationAnnotation { 
+        command := self;
     };
     
+    eAnnotations += object AddVariableToCollectionAnnotation { 
+        collectionPropertyPath := "resultCommand.subCommands";
+        parameterPropertyPath := "command";
+    };
+    
+    eAnnotations += object PropertyPathReturnAnnotation {
+	    propertyPath := "this";
+	};
+}
+
+mapping EOperation::cloneSimplifiedBuilderOperation() : EOperation {
+    name := self.name;
+    eType := self.eType;
+    
+    self.eParameters->forEach(p) {
+    	if (p.name = "location") {
+    		eParameters += object EParameter {
+    			name := "locationX";
+    			eType := EInt.oclAsType(EClassifier);
+    		};
+    		eParameters += object EParameter {
+    			name := "locationY";
+    			eType := EInt.oclAsType(EClassifier);
+    		};
+    	} else {
+    		eParameters += p.deepclone();
+    	}
+    };
+    
+    eAnnotations += object VariableObjectConstructionAnnotation {
+    	variableName := "location";
+    	parameterInputVariablePropertyPaths += "locationX";
+    	parameterInputVariablePropertyPaths += "locationY";
+    	constructorTypeName := "Location";
+    };
+    
+    eAnnotations += self.eAnnotations.deepclone();
 }
 
 abstract mapping inout EClass::createBuildOperation() {
