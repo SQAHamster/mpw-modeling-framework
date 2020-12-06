@@ -169,6 +169,7 @@ mapping inout EClass::createCommands() {
 	        };
             eParameters := c.mainUnit.parameters->map toOperationParameter();
 	        eAnnotations += object CommandCallAnnotation { command := c; };
+	        eAnnotations += toAnnotation("documentation", c.documentation);
 	    };
     };
 }
@@ -198,6 +199,7 @@ mapping inout EClass::createQueries() {
                 _query := q;
                 internalRoleField := self.getEStructuralFeature("internal" + self.name).oclAsType(EReference);
             };
+	        eAnnotations += toAnnotation("documentation", q.documentation);
 	    };
     };
 }
