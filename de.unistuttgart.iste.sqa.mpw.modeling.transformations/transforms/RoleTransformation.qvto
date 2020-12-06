@@ -92,7 +92,7 @@ mapping QueryModel::Query::transformQueryToOperation() : EOperation {
 
 helper ecore::EClass::embedQueriesInOperations(queries: Set(QueryModel::Query)) {
   self.eAllOperations->forEach(o) {
-      var queryForThisOperation := queries->any(q|q.name = o.name);
+      var queryForThisOperation := queries->any(q|q.name = o.name or o.isPropertyGetter() and o.getSimplePropertyGetterName() = q.name);
       if (queryForThisOperation != null) {
           var annotation := "query".toMarkerAnnotation();
           annotation.contents += queryForThisOperation.oclAsType(ecore::EObject).deepclone();
