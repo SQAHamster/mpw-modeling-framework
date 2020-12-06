@@ -4,6 +4,9 @@ import generationAnnotations;
 extension template::operations::OperationGeneratorExtensions;
 extension template::types::MetaModelGeneratorExtensions;
 
+/* TODO: move CommandPropertyPathUtils to more general place like 'properties' and rename to be independent of "Command" */
+extension template::commands::CommandGeneratorExtensions;
+
 /*
  * Extensions related to EMF Metamodel types.
  */
@@ -74,7 +77,7 @@ private elementToJavaType(ETypedElement this) :
 	else this.eType.name.toJavaType();
 
 featureToFieldInstantiation(EStructuralFeature this) :
-    if (this.eAnnotations.typeSelect(FacadeElementFieldInitializationAnnotation).size > 0) then this.eAnnotations.typeSelect(FacadeElementFieldInitializationAnnotation).first().toInitialization()
+    if (this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).size > 0) then this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first().toInitialization()
 	else if (this.upperBound == -1) then "new ArrayList<>()"
 	else if (this.eType.needsImplSubclass()) then "new " + this.eType.ePackage.toJavaPackageName() + ".impl." + this.eType.name + "Impl()"
 	else "new " + this.eType.name.toUnboxedJavaTypeName() + "()";
@@ -86,8 +89,8 @@ toUnboxedJavaTypeName(String this) :
 	else if (this == "EObject") then "Object"
 	else this;
 	
-toInitialization(FacadeElementFieldInitializationAnnotation this) :
-	"new " + field.eType.name + "(this)";
+toInitialization(InlineSimpleFieldInitializationAnnotation this) :
+	"new " + field.eType.name + "(" + parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ") + ")";
 	
 defaultValueOf(EStructuralFeature f) :
     if (f.eType == "EInt") then "0"

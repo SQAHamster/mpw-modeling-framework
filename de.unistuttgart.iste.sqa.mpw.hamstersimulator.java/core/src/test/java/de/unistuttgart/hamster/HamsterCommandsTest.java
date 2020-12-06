@@ -6,17 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.unistuttgart.hamster.framework.CommandConstraintException;
-import de.unistuttgart.hamster.hamster.ConcreteHamster;
-import de.unistuttgart.hamster.hamster.GameHamster;
-import de.unistuttgart.hamster.hamster.Grain;
-import de.unistuttgart.hamster.hamster.HamsterGame;
+import de.unistuttgart.hamster.hamster.*;
 import de.unistuttgart.hamster.mpw.Tile;
 import de.unistuttgart.hamster.util.GameStringifier;
 import org.junit.jupiter.api.Test;
 
 public class HamsterCommandsTest {
 	private HamsterGame game;
-	private GameHamster sut;
+	private Hamster sut;
 
 	//<editor-fold desc="Feature: move">
 	@Test
@@ -215,7 +212,7 @@ public class HamsterCommandsTest {
 	@Test
 	public void givenHamsterBeforeWall_whenMove_ThenExceptionIsThrown() {
 		withTerritory("M<;");
-		
+
 		assertThrows(CommandConstraintException.class, () -> {
 			move();			
 		});
@@ -228,7 +225,7 @@ public class HamsterCommandsTest {
 
 	private void withTerritory(String map) {
 		game = GameStringifier.createFromString(map);
-		sut = game.getDefaultHamster();
+		sut = game.getTerritory().getDefaultHamster();
 	}
 
 	private void andGrainOn(int columnIndex, int rowIndex) {
@@ -237,26 +234,26 @@ public class HamsterCommandsTest {
 	}
 
 	private void andGrainsInMouth(int count) {
-		var concreteHamster = (ConcreteHamster) this.sut;
+		var concreteHamster = (ConcreteHamster) this.sut.getInternalHamster();
 		for (int i = 0; i < count; i++) {
 			concreteHamster.addToGrains(new Grain());
 		}
 	}
 
 	private void turnLeft() {
-		 sut.turnLeft(game.getCommandStack());
+		 sut.turnLeft();
 	}
 
 	private void move() {
-		 sut.move(game.getCommandStack());
+		 sut.move();
 	}
 
 	private void pickGrain() {
-		sut.pickGrain(game.getCommandStack());
+		sut.pickGrain();
 	}
 
 	private void putGrain() {
-		 sut.putGrain(game.getCommandStack());
+		 sut.putGrain();
 	}
 
 	private void assertTerritory(String expected) {
@@ -273,7 +270,7 @@ public class HamsterCommandsTest {
 	}
 
 	private void assertGrainsInMouth(int expected) {
-		var actual = sut.getGrains().size();
+		var actual = sut.getInternalHamster().getGrains().size();
 		assertEquals(expected, actual);
 	}
 
@@ -283,7 +280,7 @@ public class HamsterCommandsTest {
 	}
 
 	private Tile getTileAt(int columnIndex, int rowIndex) {
-		var tileOptional = game.getTerritory().getTiles().stream()
+		var tileOptional = game.getTerritory().getInternalTerritory().getTiles().stream()
 				.filter(t -> t.getLocation().getColumn() == columnIndex &&
 						t.getLocation().getRow() == rowIndex)
 				.findFirst();

@@ -118,12 +118,18 @@
     <genClasses ecoreClass="GenerationAnnotations.ecore#//ParameterToFieldAssignmentAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//ParameterToFieldAssignmentAnnotation/parameter"/>
     </genClasses>
-    <genClasses ecoreClass="GenerationAnnotations.ecore#//GetInternalRoleFieldAssignmentAnnotation">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//GetInternalRoleFieldAssignmentAnnotation/parameter"/>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//PropertyPathFieldAssignmentAnnotation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//PropertyPathFieldAssignmentAnnotation/propertyPath"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GenerationAnnotations.ecore#//FieldInitializationAnnotation"/>
-    <genClasses ecoreClass="GenerationAnnotations.ecore#//FacadeElementFieldInitializationAnnotation">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//FacadeElementFieldInitializationAnnotation/field"/>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//InlineSimpleFieldInitializationAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//InlineSimpleFieldInitializationAnnotation/field"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//InlineSimpleFieldInitializationAnnotation/parameterInputVariablePropertyPaths"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//ConstructorSimpleFieldInitializationAnnotation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//ConstructorSimpleFieldInitializationAnnotation/field"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//ConstructorSimpleFieldInitializationAnnotation/parameterInputVariablePropertyPaths"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//ConstructorSimpleFieldInitializationAnnotation/constructorType"/>
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//VisibilityAnnotation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VisibilityAnnotation/visibility"/>
@@ -137,6 +143,10 @@
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//GetPropertyAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//GetPropertyAnnotation/field"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation/fieldTypeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation/getterName"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Query" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#/">

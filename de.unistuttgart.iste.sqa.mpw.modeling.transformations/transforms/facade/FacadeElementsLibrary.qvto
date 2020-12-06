@@ -1,5 +1,6 @@
 import helpers.AnnotationHelpers;
 import helpers.EmfHelpers;
+import helpers.BasicHelpers;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
@@ -22,7 +23,7 @@ abstract mapping inout EClass::createElementsBase() {
     
     var internalGameRoleField := object EReference {
         name := "internal" + baseName;
-        eType := findClassifierForName("Game" + baseName); 
+        eType := findClassifierForName("Game" + baseName);
     };
     self.eStructuralFeatures += internalGameRoleField;
     
@@ -34,6 +35,7 @@ abstract mapping inout EClass::createElementsBase() {
 mapping inout EClass::createActorGameFacadeElements() inherits EClass::createElementsBase
     when { self.getConcreteClass().eAllSuperTypes->exists(t|t.name = "Actor") } {
     
+    var baseName := self.name;
     var concreteClass := self.getConcreteClass();
     
     var constructorOperation := object EOperation {
@@ -52,12 +54,55 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
     };
     eOperations += constructorWithParamsOperation;
     
+    var mpwClass := findInstanceOfMetaClass("MiniProgrammingWorld");
+    var internalStageConstructorOperation := object EOperation {
+        name := self.name;
+        eAnnotations += "constructor".toMarkerAnnotation();
+        
+        var mpwParameter := object EParameter {
+            name := "game";
+            eType := mpwClass;
+        };
+        eParameters += mpwParameter;
+        
+        var internalActorParameter := object EParameter {
+            name := "internal" + baseName;
+            eType := findClassifierForName("Game" + baseName);
+        };
+        eParameters += internalActorParameter;
+        
+        eAnnotations += object ParameterToFieldAssignmentAnnotation {
+            targetFeature := self.getEStructuralFeature("internal" + baseName);
+            parameter := internalActorParameter;
+        };
+        eAnnotations += object ParameterToFieldAssignmentAnnotation {
+            targetFeature := self.getEStructuralFeature("game");
+            parameter := mpwParameter;
+        };
+    };
+    eOperations += internalStageConstructorOperation;
+    
     self.map createCommands();
     self.map createQueries();
 }
 
 mapping inout EClass::createStageGameFacadeElements() inherits EClass::createElementsBase
     when { self.getConcreteClass().eAllSuperTypes->exists(t|t.name = "Stage") } {
+    
+    var baseName := self.name;
+    var concreteClass := self.getConcreteClass();
+    
+    var actorFields := concreteClass.eReferences->select(r|r.eType.isInstanceOf("Actor"));
+    actorFields->forEach(r) {
+    	var reference := object EReference {
+            name := r.name;
+            eType := r.eType.findFacadeForRoleType();    
+        };
+        eStructuralFeatures += reference;
+        self.eAnnotations += object GetPropertyAnnotation {
+        	field := reference;
+        };
+    };
     
     var constructorOperation := object EOperation {
     	name := self.name;
@@ -66,10 +111,24 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
     	    eType := findInstanceOfMetaClass("MiniProgrammingWorld");
     	};
     	eAnnotations += "constructor".toMarkerAnnotation();
+    	
+    	eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
+    		field := self.getEStructuralFeature("internal" + baseName);
+    		constructorType := concreteClass;
+    	};
     };
     eOperations += constructorOperation;
     
     constructorOperation.eAnnotations += constructorOperation.map toAssignParameterToFieldAnnotation("game", "game");
+    
+    actorFields->forEach(r) {
+        constructorOperation.eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
+        	field := self.getEStructuralFeature(r.name);
+        	parameterInputVariablePropertyPaths += "game";
+        	parameterInputVariablePropertyPaths += "internal" + baseName + "." + r.name;
+        	constructorType := field.eType;
+        };
+    };
     
     self.map createCommands();
     self.map createQueries();
@@ -78,11 +137,6 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
 mapping EOperation::toAssignParameterToFieldAnnotation(parameterName: String, fieldName: String) : ParameterToFieldAssignmentAnnotation {
     parameter := self.eParameters->any(p|p.name = parameterName);
     targetFeature := self.eContainingClass.eAllStructuralFeatures->any(f|f.name = fieldName);
-}
-
-query EClass::getConcreteClass() : EClass {
-	var baseName := self.name;
-	return findClassifierForName("Concrete" + baseName).oclAsType(EClass);
 }
 
 query getCommandForOperation(operation: EOperation) : Transformation {
@@ -107,8 +161,7 @@ mapping CommandModel::Parameter::toOperationParameter() : EParameter {
     
     // facades do rely on other facade types, e.g. Hamster -> Territory instead of GameTerritory
     if (eType.isMarkedWithAnnotation("role")) {
-        var baseName := eType.getAnnotationValue("baseName");
-    	eType := findClassifierForName(baseName);
+    	eType := eType.findFacadeForRoleType();
     }
 }
 
@@ -145,3 +198,13 @@ mapping inout EClass::createQueries() {
 	    };
     };
 }
+
+query EClass::getConcreteClass() : EClass {
+    var baseName := self.name;
+    return findClassifierForName("Concrete" + baseName).oclAsType(EClass);
+}
+
+query EClassifier::findFacadeForRoleType() : EClass {
+	var baseName := self.getAnnotationValue("baseName");
+    return findClassForName(baseName);
+};

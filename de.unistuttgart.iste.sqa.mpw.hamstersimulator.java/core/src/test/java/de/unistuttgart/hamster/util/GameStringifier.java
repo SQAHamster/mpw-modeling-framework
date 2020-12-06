@@ -1,8 +1,6 @@
 package de.unistuttgart.hamster.util;
 
-import de.unistuttgart.hamster.hamster.Grain;
-import de.unistuttgart.hamster.hamster.HamsterGame;
-import de.unistuttgart.hamster.hamster.Wall;
+import de.unistuttgart.hamster.hamster.*;
 import de.unistuttgart.hamster.mpw.Location;
 import de.unistuttgart.hamster.mpw.Tile;
 
@@ -13,11 +11,11 @@ public class GameStringifier {
 	
 	public static HamsterGame createFromString(String map) {
 		var game = new HamsterGame();
-		var hamster = game.getDefaultHamster();
+		var hamster = (ConcreteHamster)game.getTerritory().getDefaultHamster().getInternalHamster();
 
 		String[] parts = map.split(";");
 		int height = parts.length;
-		var territory = game.getTerritory();
+		var territory = (ConcreteTerritory)game.getTerritory().getInternalTerritory();
 
 		// dummy: replace later by Location, when it implements hashcode/equals correctly
 		var coordinateToTileMap = new HashMap<String, Tile>();
@@ -69,7 +67,7 @@ public class GameStringifier {
 	public static String toString(HamsterGame game) {
 		var actual = new StringBuilder();
 
-		var hamster = game.getDefaultHamster();
+		var hamster = game.getTerritory().getDefaultHamster().getInternalHamster();
 		iterateTiles(game, currentTile -> {
 			if (hamster.getCurrentTile() == currentTile) {
 				actual.append(DirectionTestHelper.toDirection(hamster.getDirection()));
@@ -105,7 +103,7 @@ public class GameStringifier {
 	}
 
 	private static void iterateTiles(HamsterGame game, Consumer<Tile> lambda) {
-		var tiles = game.getTerritory().getTiles();
+		var tiles = game.getTerritory().getInternalTerritory().getTiles();
 		final var upperLeftTile = tiles.get(0);
 		var firstOfRowTile = upperLeftTile;
 

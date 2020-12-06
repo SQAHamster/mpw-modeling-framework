@@ -1,5 +1,6 @@
 package de.unistuttgart.hamster;
 
+import de.unistuttgart.hamster.commands.*;
 import de.unistuttgart.hamster.hamster.*;
 import de.unistuttgart.hamster.mpw.Location;
 import de.unistuttgart.hamster.mpw.Tile;
@@ -92,23 +93,37 @@ public class TerritoryCommandsTest {
 
 	private void withTerritory(String map) {
 		game = GameStringifier.createFromString(map);
-		sut = game.getTerritory();
+		sut = (EditorTerritory)game.getTerritory().getInternalTerritory();
 	}
 
 	private void initTerritory(int columnsCount, int rowsCount) {
-		sut.initTerritory(game.getCommandStack(), columnsCount, rowsCount);
+		var params = new InitTerritoryCommandParameters();
+		params.commandStack = game.getCommandStack();
+		params.columns = columnsCount;
+		params.rows = rowsCount;
+		sut.initTerritory(params);
 	}
 
 	private void addGrainsToTile(Location location, int amount) {
-		sut.addGrainsToTile(game.getCommandStack(), location, amount);
+		var params = new AddGrainsToTileCommandParameters();
+		params.commandStack = game.getCommandStack();
+		params.location = location;
+		params.amount = amount;
+		sut.addGrainsToTile(params);
 	}
 
 	private void addWallToTile(Location location) {
-		sut.addWallToTile(game.getCommandStack(), location);
+		var params = new AddWallToTileCommandParameters();
+		params.commandStack = game.getCommandStack();
+		params.location = location;
+		sut.addWallToTile(params);
 	}
 
 	private void clearTile(Location location) {
-		sut.clearTile(game.getCommandStack(), location);
+		var params = new ClearTileCommandParameters();
+		params.commandStack = game.getCommandStack();
+		params.location = location;
+		sut.clearTile(params);
 	}
 
 	private void assertGrainsOnTerritory(String expected) {
@@ -122,7 +137,7 @@ public class TerritoryCommandsTest {
 	}
 
 	private Tile getTileAt(int columnIndex, int rowIndex) {
-		var tileOptional = game.getTerritory().getTiles().stream()
+		var tileOptional = game.getTerritory().getInternalTerritory().getTiles().stream()
 				.filter(t -> t.getLocation().getColumn() == columnIndex &&
 						t.getLocation().getRow() == rowIndex)
 				.findFirst();

@@ -15,16 +15,26 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EParameter"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GetInternalRoleFieldAssignmentAnnotation"
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyPathFieldAssignmentAnnotation"
       eSuperTypes="#//FieldAssignmentAnnotation">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
-        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EParameter"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyPath" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FieldInitializationAnnotation" abstract="true"
       eSuperTypes="#//GenerationAnnotation"/>
-  <eClassifiers xsi:type="ecore:EClass" name="FacadeElementFieldInitializationAnnotation"
+  <eClassifiers xsi:type="ecore:EClass" name="InlineSimpleFieldInitializationAnnotation"
       eSuperTypes="#//FieldInitializationAnnotation">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterInputVariablePropertyPaths"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstructorSimpleFieldInitializationAnnotation"
+      eSuperTypes="#//FieldInitializationAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterInputVariablePropertyPaths"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constructorType" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VisibilityAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" lowerBound="1"
@@ -46,5 +56,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GetPropertyAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GetPropertyDeclarationAnnotation" eSuperTypes="#//GenerationAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldTypeName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="getterName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

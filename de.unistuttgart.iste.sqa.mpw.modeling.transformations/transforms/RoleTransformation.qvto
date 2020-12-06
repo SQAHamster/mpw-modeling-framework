@@ -5,6 +5,7 @@ modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
 modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
 modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
+modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
 transformation RoleTransformation(inout ecore: Ecore);
 
@@ -25,40 +26,55 @@ helper Ecore::EClass::isRelevantType() : Boolean {
 }
 
 mapping inout Ecore::EClass::transformToRoles() {
-  var baseName := self.name;
-  self.name := "Concrete" + baseName;
-  eAnnotations += toAnnotation("role", "concrete");
-  eAnnotations += toAnnotation("baseName", baseName);
+    var baseName := self.name;
+    self.name := "Concrete" + baseName;
+    eAnnotations += toAnnotation("role", "concrete");
+    eAnnotations += toAnnotation("baseName", baseName);
   
-  var readOnlyRole := createReadOnlyRole(baseName);
+    var readOnlyRole := createReadOnlyRole(baseName);
+    
+    var gameRole := self.createCommandRole(baseName, "game");
+    gameRole.eSuperTypes += readOnlyRole;
+    self.eSuperTypes += gameRole;
+    
+    var editorRole := self.createCommandRole(baseName, "editor");
+    editorRole.eSuperTypes += readOnlyRole;
+    self.eSuperTypes += editorRole;
   
-  var gameRole := self.createCommandRole(baseName, "game");
-  gameRole.eSuperTypes += readOnlyRole;
-  self.eSuperTypes += gameRole;
-  
-  var editorRole := self.createCommandRole(baseName, "editor");
-  editorRole.eSuperTypes += readOnlyRole;
-  self.eSuperTypes += editorRole;
+    var actorFields := self.eReferences->select(r|r.eType.isInstanceOf("Actor"));
+    actorFields->forEach(r) {
+        readOnlyRole.eAnnotations += r.createRoleGetterDeclarationAnnotation("ReadOnly");
+        gameRole.eAnnotations += r.createRoleGetterDeclarationAnnotation("Game");
+        editorRole.eAnnotations += r.createRoleGetterDeclarationAnnotation("Editor");
+    };
+}
+
+query Ecore::EStructuralFeature::createRoleGetterDeclarationAnnotation(roleName: String) : EAnnotation {
+    var baseName := self.eType.getAnnotationValue("baseName");
+    return object GetPropertyDeclarationAnnotation {
+        fieldTypeName := roleName + baseName;
+        getterName := "get" + self.name.firstToUpper();
+    };
 }
 
 helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
   var readOnlyRole := object EClass {
-  	name := "ReadOnly" + baseName;
-  	_abstract := true;
-  	interface := true;
-  	eAnnotations += toAnnotation("role", "readonly");
-  	eAnnotations += toAnnotation("baseName", baseName);
-  	eSuperTypes += findClassForName("Entity");
+    name := "ReadOnly" + baseName;
+    _abstract := true;
+    interface := true;
+    eAnnotations += toAnnotation("role", "readonly");
+    eAnnotations += toAnnotation("baseName", baseName);
+    eSuperTypes += findClassForName("Entity");
   };
   readOnlyRole.eOperations += self.eAllStructuralFeatures->select(f|f.changeable)
-            											 ->map transformFeatureToGetterOperation();
+                                                         ->map transformFeatureToGetterOperation();
   
   var queryModule := Queries->first();
   var queriesForThisType := self.getQueriesForThisType();
   
   readOnlyRole.eOperations += queriesForThisType->reject(q|readOnlyRole.eAllOperations
                                                            ->exists(o|o.isPropertyGetter() and o.getSimplePropertyGetterName() = q.name))
-  									 			           ->map transformQueryToOperation();
+                                                           ->map transformQueryToOperation();
   
   readOnlyRole.embedQueriesInOperations(queriesForThisType);
   
@@ -67,11 +83,11 @@ helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
 }
 
 mapping QueryModel::Query::transformQueryToOperation() : EOperation {
-	name := self.name;
-	eType := self.eType;
-	if (self.isCollection) {
+    name := self.name;
+    eType := self.eType;
+    if (self.isCollection) {
         upperBound := -1; 
-	};
+    };
 }
 
 helper ecore::EClass::embedQueriesInOperations(queries: Set(QueryModel::Query)) {
@@ -105,11 +121,11 @@ query ecore::EClass::getQueriesForThisType() : Set(QueryModel::Query) {
 
 helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ecore::EClass {
     var roleClass := object EClass {
-  	  name := roleName.firstToUpper() + baseName;
-  	  _abstract := true;
-  	  interface := true;
-  	  eAnnotations += toAnnotation("role", roleName);
-  	  eAnnotations += toAnnotation("baseName", baseName);
+      name := roleName.firstToUpper() + baseName;
+      _abstract := true;
+      interface := true;
+      eAnnotations += toAnnotation("role", roleName);
+      eAnnotations += toAnnotation("baseName", baseName);
     };
     roleClass.eOperations += Commands->select(c|c.roleName = roleName and c.targetClass.name = baseName)->map transformCommandToOperation();
     self.ePackage.eClassifiers += roleClass;
@@ -118,19 +134,19 @@ helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ec
 }
 
 mapping CommandModel::Transformation::transformCommandToOperation() : EOperation {
-	name := self.name;
-	
-	var annotation := "command".toMarkerAnnotation();
-	eAnnotations += annotation;
-	
+    name := self.name;
+    
+    var annotation := "command".toMarkerAnnotation();
+    eAnnotations += annotation;
+    
     annotation.contents += self.oclAsType(ecore::EObject).deepclone();
 }
 
 mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {
-	name := self.name;
-	eType := self.eType;
-	upperBound := self.upperBound;
-	eAnnotations += "isPropertyGetter".toMarkerAnnotation();
+    name := self.name;
+    eType := self.eType;
+    upperBound := self.upperBound;
+    eAnnotations += "isPropertyGetter".toMarkerAnnotation();
 }
 
 query EOperation::isPropertyGetter() : Boolean {

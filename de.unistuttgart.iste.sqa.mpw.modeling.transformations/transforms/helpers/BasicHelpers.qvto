@@ -17,3 +17,10 @@ query Sequence(String)::joinToString(separator: String) : String {
 	};
 	return str;
 }
+
+query String::firstToLower() : String {
+    if (self.size() <= 1) {
+    	return self.toLowerCase();
+    };
+	return self.substring(1, 1).toLowerCase() + self.substring(2, self.size());
+};

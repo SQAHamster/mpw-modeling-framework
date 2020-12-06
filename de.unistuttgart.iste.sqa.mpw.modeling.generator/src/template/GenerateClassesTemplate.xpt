@@ -38,6 +38,7 @@
     «FOREACH command.mainUnit.parameters AS p-»
          parameters.«p.name» = «IF p.type == "GameTerritory"»«p.name».getInternalTerritory()«ELSE»«p.name»«ENDIF»; «REM»TODO: solve by transformation logic«ENDREM» 
     «ENDFOREACH-»
+    internalHamster.«command.name»(parameters);
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR QueryCallAnnotation»
@@ -46,6 +47,14 @@
 
 «DEFINE GenerationAnnotation FOR ParameterToFieldAssignmentAnnotation»
     this.«targetFeature.name» = «parameter.name» ;
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR ConstructorSimpleFieldInitializationAnnotation»
+    this.«field.name» = new «constructorType.name»(«parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ")»);
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR PropertyPathFieldAssignmentAnnotation»
+    this.«targetFeature.name» = «propertyPath.toPropertyGetters()»;
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR GetPropertyAnnotation»

@@ -14,15 +14,15 @@ public class UndoCommandTest {
 															"   ;");
 		var commandStack = game.getCommandStack();
 
-		var hamster = game.getDefaultHamster();
-		hamster.move(commandStack);
-		hamster.pickGrain(commandStack);
+		var hamster = game.getTerritory().getDefaultHamster();
+		hamster.move();
+		hamster.pickGrain();
 
-		hamster.turnLeft(commandStack);
-		hamster.turnLeft(commandStack);
-		hamster.turnLeft(commandStack);
+		hamster.turnLeft();
+		hamster.turnLeft();
+		hamster.turnLeft();
 
-		hamster.move(commandStack);
+		hamster.move();
 
 		commandStack.undo();
 		String actual = GameStringifier.toString(game);
