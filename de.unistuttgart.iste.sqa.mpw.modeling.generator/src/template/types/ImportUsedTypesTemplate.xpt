@@ -12,19 +12,9 @@
 	«IF eAllOperations.exists(o|o.isCommand())-»
     import «getModulePackage()».commands.*;
 	«ENDIF-»
-	«REM»TODO: import for queries the Location, but later resolve by ecore-return type«ENDREM-»
-	«IF (interface && name.startsWith("ReadOnly") && eAllOperations.exists(o|o.isQuery())) || (interface && eAllOperations.exists(o|o.isCommand()))-»
-    import «getModulePackage()».mpw.*;
-	«ENDIF-»
 	«IF !interface && name.startsWith("Concrete") && eAllOperations.exists(o|o.isQuery())-»
     import static «getModulePackage()».mpw.Direction.*;
     import java.util.stream.Collectors;
-	«ENDIF-»
-	«IF eAllOperations.exists(o|o.isCommand())-»
-    import «getModulePackage()».command.*;
-	«ENDIF-»
-	«IF name.startsWith("Concrete")-»
-    import «getModulePackage()».mpw.*;
 	«ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
 	    eOperations.exists(o|o.isPropertyGetter())-»
@@ -36,7 +26,7 @@
     «EXPAND SingleImportDefinition FOREACH eStructuralFeatures
 		.collect(e|e.eType)
 		.union(eSuperTypes)
-		.union(eOperations.collect(o|o.getUsedTypes()).flatten())
+		.union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())
 		.union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
 		.toSet()
 		.reject(t|t.ePackage == this.ePackage)
