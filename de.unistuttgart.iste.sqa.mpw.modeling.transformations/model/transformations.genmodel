@@ -129,7 +129,7 @@
     <genClasses ecoreClass="GenerationAnnotations.ecore#//ConstructorSimpleFieldInitializationAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//ConstructorSimpleFieldInitializationAnnotation/field"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//ConstructorSimpleFieldInitializationAnnotation/parameterInputVariablePropertyPaths"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//ConstructorSimpleFieldInitializationAnnotation/constructorType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//ConstructorSimpleFieldInitializationAnnotation/constructorTypeName"/>
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//VisibilityAnnotation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VisibilityAnnotation/visibility"/>
@@ -153,6 +153,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//MethodCallAnnotation/variableName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//MethodCallAnnotation/methodName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//MethodCallAnnotation/parameterInputVariablePropertyPaths"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//PropertyPathReturnAnnotation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//PropertyPathReturnAnnotation/propertyPath"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//ImportTypeAnnotation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//ImportTypeAnnotation/relativeQualifiedTypeName"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Query" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#/">

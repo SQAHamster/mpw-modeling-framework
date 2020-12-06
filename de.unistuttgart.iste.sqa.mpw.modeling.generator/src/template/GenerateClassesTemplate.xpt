@@ -14,10 +14,12 @@
     
     import de.unistuttgart.hamster.mpw.*;
     import de.unistuttgart.hamster.commands.*;
+    import de.unistuttgart.hamster.command.*;
+    «EXPAND ImportTypeGenerationAnnotation FOREACH eAnnotations.typeSelect(ImportTypeAnnotation)»
     
     public class «name» {
         «FOREACH eStructuralFeatures AS f-»
-            private «f.eType.name» «f.name»;
+            private «f.featureToJavaType()» «f.name»;
         «ENDFOREACH-»
         
         «FOREACH eOperations AS o-»
@@ -53,7 +55,7 @@
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR ConstructorSimpleFieldInitializationAnnotation-»
-    this.«field.name» = new «constructorType.name»(«parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ")»);
+    this.«field.name» = new «constructorTypeName»(«parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ")»);
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR PropertyPathFieldAssignmentAnnotation-»
@@ -70,4 +72,12 @@
 
 «DEFINE GenerationAnnotation FOR MethodCallAnnotation-»
     «variableName».«methodName»(«parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ")»);
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR PropertyPathReturnAnnotation-»
+    return «propertyPath.toPropertyGetters()»;
+«ENDDEFINE»
+
+«DEFINE ImportTypeGenerationAnnotation FOR ImportTypeAnnotation-»
+    import «getModulePackage()».«relativeQualifiedTypeName»;
 «ENDDEFINE»

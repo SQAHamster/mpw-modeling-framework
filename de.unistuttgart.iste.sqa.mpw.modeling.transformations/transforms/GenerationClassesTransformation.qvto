@@ -1,4 +1,5 @@
 import facade.FacadeElementsLibrary;
+import facade.StageBuilderLibrary;
 
 import helpers.AnnotationHelpers;
 import helpers.EmfHelpers;
@@ -34,6 +35,8 @@ mapping EPackage::transformPackage() : EPackage {
     
     // generate elements of facade after classes are created, since they may rely on other facade types
     facadeClasses->map createElements();
+    
+    eClassifiers += self.eClassifiers[EClass][hasAnnotationValue("role", "editor")]->map createBuilderClass();
     
     self.eClassifiers[EClass][isInstanceOf("MiniProgrammingWorld")]->map useFacades();
 }

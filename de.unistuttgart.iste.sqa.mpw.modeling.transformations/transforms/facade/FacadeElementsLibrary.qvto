@@ -45,7 +45,7 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
     	
     	eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
     		field := self.getEStructuralFeature("internal" + baseName);
-    		constructorType := concreteClass;
+    		constructorTypeName := concreteClass.name;
     	};
     	
     	eAnnotations += toAnnotation("documentation", "Create a new " + baseName + " object without initializing it.");
@@ -132,7 +132,7 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
     	
     	eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
     		field := self.getEStructuralFeature("internal" + baseName);
-    		constructorType := concreteClass;
+    		constructorTypeName := concreteClass.name;
     	};
     	
     	eAnnotations += toAnnotation("documentation", "Initialize a new " + baseName + " and link it to its game object.");
@@ -146,7 +146,7 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
         	field := self.getEStructuralFeature(r.name);
         	parameterInputVariablePropertyPaths += "game";
         	parameterInputVariablePropertyPaths += "internal" + baseName + "." + r.name;
-        	constructorType := field.eType;
+        	constructorTypeName := field.eType.name;
         };
     };
     
@@ -212,7 +212,7 @@ mapping CommandModel::Parameter::toCommandCallParameterMapping() : EStringToStri
     value := self.name;
     var eType := findClassifierForName(self.type);
     if (eType.isMarkedWithAnnotation("role")) {
-        var baseName := eType.getAnnotationValue("baseName");
+        var baseName := eType.getBaseName();
         value := value + ".internal" + baseName;
     }
 }
@@ -239,10 +239,17 @@ mapping inout EClass::createQueries() {
 
 query EClass::getConcreteClass() : EClass {
     var baseName := self.name;
+    if (self.isMarkedWithAnnotation("baseName")) {
+    	baseName := self.getBaseName();
+    };
     return findClassifierForName("Concrete" + baseName).oclAsType(EClass);
 }
 
 query EClassifier::findFacadeForRoleType() : EClass {
-	var baseName := self.getAnnotationValue("baseName");
+	var baseName := self.getBaseName();
     return findClassForName(baseName);
 };
+
+query EClassifier::getBaseName() : String {
+	return self.getAnnotationValue("baseName");
+}
