@@ -52,20 +52,29 @@ mapping QueryInput::Query::toElement() : QueryModel::Query inherits QueryInput::
 }
 
 mapping QueryInput::CommandConstraint::toCommandConstraintBase() : QueryModel::CommandConstraint inherits QueryInput::Element::toElementBase {
-    result.name := self.context().className + "_" + self.name;
+    if (self.name != null) {
+        result.name := self.name;
+    } else {
+        var commandContext := self.commandContext();
+        result.name := commandContext.className + "_" + commandContext.commandName + "_" + self.metaClassName();
+    }
 }
 
 mapping QueryInput::Precondition::toElement() : QueryModel::Precondition inherits QueryInput::CommandConstraint::toCommandConstraintBase {
-    commandName := self.name;
+    commandName := self.commandContext().commandName;
 }
 
 mapping QueryInput::Postcondition::toElement() : QueryModel::Postcondition merges QueryInput::CommandConstraint::toCommandConstraintBase {
     oldValueVariableExpressions := self.allSubobjectsOfType(OldValueExpression).map toVariableExpression();
-    commandName := self.name;
+    commandName := self.commandContext().commandName;
 }
 
 mapping QueryInput::Invariant::toElement() : QueryModel::ClassInvariant inherits QueryInput::Element::toElementBase {
-    result.name := self.context().className + "_invariant";
+    if (self.name != null) {
+        result.name := self.name;
+    } else {
+        result.name := self.context().className + "_Invariant";
+    }
 }
 
 mapping String::toContextClass() : ecore::EClass {
@@ -74,4 +83,8 @@ mapping String::toContextClass() : ecore::EClass {
 
 query QueryInput::Element::context() : QueryInput::Context {
     return self.container().oclAsType(QueryInput::Context);
+}
+
+query QueryInput::Element::commandContext() : QueryInput::CommandContext {
+    return self.container().oclAsType(QueryInput::CommandContext);
 }

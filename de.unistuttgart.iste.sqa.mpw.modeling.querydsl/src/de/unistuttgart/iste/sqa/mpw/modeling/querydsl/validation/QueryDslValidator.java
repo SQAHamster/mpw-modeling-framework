@@ -6,8 +6,13 @@ package de.unistuttgart.iste.sqa.mpw.modeling.querydsl.validation;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.validation.Check;
 
+import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.ClassContext;
+import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.CommandConstraint;
+import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.CommandContext;
+import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.Invariant;
 import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.OldValueExpression;
 import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.Postcondition;
+import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.Query;
 
 /**
  * This class contains custom validation rules. 
@@ -20,6 +25,27 @@ public class QueryDslValidator extends AbstractQueryDslValidator {
 	public void oldValuesOnlyUsedInPostConditions(OldValueExpression statement) {
 		if (EcoreUtil2.getContainerOfType(statement, Postcondition.class) == null) {
 			error("Old value expressions are only allowed in postconditions", null);
+		}
+	}
+	
+	@Check
+	public void commandConstraintsOnlyUsedInCommandContext(CommandConstraint constraint) {
+		if (EcoreUtil2.getContainerOfType(constraint, CommandContext.class) == null) {
+			error("Preconditions and Postconditions are only allowed to be used in command contexts (<classname>::<commandname>", null);
+		}
+	}
+	
+	@Check
+	public void invariantsOnlyUsedInClassContext(Invariant invariant) {
+		if (EcoreUtil2.getContainerOfType(invariant, ClassContext.class) == null) {
+			error("Invariants are only allowed to to be used in class contexts", null);
+		}
+	}
+	
+	@Check
+	public void queriesOnlyUsedInClassContext(Query query) {
+		if (EcoreUtil2.getContainerOfType(query, ClassContext.class) == null) {
+			error("Queries are only allowed to to be used in class contexts", null);
 		}
 	}
 }

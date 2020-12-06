@@ -105,6 +105,9 @@ toJavaDoc(String this) :
     if (length > 0) then 
         "/** " + this + " */"
     else "";
-    
+
 isMarkedWithAnnotation(EModelElement this, String key) : 
-    eAnnotations.exists(a|a.source == key); 
+    eAnnotations.exists(a|a.source == key);
+
+getAnnotationValue(EModelElement this, String key) : 
+    eAnnotations.selectFirst(a|a.source == key).details.selectFirst(d|d.key == key).value;

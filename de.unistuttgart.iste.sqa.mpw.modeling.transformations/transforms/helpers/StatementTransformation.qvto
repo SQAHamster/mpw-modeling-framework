@@ -45,8 +45,8 @@ mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement merges I
 }
 
 mapping Input::Statement::toParameterUsageStatement() : QueryModel::ParameterUsageStatement merges Input::Statement::toStatementBase
-    when { self.parentElement().oclAsType(Input::CommandConstraint).parameterList.parameters->exists(p|p.variableName = self.target); } {
-    var parameter := self.parentElement().oclAsType(Input::CommandConstraint).parameterList.parameters->any(p|p.variableName = self.target);
+    when { self.commandContext().parameterList.parameters->exists(p|p.variableName = self.target); } {
+    var parameter := self.commandContext().parameterList.parameters->any(p|p.variableName = self.target);
     eType := findClassifierForName(parameter.typeName);
     parameterName := parameter.variableName;
     isCollection := false;
@@ -156,6 +156,10 @@ query Input::Statement::parentContext() : Input::Context {
 
 query Input::Element::context() : Input::Context {
     return self.container().oclAsType(Input::Context);
+}
+
+query Input::Statement::commandContext() : Input::CommandContext {
+    return self.container().oclAsType(Input::CommandContext);
 }
 
 helper Input::Statement::parentElement() : Input::Element {

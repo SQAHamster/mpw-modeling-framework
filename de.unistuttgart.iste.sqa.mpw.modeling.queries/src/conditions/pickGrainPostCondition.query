@@ -1,2 +1,2 @@
-context Hamster
-postcondition pickGrain: self.grains->size() = old(self.grains->size()) + 1;
+context Hamster::pickGrain
+postcondition: self.grains->size() = old(self.grains->size()) + 1;

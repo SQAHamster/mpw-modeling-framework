@@ -21,6 +21,8 @@
         «ENDFOREACH-»
         
         «FOREACH eOperations AS o-»
+		    «REM»TODO JML«constraints.toJml()»«ENDREM-»
+		    «o.getAnnotationValue("documentation").toJavaDoc()»
             public «o.operationToJavaType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.name.toJavaType()» «p.name»«ENDFOREACH») {
             «EXPAND GenerationAnnotation FOREACH o.eAnnotations»
             }

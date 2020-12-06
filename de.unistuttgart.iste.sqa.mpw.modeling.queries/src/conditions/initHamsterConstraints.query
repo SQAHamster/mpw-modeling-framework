@@ -1,5 +1,5 @@
-context Hamster
-precondition for initHamster(territory:Territory, location:Location, direction:Direction, grainCount:EInt): 
+context Hamster::initHamster(territory:Territory, location:Location, direction:Direction, grainCount:EInt)
+precondition: 
     grainCount > 0;
-postcondition for initHamster(territory:Territory, location:Location, direction:Direction, grainCount:EInt): 
+postcondition: 
     self.grains->size() = grainCount;

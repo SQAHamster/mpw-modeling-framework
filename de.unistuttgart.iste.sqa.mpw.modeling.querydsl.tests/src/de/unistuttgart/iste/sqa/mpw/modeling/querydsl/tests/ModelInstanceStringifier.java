@@ -25,7 +25,10 @@ public class ModelInstanceStringifier {
 
 		var nameFeature = eClass.getEStructuralFeature("name");
 		if (nameFeature != null) {
-			sb.append(" ").append(eObject.eGet(nameFeature));
+			var name = eObject.eGet(nameFeature);
+			if (name != null) {
+				sb.append(" ").append(eObject.eGet(nameFeature));
+			}
 		}
 		sb.append(":\n");
 		increaseIndent();

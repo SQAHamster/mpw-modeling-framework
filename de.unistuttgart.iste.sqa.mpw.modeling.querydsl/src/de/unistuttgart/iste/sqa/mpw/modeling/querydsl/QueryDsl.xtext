@@ -7,7 +7,15 @@ Model:
 ;
 	
 Context:
+	ClassContext | CommandContext
+;
+
+ClassContext:
 	'context' className=ID (elements+=Element)+
+;
+
+CommandContext:
+	'context' className=ID '::' commandName=ID ('(' parameterList=ParameterList ')')? (elements+=Element)+
 ;
 	
 Element:
@@ -23,11 +31,11 @@ CommandConstraint:
 ;
 
 Precondition:
-	(documentation=DOCUMENTATION)? 'precondition' 'for' name=ID ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
+	(documentation=DOCUMENTATION)? 'precondition' (name=ID)? ':' (expressions+=Expression ';')
 ;
 
 Postcondition:
-	(documentation=DOCUMENTATION)? 'postcondition' 'for' name=ID ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
+	(documentation=DOCUMENTATION)? 'postcondition' (name=ID)? ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
 ;
 
 ParameterList:
@@ -35,11 +43,11 @@ ParameterList:
 ;
 
 Parameter:
-	variableName=ID typeName=ID
+	variableName=ID ':' typeName=ID
 ;
 
 Invariant:
-	(documentation=DOCUMENTATION)? 'invariant' ':' (expressions+=Expression ';')
+	(documentation=DOCUMENTATION)? 'invariant' (name=ID)? ':' (expressions+=Expression ';')
 ;
 	
 Expression:

@@ -1,3 +1,3 @@
-/** Get the current hamster location. */
 context Hamster
+/** Get the current hamster location. */
 query getLocation: self.currentTile.location;

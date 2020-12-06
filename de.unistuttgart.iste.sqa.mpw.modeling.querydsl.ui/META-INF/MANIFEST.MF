@@ -24,3 +24,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-14
 Export-Package: de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.quickfix,
  de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.contentassist,
  de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.internal
+Bundle-Activator: de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui.internal.QuerydslActivator

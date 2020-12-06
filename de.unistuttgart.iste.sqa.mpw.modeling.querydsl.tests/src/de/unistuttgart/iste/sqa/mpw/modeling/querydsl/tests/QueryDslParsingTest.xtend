@@ -33,7 +33,7 @@ class QueryDslParsingTest {
 			query myQuery: true;
 		''')
 		assertModel(result, '''
-		    Context:
+		    ClassContext:
 		      className: Hamster
 		      elements: [
 		        Query myQuery:
@@ -53,7 +53,7 @@ class QueryDslParsingTest {
 			query myQuery2: true;
 		''')
 		assertModel(result, '''
-		    Context:
+		    ClassContext:
 		      className: Hamster
 		      elements: [
 		        Query myQuery1:
@@ -65,16 +65,40 @@ class QueryDslParsingTest {
 	}
 	
 	@Test
-	def void givenPreconditionUsingQuery_whenParse_thenStatementUsingQueryIsParsed() {
+	def void givenCommandContextWithParameters_whenParse_thenParametersAreParsed() {
 		val result = parseHelper.parse('''
-			context Hamster
-			precondition for myCommand: self.myQuery();
+			context Hamster::myCommand(text: String)
+			precondition: true;
 		''')
 		assertModel(result, '''
-		    Context:
+		    CommandContext:
 		      className: Hamster
+		      commandName: myCommand
 		      elements: [
-		        Precondition myCommand:
+		        Precondition:
+		          «simpleExpression»
+		      ]
+		      parameterList: ParameterList:
+		        parameters: [
+		          Parameter:
+		            variableName: text
+		            typeName: String
+		        ]
+		''')
+	}
+	
+	@Test
+	def void givenPreconditionUsingQuery_whenParse_thenStatementUsingQueryIsParsed() {
+		val result = parseHelper.parse('''
+			context Hamster::myCommand
+			precondition: self.myQuery();
+		''')
+		assertModel(result, '''
+		    CommandContext:
+		      className: Hamster
+		      commandName: myCommand
+		      elements: [
+		        Precondition:
 		          expressions: [
 		            StatementsExpression:
 		              statements: [
@@ -91,14 +115,15 @@ class QueryDslParsingTest {
     @Test
     def void givenPostconditionUsingOldValue_whenParse_thenStatementOfOldValueIsParsed() {
         val result = parseHelper.parse('''
-            context Hamster
-            postcondition for myCommand: self.grains->size() = old(self.grains->size()) + 1;
+            context Hamster::myCommand
+            postcondition: self.grains->size() = old(self.grains->size()) + 1;
         ''')
         assertModel(result, '''
-            Context:
+            CommandContext:
               className: Hamster
+              commandName: myCommand
               elements: [
-                Postcondition myCommand:
+                Postcondition:
                   expressions: [
                     EqualityExpression:
                       operation: =
@@ -139,7 +164,7 @@ class QueryDslParsingTest {
             query myQuery: true;
         ''')
         assertModel(result, '''
-		    Context:
+		    ClassContext:
 		      className: Hamster
 		      elements: [
 		        Query myQuery:
@@ -157,7 +182,7 @@ class QueryDslParsingTest {
             invariant: true;
         ''')
         assertModel(result, '''
-		    Context:
+		    ClassContext:
 		      className: Hamster
 		      elements: [
 		        Invariant:
@@ -170,15 +195,16 @@ class QueryDslParsingTest {
     @Test
     def void givenPreconditionWithDocumentation_whenParse_thenDocumentationIsParsedForPrecondition() {
         val result = parseHelper.parse('''
-            context Hamster
+            context Hamster::myCommand
             /** This precondition checks something useful. */
-            precondition for myCommand: true;
+            precondition: true;
         ''')
         assertModel(result, '''
-		    Context:
+		    CommandContext:
 		      className: Hamster
+		      commandName: myCommand
 		      elements: [
-		        Precondition myCommand:
+		        Precondition:
 		          documentation: /** This precondition checks something useful. */
 		          «simpleExpression»
 		      ]
@@ -188,15 +214,16 @@ class QueryDslParsingTest {
     @Test
     def void givenPostconditionWithDocumentation_whenParse_thenDocumentationIsParsedForPostcondition() {
         val result = parseHelper.parse('''
-            context Hamster
+            context Hamster::myCommand
             /** This postcondition checks something useful. */
-            postcondition for myCommand: true;
+            postcondition: true;
         ''')
         assertModel(result, '''
-		    Context:
+		    CommandContext:
 		      className: Hamster
+		      commandName: myCommand
 		      elements: [
-		        Postcondition myCommand:
+		        Postcondition:
 		          documentation: /** This postcondition checks something useful. */
 		          «simpleExpression»
 		      ]
