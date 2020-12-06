@@ -48,7 +48,7 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
     var constructorWithParamsOperation := object EOperation {
     	name := self.name;
     	
-    	eParameters += getCommandForOperation(initCommand).mainUnit.parameters->map toOperationParameter();
+    	eParameters += getCommandForOperation(initCommand).mainUnit.parameters->map toConstructorParameter();
 
     	eAnnotations += "constructor".toMarkerAnnotation();
     };
@@ -155,15 +155,6 @@ query getQueryForOperation(operation: EOperation) : Query {
                     .oclAsType(Query);
 }
 
-mapping CommandModel::Parameter::toOperationParameter() : EParameter {
-    name := self.name;
-    eType := findClassifierForName(self.type);
-    
-    // facades do rely on other facade types, e.g. Hamster -> Territory instead of GameTerritory
-    if (eType.isMarkedWithAnnotation("role")) {
-    	eType := eType.findFacadeForRoleType();
-    }
-}
 
 mapping inout EClass::createCommands() {
     var gameRole := findClassForName("Game" + self.name);
@@ -173,15 +164,27 @@ mapping inout EClass::createCommands() {
 	    self.eOperations += object EOperation {
 	        if (c.isInit) {
 	            name := "init";
-                eParameters := c.mainUnit.parameters->clone()->map toOperationParameter(); // already mapped by constructor: now clone it to avoid removement on constructor parameters
 	        } else {
   	            name := c.name;
-                eParameters := c.mainUnit.parameters->map toOperationParameter();
 	        };
+            eParameters := c.mainUnit.parameters->map toOperationParameter();
 	        eAnnotations += object CommandCallAnnotation { command := c; };
 	    };
     };
 }
+
+abstract mapping CommandModel::Parameter::toOperationParameterBase() : EParameter {
+    name := self.name;
+    eType := findClassifierForName(self.type);
+    
+    // facades do rely on other facade types, e.g. Hamster -> Territory instead of GameTerritory
+    if (eType.isMarkedWithAnnotation("role")) {
+        eType := eType.findFacadeForRoleType();
+    }
+}
+
+mapping CommandModel::Parameter::toOperationParameter() : EParameter merges CommandModel::Parameter::toOperationParameterBase {}
+mapping CommandModel::Parameter::toConstructorParameter() : EParameter merges CommandModel::Parameter::toOperationParameterBase {}
 
 mapping inout EClass::createQueries() {
     var readOnlyRole := findClassForName("ReadOnly" + self.name);

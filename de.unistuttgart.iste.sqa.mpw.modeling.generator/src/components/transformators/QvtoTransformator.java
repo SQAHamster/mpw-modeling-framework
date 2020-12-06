@@ -130,6 +130,7 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 				
 				if (contents.size() > 1) {
 					log.warn("created more than 1 content (" + contents.size() + ") for " + getTransformationName() + " on " + getName(eObject));
+					log.warn("  second element: " + contents.get(1));
 				}
 			}
 			
