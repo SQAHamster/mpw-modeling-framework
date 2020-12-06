@@ -1,0 +1,10 @@
+context Territory::addGrainsToTile(location:Location, amount:EInt)
+
+precondition: 
+    amount > 0;
+
+/*
+precondition: 
+    self.isLocationOnTile(location);
+*/
+    

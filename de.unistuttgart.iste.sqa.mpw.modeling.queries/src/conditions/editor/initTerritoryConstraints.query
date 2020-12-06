@@ -1,0 +1,9 @@
+context Territory::initTerritory(columns: EInt, rows: EInt)
+
+/** size must be > 0 */
+precondition: 
+    columns > 0 && rows > 0;
+
+/** size of territory is set */
+postcondition: 
+    self.width = columns && self.height = rows;

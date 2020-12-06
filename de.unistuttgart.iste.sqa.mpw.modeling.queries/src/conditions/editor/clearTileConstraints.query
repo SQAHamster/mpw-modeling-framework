@@ -1,0 +1,4 @@
+context Territory::clearTile(location:Location)
+
+precondition: true;
+    /* self.isLocationOnTile(location); */

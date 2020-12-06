@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_NOYy8CXXEeuHDMx4P4HuOA" name="initTerritory" description="Defines a new territory by creating a new, empty territory of the given size.">
   <annotations xmi:id="_vrPXIDTJEeu0KvmSgTDkRg" key="isInit" value="true"/>
-  <imports href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#/"/>
   <imports href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#/"/>
+  <imports href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#/"/>
   <units xsi:type="henshin:Rule" xmi:id="_KqqZwDGPEeuDH7pHwTyKiw" name="createFirstRowTile">
     <parameters xmi:id="_zPfocDGREeuDH7pHwTyKiw" name="x" kind="VAR">
       <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -398,7 +398,7 @@
     <mappings xmi:id="_A9aJ8TGSEeuDH7pHwTyKiw" origin="_A9YUwDGSEeuDH7pHwTyKiw" image="_A9aJ8DGSEeuDH7pHwTyKiw"/>
     <mappings xmi:id="_IS5JwTGSEeuDH7pHwTyKiw" origin="_D4O8UDGSEeuDH7pHwTyKiw" image="_IS5JwDGSEeuDH7pHwTyKiw"/>
   </units>
-  <units xsi:type="henshin:SequentialUnit" xmi:id="_fTAPYDGSEeuDH7pHwTyKiw" name="initTerritory" subUnits="_R6N7QDGQEeuDH7pHwTyKiw _qWt0cDGSEeuDH7pHwTyKiw _v4HAcDGSEeuDH7pHwTyKiw">
+  <units xsi:type="henshin:SequentialUnit" xmi:id="_fTAPYDGSEeuDH7pHwTyKiw" name="initTerritory" subUnits="_R6N7QDGQEeuDH7pHwTyKiw _qWt0cDGSEeuDH7pHwTyKiw _v4HAcDGSEeuDH7pHwTyKiw _m9tbsDf9Eeu0KvmSgTDkRg">
     <parameters xmi:id="_frM3gDGTEeuDH7pHwTyKiw" name="self" kind="IN">
       <type xsi:type="ecore:EClass" href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Territory"/>
     </parameters>
@@ -414,6 +414,10 @@
     <parameterMappings xmi:id="_zhVJ4TGSEeuDH7pHwTyKiw" source="_xJcsgDGSEeuDH7pHwTyKiw" target="_iqfvoTGSEeuDH7pHwTyKiw"/>
     <parameterMappings xmi:id="_zhVJ4jGSEeuDH7pHwTyKiw" source="_iqfvojGSEeuDH7pHwTyKiw" target="_xJcsgTGSEeuDH7pHwTyKiw"/>
     <parameterMappings xmi:id="_zhVJ4zGSEeuDH7pHwTyKiw" source="_xJcsgTGSEeuDH7pHwTyKiw" target="_iqfvojGSEeuDH7pHwTyKiw"/>
+    <parameterMappings xmi:id="_tDu-wDf9Eeu0KvmSgTDkRg" source="_iqfvoTGSEeuDH7pHwTyKiw" target="_qbyFEDf9Eeu0KvmSgTDkRg"/>
+    <parameterMappings xmi:id="_tDu-wTf9Eeu0KvmSgTDkRg" source="_qbyFEDf9Eeu0KvmSgTDkRg" target="_iqfvoTGSEeuDH7pHwTyKiw"/>
+    <parameterMappings xmi:id="_tDu-wjf9Eeu0KvmSgTDkRg" source="_iqfvojGSEeuDH7pHwTyKiw" target="_qbyFETf9Eeu0KvmSgTDkRg"/>
+    <parameterMappings xmi:id="_tDu-wzf9Eeu0KvmSgTDkRg" source="_qbyFETf9Eeu0KvmSgTDkRg" target="_iqfvojGSEeuDH7pHwTyKiw"/>
   </units>
   <units xsi:type="henshin:IteratedUnit" xmi:id="_qWt0cDGSEeuDH7pHwTyKiw" name="createFirstRow" subUnit="_KqqZwDGPEeuDH7pHwTyKiw" iterations="columns-1">
     <parameters xmi:id="_sylZ8DGSEeuDH7pHwTyKiw" name="columns" kind="IN">
@@ -441,5 +445,30 @@
     <parameters xmi:id="_Jnr9ADGTEeuDH7pHwTyKiw" name="columns" kind="IN">
       <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </parameters>
+  </units>
+  <units xsi:type="henshin:Rule" xmi:id="_m9tbsDf9Eeu0KvmSgTDkRg" name="setSize">
+    <parameters xmi:id="_qbyFEDf9Eeu0KvmSgTDkRg" name="columns" kind="IN">
+      <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </parameters>
+    <parameters xmi:id="_qbyFETf9Eeu0KvmSgTDkRg" name="rows" kind="IN">
+      <type xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </parameters>
+    <lhs xmi:id="_m9up0Df9Eeu0KvmSgTDkRg" name="Lhs">
+      <nodes xmi:id="_uaxqMDf9Eeu0KvmSgTDkRg" name="self">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Territory"/>
+      </nodes>
+    </lhs>
+    <rhs xmi:id="_m9up0Tf9Eeu0KvmSgTDkRg" name="Rhs">
+      <nodes xmi:id="_uay4UDf9Eeu0KvmSgTDkRg" name="self">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Territory"/>
+        <attributes xmi:id="_wbAckDf9Eeu0KvmSgTDkRg" value="columns">
+          <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Stage/width"/>
+        </attributes>
+        <attributes xmi:id="_1WZ_kDf9Eeu0KvmSgTDkRg" value="rows">
+          <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Stage/height"/>
+        </attributes>
+      </nodes>
+    </rhs>
+    <mappings xmi:id="_uay4UTf9Eeu0KvmSgTDkRg" origin="_uaxqMDf9Eeu0KvmSgTDkRg" image="_uay4UDf9Eeu0KvmSgTDkRg"/>
   </units>
 </henshin:Module>
