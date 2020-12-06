@@ -61,6 +61,9 @@
 
 «DEFINE SetPropertyValueDefinitions FOR EClass»
     «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
+    «IF eAllOperations.without(eOperations).exists(o|o.name == f.adderOrSetter())-»
+    @Override
+    «ENDIF-»
 	«f.modifierVisibility()» void «f.adderOrSetter()»(«f.featureToSingleJavaType()» «f.modifierParameterName()») {
 	     «IF f.isReference() && f.isCollection()-»
 	         «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f»

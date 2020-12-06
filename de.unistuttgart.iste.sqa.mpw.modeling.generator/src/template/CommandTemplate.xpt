@@ -168,8 +168,13 @@
 
 «DEFINE AttributeDefinition FOR AttributeCondition»
 	«IF this.isCreate»
-	    // set attribute condition «instance.variableName».«attributeName» := «attributeValueLiteral»
-	    «instance.variableName».«attributeName.setter()»(«attributeValueLiteral.toPropertyGetters()»);
+	    «IF instance.typeName.isValueType()-»
+    	    // set attribute condition «instance.variableName».«attributeName» := «attributeValueLiteral»
+	        «instance.variableName».«attributeName.setter()»(«attributeValueLiteral.toPropertyGetters()»);
+	    «ELSE»
+	        // set value type field «instance.variableName».«attributeName» := «attributeValueLiteral»
+	        «commandSetter()»(«instance.variableName», "«attributeName»", «instance.variableName».«attributeName.getter()»(), «attributeValueLiteral.toPropertyGetters()»);
+	    «ENDIF-»
 	«ELSE»	
 		// assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
 		assertAttributeCondition("«instance.variableName».«attributeName» == «attributeValueLiteral.toPropertyGetters()»", «toPropertyGetters(instance.variableName + "." + attributeName)» == «attributeValueLiteral.toPropertyGetters()»);

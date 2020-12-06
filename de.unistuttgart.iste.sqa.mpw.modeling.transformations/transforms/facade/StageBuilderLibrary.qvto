@@ -20,7 +20,6 @@ mapping EClass::createBuilderClass() : EClass
     result.map createConstructor();
     result.eOperations += self.eAllOperations[isMarkedWithAnnotation("command")]->collect(o|getCommandForOperation(o))->map toBuilderOperation(result);
     result.eOperations += result.eOperations[eParameters->exists(p|p.name = "location" and p.eType.name = "Location")]->map cloneSimplifiedBuilderOperation();
-    result.map createBuildOperation();
 }
 
 abstract mapping inout EClass::createFields() {
@@ -36,13 +35,6 @@ abstract mapping inout EClass::createFields() {
         name := "game";
         eType := findInstanceOfMetaClass("MiniProgrammingWorld");	
     };
-    
-    var resultCommandField := object EReference {
-        name := "resultCommand";
-        eType := findClassifierForName("CompositeCommand");
-        containment := true;
-    };
-    eStructuralFeatures += resultCommandField;
 }
 
 abstract mapping inout EClass::createConstructor() {
@@ -69,14 +61,6 @@ abstract mapping inout EClass::createConstructor() {
     		propertyPath := "game.territory.internalEditor" + baseName;
     	};
     	
-    	eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
-    		field := self.getEStructuralFeature("resultCommand");
-    		constructorTypeName := "SimpleCompositeCommand";
-    	};
-    	self.eAnnotations += object ImportTypeAnnotation {
-    		relativeQualifiedTypeName := "command.impl.*"
-    	};
-    	
     	eAnnotations += toAnnotation("documentation", "Creates a new " + self.name + " object which then can be used to defined the given " + baseName + ".");
     };
     eOperations += constructorOperation;
@@ -95,13 +79,9 @@ mapping Transformation::toBuilderOperation(parentBuilderClass: EClass) : EOperat
         parameterMappings := self.mainUnit.parameters->map toCommandCallParameterMapping();
     };
     
-    eAnnotations += object CommandCreationAnnotation { 
+    eAnnotations += object CommandCallAnnotation { 
         command := self;
-    };
-    
-    eAnnotations += object AddVariableToCollectionAnnotation { 
-        collectionPropertyPath := "resultCommand.subCommands";
-        parameterPropertyPath := "command";
+        targetRoleVariableName := parentBuilderClass.getBaseName().firstToLower();
     };
     
     eAnnotations += object PropertyPathReturnAnnotation {
@@ -136,18 +116,4 @@ mapping EOperation::cloneSimplifiedBuilderOperation() : EOperation {
     };
     
     eAnnotations += self.eAnnotations.deepclone();
-}
-
-abstract mapping inout EClass::createBuildOperation() {
-    var baseName := self.getBaseName();
-
-    var buildOperation := object EOperation {
-    	name := "build";
-    	eType := findClassForName("Command");
-    	eAnnotations := object PropertyPathReturnAnnotation {
-    	    propertyPath := "resultCommand";
-    	};
-    };
-    eOperations += buildOperation;
-    
 }

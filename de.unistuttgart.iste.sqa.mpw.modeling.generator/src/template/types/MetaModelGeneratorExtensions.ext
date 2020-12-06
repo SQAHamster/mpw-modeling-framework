@@ -36,9 +36,12 @@ toInheritance(EClass this) :
     else if (filteredInterfaces.size > 0) then "implements " + filteredInterfaces.collect(i|i.name).toString(", ")
     else "";
     
-// TODO: introduce a stereotype for the Value Type semantics
 isValueType(EClassifier this) :
-    EClass.isInstance(this) && name == "Location";
+    name.isValueType();
+    
+// TODO: introduce a stereotype for the Value Type semantics
+isValueType(String this) :
+    this == "Location";
 
 toJavaPackagePath(EPackage this) :
     this.toJavaPackageName().replaceAll("\\.", "/");

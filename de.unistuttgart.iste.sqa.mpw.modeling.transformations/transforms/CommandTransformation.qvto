@@ -89,10 +89,7 @@ mapping Henshin::Rule::toRule() : CommandModel::Rule {
   modifications += self.rhs.edges[action.toString() = "create"]->map toAddEdgeModifications();
   modifications += self.lhs.allSubobjectsOfType(Attribute)[isModification()]->map toAttributeModifications();
   
-  thisInstance := self.lhs.nodes->any(n|n.type.eSuperTypes->exists(t|t.name = 'Actor')).resolveone(CommandModel::InstanceCondition);
-  if (thisInstance = null) {
-  	thisInstance := self.lhs.nodes->any(n|n.name = "self").resolveone(CommandModel::InstanceCondition);
-  } endif;
+  thisInstance := self.lhs.nodes->any(n|n.name = "self").resolveone(CommandModel::InstanceCondition);
   
   referenceConditions := result.sortReferences();
   
