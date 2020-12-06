@@ -29,6 +29,7 @@ abstract mapping inout EClass::createElementsBase() {
     
     self.eAnnotations += object GetPropertyAnnotation {
     	field := internalGameRoleField;
+    	eAnnotations += toAnnotation("documentation", "Get the internal representation of the " + baseName + ".");
     };
 }
 
@@ -41,18 +42,33 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
     var constructorOperation := object EOperation {
     	name := self.name;
     	eAnnotations += "constructor".toMarkerAnnotation();
+    	
+    	eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
+    		field := self.getEStructuralFeature("internal" + baseName);
+    		constructorType := concreteClass;
+    	};
+    	
+    	eAnnotations += toAnnotation("documentation", "Create a new " + baseName + " object without initializing it.");
     };
     eOperations += constructorOperation;
-    var initCommand := concreteClass.eAllOperations->any(o|o.isMarkedWithAnnotation("command") and getCommandForOperation(o).isInit);
     
-    var constructorWithParamsOperation := object EOperation {
-    	name := self.name;
-    	
-    	eParameters += getCommandForOperation(initCommand).mainUnit.parameters->map toConstructorParameter();
-
-    	eAnnotations += "constructor".toMarkerAnnotation();
+    var initCommand := concreteClass.eAllOperations->any(o|o.isMarkedWithAnnotation("command") and getCommandForOperation(o).isInit);
+    if (initCommand != null) {
+	    var constructorWithParamsOperation := object EOperation {
+	    	name := self.name;
+	    	eParameters += getCommandForOperation(initCommand).mainUnit.parameters->map toConstructorParameter();
+	    	eAnnotations += "constructor".toMarkerAnnotation();
+	    	
+	    	eAnnotations += object MethodCallAnnotation {
+	    	    variableName := "this";
+	    		methodName := "init";
+	    		parameterInputVariablePropertyPaths += eParameters->collect(p|p.name);
+	    	};
+	    	
+	    	eAnnotations += toAnnotation("documentation", "Create a new Hamster object by initializing it with the relating init() method.");
+	    };
+	    eOperations += constructorWithParamsOperation;
     };
-    eOperations += constructorWithParamsOperation;
     
     var mpwClass := findInstanceOfMetaClass("MiniProgrammingWorld");
     var internalStageConstructorOperation := object EOperation {
@@ -79,6 +95,8 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
             targetFeature := self.getEStructuralFeature("game");
             parameter := mpwParameter;
         };
+        
+        eAnnotations += toAnnotation("documentation", "Internal constructor.");
     };
     eOperations += internalStageConstructorOperation;
     
@@ -116,6 +134,8 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
     		field := self.getEStructuralFeature("internal" + baseName);
     		constructorType := concreteClass;
     	};
+    	
+    	eAnnotations += toAnnotation("documentation", "Initialize a new " + baseName + " and link it to its game object.");
     };
     eOperations += constructorOperation;
     

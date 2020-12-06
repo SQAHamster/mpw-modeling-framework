@@ -9,7 +9,7 @@
     «EXPAND JavaClass FOREACH this.eClassifiers.typeSelect(EClass).reject(c|c.interface)»
 «ENDDEFINE»
 
-«DEFINE JavaClass FOR EClass»
+«DEFINE JavaClass FOR EClass-»
     «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
     
     import de.unistuttgart.hamster.mpw.*;
@@ -24,17 +24,18 @@
 		    «REM»TODO JML«constraints.toJml()»«ENDREM-»
 		    «o.getAnnotationValue("documentation").toJavaDoc()»
             public «o.operationToJavaType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.name.toJavaType()» «p.name»«ENDFOREACH») {
-            «EXPAND GenerationAnnotation FOREACH o.eAnnotations»
+            «EXPAND GenerationAnnotation FOREACH o.eAnnotations-»
             }
+            
         «ENDFOREACH»
         «EXPAND GenerationAnnotation FOREACH eAnnotations»
     }
     «ENDFILE»
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE»
+«DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE-»
 
-«DEFINE GenerationAnnotation FOR CommandCallAnnotation»
+«DEFINE GenerationAnnotation FOR CommandCallAnnotation-»
     var parameters = new «command.name.toFirstUpper()»CommandParameters();
     parameters.commandStack = game.getCommandStack();
     «FOREACH parameterMappings AS mapping-»
@@ -43,24 +44,30 @@
     internalHamster.«command.name»(parameters);
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR QueryCallAnnotation»
+«DEFINE GenerationAnnotation FOR QueryCallAnnotation-»
     return «internalRoleField.name».«query.name»(); 
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR ParameterToFieldAssignmentAnnotation»
+«DEFINE GenerationAnnotation FOR ParameterToFieldAssignmentAnnotation-»
     this.«targetFeature.name» = «parameter.name» ;
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR ConstructorSimpleFieldInitializationAnnotation»
+«DEFINE GenerationAnnotation FOR ConstructorSimpleFieldInitializationAnnotation-»
     this.«field.name» = new «constructorType.name»(«parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ")»);
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR PropertyPathFieldAssignmentAnnotation»
+«DEFINE GenerationAnnotation FOR PropertyPathFieldAssignmentAnnotation-»
     this.«targetFeature.name» = «propertyPath.toPropertyGetters()»;
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR GetPropertyAnnotation»
+«DEFINE GenerationAnnotation FOR GetPropertyAnnotation-»
+    «getAnnotationValue("documentation").toJavaDoc()»
     public «field.featureToJavaType()» «field.name.getter()»() {
         return this.«field.name»;
     }
+    
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR MethodCallAnnotation-»
+    «variableName».«methodName»(«parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ")»);
 «ENDDEFINE»

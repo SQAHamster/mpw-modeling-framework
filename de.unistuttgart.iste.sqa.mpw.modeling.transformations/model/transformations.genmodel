@@ -149,6 +149,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation/fieldTypeName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation/getterName"/>
     </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//MethodCallAnnotation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//MethodCallAnnotation/variableName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//MethodCallAnnotation/methodName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//MethodCallAnnotation/parameterInputVariablePropertyPaths"/>
+    </genClasses>
   </genPackages>
   <genPackages prefix="Query" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="QueryBehaviors.ecore#//CalculationOperator">
