@@ -37,8 +37,8 @@
 «DEFINE GenerationAnnotation FOR CommandCallAnnotation»
     var parameters = new «command.name.toFirstUpper()»CommandParameters();
     parameters.commandStack = game.getCommandStack();
-    «FOREACH command.mainUnit.parameters AS p-»
-         parameters.«p.name» = «IF p.type == "GameTerritory"»«p.name».getInternalTerritory()«ELSE»«p.name»«ENDIF»; «REM»TODO: solve by transformation logic«ENDREM» 
+    «FOREACH parameterMappings AS mapping-»
+         parameters.«mapping.key» = «mapping.value.toPropertyGetters()»; 
     «ENDFOREACH-»
     internalHamster.«command.name»(parameters);
 «ENDDEFINE»

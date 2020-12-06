@@ -50,8 +50,6 @@ mapping Input::Statement::toParameterUsageStatement() : QueryModel::ParameterUsa
     eType := findClassifierForName(parameter.typeName);
     parameterName := parameter.variableName;
     isCollection := false;
-    
-    log("### " + parameterName + ", " + eType.name);
 }
 
 query Input::Statement::determineSelfAlias() : String {

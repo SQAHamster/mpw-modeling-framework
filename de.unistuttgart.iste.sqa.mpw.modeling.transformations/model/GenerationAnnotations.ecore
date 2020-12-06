@@ -48,6 +48,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="CommandCallAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="command" lowerBound="1"
         eType="ecore:EClass CommandBehaviors.ecore#//Transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterMappings" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStringToStringMapEntry"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="QueryCallAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1" eType="ecore:EClass QueryBehaviors.ecore#//Query"/>

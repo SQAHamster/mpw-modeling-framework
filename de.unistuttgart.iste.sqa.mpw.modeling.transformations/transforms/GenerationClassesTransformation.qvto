@@ -23,6 +23,7 @@ mapping EPackage::transformPackage() : EPackage {
     name := self.name;
     nsURI := self.nsURI + "/generation";
     nsPrefix := self.nsPrefix;
+    eAnnotations += "facade".toMarkerAnnotation();
     // eClassifiers := self.eClassifiers->map toClassifier();
     // eClassifiers += self.eClassifiers[EClass]->map toImplClass();
     

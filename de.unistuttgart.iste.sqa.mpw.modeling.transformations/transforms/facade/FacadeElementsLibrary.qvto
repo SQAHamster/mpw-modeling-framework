@@ -168,7 +168,10 @@ mapping inout EClass::createCommands() {
   	            name := c.name;
 	        };
             eParameters := c.mainUnit.parameters->map toOperationParameter();
-	        eAnnotations += object CommandCallAnnotation { command := c; };
+	        eAnnotations += object CommandCallAnnotation { 
+	            command := c;
+	            parameterMappings := c.mainUnit.parameters->map toCommandCallParameterMapping();
+            };
 	        eAnnotations += toAnnotation("documentation", c.documentation);
 	    };
     };
@@ -181,6 +184,16 @@ abstract mapping CommandModel::Parameter::toOperationParameterBase() : EParamete
     // facades do rely on other facade types, e.g. Hamster -> Territory instead of GameTerritory
     if (eType.isMarkedWithAnnotation("role")) {
         eType := eType.findFacadeForRoleType();
+    }
+}
+
+mapping CommandModel::Parameter::toCommandCallParameterMapping() : EStringToStringMapEntry {
+    key := self.name;
+    value := self.name;
+    var eType := findClassifierForName(self.type);
+    if (eType.isMarkedWithAnnotation("role")) {
+        var baseName := eType.getAnnotationValue("baseName");
+        value := value + ".internal" + baseName;
     }
 }
 

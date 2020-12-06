@@ -136,6 +136,7 @@
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//CommandCallAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandCallAnnotation/command"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandCallAnnotation/parameterMappings"/>
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//QueryCallAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//QueryCallAnnotation/query"/>
