@@ -13,6 +13,7 @@
     	import «getModulePackage()».command.*;
     	import de.unistuttgart.hamster.command.impl.*;
     	import static «getModulePackage()».mpw.Direction.*;
+    	import java.util.stream.Collectors;
     	
     	«REM»TODO JML«constraints.toJml()»«ENDREM-»
     	«documentation.toJavaDoc()»

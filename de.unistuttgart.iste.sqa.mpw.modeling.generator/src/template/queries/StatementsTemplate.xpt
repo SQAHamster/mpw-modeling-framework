@@ -35,6 +35,10 @@
         «LET ((EClassifier)parameters.get(0)).name AS typeSelectName-»
         stream().filter(«typeSelectName».class::isInstance).map(«typeSelectName».class::cast).collect(Collectors.toList())
         «ENDLET-»
+    «ELSEIF methodType == CollectionMethodType::AT-»
+        «LET (Expression)parameters.get(0) AS indexExpression-»
+        get(«EXPAND template::QueriesTemplate::ExpressionDefinition FOR indexExpression»)
+        «ENDLET-»
     «ENDIF-»
 «ENDDEFINE»
 

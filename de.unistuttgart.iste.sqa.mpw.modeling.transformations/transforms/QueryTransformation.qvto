@@ -46,8 +46,9 @@ helper String::trimMarkers() : String {
 }
 
 mapping QueryInput::Query::toElement() : QueryModel::Query inherits QueryInput::Element::toElementBase {
-    result.name := self.name;
-	result.eType := result.mainExpression.eType;
+    name := self.name;
+	eType := result.mainExpression.eType;
+	internal := self.internal;
 	defaultValueLiteral := result.eType.defaultValue.toString();
 	if (self.parameterList != null) {
 		parameters := self.parameterList.parameters->map toParameter();

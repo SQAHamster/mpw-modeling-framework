@@ -23,7 +23,7 @@ Element:
 ;
 
 Query:
-	(documentation=DOCUMENTATION)? 'query' name=ID ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
+	(internal?='internal')? (documentation=DOCUMENTATION)? 'query' name=ID ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
 ;
 
 CommandConstraint:
@@ -75,7 +75,11 @@ ComparisonExpression returns Expression:
 ;
 
 PlusOrMinusExpression returns Expression:
-    PrimaryExpression ( ({PlusExpression.left=current} '+' | {MinusExpression.left=current} '-') right=PrimaryExpression)*
+    MultiplicationOrDivisionExpression ( ({PlusExpression.left=current} '+' | {MinusExpression.left=current} '-') right=MultiplicationOrDivisionExpression)*
+;
+
+MultiplicationOrDivisionExpression returns Expression:
+    PrimaryExpression ( ({MultiplicationExpression.left=current} '*' | {DivisionExpression.left=current} '/') right=PrimaryExpression)*
 ;
 
 PrimaryExpression returns Expression:
@@ -111,12 +115,11 @@ SimpleCollectionMethod:
 	method=('notEmpty' | 'isEmpty' | 'size' ) '()';
     
 ParametrizedCollectionMethod:
-	('typeSelect(' typeSelect=ID ')');
+	('typeSelect(' typeSelect=ID ')') |
+	('at(' indexExpression=Expression ')');
     
 Direction:
 	('EAST' | 'WEST' | 'SOUTH' | 'NORTH');
-	
-IdBracket: ID '()'?;
 
 terminal DOCUMENTATION : '/**' -> '*/' ;
 @Override 

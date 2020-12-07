@@ -28,6 +28,8 @@ mapping Input::Expression::toExpression() : QueryModel::Expression
               Input::ComparisonExpression::toCompareExpression,
               Input::PlusExpression::toCalculationExpression,
               Input::MinusExpression::toCalculationExpression,
+              Input::MultiplicationExpression::toCalculationExpression,
+              Input::DivisionExpression::toCalculationExpression,
               Input::BoolConstant::toConstantExpression,
               Input::IntConstant::toConstantExpression,
               Input::StringConstant::toConstantExpression,
@@ -136,6 +138,26 @@ mapping Input::MinusExpression::toCalculationExpression() : QueryModel::Calculat
     eType := EInt.oclAsType(EClassifier);
 }
 
+mapping Input::MultiplicationExpression::toCalculationExpression() : QueryModel::CalculationExpression {
+    lhs := self.left.map toExpression();
+    rhs := self.right.map toExpression();
+    operator := CalculationOperator::MULTIPLY;
+    
+    assert(lhs.eType = EInt.oclAsType(EClassifier) and not lhs.isCollection);
+    assert(rhs.eType = EInt.oclAsType(EClassifier) and not rhs.isCollection);
+    eType := EInt.oclAsType(EClassifier);
+}
+
+mapping Input::DivisionExpression::toCalculationExpression() : QueryModel::CalculationExpression {
+    lhs := self.left.map toExpression();
+    rhs := self.right.map toExpression();
+    operator := CalculationOperator::DIVIDE;
+    
+    assert(lhs.eType = EInt.oclAsType(EClassifier) and not lhs.isCollection);
+    assert(rhs.eType = EInt.oclAsType(EClassifier) and not rhs.isCollection);
+    eType := EInt.oclAsType(EClassifier);
+}
+
 mapping Input::BoolConstant::toConstantExpression() : QueryModel::ConstantExpression {
     _literal := self.value;
     eType := EBoolean.oclAsType(EClassifier);
@@ -158,6 +180,10 @@ mapping Input::NullConstant::toConstantExpression() : QueryModel::ConstantExpres
 
 mapping Input::StatementsExpression::toStatementExpression() : QueryModel::StatementsExpression
     when { self.statements->notEmpty(); } {
+    
+    // resolve potential nested expressions to ensure they are usable by statements via resolve (note: avoid cyclic dependency of qvto-files)
+    self.allSubobjectsOfKind(Input::Expression)->map toExpression();
+    
     statements += self.statements->map toStatement();
     eType := statements->last().eType;
     isCollection := statements->last().isCollection;

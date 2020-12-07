@@ -109,6 +109,14 @@ mapping Input::Statement::toCollectionMethodStatement() : QueryModel::Collection
             methodType := QueryModel::CollectionMethodType::TYPE_SELECT;
             parameters += eType.oclAsType(ecore::EObject);
         }
+        case (not isSimple and parametrizedCollectionMethod.indexExpression != null) {
+            methodType := QueryModel::CollectionMethodType::AT;
+            isCollection := false;
+            eType := self.getCurrentExpressionType();
+            var expression := parametrizedCollectionMethod.indexExpression.resolveone(QueryModel::Expression).oclAsType(EObject);
+            parameters += expression;
+            contents += expression; // ensure containment
+        }
         else {
             assert(false);
         }

@@ -20,6 +20,8 @@ toOperatorCode(CalculationOperator this) :
     switch (this) {
        case CalculationOperator::PLUS: "+"
        case CalculationOperator::MINUS: "-"
+       case CalculationOperator::MULTIPLY: "*"
+       case CalculationOperator::DIVIDE: "/"
        default: ""
     };
 

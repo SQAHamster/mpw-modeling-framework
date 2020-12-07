@@ -239,6 +239,7 @@ mapping inout EClass::createQueries() {
     var readOnlyRole := findClassForName("ReadOnly" + self.name);
     readOnlyRole.eAllOperations[isMarkedWithAnnotation("query")]
                ->collect(o|getQueryForOperation(o))
+               ->reject(q|q.internal)
                ->forEach(q) {
 	    self.eOperations += object EOperation {
 	        name := q.name;

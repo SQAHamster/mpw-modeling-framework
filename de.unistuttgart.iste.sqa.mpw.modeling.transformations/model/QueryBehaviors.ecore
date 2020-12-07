@@ -25,6 +25,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValueLiteral" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="internal" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//TypedElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -64,6 +66,8 @@
   <eClassifiers xsi:type="ecore:EEnum" name="CalculationOperator">
     <eLiterals name="PLUS" literal="+"/>
     <eLiterals name="MINUS" value="1" literal="-"/>
+    <eLiterals name="MULTIPLY" value="2" literal="*"/>
+    <eLiterals name="DIVIDE" value="3" literal="/"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ImpliesExpression" eSuperTypes="#//BinaryExpression"/>
   <eClassifiers xsi:type="ecore:EClass" name="ConstantExpression" eSuperTypes="#//Expression">
@@ -121,12 +125,15 @@
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="methodType" lowerBound="1"
         eType="#//CollectionMethodType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="CollectionMethodType">
     <eLiterals name="NOT_EMPTY" literal="NOT_EMPTY"/>
     <eLiterals name="IS_EMPTY" value="1" literal="IS_EMPTY"/>
     <eLiterals name="SIZE" value="2" literal="SIZE"/>
     <eLiterals name="TYPE_SELECT" value="3" literal="TYPE_SELECT"/>
+    <eLiterals name="AT" value="4" literal="AT"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EnumLiteralStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="enumLiteral" lowerBound="1"
