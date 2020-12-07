@@ -1,3 +1,6 @@
 context Hamster::pickGrain
+
+precondition: self.grainAvailable();
+
 /** check if the grains size is increased by one */
 postcondition: self.grains->size() = old(self.grains->size()) + 1;

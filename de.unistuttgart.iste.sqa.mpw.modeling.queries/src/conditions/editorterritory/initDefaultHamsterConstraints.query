@@ -1,0 +1,17 @@
+context Territory::initDefaultHamster(location:Location, direction:Direction, grainCount:EInt)
+
+/** hamster must not be already initialized */
+precondition: 
+    self.defaultHamster.stage = null;
+
+/** location has to be on territory */
+precondition: 
+    self.isLocationInTerritory(location);
+
+/** grainCount has to be greater than zero */
+precondition: 
+    grainCount > 0;
+
+/** the number of grains is not correct */
+postcondition: 
+    self.defaultHamster.grains->size() = grainCount;

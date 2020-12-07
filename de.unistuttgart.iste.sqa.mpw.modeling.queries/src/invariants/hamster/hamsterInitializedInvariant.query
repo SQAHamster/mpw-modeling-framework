@@ -1,3 +1,4 @@
 context Hamster
+
 /** Invariant which checks if the hamster is placed on a tile. */
 invariant isInitialized: self.currentTile <> null;
