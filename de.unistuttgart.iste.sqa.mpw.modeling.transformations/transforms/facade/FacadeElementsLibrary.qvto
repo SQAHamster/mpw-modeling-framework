@@ -97,11 +97,11 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
         eParameters += internalActorParameter;
         
         eAnnotations += object ParameterToFieldAssignmentAnnotation {
-            targetFeature := self.getEStructuralFeature("internal" + baseName);
+            field := self.getEStructuralFeature("internal" + baseName);
             parameter := internalActorParameter;
         };
         eAnnotations += object ParameterToFieldAssignmentAnnotation {
-            targetFeature := self.getEStructuralFeature("game");
+            field := self.getEStructuralFeature("game");
             parameter := mpwParameter;
         };
         
@@ -167,7 +167,7 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
 
 mapping EOperation::toAssignParameterToFieldAnnotation(parameterName: String, fieldName: String) : ParameterToFieldAssignmentAnnotation {
     parameter := self.eParameters->any(p|p.name = parameterName);
-    targetFeature := self.eContainingClass.eAllStructuralFeatures->any(f|f.name = fieldName);
+    field := self.eContainingClass.eAllStructuralFeatures->any(f|f.name = fieldName);
 }
 
 query getCommandForOperation(operation: EOperation) : Transformation {

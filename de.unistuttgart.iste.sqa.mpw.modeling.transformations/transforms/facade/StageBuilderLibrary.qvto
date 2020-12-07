@@ -52,12 +52,12 @@ abstract mapping inout EClass::createConstructor() {
     	eAnnotations += "constructor".toMarkerAnnotation();
     	
     	eAnnotations += object ParameterToFieldAssignmentAnnotation {
-    		targetFeature := self.getEStructuralFeature("game");
+    		field := self.getEStructuralFeature("game");
     		parameter := gameParameter;
     	};
     	
     	eAnnotations += object PropertyPathFieldAssignmentAnnotation {
-    		targetFeature := self.getEStructuralFeature(baseName.firstToLower());
+    		field := self.getEStructuralFeature(baseName.firstToLower());
     		propertyPath := "game.territory.internalEditor" + baseName;
     	};
     	

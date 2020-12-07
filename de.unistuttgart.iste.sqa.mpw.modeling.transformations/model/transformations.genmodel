@@ -113,7 +113,7 @@
     <genClasses image="false" ecoreClass="GenerationAnnotations.ecore#//GenerationAnnotation"/>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//ConstructorAnnotation"/>
     <genClasses image="false" ecoreClass="GenerationAnnotations.ecore#//FieldAssignmentAnnotation">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//FieldAssignmentAnnotation/targetFeature"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//FieldAssignmentAnnotation/field"/>
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//ParameterToFieldAssignmentAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//ParameterToFieldAssignmentAnnotation/parameter"/>

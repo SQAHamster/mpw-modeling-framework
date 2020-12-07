@@ -58,7 +58,7 @@
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR ParameterToFieldAssignmentAnnotation-»
-    this.«targetFeature.name» = «parameter.name» ;
+    this.«field.name» = «parameter.name» ;
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR ConstructorSimpleFieldInitializationAnnotation-»
@@ -66,7 +66,7 @@
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR PropertyPathFieldAssignmentAnnotation-»
-    this.«targetFeature.name» = «propertyPath.toPropertyGetters()»;
+    this.«field.name» = «propertyPath.toPropertyGetters()»;
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR AddVariableToCollectionAnnotation-»
