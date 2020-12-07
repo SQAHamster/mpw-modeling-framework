@@ -113,6 +113,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="QueryStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1" eType="#//Query"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterNames" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CollectionMethodStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"

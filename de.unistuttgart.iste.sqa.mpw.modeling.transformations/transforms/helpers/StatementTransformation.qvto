@@ -66,6 +66,7 @@ mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement merges
     _query := inputQuery.resolveone(QueryModel::Query);
     assert(_query != null) with log('query ' + inputQuery.name + ' could not be resolved');
     eType := _query.eType;
+    parameterNames := self.methodCall.parameters;
 }
 
 mapping Input::Statement::toFeatureStatement() : QueryModel::FeatureStatement merges Input::Statement::toStatementBase
@@ -125,7 +126,8 @@ query Input::Statement::isBasedOnQuery() : Boolean {
 }
 
 query isStatementMatchingQuery(s: Input::Statement, queryElement: Input::Query) : Boolean {
-    return queryElement.name + "()" = s.target
+    return s.methodCall != null 
+           and queryElement.name = s.methodCall.targetMethod
            and currentExpressionTypes->get(s.parentExpression()).name = queryElement.context().className;
 }
 

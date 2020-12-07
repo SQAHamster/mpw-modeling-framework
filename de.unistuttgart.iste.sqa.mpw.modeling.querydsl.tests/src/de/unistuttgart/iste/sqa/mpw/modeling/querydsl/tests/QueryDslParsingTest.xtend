@@ -105,10 +105,45 @@ class QueryDslParsingTest {
 		                Statement:
 		                  target: self
 		                Statement:
-		                  target: myQuery()
+		                  methodCall: MethodCall:
+		                    targetMethod: myQuery
+		                    parameters: []
 		              ]
 		          ]
 		      ]
+		''')
+	}
+	
+	@Test
+	def void givenPreconditionUsingQueryWithParameters_whenParse_thenStatementUsingQueryIsParsed() {
+		val result = parseHelper.parse('''
+			context Hamster::myCommand(number: Int)
+			precondition: self.myQuery(number);
+		''')
+		assertModel(result, '''
+		    CommandContext:
+		      className: Hamster
+		      commandName: myCommand
+		      elements: [
+		        Precondition:
+		          expressions: [
+		            StatementsExpression:
+		              statements: [
+		                Statement:
+		                  target: self
+		                Statement:
+		                  methodCall: MethodCall:
+		                    targetMethod: myQuery
+		                    parameters: [number]
+		              ]
+		          ]
+		      ]
+		      parameterList: ParameterList:
+		        parameters: [
+		          Parameter:
+		            variableName: number
+		            typeName: Int
+		        ]
 		''')
 	}
 

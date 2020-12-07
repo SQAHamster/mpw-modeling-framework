@@ -99,7 +99,10 @@ Statement:
 	target='self' | target=Direction | target=ID;
 
 NavigatedStatement returns Statement:
-    ('.' target=IdBracket) | ('->' collectionTarget=CollectionMethod);
+    ('.' methodCall=MethodCall) | ('.' target=ID) | ('->' collectionTarget=CollectionMethod);
+    
+MethodCall:
+	targetMethod=ID ('(' parameters+=(ID)* ')' | '()');
     
 CollectionMethod:
 	SimpleCollectionMethod | ParametrizedCollectionMethod;

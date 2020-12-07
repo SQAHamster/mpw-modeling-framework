@@ -43,7 +43,7 @@
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR QueryStatement-»
-    «query.name»()
+    «query.name»(«parameterNames.toString(", ")»)
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR VariableUsageStatement-»
