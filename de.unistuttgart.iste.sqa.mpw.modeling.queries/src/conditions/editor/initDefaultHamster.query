@@ -4,9 +4,7 @@ context Hamster::initHamster(territory:Territory, location:Location, direction:D
 precondition: 
     self.stage = null;
 
-/** check hamster is not already initialized */
-precondition: 
-    location.column >= 0 && location.column < territory.width;
+// todo use territory.isLocationInTerritory to check location
 
 precondition: 
     grainCount > 0;

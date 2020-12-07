@@ -1,4 +1,4 @@
 context Territory::addWallToTile(location:Location)
 
-precondition: true;
-    /* self.isLocationOnTile(location); */
+precondition: 
+    self.isLocationInTerritory(location);
