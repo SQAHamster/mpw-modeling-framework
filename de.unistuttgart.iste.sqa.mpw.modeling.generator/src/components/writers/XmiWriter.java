@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
-import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.impl.EAnnotationImpl;
@@ -22,6 +21,8 @@ import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xtext.EcoreUtil2;
+
+import components.helpers.CustomAnnotationConverter;
 
 public class XmiWriter extends WorkflowComponentWithModelSlot {
 	private final static Logger log = Logger.getLogger(XmiWriter.class.getName());
@@ -91,13 +92,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	 * opening XMI files with complex annotation contents comes with errors, so remove them.
 	 */
 	private void removeAnnotationContents(EObject eObject) {
-		var modelElements = EcoreUtil2.getAllContentsOfType(eObject, EModelElement.class);
-		for (var modelElement : modelElements) {
-			var eAnnotations = modelElement.getEAnnotations();
-			var replacedAnnotations = replaceAllObjects(eAnnotations);
-			eAnnotations.clear();
-			eAnnotations.addAll(replacedAnnotations);
-		}
+		CustomAnnotationConverter.convert(eObject);
 		
 		var annotations = EcoreUtil2.getAllContentsOfType(eObject, EAnnotation.class);
 		for (var annotation : annotations) {
