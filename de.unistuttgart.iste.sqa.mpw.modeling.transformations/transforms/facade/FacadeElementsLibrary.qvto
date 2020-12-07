@@ -243,6 +243,7 @@ mapping inout EClass::createQueries() {
 	    self.eOperations += object EOperation {
 	        name := q.name;
 	        eType := q.eType;
+            eParameters := q.parameters->map toEParameter();
             eAnnotations += object QueryCallAnnotation { 
                 _query := q;
                 internalRoleField := self.getEStructuralFeature("internal" + self.name).oclAsType(EReference);
@@ -250,6 +251,11 @@ mapping inout EClass::createQueries() {
 	        eAnnotations += toAnnotation("documentation", q.documentation);
 	    };
     };
+}
+
+mapping QueryModel::Parameter::toEParameter() : EParameter {
+    name := self.name;
+    eType := self.eType;
 }
 
 query EClass::getConcreteClass() : EClass {

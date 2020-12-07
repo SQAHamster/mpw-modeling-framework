@@ -23,7 +23,7 @@ Element:
 ;
 
 Query:
-	(documentation=DOCUMENTATION)? 'query' name=ID ':' (expressions+=Expression ';')
+	(documentation=DOCUMENTATION)? 'query' name=ID ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
 ;
 
 CommandConstraint:
@@ -35,7 +35,7 @@ Precondition:
 ;
 
 Postcondition:
-	(documentation=DOCUMENTATION)? 'postcondition' (name=ID)? ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
+	(documentation=DOCUMENTATION)? 'postcondition' (name=ID)? ':' (expressions+=Expression ';')
 ;
 
 ParameterList:

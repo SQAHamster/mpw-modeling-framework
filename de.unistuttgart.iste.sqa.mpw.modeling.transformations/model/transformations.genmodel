@@ -218,6 +218,10 @@
     </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//Query">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Query/defaultValueLiteral"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//Query/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="QueryBehaviors.ecore#//Parameter">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Parameter/name"/>
     </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//Constraint"/>
     <genClasses ecoreClass="QueryBehaviors.ecore#//CommandConstraint">

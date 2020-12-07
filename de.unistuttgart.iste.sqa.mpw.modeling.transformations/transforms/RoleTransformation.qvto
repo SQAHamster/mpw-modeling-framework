@@ -88,6 +88,12 @@ mapping QueryModel::Query::transformQueryToOperation() : EOperation {
     if (self.isCollection) {
         upperBound := -1; 
     };
+    eParameters := self.parameters->map toEParameter();
+}
+
+mapping QueryModel::Parameter::toEParameter() : EParameter {
+    name := self.name;
+    eType := self.eType;
 }
 
 helper ecore::EClass::embedQueriesInOperations(queries: Set(QueryModel::Query)) {

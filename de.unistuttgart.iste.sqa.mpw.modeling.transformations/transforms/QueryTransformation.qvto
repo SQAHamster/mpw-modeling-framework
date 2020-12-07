@@ -49,6 +49,14 @@ mapping QueryInput::Query::toElement() : QueryModel::Query inherits QueryInput::
     result.name := self.name;
 	result.eType := result.mainExpression.eType;
 	defaultValueLiteral := result.eType.defaultValue.toString();
+	if (self.parameterList != null) {
+		parameters := self.parameterList.parameters->map toParameter();
+	};
+}
+
+mapping QueryInput::Parameter::toParameter() : QueryModel::Parameter {
+    name := self.variableName;
+    eType := findClassifierForName(self.typeName);
 }
 
 mapping QueryInput::CommandConstraint::toCommandConstraintBase() : QueryModel::CommandConstraint inherits QueryInput::Element::toElementBase {

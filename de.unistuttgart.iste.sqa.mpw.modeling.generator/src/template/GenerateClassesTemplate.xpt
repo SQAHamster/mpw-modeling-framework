@@ -54,7 +54,7 @@
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR QueryCallAnnotation-»
-    return «internalRoleField.name».«query.name»(); 
+    return «internalRoleField.name».«query.name»(«query.parameters.collect(p|p.name).toString(", ")»); 
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR ParameterToFieldAssignmentAnnotation-»
