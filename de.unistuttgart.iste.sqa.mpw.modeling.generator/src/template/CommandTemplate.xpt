@@ -299,6 +299,6 @@
 «DEFINE ConstraintDefinition FOR Constraint»
     «documentation.toComment()»
 	if ((«EXPAND template::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
-	    throw new CommandConstraintException("violation of precondition for command");
+	    throw new CommandConstraintException("«constraintToViolationString()»");
 	}
 «ENDDEFINE»

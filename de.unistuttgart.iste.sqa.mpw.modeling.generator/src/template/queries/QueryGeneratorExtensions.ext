@@ -27,3 +27,9 @@ toOperatorCode(CalculationOperator this) :
 
 Query getQueryForOperation(EOperation operation) : 
     operation.eAnnotations.selectFirst(a|a.source == "query").contents.first();
+    
+constraintToViolationString(queryBehavior::Constraint this) :
+    let typeName = this.metaType.name.replaceAll("queryBehavior::", "") :
+    "Violation of " + typeName + 
+        (if (this.documentation != null) then ": " + documentation 
+        else "");
