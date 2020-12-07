@@ -1,5 +1,6 @@
 context Territory::addWallToTile(location:Location)
 
+/** location has to be on territory */
 precondition: 
     self.isLocationInTerritory(location);
     

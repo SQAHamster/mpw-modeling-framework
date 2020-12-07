@@ -8,10 +8,10 @@ precondition:
 precondition: 
     self.isLocationInTerritory(location);
 
-/** grainCount has to be greater than zero */
+/** grainCount has to be greater than or equal to zero */
 precondition: 
-    grainCount > 0;
+    grainCount >= 0;
 
-/** the number of grains is not correct */
+/** the number of grains must equal the parameter grainCount */
 postcondition: 
     self.defaultHamster.grains->size() = grainCount;
