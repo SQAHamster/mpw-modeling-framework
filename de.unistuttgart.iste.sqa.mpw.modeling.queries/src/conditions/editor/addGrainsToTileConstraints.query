@@ -5,4 +5,10 @@ precondition:
 
 precondition: 
     self.isLocationInTerritory(location);
+
+precondition:
+    self.getTileAt(location).contents->isEmpty();
+
+postcondition: 
+    self.getTileAt(location).contents->typeSelect(Grain)->size() = amount;
     

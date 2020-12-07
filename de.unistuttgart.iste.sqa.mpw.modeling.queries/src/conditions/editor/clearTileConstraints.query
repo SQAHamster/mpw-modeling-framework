@@ -2,3 +2,6 @@ context Territory::clearTile(location:Location)
 
 precondition: 
     self.isLocationInTerritory(location);
+    
+postcondition:
+    self.getTileAt(location).contents->isEmpty();

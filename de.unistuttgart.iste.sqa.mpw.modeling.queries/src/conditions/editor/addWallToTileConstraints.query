@@ -2,3 +2,9 @@ context Territory::addWallToTile(location:Location)
 
 precondition: 
     self.isLocationInTerritory(location);
+    
+precondition:
+    self.getTileAt(location).contents->isEmpty();
+
+postcondition: 
+    self.getTileAt(location).contents->typeSelect(Wall)->size() = 1;
