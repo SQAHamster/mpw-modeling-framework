@@ -23,7 +23,7 @@ Element:
 ;
 
 Query:
-	(internal?='internal')? (documentation=DOCUMENTATION)? 'query' name=ID ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
+	(documentation=DOCUMENTATION)? (internal?='internal')? 'query' name=ID ('(' parameterList=ParameterList ')')? ':' (expressions+=Expression ';')
 ;
 
 CommandConstraint:

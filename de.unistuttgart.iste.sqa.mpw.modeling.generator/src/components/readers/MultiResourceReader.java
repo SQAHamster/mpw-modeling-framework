@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.mwe.core.WorkflowContext;
@@ -105,6 +106,12 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 			var uri = baseUri + modelName;
 			boolean firstElementOnly = true;
 			var object = Reader.load(resourceSet, uri, firstElementOnly);
+			if (object instanceof EObject) {
+				var eObject = (EObject)object;
+				if (eObject.eResource() != null && eObject.eResource().getErrors().size() > 0) {
+					throw new RuntimeException("error loading " + modelName + ": " + eObject.eResource().getErrors().get(0));
+				}
+			}
 			models.add(object);
 		}
 
