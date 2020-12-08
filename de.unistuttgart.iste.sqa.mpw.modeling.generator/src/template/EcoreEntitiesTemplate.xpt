@@ -65,6 +65,21 @@
       «EXPAND GenerationAnnotation FOREACH eAnnotations»
     }
     «ENDFILE»
+    «IF isDependency()»
+    «FILE "java/" + this.ePackage.toJavaPackagePath() + "/impl/Dummy" + name + ".java"»package «this.ePackage.toJavaPackageName()».impl;
+    
+    «EXPAND template::types::ImportUsedTypesTemplate::ImplImportDefinitions FOR this»
+    
+    public class Dummy«this.name» implements «this.name» {
+      «FOREACH this.eAllOperations AS o»
+      @Override
+      public «o.operationToSignature()» {
+          throw new RuntimeException("not implemented");
+      }
+      «ENDFOREACH»
+    }
+    «ENDFILE»
+    «ENDIF»
 «ENDDEFINE»
 
 «DEFINE JavaEnum FOR EEnum»

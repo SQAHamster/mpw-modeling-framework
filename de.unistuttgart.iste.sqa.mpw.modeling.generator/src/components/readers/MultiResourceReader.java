@@ -127,6 +127,12 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	
 	private boolean isExcluded(String filePath) {
 		String fileName = new File(filePath).getName();
+		for (var pattern : excludeModels) {
+			var resolvedWildcards = pattern.replaceAll("\\*" + fileExtension, fileName); // allow "*.<fileextension>" pattern
+			if (filePath.endsWith(resolvedWildcards)) {
+				return true;
+			}
+		}
 		return excludeModels.contains(fileName);
 	}
 	

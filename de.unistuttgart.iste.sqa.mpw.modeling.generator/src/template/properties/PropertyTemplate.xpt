@@ -6,6 +6,8 @@
 	  «FOREACH eStructuralFeatures AS f»
 	  «IF f.isObservableProperty()»
       private final «f.featureToObservableFieldType()» «f.name» = «f.featureToObservableFieldInstantiation()»;
+      «ELSEIF f.changeable && f.eType.isDependency()»
+      private «f.featureToJavaType()» «f.name» = «f.featureToFieldInstantiation()»;
       «ELSEIF f.derived || f.changeable»
       private «f.featureToJavaType()» «f.name»;
       «ELSEIF f.isConstructorInjectedProperty()»
@@ -67,6 +69,8 @@
 	«f.modifierVisibility()» void «f.adderOrSetter()»(«f.featureToSingleJavaType()» «f.modifierParameterName()») {
 	     «IF f.isReference() && f.isCollection()-»
 	         «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f»
+	     «ELSEIF !f.isReference() && f.isCollection()-»
+	         «EXPAND SimpleAdderForFeatureDefinition FOR f»
 	     «ELSE-»
 	         «EXPAND SimpleSetterForFeatureDefinition FOR f»
 	     «ENDIF-»
@@ -124,6 +128,10 @@
         «EXPAND CallSetterForUnsetOppositeDefinition FOR (EReference)this-»
         }
     «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE SimpleAdderForFeatureDefinition FOR EStructuralFeature»
+    this.«name».add(«modifierParameterName()»);
 «ENDDEFINE»
 
 «DEFINE CallSetterForOppositeDefinition FOR EReference»

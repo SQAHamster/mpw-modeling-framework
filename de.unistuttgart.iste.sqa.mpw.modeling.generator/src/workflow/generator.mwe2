@@ -64,7 +64,7 @@ Workflow {
 	/* load model and store it in slots */
 	component = MultiEcoreReader {
 		projectName = mpwModelProject
-		excludeModel = "ViewModel"
+		excludeModel = "stereotypes/*"
 		modelSlot = "entityModels"
 	}
 	

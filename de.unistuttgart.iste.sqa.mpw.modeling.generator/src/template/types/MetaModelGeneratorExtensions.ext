@@ -9,7 +9,14 @@ extension util::Extensions;
  */
 
 isStereotype(EClassifier this) :
-    EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewStereotype");
+    this.isInStereotypePackage();
+    
+private isInStereotypePackage(EClassifier this) :
+    ePackage.nsPrefix == "viewmodel" || ePackage.nsPrefix == "stereotypes";
+
+hasStereotype(EClassifier this, String stereotype) :
+    let eClass = (EClass)this :
+    EClass.isInstance(this) && eClass.eAllSuperTypes.exists(t|t.isStereotype() && t.name == stereotype);
 
 needsImplSubclass(EClassifier this) :
     let eClass = (EClass)this :
@@ -36,12 +43,12 @@ toInheritance(EClass this) :
     else if (filteredInterfaces.size > 0) then "implements " + filteredInterfaces.collect(i|i.name).toString(", ")
     else "";
     
-isValueType(EClassifier this) :
-    name.isValueType();
+isValueType(EClassifier this) : hasStereotype("ValueType");
+isDependency(EClassifier this) : hasStereotype("Dependency");
     
-// TODO: introduce a stereotype for the Value Type semantics
+// TODO: resolve EClass to check stereotype
 isValueType(String this) :
-    this == "Location";
+   this == "Location";
 
 toJavaPackagePath(EPackage this) :
     this.toJavaPackageName().replaceAll("\\.", "/");

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="stereotypes" nsURI="http://www.mpw.uni-stuttgart.de/stereotypes"
+    nsPrefix="stereotypes">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="In this package stereotypes are defined which are used in basic classes of the Miniprogrammingworld to classify roles like datastructures or dependency classes.&#xD;&#xA;&#xD;&#xA;Note: the stereotypes are only relevant for transformation / generation and in the generated target simulator they are not present."/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueType" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Dependency" abstract="true" interface="true"/>
+</ecore:EPackage>
