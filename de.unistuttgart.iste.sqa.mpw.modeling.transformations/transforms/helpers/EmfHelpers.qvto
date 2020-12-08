@@ -35,5 +35,5 @@ query findInstanceOfMetaClass(name: String) : ecore::EClassifier {
 }
 
 query EClassifier::isInstanceOf(name: String) : Boolean {
-    return self.oclIsTypeOf(EClass) and self.oclAsType(EClass).eSuperTypes->exists(t|t.name = name);
+    return self.oclIsTypeOf(EClass) and self.oclAsType(EClass).eAllSuperTypes->exists(t|t.name = name);
 }

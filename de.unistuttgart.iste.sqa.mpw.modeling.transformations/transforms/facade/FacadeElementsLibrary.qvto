@@ -43,7 +43,7 @@ abstract mapping inout EClass::createElementsBase() {
 }
 
 mapping inout EClass::createActorGameFacadeElements() inherits EClass::createElementsBase
-    when { self.getConcreteClass().eAllSuperTypes->exists(t|t.name = "Actor") } {
+    when { self.getConcreteClass().isInstanceOf("Actor") } {
     
     var baseName := self.name;
     var concreteClass := self.getConcreteClass();
@@ -68,6 +68,11 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
 	    	eParameters += getCommandForOperation(initCommand).mainUnit.parameters->map toConstructorParameter();
 	    	eAnnotations += "constructor".toMarkerAnnotation();
 	    	
+            eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
+                field := self.getEStructuralFeature("internal" + baseName);
+                constructorTypeName := concreteClass.name;
+            };
+        
 	    	eAnnotations += object MethodCallAnnotation {
 	    	    variableName := "this";
 	    		methodName := "init";
@@ -114,7 +119,7 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
 }
 
 mapping inout EClass::createStageGameFacadeElements() inherits EClass::createElementsBase
-    when { self.getConcreteClass().eAllSuperTypes->exists(t|t.name = "Stage") } {
+    when { self.getConcreteClass().isInstanceOf("Stage") } {
     
     var baseName := self.name;
     var concreteClass := self.getConcreteClass();
@@ -163,6 +168,13 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
     
     self.map createCommands();
     self.map createQueries();
+    
+    self.eAnnotations += object GetPropertyAnnotation {
+        field := self.getEStructuralFeature("game");
+        getterTypeName := findInstanceOfMetaClass("MiniProgrammingWorld").name;
+        getterOperationName := "getGame";
+        eAnnotations += toAnnotation("documentation", "Gets the game associated to this " + baseName + " object.");
+    };
 }
 
 mapping EOperation::toAssignParameterToFieldAnnotation(parameterName: String, fieldName: String) : ParameterToFieldAssignmentAnnotation {
@@ -199,6 +211,16 @@ mapping inout EClass::createCommands() {
   	            name := c.name;
 	        };
             eParameters := c.mainUnit.parameters->map toOperationParameter();
+            if (c.isInit) {
+                // init game field from stage parameter
+                var stageParameter := eParameters->any(p|p.eType.getConcreteClass().isInstanceOf("Stage"));
+                if (stageParameter != null) {
+                    eAnnotations += object PropertyPathFieldAssignmentAnnotation {
+                        field := self.getEStructuralFeature("game");
+                        propertyPath := stageParameter.name + ".game";
+                    };
+                }
+            };
 	        eAnnotations += object CommandParameterCreationAnnotation { 
 	            command := c;
 	            parameterMappings := c.mainUnit.parameters->map toCommandCallParameterMapping();
@@ -259,7 +281,7 @@ mapping QueryModel::Parameter::toEParameter() : EParameter {
     eType := self.eType;
 }
 
-query EClass::getConcreteClass() : EClass {
+query EClassifier::getConcreteClass() : EClass {
     var baseName := self.name;
     if (self.isMarkedWithAnnotation("baseName")) {
     	baseName := self.getBaseName();
