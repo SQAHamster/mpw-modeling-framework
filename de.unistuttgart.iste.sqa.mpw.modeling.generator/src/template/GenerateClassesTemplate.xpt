@@ -44,6 +44,9 @@
 «DEFINE GenerationAnnotation FOR CommandParameterCreationAnnotation-»
     var «parametersVariableName» = new «command.name.toFirstUpper()»CommandParameters();
     «parametersVariableName».commandStack = game.getCommandStack();
+    «IF command.isActorCommand()-»
+    «parametersVariableName».gameLog = game.getGameLog();
+    «ENDIF-»
     «FOREACH parameterMappings AS mapping-»
          «parametersVariableName».«mapping.key» = «mapping.value.toPropertyGetters()»; 
     «ENDFOREACH-»

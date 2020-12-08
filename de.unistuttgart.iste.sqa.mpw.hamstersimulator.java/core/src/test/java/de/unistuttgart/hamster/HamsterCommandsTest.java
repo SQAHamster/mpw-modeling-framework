@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.unistuttgart.hamster.framework.CommandConstraintException;
 import de.unistuttgart.hamster.hamster.*;
+import de.unistuttgart.hamster.mpw.Direction;
+import de.unistuttgart.hamster.mpw.Location;
 import de.unistuttgart.hamster.mpw.Tile;
 import de.unistuttgart.hamster.util.GameStringifier;
 import org.junit.jupiter.api.Test;
@@ -220,12 +222,41 @@ public class HamsterCommandsTest {
 
 	//</editor-fold>
 
+	//<editor-fold desc="Feature: gameLog">
+	@Test
+	public void givenHamster_whenExecuteAndCommand_thenGameLogIsAdded() {
+		withTerritory(" *;");
+
+		initNewHamster(locationOf(0, 0), Direction.EAST);
+		move();
+		pickGrain();
+		putGrain();
+		turnLeft();
+
+		assertGameLog(
+				"Init Hamster",
+				"Move",
+				"Pick Grain",
+				"Put Grain",
+				"Turn Left");
+	}
+
+	//</editor-fold>
+
 
 	//<editor-fold desc="helpers">
 
 	private void withTerritory(String map) {
 		game = GameStringifier.createFromString(map);
 		sut = game.getTerritory().getDefaultHamster();
+	}
+
+	private void initNewHamster(Location location, Direction direction) {
+		sut = new Hamster(game.getTerritory(), location, direction, 0);
+	}
+
+	private static Location locationOf(int x, int y) {
+		return new Location(x, y);
 	}
 
 	private void andGrainOn(int columnIndex, int rowIndex) {
@@ -276,6 +307,12 @@ public class HamsterCommandsTest {
 
 	private void assertGrainsOnTerritory(String expected) {
 		String actual = GameStringifier.grainsOnTerritoryToString(game);
+		assertEquals(expected, actual);
+	}
+
+	private void assertGameLog(String...expectedStrings) {
+		String actual = String.join("|", game.getGameLog().getLogEntries());
+		String expected = String.join("|", expectedStrings);
 		assertEquals(expected, actual);
 	}
 

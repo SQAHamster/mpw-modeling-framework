@@ -30,6 +30,15 @@ getVariableNameForFindReference(ManyReferenceCondition this) :
   
 isPolymorphic(ManyReferenceCondition this) :
   this.type.eType.name != this.target.typeName;
+  
+getParentTransformation(Unit this):
+    (Transformation)eContainer;
+  
+toLogMessage(Transformation this):
+    name.toFirstUpper().replaceAll("([a-z])([A-Z])", "$1 $2");
+  
+isActorCommand(Transformation this):
+    targetClass.eAllSuperTypes.exists(t|t.name == "Actor");
     
 commandSetter() : "executeSetProperty";
     

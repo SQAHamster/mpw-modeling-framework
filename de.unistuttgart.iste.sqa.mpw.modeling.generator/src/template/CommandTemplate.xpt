@@ -19,6 +19,9 @@
     	«documentation.toJavaDoc()»
 		public class «name.toFirstUpper()»Command extends CompositeCommandBase {
 			private final «targetClass.getConcreteName()» thisInstance;
+            «IF isActorCommand()-»
+            private final GameLog gameLog;
+            «ENDIF-»
 			«IF mainUnit != null»
 			«FOREACH mainUnit.parameters AS p»
 			private final «p.type.toJavaType()» «p.name»;
@@ -27,6 +30,9 @@
 		
 			public «name.toFirstUpper()»Command(«name.toFirstUpper()»CommandParameters parameters) {
 				this.thisInstance = parameters.self;
+	            «IF isActorCommand()-»
+	            this.gameLog = parameters.gameLog;
+	            «ENDIF-»
 				«FOREACH mainUnit.parameters AS p-»
                    this.«p.name» = parameters.«p.name»;
                 «ENDFOREACH-»
@@ -46,6 +52,9 @@
         public class «name.toFirstUpper()»CommandParameters {
             public «targetClass.getConcreteName()» self;
             public CommandStack commandStack;
+		    «IF isActorCommand()-»
+            public GameLog gameLog;
+		    «ENDIF-»
             «FOREACH mainUnit.parameters AS p»
             public «p.type.toJavaType()» «p.name»;
             «ENDFOREACH»
@@ -59,6 +68,9 @@
     «IF mainUnit-»
         «EXPAND PreconditionsDefinition FOR this»
         «EXPAND OldValueVariablesDefinition FOR this»
+    «ENDIF-»
+    «IF mainUnit && getParentTransformation().isActorCommand()-»
+        gameLog.write("«getParentTransformation().toLogMessage()»");
     «ENDIF-»
 	«EXPAND UnitExpandBody FOR this»
     «IF mainUnit-»
