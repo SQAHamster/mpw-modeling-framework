@@ -39,8 +39,12 @@
         derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
         eType="ecore:EClass Command.ecore#//CommandStack" changeable="false" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gameLog" lowerBound="1"
+        eType="#//GameLog" changeable="false" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="userInputInterface" lowerBound="1"
+        eType="#//UserInputInterface"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Location">
+  <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="stereotypes/MpwStereotypes.ecore#//ValueType">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="row" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
@@ -50,4 +54,25 @@
     <eLiterals name="WEST" value="2"/>
     <eLiterals name="EAST" value="3"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserInputInterface" abstract="true"
+      interface="true" eSuperTypes="stereotypes/MpwStereotypes.ecore#//Dependency">
+    <eOperations name="readInteger" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="readString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="confirmAlert">
+      <eParameters name="t" eType="#//Throwable"/>
+    </eOperations>
+    <eOperations name="abort"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GameLog">
+    <eOperations name="write">
+      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="logEntries" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Throwable" instanceClassName="java.lang.Throwable"/>
 </ecore:EPackage>

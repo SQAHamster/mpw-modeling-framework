@@ -33,7 +33,10 @@ previousFieldName(EStructuralFeature this) :
 modifierVisibility(EStructuralFeature this) :
     if (derived) then "protected" else "public";
     
-private toSingleName(String this) : if (endsWith("s")) then subString(0, length-1) else this;
+private toSingleName(String this) : 
+    if (endsWith("ies")) then subString(0, length-3) + "y"
+    else if (endsWith("s")) then subString(0, length-1)
+    else this;
 	
 isCollection(ETypedElement this) :
     upperBound == -1;
@@ -77,6 +80,7 @@ private elementToJavaType(ETypedElement this) :
 featureToFieldInstantiation(EStructuralFeature this) :
     if (this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).size > 0) then this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first().toInitialization()
 	else if (this.upperBound == -1) then "new ArrayList<>()"
+	else if (this.eType.isDependency()) then "new " + this.eType.ePackage.toJavaPackageName() + ".impl.Dummy" + this.eType.name + "()"
 	else if (this.eType.needsImplSubclass()) then "new " + this.eType.ePackage.toJavaPackageName() + ".impl." + this.eType.name + "Impl()"
 	else "new " + this.eType.name.toUnboxedJavaTypeName() + "()";
 	
