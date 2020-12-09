@@ -63,7 +63,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 			
 			var name = getName(object);
 			String directoryName = object.eClass().getEPackage().getName() + directorySuffix;
-			String fileUri = "platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.generator/out/" + directoryName + "/" + name + "." + fileExtension;
+			String fileUri = "platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.generator/debugout/" + directoryName + "/" + name + "." + fileExtension;
 			
 			var resourceSet = new ResourceSetImpl();
 
