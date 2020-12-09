@@ -8,9 +8,13 @@ context Module
 def: allRules : Sequence(Rule) = units->select(oclIsTypeOf(Rule))->collect(oclAsType(Rule))
 inv allRulesHaveThis: allRules ->forAll(lhs.nodes->exists(n|n.name = 'self'))
 
--- if there is single main unit, each rule has to be distinguishable by attribute conditions on this
-def: noSingleMainUnit : Boolean = (units->size() > 0 and units->forAll(oclIsTypeOf(Rule)))
+-- if there is no single main unit, each rule has to be distinguishable by attribute conditions on this
+def: noSingleMainUnit : Boolean = (units->size() > 1 and units->forAll(oclIsTypeOf(Rule)))
 inv mainUnitsAreDistinguishable: noSingleMainUnit implies allRules->collect(selfNode)->forAll(attributes->notEmpty())
+
+-- if there is any non Rule Unit, a main unit with the module's name has to be available
+def: anyNonRuleUnit : Boolean = units->exists(not oclIsTypeOf(Rule))
+inv moduleNamedUnitExists: anyNonRuleUnit implies units->exists(name = oclContainer().oclAsType(Module).name)
 
 context Rule
 def: selfNode : Node = lhs.nodes->any(name = 'self')
