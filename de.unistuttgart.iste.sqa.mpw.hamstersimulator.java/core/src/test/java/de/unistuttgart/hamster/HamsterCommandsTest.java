@@ -232,13 +232,15 @@ public class HamsterCommandsTest {
 		pickGrain();
 		putGrain();
 		turnLeft();
+		write("Custom Message");
 
 		assertGameLog(
 				"Init Hamster",
 				"Move",
 				"Pick Grain",
 				"Put Grain",
-				"Turn Left");
+				"Turn Left",
+				"Custom Message");
 	}
 
 	//</editor-fold>
@@ -285,6 +287,10 @@ public class HamsterCommandsTest {
 
 	private void putGrain() {
 		 sut.putGrain();
+	}
+
+	private void write(String message) {
+		 sut.write(message);
 	}
 
 	private void assertTerritory(String expected) {

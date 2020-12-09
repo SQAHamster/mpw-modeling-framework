@@ -129,6 +129,22 @@ mapping inout EClass::addWriteOperation() {
             eType := EString.oclAsType(EClassifier);    
         };
 	};
+    var gameLogVariableAnnotation := object VariableDefinitionAnnotation {
+        variableName := "gameLog";
+        variableTypeName := "GameLog";
+        rhs := object PropertyPathAnnotation {
+            propertyPath := "game.gameLog";
+        };
+    };
+    writeOperation.eAnnotations += gameLogVariableAnnotation;
+    
+    var callWriteAnnotation := object MethodCallAnnotation {
+        variableName := "gameLog";
+        methodName := "write";
+        parameterInputVariablePropertyPaths += "message";
+    };
+    writeOperation.eAnnotations += callWriteAnnotation;
+	
 	eOperations += writeOperation;
 }
 
