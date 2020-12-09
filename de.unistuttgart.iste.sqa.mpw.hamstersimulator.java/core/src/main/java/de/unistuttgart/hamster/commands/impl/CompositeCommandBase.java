@@ -1,8 +1,8 @@
-package de.unistuttgart.hamster.command.impl;
+package de.unistuttgart.hamster.commands.impl;
 
-import de.unistuttgart.hamster.command.Command;
-import de.unistuttgart.hamster.command.CompositeCommand;
-import de.unistuttgart.hamster.command.Entity;
+import de.unistuttgart.hamster.commands.Command;
+import de.unistuttgart.hamster.commands.CompositeCommand;
+import de.unistuttgart.hamster.commands.Entity;
 
 public abstract class CompositeCommandBase extends CompositeCommand {
 

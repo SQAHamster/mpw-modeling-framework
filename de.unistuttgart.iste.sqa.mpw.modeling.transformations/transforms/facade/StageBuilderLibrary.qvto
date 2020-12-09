@@ -16,6 +16,10 @@ mapping EClass::createBuilderClass() : EClass
     name := self.getBaseName() + "Builder";
     eAnnotations += toAnnotation("baseName", self.getBaseName());
     
+    eAnnotations += object ImportTypeAnnotation {
+        relativeQualifiedTypeName := "commands." + self.getBaseName().toLowerCase() + ".*";
+    };
+    
     result.map createFields();
     result.map createConstructor();
     result.eOperations += self.eAllOperations[isMarkedWithAnnotation("command")]->collect(o|getCommandForOperation(o))->map toBuilderOperation(result);

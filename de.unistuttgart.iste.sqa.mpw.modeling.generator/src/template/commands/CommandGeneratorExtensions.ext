@@ -9,7 +9,7 @@ getCommandJavaPackagePath(Transformation this) :
   this.getCommandJavaPackageName().replaceAll("\\.", "/");
 
 getCommandJavaPackageName(Transformation this) :
-  getModulePackage() + ".commands";
+  getModulePackage() + ".commands." + targetClass.name.toLowerCase();
 
 Transformation getCommandForOperation(EOperation operation) : 
     operation.eAnnotations.selectFirst(a|a.source == "command").contents.first();

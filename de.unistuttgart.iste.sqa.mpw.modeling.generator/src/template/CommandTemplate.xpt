@@ -10,8 +10,8 @@
         import static de.unistuttgart.hamster.framework.FrameworkAssert.*;
     	«EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
     	import «getModulePackage()».mpw.*;
-    	import «getModulePackage()».command.*;
-    	import de.unistuttgart.hamster.command.impl.*;
+    	import «getModulePackage()».commands.*;
+    	import de.unistuttgart.hamster.commands.impl.*;
     	import static «getModulePackage()».mpw.Direction.*;
     	import java.util.stream.Collectors;
     	
@@ -46,8 +46,7 @@
         
         «EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
         import «getModulePackage()».mpw.*;
-        import «getModulePackage()».command.*;
-        import de.unistuttgart.hamster.command.impl.*;
+        import «getModulePackage()».commands.*;
         
         public class «name.toFirstUpper()»CommandParameters {
             public «targetClass.getConcreteName()» self;

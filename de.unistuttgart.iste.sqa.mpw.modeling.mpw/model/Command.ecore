@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="command" nsURI="http://www.mpw.uni-stuttgart.de/command" nsPrefix="command">
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="commands" nsURI="http://www.mpw.uni-stuttgart.de/commands" nsPrefix="commands">
   <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
     <details key="documentation" value="In this package the metamodel for commands and its related roles like Entity or CommandStack are defined. Commands are the meta-type for behavior in a MPW."/>
   </eAnnotations>

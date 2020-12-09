@@ -9,9 +9,9 @@
     «IF eStructuralFeatures.exists(e|e.isCollection() && !e.changeable)-»
     import java.util.ArrayList;
     «ENDIF-»
-	«IF eAllOperations.exists(o|o.isCommand())-»
-    import «getModulePackage()».commands.*;
-	«ENDIF-»
+    «FOREACH eAllOperations.select(o|o.isCommand()).collect(o|o.getCommandForOperation().targetClass.name).toSet() AS className-»
+    import «getModulePackage()».commands.«className.toLowerCase()».*;
+    «ENDFOREACH-»
 	«IF !interface && name.startsWith("Concrete") && eAllOperations.exists(o|o.isQuery())-»
     import static «getModulePackage()».mpw.Direction.*;
     import java.util.stream.Collectors;

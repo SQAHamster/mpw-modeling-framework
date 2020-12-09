@@ -13,8 +13,6 @@
     «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
     
     import de.unistuttgart.hamster.mpw.*;
-    import de.unistuttgart.hamster.commands.*;
-    import de.unistuttgart.hamster.command.*;
     «EXPAND ImportTypeGenerationAnnotation FOREACH eAnnotations.typeSelect(ImportTypeAnnotation)»
     
     public class «name» {

@@ -1,7 +1,7 @@
-package de.unistuttgart.hamster.command.impl;
+package de.unistuttgart.hamster.commands.impl;
 
-import de.unistuttgart.hamster.command.AddEntityCommand;
-import de.unistuttgart.hamster.command.impl.utils.CommandUtils;
+import de.unistuttgart.hamster.commands.AddEntityCommand;
+import de.unistuttgart.hamster.commands.impl.utils.CommandUtils;
 
 public class AddEntityCommandImpl extends AddEntityCommand {
 

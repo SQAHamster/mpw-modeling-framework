@@ -1,7 +1,7 @@
-package de.unistuttgart.hamster.command.impl;
+package de.unistuttgart.hamster.commands.impl;
 
-import de.unistuttgart.hamster.command.Command;
-import de.unistuttgart.hamster.command.CommandStack;
+import de.unistuttgart.hamster.commands.Command;
+import de.unistuttgart.hamster.commands.CommandStack;
 
 public class CommandStackImpl extends CommandStack {
 

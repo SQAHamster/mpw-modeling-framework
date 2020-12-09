@@ -27,6 +27,10 @@ abstract mapping inout EClass::createElementsBase() {
     };
     self.eStructuralFeatures += internalGameRoleField;
     
+    self.eAnnotations += object ImportTypeAnnotation {
+        relativeQualifiedTypeName := "commands." + baseName.toLowerCase() + ".*";
+    };
+    
     self.eAnnotations += object GetPropertyAnnotation {
     	field := internalGameRoleField;
     	getterTypeName := "Game" + baseName;
