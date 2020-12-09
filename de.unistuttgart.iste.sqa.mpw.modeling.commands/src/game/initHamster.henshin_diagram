@@ -87,7 +87,7 @@
         <element xmi:type="henshin:IteratedUnit" href="initHamster.henshin#_CvbM0DIkEeupAp5-xI7a9A"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Cvh6iTIkEeupAp5-xI7a9A" x="245" y="15"/>
       </children>
-      <children xmi:type="notation:Shape" xmi:id="_CYbRMDJoEeuu_uKvvP5GUQ" type="3003" fontName=".AppleSystemUIFont" italic="true" lineColor="0">
+      <children xmi:type="notation:Shape" xmi:id="_CYbRMDJoEeuu_uKvvP5GUQ" type="3003" fontName="Segoe UI" italic="true" lineColor="0">
         <children xmi:type="notation:DecorationNode" xmi:id="_CYbRMjJoEeuu_uKvvP5GUQ" type="5005"/>
         <element xmi:type="henshin:Rule" href="initHamster.henshin#_JkUoEDIkEeupAp5-xI7a9A"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_CYbRMTJoEeuu_uKvvP5GUQ" x="133" y="75"/>

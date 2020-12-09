@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.3/notation" xmi:id="_2y9YADJpEeuu_uKvvP5GUQ" type="Henshin" measurementUnit="Pixel">
-  <children xmi:type="notation:Shape" xmi:id="_2zoGYDJpEeuu_uKvvP5GUQ" type="2001" fontName=".AppleSystemUIFont" italic="true" lineColor="0">
+  <children xmi:type="notation:Shape" xmi:id="_2zoGYDJpEeuu_uKvvP5GUQ" type="2001" fontName="Segoe UI" italic="true" lineColor="0">
     <children xmi:type="notation:DecorationNode" xmi:id="_2zoGYjJpEeuu_uKvvP5GUQ" type="5001"/>
     <children xmi:type="notation:DecorationNode" xmi:id="_2zoGYzJpEeuu_uKvvP5GUQ" type="7001">
-      <children xmi:type="notation:Shape" xmi:id="_2zotcDJpEeuu_uKvvP5GUQ" type="3001" fontName=".AppleSystemUIFont">
+      <children xmi:type="notation:Shape" xmi:id="_2zotcDJpEeuu_uKvvP5GUQ" type="3001" fontName="Segoe UI">
         <children xmi:type="notation:DecorationNode" xmi:id="_2zotcjJpEeuu_uKvvP5GUQ" type="5002"/>
         <children xmi:type="notation:DecorationNode" xmi:id="_2zotczJpEeuu_uKvvP5GUQ" type="5003"/>
         <children xmi:type="notation:DecorationNode" xmi:id="_2zotdDJpEeuu_uKvvP5GUQ" type="7002">
@@ -13,7 +13,7 @@
         <element xmi:type="henshin:Node" href="addWallToTile.henshin#_FUGCUyZhEeuiY_E2amZoVQ"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2zotcTJpEeuu_uKvvP5GUQ" x="52" y="9"/>
       </children>
-      <children xmi:type="notation:Shape" xmi:id="_2zotdzJpEeuu_uKvvP5GUQ" type="3001" fontName=".AppleSystemUIFont">
+      <children xmi:type="notation:Shape" xmi:id="_2zotdzJpEeuu_uKvvP5GUQ" type="3001" fontName="Segoe UI">
         <children xmi:type="notation:DecorationNode" xmi:id="_2zpUgDJpEeuu_uKvvP5GUQ" type="5002"/>
         <children xmi:type="notation:DecorationNode" xmi:id="_2zpUgTJpEeuu_uKvvP5GUQ" type="5003"/>
         <children xmi:type="notation:DecorationNode" xmi:id="_2zpUgjJpEeuu_uKvvP5GUQ" type="7002">
@@ -23,7 +23,7 @@
         <element xmi:type="henshin:Node" href="addWallToTile.henshin#_yh8rQDJoEeuu_uKvvP5GUQ"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2zoteDJpEeuu_uKvvP5GUQ" x="20" y="212"/>
       </children>
-      <children xmi:type="notation:Shape" xmi:id="_2zpUhTJpEeuu_uKvvP5GUQ" type="3001" fontName=".AppleSystemUIFont">
+      <children xmi:type="notation:Shape" xmi:id="_2zpUhTJpEeuu_uKvvP5GUQ" type="3001" fontName="Segoe UI">
         <children xmi:type="notation:DecorationNode" xmi:id="_2zpUhzJpEeuu_uKvvP5GUQ" type="5002"/>
         <children xmi:type="notation:DecorationNode" xmi:id="_2zpUiDJpEeuu_uKvvP5GUQ" type="5003"/>
         <children xmi:type="notation:DecorationNode" xmi:id="_2zpUiTJpEeuu_uKvvP5GUQ" type="7002">
@@ -33,7 +33,7 @@
         <element xmi:type="henshin:Node" href="addWallToTile.henshin#_1iYWYDJoEeuu_uKvvP5GUQ"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2zpUhjJpEeuu_uKvvP5GUQ" x="52" y="84"/>
       </children>
-      <children xmi:type="notation:Shape" xmi:id="_2zpUjDJpEeuu_uKvvP5GUQ" type="3001" fontName=".AppleSystemUIFont">
+      <children xmi:type="notation:Shape" xmi:id="_2zpUjDJpEeuu_uKvvP5GUQ" type="3001" fontName="Segoe UI">
         <children xmi:type="notation:DecorationNode" xmi:id="_2zpUjjJpEeuu_uKvvP5GUQ" type="5002"/>
         <children xmi:type="notation:DecorationNode" xmi:id="_2zpUjzJpEeuu_uKvvP5GUQ" type="5003"/>
         <children xmi:type="notation:DecorationNode" xmi:id="_2zpUkDJpEeuu_uKvvP5GUQ" type="7002">
@@ -56,7 +56,7 @@
     <children xmi:type="notation:DecorationNode" xmi:id="_20JDxTJpEeuu_uKvvP5GUQ" type="6002">
       <layoutConstraint xmi:type="notation:Location" xmi:id="_20JDxjJpEeuu_uKvvP5GUQ" x="7" y="34"/>
     </children>
-    <styles xmi:type="notation:FontStyle" xmi:id="_20JDwTJpEeuu_uKvvP5GUQ" fontName=".AppleSystemUIFont"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_20JDwTJpEeuu_uKvvP5GUQ" fontName="Segoe UI"/>
     <element xmi:type="henshin:Edge" href="addWallToTile.henshin#_2nY2oDJoEeuu_uKvvP5GUQ"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_20JDwjJpEeuu_uKvvP5GUQ" points="[17, 20, 0, 0]$[0, 0, -17, -20]"/>
   </edges>
@@ -67,7 +67,7 @@
     <children xmi:type="notation:DecorationNode" xmi:id="_20Jq1TJpEeuu_uKvvP5GUQ" type="6002">
       <layoutConstraint xmi:type="notation:Location" xmi:id="_20Jq1jJpEeuu_uKvvP5GUQ" x="-6" y="32"/>
     </children>
-    <styles xmi:type="notation:FontStyle" xmi:id="_20Jq0TJpEeuu_uKvvP5GUQ" fontName=".AppleSystemUIFont"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_20Jq0TJpEeuu_uKvvP5GUQ" fontName="Segoe UI"/>
     <element xmi:type="henshin:Edge" href="addWallToTile.henshin#_5Bp5oDJoEeuu_uKvvP5GUQ"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_20Jq0jJpEeuu_uKvvP5GUQ" points="[28, -2, -3, 0]$[-37, 0, -68, 2]"/>
   </edges>
@@ -78,7 +78,7 @@
     <children xmi:type="notation:DecorationNode" xmi:id="_20Jq3DJpEeuu_uKvvP5GUQ" type="6002">
       <layoutConstraint xmi:type="notation:Location" xmi:id="_20Jq3TJpEeuu_uKvvP5GUQ" x="-1" y="14"/>
     </children>
-    <styles xmi:type="notation:FontStyle" xmi:id="_20Jq2DJpEeuu_uKvvP5GUQ" fontName=".AppleSystemUIFont"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_20Jq2DJpEeuu_uKvvP5GUQ" fontName="Segoe UI"/>
     <element xmi:type="henshin:Edge" href="addWallToTile.henshin#_CQEJ8DJpEeuu_uKvvP5GUQ"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_20Jq2TJpEeuu_uKvvP5GUQ" points="[5, 20, 0, 10]$[0, -10, -5, -20]"/>
   </edges>
