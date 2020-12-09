@@ -116,6 +116,83 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
     
     self.map createCommands();
     self.map createQueries();
+    
+    self.map addWriteOperation();
+    self.map addInputInterfaceOperation();
+}
+
+mapping inout EClass::addWriteOperation() {
+	var writeOperation := object EOperation {
+	    name := "write";
+        eParameters += object EParameter {
+            name := "message";
+            eType := EString.oclAsType(EClassifier);    
+        };
+	};
+	eOperations += writeOperation;
+}
+
+mapping inout EClass::addInputInterfaceOperation() {
+    var gameInterfaceVariableAnnotation := object VariableDefinitionAnnotation {
+        variableName := "gameInterface";
+        variableTypeName := "UserInputInferface";
+        rhs := object PropertyPathAnnotation {
+            propertyPath := "game.userInputInterface";
+        };
+    };
+
+    var intType := EInt.oclAsType(EClassifier);
+    var stringType := EString.oclAsType(EClassifier);
+    var readIntOperation := object EOperation {
+        name := "readNumber";
+        eParameters += object EParameter {
+            name := "message";
+            eType := stringType;	
+        };
+        eType := intType;
+        
+        eAnnotations += gameInterfaceVariableAnnotation;
+        
+        eAnnotations += object VariableDefinitionAnnotation {
+        	variableName := "result";
+        	variableTypeName := intType.name;
+        	rhs := object MethodCallAnnotation {
+        	    variableName := "gameInterface";
+        		methodName := "readInteger";
+        		parameterInputVariablePropertyPaths += "message";
+        	};
+        };
+        eAnnotations += object PropertyPathReturnAnnotation {
+        	propertyPath := "result";
+        };
+    };
+    eOperations += readIntOperation;
+
+    
+    var readStringOperation := object EOperation {
+        name := "readString";
+        eParameters += object EParameter {
+            name := "message";
+            eType := stringType;    
+        };
+        eType := stringType;
+        
+        eAnnotations += gameInterfaceVariableAnnotation.deepclone();
+        
+        eAnnotations += object VariableDefinitionAnnotation {
+            variableName := "result";
+            variableTypeName := intType.name;
+            rhs := object MethodCallAnnotation {
+                variableName := "gameInterface";
+                methodName := "readString";
+                parameterInputVariablePropertyPaths += "message";
+            };
+        };
+        eAnnotations += object PropertyPathReturnAnnotation {
+            propertyPath := "result";
+        };
+    };
+    eOperations += readStringOperation;
 }
 
 mapping inout EClass::createStageGameFacadeElements() inherits EClass::createElementsBase

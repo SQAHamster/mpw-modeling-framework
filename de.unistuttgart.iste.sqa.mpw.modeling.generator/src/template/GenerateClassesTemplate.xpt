@@ -92,8 +92,16 @@
     return «propertyPath.toPropertyGetters()»;
 «ENDDEFINE»
 
+«DEFINE GenerationAnnotation FOR PropertyPathAnnotation-»
+    «propertyPath.toPropertyGetters()»
+«ENDDEFINE»
+
 «DEFINE GenerationAnnotation FOR VariableObjectConstructionAnnotation-»
     var «variableName» = «toConstructorCall(constructorTypeName, parameterInputVariablePropertyPaths)»;
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR VariableDefinitionAnnotation-»
+    var «variableName» = «EXPAND GenerationAnnotation FOR rhs»;
 «ENDDEFINE»
 
 «DEFINE ImportTypeGenerationAnnotation FOR ImportTypeAnnotation-»
