@@ -1,6 +1,6 @@
-import helpers.RuleReferenceSorter;
-import helpers.EmfHelpers;
-import helpers.BasicHelpers;
+import commands.RuleReferenceSorter;
+import types.EmfHelpers;
+import util.BasicHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	

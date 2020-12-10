@@ -1,5 +1,5 @@
-import helpers.AnnotationHelpers;
-import helpers.EmfHelpers;
+import types.AnnotationHelpers;
+import types.EmfHelpers;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 

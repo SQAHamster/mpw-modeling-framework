@@ -1,4 +1,4 @@
-import helpers.EmfHelpers;
+import types.EmfHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
