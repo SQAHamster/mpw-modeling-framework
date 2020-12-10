@@ -1,0 +1,70 @@
+import facade.gamefacade.GameFacadeElementsBaseLibrary;
+
+modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
+
+library StageGameFacadeElementsLibrary;
+
+mapping inout EClass::createStageGameFacadeElements() inherits EClass::createElementsBase
+    when { self.getConcreteClass().isInstanceOf("Stage") } {
+    
+    var baseName := self.name;
+    var concreteClass := self.getConcreteClass();
+    
+    var actorFields := concreteClass.eReferences->select(r|r.eType.isInstanceOf("Actor"));
+    actorFields->forEach(r) {
+    	var reference := object EReference {
+            name := r.name;
+            eType := r.eType.findFacadeForRoleType();    
+        };
+        eStructuralFeatures += reference;
+        self.eAnnotations += object GetPropertyAnnotation {
+        	field := reference;
+    	    getterTypeName := field.eType.name;
+    	    getterOperationName := "get" + field.name.firstToUpper();
+        };
+    };
+    
+    var constructorOperation := object EOperation {
+    	name := self.name;
+    	eParameters += object EParameter {
+    	    name := "game";
+    	    eType := findInstanceOfMetaClass("MiniProgrammingWorld");
+    	};
+    	eAnnotations += "constructor".toMarkerAnnotation();
+    	
+    	eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
+    		field := self.getEStructuralFeature("internal" + baseName);
+    		constructorTypeName := concreteClass.name;
+    	};
+    	
+    	eAnnotations += toAnnotation("documentation", "Initialize a new " + baseName + " and link it to its game object.");
+    };
+    eOperations += constructorOperation;
+    
+    constructorOperation.eAnnotations += constructorOperation.map toAssignParameterToFieldAnnotation("game", "game");
+    
+    actorFields->forEach(r) {
+        constructorOperation.eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
+        	field := self.getEStructuralFeature(r.name);
+        	parameterInputVariablePropertyPaths += "game";
+        	parameterInputVariablePropertyPaths += "internal" + baseName + "." + r.name;
+        	constructorTypeName := field.eType.name;
+        };
+    };
+    
+    self.map createCommands();
+    self.map createQueries();
+    
+    self.eAnnotations += object GetPropertyAnnotation {
+        field := self.getEStructuralFeature("game");
+        getterTypeName := findInstanceOfMetaClass("MiniProgrammingWorld").name;
+        getterOperationName := "getGame";
+        eAnnotations += toAnnotation("documentation", "Gets the game associated to this " + baseName + " object.");
+    };
+}
+
+mapping EOperation::toAssignParameterToFieldAnnotation(parameterName: String, fieldName: String) : ParameterToFieldAssignmentAnnotation {
+    parameter := self.eParameters->any(p|p.name = parameterName);
+    field := self.eContainingClass.eAllStructuralFeatures->any(f|f.name = fieldName);
+}

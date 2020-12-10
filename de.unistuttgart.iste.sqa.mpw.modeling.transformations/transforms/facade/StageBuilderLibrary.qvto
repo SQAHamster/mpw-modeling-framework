@@ -1,12 +1,8 @@
-import types.AnnotationHelpers;
-import types.EmfHelpers;
+import facade.gamefacade.GameFacadeElementsBaseLibrary;
 import util.BasicHelpers;
-import facade.FacadeElementsLibrary;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
-
 modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
-modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
 library StageBuilderLibrary;

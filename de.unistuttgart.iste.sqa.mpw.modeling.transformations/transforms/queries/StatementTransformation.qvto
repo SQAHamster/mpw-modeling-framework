@@ -8,7 +8,6 @@ modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 library StatementTransformation;
 
 configuration property Queries: List(querydsl::Model);
-configuration property EntityModels: List(EPackage);
 
 // remember the "current" statement / expression's type of the input model (to use in when blocks)
 // Note: intermediate properties/classes are not allowed in a library, as a workaround Dictionaries are used

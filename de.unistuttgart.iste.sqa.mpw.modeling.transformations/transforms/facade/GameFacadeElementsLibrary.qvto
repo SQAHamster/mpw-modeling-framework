@@ -1,0 +1,10 @@
+import facade.gamefacade.ActorGameFacadeElementsLibrary;
+import facade.gamefacade.StageGameFacadeElementsLibrary;
+
+modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+
+library FacadeElementsLibrary;
+
+mapping inout EClass::createElements()
+    disjuncts EClass::createActorGameFacadeElements,
+              EClass::createStageGameFacadeElements {}

@@ -1,8 +1,5 @@
-import facade.FacadeElementsLibrary;
+import facade.GameFacadeElementsLibrary;
 import facade.StageBuilderLibrary;
-
-import types.AnnotationHelpers;
-import types.EmfHelpers;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
@@ -11,10 +8,6 @@ modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
 transformation GenerationClassesTransformation(in inEcore: Ecore, out outEcore: Ecore);
-
-configuration property Queries: List(QueryModel::Module);
-configuration property Commands: List(CommandModel::Transformation);
-configuration property EntityModels: List(CommandModel::Transformation);
 
 main() {
     inEcore.rootObjects()[EPackage]->map transformPackage();
