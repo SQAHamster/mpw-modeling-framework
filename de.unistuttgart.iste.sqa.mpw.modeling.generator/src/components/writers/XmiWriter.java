@@ -1,6 +1,10 @@
 package components.writers;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.impl.EAnnotationImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -24,6 +29,10 @@ import org.eclipse.xtext.EcoreUtil2;
 
 import components.helpers.CustomAnnotationConverter;
 
+/**
+ * Component used to debugging purposes. It writes EMF resources in some points of the workflow to a XMI / Ecore file.
+ * This files then can be inspected to see effects of transformation steps.
+ */
 public class XmiWriter extends WorkflowComponentWithModelSlot {
 	private final static Logger log = Logger.getLogger(XmiWriter.class.getName());
 	
@@ -52,11 +61,11 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		var resources = (List<?>)context.get(getModelSlot());
 		for (var resource : resources) {
-			save((EObject)resource);
+			save(context, (EObject)resource);
 		}
 	}
 
-	private void save(EObject object) {
+	private void save(WorkflowContext context, EObject object) {
 		try {
 			Map<String, String> saveOptions = new HashMap<String, String>();
 			saveOptions.put(org.eclipse.emf.ecore.xmi.XMLResource.OPTION_ENCODING, "UTF-8");
@@ -77,10 +86,46 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 			resource.getContents().add(copiedObject);
 			resource.save(saveOptions);
 			
+			replaceEcoreLinksToGeneratedOnes(context, fileUri, directoryName);
+			
 			log.debug(fileUri + " created.");
 		} catch (IOException e) {
 			log.error("Error during creating Xmi.", e);
 		}
+	}
+
+	/**
+	 * Fix the references to the extended / transformed ecore files
+	 * Note: the transformed ecore files are based on their package names, so regard this.  
+	 * @param context 
+	 */
+	private void replaceEcoreLinksToGeneratedOnes(WorkflowContext context, String resourceUri, String directoryName) throws IOException {
+		var filePath = ".." + URI.createURI(resourceUri).toPlatformString(true);
+		var path = Paths.get(filePath);
+		var charset = StandardCharsets.UTF_8;
+
+		var content = new String(Files.readAllBytes(path), charset);
+		content = replaceEntityModelNamesToPackageNames(context, content, directoryName);
+		Files.write(path, content.getBytes(charset));
+	}
+	
+	private String replaceEntityModelNamesToPackageNames(WorkflowContext context, String text, String directoryName) {
+
+		var modeledEcoreFiles = (List<?>)context.get("entityModels");
+		for (var object : modeledEcoreFiles) {
+			var ePackage = (EPackage)object;
+			
+			var originalUri = ePackage.eResource().getURI().toString();
+			String fileName = new File(ePackage.eResource().getURI().toPlatformString(true)).getName();
+			
+			String originalUriSuffix = "mpw/model//" + fileName;
+			String modifiedUriSuffix = "generator/debugout/" + directoryName + "//" + ePackage.getName() + ".ecore";
+			var modifiedUri = originalUri.replaceAll(originalUriSuffix, modifiedUriSuffix);
+			
+			text = text.replaceAll(originalUri, modifiedUri);
+		}
+			
+		return text;
 	}
 
 	private String getName(EObject object) {
