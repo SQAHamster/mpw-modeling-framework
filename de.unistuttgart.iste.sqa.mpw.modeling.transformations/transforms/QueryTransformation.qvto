@@ -1,4 +1,4 @@
-import helpers.ExpressionTransformation;
+import queries.ExpressionTransformation;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
@@ -6,6 +6,11 @@ modeltype Input uses "http://www.mpw.uni-stuttgart.de/transformation/inputs";
 modeltype QueryInput uses "http://www.mpw.uni-stuttgart.de/querydsl";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
+/**
+  *  Transformation which transforms QueryDSL models into the more generation friendly QueryBehavior models.
+  *
+  *  The transformation is splitted into libraries 'queries.ExpressionTransformation' and 'queries.StatementTransformation'.
+  */
 transformation TransformQueryDsl2Query(in inModel: QueryInput, out outModel: QueryModel);
 
 main() {

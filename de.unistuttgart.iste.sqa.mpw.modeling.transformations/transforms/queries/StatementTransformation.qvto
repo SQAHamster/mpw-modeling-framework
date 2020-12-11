@@ -1,14 +1,20 @@
-import helpers.EmfHelpers;
+import types.EmfHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
 modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
+/**
+  *  Library used for the ExpressionTransformation which handles transformation of Statements.
+  *
+  *  For many statements it maps a simple one-to-one mapping from QueryDSL to QueryBehavior Statement instances.
+  *  But additionally it tracks the target types of each Statement and resolves used queries in QueryStatements.
+  *  Also it resolves the collection-methods statements to have more typed information available. 
+  */
 library StatementTransformation;
 
 configuration property Queries: List(querydsl::Model);
-configuration property EntityModels: List(EPackage);
 
 // remember the "current" statement / expression's type of the input model (to use in when blocks)
 // Note: intermediate properties/classes are not allowed in a library, as a workaround Dictionaries are used

@@ -1,19 +1,22 @@
-import helpers.AnnotationHelpers;
-import helpers.EmfHelpers;
-import helpers.BasicHelpers;
-import facade.FacadeElementsLibrary;
+import facade.gamefacade.GameFacadeElementsBaseLibrary;
+import util.BasicHelpers;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
-
 modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
-modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
+/**
+  *  Library used for the GenerationClassesTransformation which handles the creation of the Stage-Builder classes for editor roles.
+  *
+  *  The Stage-Builder is used to have a fluent API to build stages. For the Hamstersimulator this will generate the
+  *  TerritoryBuilder class which provides the initialization and filling of Territory-instances.
+  */
 library StageBuilderLibrary;
 
 mapping EClass::createBuilderClass() : EClass
     when { self.getConcreteClass().eAllSuperTypes->exists(t|t.name = "Stage") } {
     name := self.getBaseName() + "Builder";
+    eAnnotations += "facade".toMarkerAnnotation();
     eAnnotations += toAnnotation("baseName", self.getBaseName());
     
     eAnnotations += object ImportTypeAnnotation {

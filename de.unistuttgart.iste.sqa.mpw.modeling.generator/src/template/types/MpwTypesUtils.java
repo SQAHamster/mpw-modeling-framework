@@ -9,7 +9,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
-import command.CommandPackage;
+import commands.CommandPackage;
 import hamster.HamsterPackage;
 import mpw.MpwPackage;
 

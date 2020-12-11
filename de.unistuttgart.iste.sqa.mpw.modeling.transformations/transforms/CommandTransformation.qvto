@@ -1,6 +1,6 @@
-import helpers.RuleReferenceSorter;
-import helpers.EmfHelpers;
-import helpers.BasicHelpers;
+import commands.RuleReferenceSorter;
+import types.EmfHelpers;
+import util.BasicHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
@@ -8,6 +8,12 @@ modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
 modeltype CommandModel uses "http://www.mpw.uni-stuttgart.de/behavior/command";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
+/**
+  *  Transformation which transforms Henshin models into the more generation friendly CommandBehavior models.
+  *
+  *  It resolves used type-names to EClassifiers if possible and converts transformations to be easier used by 
+  *  the later generation.
+  */
 transformation TransformHenshin2Commandgt(in inModel:Henshin, out outModel:CommandModel);
 
 configuration property Queries: List(QueryModel::Module);

@@ -5,7 +5,6 @@ import de.unistuttgart.hamster.hamster.HamsterGame;
 import de.unistuttgart.hamster.mpw.Direction;
 import de.unistuttgart.hamster.mpw.Location;
 import de.unistuttgart.hamster.util.GameStringifier;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

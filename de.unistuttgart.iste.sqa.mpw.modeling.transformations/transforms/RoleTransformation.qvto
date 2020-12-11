@@ -1,5 +1,5 @@
-import helpers.AnnotationHelpers;
-import helpers.EmfHelpers;
+import types.AnnotationHelpers;
+import types.EmfHelpers;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
@@ -7,6 +7,16 @@ modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
 modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
+/**
+  *  In-Place Transformation which transforms Actor and Stage classes to Game, Editor and ReadOnly role interfaces.
+  *
+  *  The original class will be prefixed with "Concrete" and will be used as implementation of the roles. For all
+  *  queries relating to the entity, a operation will be inserted in the ReadOnly role interface. For the editor / game
+  *  commands also a operation will be inserted to the Game / Editor role interface respectively. 
+  *   
+  *  Additionally for all features of the entities class, a property-getter operation will be inserted to the ReadOnly
+  *  role interface. Note that this may "collide" with queries, where the operations will be merged together.
+  */
 transformation RoleTransformation(inout ecore: Ecore);
 
 configuration property Queries: List(QueryModel::Module);

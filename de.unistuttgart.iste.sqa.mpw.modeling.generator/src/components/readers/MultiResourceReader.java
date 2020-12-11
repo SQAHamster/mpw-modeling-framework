@@ -24,7 +24,9 @@ import org.eclipse.emf.mwe.utils.Reader;
 import com.google.common.base.CaseFormat;
 
 /**
- * Base reader class which loads multiple EMF resources of a project in the workspace. 
+ * Base reader class which loads multiple EMF resources of a project in the workspace.
+ * 
+ * It recursively traverses a file tree and loads each model found with the given file-extension.
  */
 public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot {
 	protected final static Logger log = Logger.getLogger(MultiResourceReader.class.getName());

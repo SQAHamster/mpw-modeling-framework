@@ -45,7 +45,8 @@ toInheritance(EClass this) :
     
 isValueType(EClassifier this) : hasStereotype("ValueType");
 isDependency(EClassifier this) : hasStereotype("Dependency");
-    
+isFacade(EClassifier this) : eAnnotations.exists(a|a.source == "facade");
+
 // TODO: resolve EClass to check stereotype
 isValueType(String this) :
    this == "Location";

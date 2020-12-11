@@ -21,6 +21,11 @@ import org.eclipse.m2m.qvt.oml.TransformationExecutor;
 
 import components.helpers.QvtoLogger;
 
+/**
+ * Component used to call QVTo transformations.
+ * 
+ * It uses modelslots to obtain the input models. Optionally a target slot can be specified where the result will be written to.
+ */
 public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 	private final static Logger log = Logger.getLogger(QvtoTransformator.class.getName());
 	

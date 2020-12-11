@@ -1,2 +1,13 @@
-extension util::Extensions;
+import ecore;
 
+extension util::Extensions;
+extension template::GeneratorExtensions;
+
+context EClass ERROR "Each class needs a name, starting with a uppercase letter":
+    name != null && name.length > 0 && name.matches("[A-Z]\\w+");
+  
+context EOperation if isCommand() ERROR "Operation with annotation 'command' needs an embeeded command instance ":
+    getCommandForOperation() != null;
+  
+context EOperation if isQuery() ERROR "Operation with annotation 'query' needs an embeeded query instance ":
+    getQueryForOperation() != null;

@@ -17,6 +17,9 @@ import org.eclipse.ocl.xtext.completeocl.validation.CompleteOCLEObjectValidator;
 
 import behaviorInputs.impl.InputsFactoryImpl;
 
+/**
+ * MultiResourceReader Component used to read henshin commands recursively in a given file path.
+ */
 public class CommandReader extends MultiResourceReader {
 	
 	public CommandReader() {

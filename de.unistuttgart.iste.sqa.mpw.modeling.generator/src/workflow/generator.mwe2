@@ -23,7 +23,6 @@ var mpwModelProject  = "${modelingModuleBaseName}.mpw"
 var commandsModelProject  = "${modelingModuleBaseName}.commands"
 var queriesModelProject  = "${modelingModuleBaseName}.queries"
 var transformationsProject = "${modelingModuleBaseName}.transformations"
-var generatorProject = "${modelingModuleBaseName}.generator"
 
 var targetSimulatorProject = "${moduleBaseName}.hamstersimulator.java"
 var targetCoreSimulatorProject = "${targetSimulatorProject}/core"
@@ -113,7 +112,6 @@ Workflow {
         transformationUri = generationClassesTransformationUri
         modelSlot = "entityModels"
         targetModelSlot = "generationEcoreModels"
-        sourceTargetRelationship = "NEW_TARGET"
     }
     
     component = XmiWriter {
@@ -123,11 +121,16 @@ Workflow {
     }
 	
 	/* check model */
-	/*component = CheckComponent {
+	component = CheckComponent {
 		metaModel = mm_emf
 		checkFile = "util::Checks"
-		emfAllChildrenSlot = ""
-	}*/
+		emfAllChildrenSlot = "entityModels"
+	}
+	component = CheckComponent {
+		metaModel = mm_emf
+		checkFile = "util::Checks"
+		emfAllChildrenSlot = "generationEcoreModels"
+	}
 
 	/** Clear output directory */
 	component = DirectoryCleaner {
@@ -196,9 +199,4 @@ Workflow {
 		}
 	}
 	
-    /* copy framework util code */
-    component = DirectoryCopyer {
-    	sourcePath = "${projectRoot}/${generatorProject}/src-framework"
-    	targetPath = simulatorTargetSrcGenerated
-    }
 }

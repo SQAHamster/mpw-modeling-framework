@@ -10,9 +10,9 @@ Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-14
-Export-Package: command,
- command.impl,
- command.util,
+Export-Package: commands,
+ commands.impl,
+ commands.util,
  hamster,
  hamster.impl,
  hamster.util,

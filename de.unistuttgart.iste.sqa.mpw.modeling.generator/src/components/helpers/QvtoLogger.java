@@ -3,6 +3,9 @@ package components.helpers;
 import org.apache.log4j.Logger;
 import org.eclipse.m2m.qvt.oml.util.Log;
 
+/**
+ * Simple helper class used to delegate log messages form the QVTo executor out to the log4j logger.
+ */
 public class QvtoLogger implements Log {
 	private final String name;
 	private final Logger log;
