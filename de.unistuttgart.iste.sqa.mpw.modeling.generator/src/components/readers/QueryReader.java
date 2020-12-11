@@ -10,6 +10,9 @@ import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDslStandaloneSetup;
 import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.Model;
 import behaviorInputs.impl.InputsFactoryImpl;
 
+/**
+ * MultiResourceReader Component used to read QueryDSL models recursively in a given file path.
+ */
 public class QueryReader extends MultiResourceReader {
 
 	public QueryReader() {
