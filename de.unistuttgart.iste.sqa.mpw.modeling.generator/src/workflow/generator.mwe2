@@ -123,11 +123,16 @@ Workflow {
     }
 	
 	/* check model */
-	/*component = CheckComponent {
+	component = CheckComponent {
 		metaModel = mm_emf
 		checkFile = "util::Checks"
-		emfAllChildrenSlot = ""
-	}*/
+		emfAllChildrenSlot = "entityModels"
+	}
+	component = CheckComponent {
+		metaModel = mm_emf
+		checkFile = "util::Checks"
+		emfAllChildrenSlot = "generationEcoreModels"
+	}
 
 	/** Clear output directory */
 	component = DirectoryCleaner {
