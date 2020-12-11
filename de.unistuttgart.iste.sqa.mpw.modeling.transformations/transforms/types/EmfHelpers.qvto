@@ -10,10 +10,6 @@ library EmfHelpers;
 
 configuration property EntityModels: List(EPackage);
 
-helper addEntityModelToGlobalSearchList(newPackage: EPackage) {
-    EntityModels += newPackage;
-}
-
 helper Element::root() : Element {
     var element := self;
     while (element.container() != null) {

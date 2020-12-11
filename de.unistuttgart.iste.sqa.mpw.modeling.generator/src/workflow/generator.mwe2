@@ -113,7 +113,6 @@ Workflow {
         transformationUri = generationClassesTransformationUri
         modelSlot = "entityModels"
         targetModelSlot = "generationEcoreModels"
-        sourceTargetRelationship = "NEW_TARGET"
     }
     
     component = XmiWriter {

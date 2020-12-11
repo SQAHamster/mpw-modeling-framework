@@ -19,20 +19,13 @@ modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation
   *        to move much more logic from the generator to the transformation stage. This pattern may later also be used for the
   *        QueryTransformation.qvto and CommandTransformation.qvto.
   */
-transformation GenerationClassesTransformation(in inEcore: Ecore, out outEcore: Ecore);
+transformation GenerationClassesTransformation(inout inEcore: Ecore);
 
 main() {
     inEcore.rootObjects()[EPackage]->map transformPackage();
 }
 
-mapping EPackage::transformPackage() : EPackage {
-    name := self.name;
-    nsURI := self.nsURI + "/generation";
-    nsPrefix := self.nsPrefix;
-    eAnnotations += "facade".toMarkerAnnotation();
-    
-    addEntityModelToGlobalSearchList(result);
-    
+mapping inout EPackage::transformPackage() {
     var facadeClasses := self.eClassifiers[EClass][hasAnnotationValue("role", "game")]->map toGameFacadeClass();
     eClassifiers += facadeClasses;
     
@@ -44,25 +37,10 @@ mapping EPackage::transformPackage() : EPackage {
     self.eClassifiers[EClass][isInstanceOf("MiniProgrammingWorld")]->map useFacades();
 }
 
-mapping EClassifier::toClassifier() : EClassifier
-    disjuncts EClass::toClassifier,
-              EEnum::toClassifier {}
-
-mapping EClass::toClassifier() : EClass {
-    name := self.name;
-}
-
-mapping EEnum::toClassifier() : EEnum {
-    name := self.name;
-}
-
-mapping EClass::toImplClass() : EClass {
-    name := self.name + "Impl";
-}
-
 mapping EClass::toGameFacadeClass() : EClass {
     var baseName := self.getAnnotationValue("baseName");
     name := baseName;
+    eAnnotations += "facade".toMarkerAnnotation();
 }
 
 // MiniProgrammingWorld classes have to use facade classes

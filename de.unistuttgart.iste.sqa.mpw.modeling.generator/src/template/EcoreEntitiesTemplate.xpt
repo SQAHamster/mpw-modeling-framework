@@ -3,12 +3,19 @@
 
 «EXTENSION template::GeneratorExtensions»
 
+«REM»
+  Generate entity ecore files.
+  Note: facade classes are generated with the more generic "GenerateClassesTemplate.xpt".
+«ENDREM»
 «DEFINE main FOR List[EPackage]»
     «EXPAND EcoreFile FOREACH this»
 «ENDDEFINE»
 
 «DEFINE EcoreFile FOR EPackage»
-    «EXPAND JavaClass FOREACH this.eClassifiers.typeSelect(EClass).reject(c|c.interface).reject(c|c.isValueType())»
+    «EXPAND JavaClass FOREACH this.eClassifiers.typeSelect(EClass)
+                                  .reject(c|c.interface)
+                                  .reject(c|c.isValueType())
+                                  .reject(c|c.isFacade())»
     «EXPAND template::types::ValueTypeTemplate::ValueTypeTemplate FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.isValueType())»
     «EXPAND JavaInterface FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.interface)»
     «EXPAND JavaEnum FOREACH this.eClassifiers.typeSelect(EEnum)»
