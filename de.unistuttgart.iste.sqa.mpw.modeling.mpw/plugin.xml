@@ -9,8 +9,8 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated mpw -->
       <package
-            uri="http://www.mpw.uni-stuttgart.de/command"
-            class="command.CommandPackage"
+            uri="http://www.mpw.uni-stuttgart.de/commands"
+            class="commands.CommandPackage"
             genModel="model/mpw.genmodel"/>
    </extension>
 
