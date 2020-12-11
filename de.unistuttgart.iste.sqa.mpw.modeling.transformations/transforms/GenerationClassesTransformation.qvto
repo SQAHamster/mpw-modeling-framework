@@ -7,6 +7,18 @@ modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
 modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
+/**
+  *  Transformation which transforms Ecore models by inserting facade classes for Actors and Stages.
+  *
+  *  It embeds GenerationAnnotations into the created EClasses which includes simple behavior and statements. The generation
+  *  then simply can make use of this annotations to generate code.
+  *
+  *  The transformation is splitted into libraries 'facade.GameFacadeElementsLibrary' and 'facade.StageBuilderLibrary'.
+  *
+  *  Note: later this transformation shall also be used to copy also all other EClassifiers and insert GenerationAnnotations
+  *        to move much more logic from the generator to the transformation stage. This pattern may later also be used for the
+  *        QueryTransformation.qvto and CommandTransformation.qvto.
+  */
 transformation GenerationClassesTransformation(in inEcore: Ecore, out outEcore: Ecore);
 
 main() {

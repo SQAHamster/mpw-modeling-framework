@@ -1,5 +1,8 @@
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
+/**
+  *  Library used to have simpler convinience methods to deal with EAnnotations.
+  */
 library AnnotationHelpers;
 
 helper String::toMarkerAnnotation() : EAnnotation {

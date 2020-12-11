@@ -1,5 +1,11 @@
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
+/**
+  *  Library with some convinience utilities in context of Ecore types.
+  *
+  *  It additionally gets the modeled ecore-files injected as a configuration property to allow to
+  *  find the custom types by their names.
+  */
 library EmfHelpers;
 
 configuration property EntityModels: List(EPackage);

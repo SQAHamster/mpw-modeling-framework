@@ -5,6 +5,10 @@ import ecore;
 extension template::types::EmfGeneratorExtensions;
 extension template::util::GlobalsGeneratorExtensions;
 
+/*
+ * Extensions related to the generation of commands.
+ */
+
 getCommandJavaPackagePath(Transformation this) :
   this.getCommandJavaPackageName().replaceAll("\\.", "/");
 

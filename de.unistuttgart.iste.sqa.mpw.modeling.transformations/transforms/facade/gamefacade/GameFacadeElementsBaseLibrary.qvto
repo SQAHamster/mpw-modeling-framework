@@ -6,6 +6,9 @@ modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
 modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
+/**
+  *  Library used to share code between ActorGameFacadeElementsLibrary and StageGameFacadeElementsLibrary.
+  */
 library GameFacadeElementsBaseLibrary;
 
 abstract mapping inout EClass::createElementsBase() {

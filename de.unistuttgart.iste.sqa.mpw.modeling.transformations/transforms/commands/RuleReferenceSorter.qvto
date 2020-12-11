@@ -1,6 +1,13 @@
 modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
 modeltype CommandModel uses "http://www.mpw.uni-stuttgart.de/behavior/command";
 
+/**
+  *  Library used for the CommandTransformation which sorts the graph pattern matching references.
+  *
+  *  The order is based on the on their usage dependencies starting by the 'self' instance and parameter
+  *  variables. The sorted order then can be used to simplify the generation of code where the assumption
+  *  can be made that source elements of a reference are already available in a variable.
+  */
 library RuleReferenceSorter;
 
 helper CommandModel::Rule::sortReferences(): OrderedSet(ReferenceCondition) {

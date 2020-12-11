@@ -3,6 +3,13 @@ import facade.gamefacade.GameFacadeElementsBaseLibrary;
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
+/**
+  *  Library used for the GameFacadeElementsLibrary which handles the creation of the game role facade classes for Stages.
+  *
+  *  E.g. for the Hamstersimulator this creates the 'Territory' client API class which provide a method for each game command
+  *  and each query. It usually also defines default elements of an Actor like the 'defaultHamster' and provides the game
+  *  object for the actor classes.
+  */
 library StageGameFacadeElementsLibrary;
 
 mapping inout EClass::createStageGameFacadeElements() inherits EClass::createElementsBase
