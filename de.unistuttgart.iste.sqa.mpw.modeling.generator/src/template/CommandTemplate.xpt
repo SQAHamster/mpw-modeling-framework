@@ -1,315 +1,315 @@
-«IMPORT commandBehavior»
-«IMPORT queryBehavior»
+Â«IMPORT commandBehaviorÂ»
+Â«IMPORT queryBehaviorÂ»
 
-«EXTENSION template::GeneratorExtensions»
+Â«EXTENSION template::GeneratorExtensionsÂ»
 
-«DEFINE main FOR Transformation»
-    «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Command.java"»package «this.getCommandJavaPackageName()»;
+Â«DEFINE main FOR TransformationÂ»
+    Â«FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Command.java"Â»package Â«this.getCommandJavaPackageName()Â»;
     	
     	import de.unistuttgart.hamster.framework.*;
         import static de.unistuttgart.hamster.framework.FrameworkAssert.*;
-    	«EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
-    	import «getModulePackage()».mpw.*;
-    	import «getModulePackage()».commands.*;
+    	Â«EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClassÂ»
+    	import Â«getModulePackage()Â».mpw.*;
+    	import Â«getModulePackage()Â».commands.*;
     	import de.unistuttgart.hamster.commands.impl.*;
-    	import static «getModulePackage()».mpw.Direction.*;
+    	import static Â«getModulePackage()Â».mpw.Direction.*;
     	import java.util.stream.Collectors;
     	
-    	«REM»TODO JML«constraints.toJml()»«ENDREM-»
-    	«documentation.toJavaDoc()»
-		public class «name.toFirstUpper()»Command extends CompositeCommandBase {
-			private final «targetClass.getConcreteName()» thisInstance;
-            «IF isActorCommand()-»
+    	Â«REMÂ»TODO JMLÂ«constraints.toJml()Â»Â«ENDREM-Â»
+    	Â«documentation.toJavaDoc()Â»
+		public class Â«name.toFirstUpper()Â»Command extends CompositeCommandBase {
+			private final Â«targetClass.getConcreteName()Â» thisInstance;
+            Â«IF isActorCommand()-Â»
             private final GameLog gameLog;
-            «ENDIF-»
-			«IF mainUnit != null»
-			«FOREACH mainUnit.parameters AS p»
-			private final «p.type.toJavaType()» «p.name»;
-			«ENDFOREACH»
-			«ENDIF»
+            Â«ENDIF-Â»
+			Â«IF mainUnit != nullÂ»
+			Â«FOREACH mainUnit.parameters AS pÂ»
+			private final Â«p.type.toJavaType()Â» Â«p.nameÂ»;
+			Â«ENDFOREACHÂ»
+			Â«ENDIFÂ»
 		
-			public «name.toFirstUpper()»Command(«name.toFirstUpper()»CommandParameters parameters) {
+			public Â«name.toFirstUpper()Â»Command(Â«name.toFirstUpper()Â»CommandParameters parameters) {
 				this.thisInstance = parameters.self;
-	            «IF isActorCommand()-»
+	            Â«IF isActorCommand()-Â»
 	            this.gameLog = parameters.gameLog;
-	            «ENDIF-»
-				«FOREACH mainUnit.parameters AS p-»
-                   this.«p.name» = parameters.«p.name»;
-                «ENDFOREACH-»
+	            Â«ENDIF-Â»
+				Â«FOREACH mainUnit.parameters AS p-Â»
+                   this.Â«p.nameÂ» = parameters.Â«p.nameÂ»;
+                Â«ENDFOREACH-Â»
 			}
 		
-			«EXPAND UnitExpand FOR mainUnit»
-            «EXPAND UnitExpand FOREACH units.excluding(mainUnit)»
+			Â«EXPAND UnitExpand FOR mainUnitÂ»
+            Â«EXPAND UnitExpand FOREACH units.excluding(mainUnit)Â»
         }
-    «ENDFILE»
-    «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "CommandParameters.java"»package «this.getCommandJavaPackageName()»;
+    Â«ENDFILEÂ»
+    Â«FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "CommandParameters.java"Â»package Â«this.getCommandJavaPackageName()Â»;
         
-        «EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
-        import «getModulePackage()».mpw.*;
-        import «getModulePackage()».commands.*;
+        Â«EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClassÂ»
+        import Â«getModulePackage()Â».mpw.*;
+        import Â«getModulePackage()Â».commands.*;
         
-        public class «name.toFirstUpper()»CommandParameters {
-            public «targetClass.getConcreteName()» self;
+        public class Â«name.toFirstUpper()Â»CommandParameters {
+            public Â«targetClass.getConcreteName()Â» self;
             public CommandStack commandStack;
-		    «IF isActorCommand()-»
+		    Â«IF isActorCommand()-Â»
             public GameLog gameLog;
-		    «ENDIF-»
-            «FOREACH mainUnit.parameters AS p»
-            public «p.type.toJavaType()» «p.name»;
-            «ENDFOREACH»
+		    Â«ENDIF-Â»
+            Â«FOREACH mainUnit.parameters AS pÂ»
+            public Â«p.type.toJavaType()Â» Â«p.nameÂ»;
+            Â«ENDFOREACHÂ»
         }
-    «ENDFILE»
-«ENDDEFINE»
+    Â«ENDFILEÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE UnitExpand FOR Unit»
-    «IF mainUnit»@Override«ENDIF-»
-	«getVisibility()» void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
-    «IF mainUnit-»
-        «EXPAND PreconditionsDefinition FOR this»
-        «EXPAND OldValueVariablesDefinition FOR this»
-    «ENDIF-»
-    «IF mainUnit && getParentTransformation().isActorCommand()-»
-        gameLog.write("«getParentTransformation().toLogMessage()»");
-    «ENDIF-»
-	«EXPAND UnitExpandBody FOR this»
-    «IF mainUnit-»
-        «EXPAND PostconditionsDefinition FOR this»
-    «ENDIF-»
+Â«DEFINE UnitExpand FOR UnitÂ»
+    Â«IF mainUnitÂ»@OverrideÂ«ENDIF-Â»
+	Â«getVisibility()Â» void Â«nameÂ»(Â«IF !mainUnitÂ»Â«FOREACH parameters AS p SEPARATOR ", "Â»Â«p.type.toJavaType()Â» Â«p.nameÂ»Â«ENDFOREACHÂ»Â«ENDIFÂ») {
+    Â«IF mainUnit-Â»
+        Â«EXPAND PreconditionsDefinition FOR thisÂ»
+        Â«EXPAND OldValueVariablesDefinition FOR thisÂ»
+    Â«ENDIF-Â»
+    Â«IF mainUnit && getParentTransformation().isActorCommand()-Â»
+        gameLog.write("Â«getParentTransformation().toLogMessage()Â»");
+    Â«ENDIF-Â»
+	Â«EXPAND UnitExpandBody FOR thisÂ»
+    Â«IF mainUnit-Â»
+        Â«EXPAND PostconditionsDefinition FOR thisÂ»
+    Â«ENDIF-Â»
 	}
-	«EXPAND PostUnitExpand FOR this»
-«ENDDEFINE»
+	Â«EXPAND PostUnitExpand FOR thisÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE UnitExpandBody FOR Unit»«ENDDEFINE»
+Â«DEFINE UnitExpandBody FOR UnitÂ»Â«ENDDEFINEÂ»
 
-«DEFINE UnitExpandBody FOR ConditionalUnit»
-    if«FOREACH conditions AS c SEPARATOR " else if "-»
-    («c.condition.toPropertyGetters()») {
-	«EXPAND UnitInvokeExpand FOR c.unit»
+Â«DEFINE UnitExpandBody FOR ConditionalUnitÂ»
+    ifÂ«FOREACH conditions AS c SEPARATOR " else if "-Â»
+    (Â«c.condition.toPropertyGetters()Â») {
+	Â«EXPAND UnitInvokeExpand FOR c.unitÂ»
 	}
-    «ENDFOREACH»
-«ENDDEFINE»
+    Â«ENDFOREACHÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE UnitExpandBody FOR SequentialUnit»
-	«EXPAND UnitInvokeExpand FOR this»
-«ENDDEFINE»
+Â«DEFINE UnitExpandBody FOR SequentialUnitÂ»
+	Â«EXPAND UnitInvokeExpand FOR thisÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE UnitExpandBody FOR IteratedUnit»
-	«EXPAND UnitInvokeExpand FOR this»
-«ENDDEFINE»
+Â«DEFINE UnitExpandBody FOR IteratedUnitÂ»
+	Â«EXPAND UnitInvokeExpand FOR thisÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE UnitInvokeExpand FOR Unit»«ENDDEFINE»
+Â«DEFINE UnitInvokeExpand FOR UnitÂ»Â«ENDDEFINEÂ»
 
-«DEFINE UnitInvokeExpand FOR SequentialUnit»
-	«FOREACH targetInvocations AS i»
-	«i.targetMethodName»(«FOREACH i.mappedParameters AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
-	«ENDFOREACH»
-«ENDDEFINE»
+Â«DEFINE UnitInvokeExpand FOR SequentialUnitÂ»
+	Â«FOREACH targetInvocations AS iÂ»
+	Â«i.targetMethodNameÂ»(Â«FOREACH i.mappedParameters AS p SEPARATOR ", "Â»Â«p.nameÂ»Â«ENDFOREACHÂ»);
+	Â«ENDFOREACHÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE UnitInvokeExpand FOR IteratedUnit»
-	for (int i = 0; i < («repeat»); i++) {
-		«targetInvocation.targetMethodName»(«FOREACH targetInvocation.mappedParameters AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
+Â«DEFINE UnitInvokeExpand FOR IteratedUnitÂ»
+	for (int i = 0; i < (Â«repeatÂ»); i++) {
+		Â«targetInvocation.targetMethodNameÂ»(Â«FOREACH targetInvocation.mappedParameters AS p SEPARATOR ", "Â»Â«p.nameÂ»Â«ENDFOREACHÂ»);
 	}
-«ENDDEFINE»
+Â«ENDDEFINEÂ»
 
-«DEFINE UnitInvokeExpand FOR Rule»
-    «name»();
-«ENDDEFINE»
+Â«DEFINE UnitInvokeExpand FOR RuleÂ»
+    Â«nameÂ»();
+Â«ENDDEFINEÂ»
 
-«DEFINE UnitExpandBody FOR Rule»
-    «EXPAND VariableDefinition FOREACH variables»
-    «EXPAND InstanceDefinition FOREACH instanceConditions»
-    «EXPAND ReferenceDefinition FOREACH referenceConditions»
-    «EXPAND VariableAssignmentDefinition FOREACH variableAssignments»
-    «EXPAND AttributeDefinition FOREACH attributeConditions»
-    «EXPAND RemoveModificationDefinition FOREACH modifications.select(m|m.action == Action::DELETE)»
-    «EXPAND ClearModificationDefinition FOREACH modifications.select(m|m.action == Action::CLEAR)»
-    «EXPAND CreateModificationDefinition FOREACH modifications.select(m|m.action == Action::CREATE)»
-    «EXPAND AttributeModificationDefinition FOREACH modifications.select(m|m.action == Action::MODIFY)»
-«ENDDEFINE»
+Â«DEFINE UnitExpandBody FOR RuleÂ»
+    Â«EXPAND VariableDefinition FOREACH variablesÂ»
+    Â«EXPAND InstanceDefinition FOREACH instanceConditionsÂ»
+    Â«EXPAND ReferenceDefinition FOREACH referenceConditionsÂ»
+    Â«EXPAND VariableAssignmentDefinition FOREACH variableAssignmentsÂ»
+    Â«EXPAND AttributeDefinition FOREACH attributeConditionsÂ»
+    Â«EXPAND RemoveModificationDefinition FOREACH modifications.select(m|m.action == Action::DELETE)Â»
+    Â«EXPAND ClearModificationDefinition FOREACH modifications.select(m|m.action == Action::CLEAR)Â»
+    Â«EXPAND CreateModificationDefinition FOREACH modifications.select(m|m.action == Action::CREATE)Â»
+    Â«EXPAND AttributeModificationDefinition FOREACH modifications.select(m|m.action == Action::MODIFY)Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE PostUnitExpand FOR Unit»«ENDDEFINE»
+Â«DEFINE PostUnitExpand FOR UnitÂ»Â«ENDDEFINEÂ»
 
-«DEFINE PostUnitExpand FOR Rule»
-    «EXPAND FindObjectDefinition FOREACH referenceConditions.typeSelect(ManyReferenceCondition).select(r|!r.isCreate)»
-«ENDDEFINE»
+Â«DEFINE PostUnitExpand FOR RuleÂ»
+    Â«EXPAND FindObjectDefinition FOREACH referenceConditions.typeSelect(ManyReferenceCondition).select(r|!r.isCreate)Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE ThisInstanceDefinition FOR InstanceCondition»
-    // this: «this.variableName»:«this.typeName»
-«ENDDEFINE»
+Â«DEFINE ThisInstanceDefinition FOR InstanceConditionÂ»
+    // this: Â«this.variableNameÂ»:Â«this.typeNameÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE InstanceDefinition FOR InstanceCondition»
-	«IF isCreate»
-		// new instance: «this.variableName»:«this.typeName»
-    	«this.typeName» «this.variableName» = new «this.typeName»();
-	«ENDIF»
-«ENDDEFINE»
+Â«DEFINE InstanceDefinition FOR InstanceConditionÂ»
+	Â«IF isCreateÂ»
+		// new instance: Â«this.variableNameÂ»:Â«this.typeNameÂ»
+    	Â«this.typeNameÂ» Â«this.variableNameÂ» = new Â«this.typeNameÂ»();
+	Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE VariableDefinition FOR VariableDeclaration»
-    // new variable «this.name»: «this.type»
-    «this.type.toJavaType()» «this.name»;
-«ENDDEFINE»
+Â«DEFINE VariableDefinition FOR VariableDeclarationÂ»
+    // new variable Â«this.nameÂ»: Â«this.typeÂ»
+    Â«this.type.toJavaType()Â» Â«this.nameÂ»;
+Â«ENDDEFINEÂ»
 
-«DEFINE ReferenceDefinition FOR ReferenceCondition»
-	«IF this.metaType == SingleReferenceCondition»
-      «EXPAND SingleReferenceDefinition FOR (SingleReferenceCondition)this»
-    «ELSEIF this.metaType == ManyReferenceCondition»
-      «EXPAND ManyReferenceDefinition FOR (ManyReferenceCondition)this»
-	«ENDIF»
-«ENDDEFINE»
+Â«DEFINE ReferenceDefinition FOR ReferenceConditionÂ»
+	Â«IF this.metaType == SingleReferenceConditionÂ»
+      Â«EXPAND SingleReferenceDefinition FOR (SingleReferenceCondition)thisÂ»
+    Â«ELSEIF this.metaType == ManyReferenceConditionÂ»
+      Â«EXPAND ManyReferenceDefinition FOR (ManyReferenceCondition)thisÂ»
+	Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE SingleReferenceDefinition FOR SingleReferenceCondition»
-	«IF !this.isCreate && !this.isForbid»
-		// new variable from reference: «this.source.variableName»:«this.source.typeName» -> «this.referenceName» -> «this.target.variableName»:«this.target.typeName»
-		«this.target.typeName» «this.target.variableName» = «this.source.variableName».«getter(this.referenceName)»();
-		assertInstanceNotNull("«this.source.variableName».«this.referenceName»", «this.target.variableName»);
-	«ENDIF»
-«ENDDEFINE»
+Â«DEFINE SingleReferenceDefinition FOR SingleReferenceConditionÂ»
+	Â«IF !this.isCreate && !this.isForbidÂ»
+		// new variable from reference: Â«this.source.variableNameÂ»:Â«this.source.typeNameÂ» -> Â«this.referenceNameÂ» -> Â«this.target.variableNameÂ»:Â«this.target.typeNameÂ»
+		Â«this.target.typeNameÂ» Â«this.target.variableNameÂ» = Â«this.source.variableNameÂ».Â«getter(this.referenceName)Â»();
+		assertInstanceNotNull("Â«this.source.variableNameÂ».Â«this.referenceNameÂ»", Â«this.target.variableNameÂ»);
+	Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE ManyReferenceDefinition FOR ManyReferenceCondition»
-	«IF !this.isCreate»
-		// find new variable from many-reference: «this.source.variableName»:«this.source.typeName» -> «this.referenceName» -> «this.target.variableName»:«this.target.typeName»
-		«LET (Rule)this.eContainer AS rule»
-	    «this.target.typeName» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.variableName»);
-	    «ENDLET»
-	«ENDIF»
-«ENDDEFINE»
+Â«DEFINE ManyReferenceDefinition FOR ManyReferenceConditionÂ»
+	Â«IF !this.isCreateÂ»
+		// find new variable from many-reference: Â«this.source.variableNameÂ»:Â«this.source.typeNameÂ» -> Â«this.referenceNameÂ» -> Â«this.target.variableNameÂ»:Â«this.target.typeNameÂ»
+		Â«LET (Rule)this.eContainer AS ruleÂ»
+	    Â«this.target.typeNameÂ» Â«this.target.variableNameÂ» = Â«rule.name.toFirstLower()Â»_findÂ«this.target.variableName.toFirstUpper()Â»(Â«source.variableNameÂ»);
+	    Â«ENDLETÂ»
+	Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE VariableAssignmentDefinition FOR VariableAssignment»
-    «variableName» = «value.toPropertyGetters()»;
-«ENDDEFINE»
+Â«DEFINE VariableAssignmentDefinition FOR VariableAssignmentÂ»
+    Â«variableNameÂ» = Â«value.toPropertyGetters()Â»;
+Â«ENDDEFINEÂ»
 
-«DEFINE AttributeDefinition FOR AttributeCondition»
-	«IF this.isCreate»
-	    «IF instance.typeName.isValueType()-»
-    	    // set attribute condition «instance.variableName».«attributeName» := «attributeValueLiteral»
-	        «instance.variableName».«attributeName.setter()»(«attributeValueLiteral.toPropertyGetters()»);
-	    «ELSE»
-	        // set value type field «instance.variableName».«attributeName» := «attributeValueLiteral»
-	        «commandSetter()»(«instance.variableName», "«attributeName»", «instance.variableName».«attributeName.getter()»(), «attributeValueLiteral.toPropertyGetters()»);
-	    «ENDIF-»
-	«ELSE»	
-		// assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
-		assertAttributeCondition("«instance.variableName».«attributeName» == «attributeValueLiteral.toPropertyGetters()»", «toPropertyGetters(instance.variableName + "." + attributeName)» == «attributeValueLiteral.toPropertyGetters()»);
-	«ENDIF»
-«ENDDEFINE»
+Â«DEFINE AttributeDefinition FOR AttributeConditionÂ»
+	Â«IF this.isCreateÂ»
+	    Â«IF instance.typeName.isValueType()-Â»
+    	    // set attribute condition Â«instance.variableNameÂ».Â«attributeNameÂ» := Â«attributeValueLiteralÂ»
+	        Â«instance.variableNameÂ».Â«attributeName.setter()Â»(Â«attributeValueLiteral.toPropertyGetters()Â»);
+	    Â«ELSEÂ»
+	        // set value type field Â«instance.variableNameÂ».Â«attributeNameÂ» := Â«attributeValueLiteralÂ»
+	        Â«commandSetter()Â»(Â«instance.variableNameÂ», "Â«attributeNameÂ»", Â«instance.variableNameÂ».Â«attributeName.getter()Â»(), Â«attributeValueLiteral.toPropertyGetters()Â»);
+	    Â«ENDIF-Â»
+	Â«ELSEÂ»	
+		// assert condition: Â«instance.variableNameÂ».Â«attributeNameÂ» == Â«attributeValueLiteralÂ»
+		assertAttributeCondition("Â«instance.variableNameÂ».Â«attributeNameÂ» == Â«attributeValueLiteral.toPropertyGetters()Â»", Â«toPropertyGetters(instance.variableName + "." + attributeName)Â» == Â«attributeValueLiteral.toPropertyGetters()Â»);
+	Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE RemoveModificationDefinition FOR Modification»
-	«IF this.instance != null»
-	// remove instance: «this.action» «this.instance.variableName» «this.instance.typeName»
-	«ENDIF»
-    «IF this.reference != null»
-    // remove reference: «this.action» «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
-    «IF this.reference.metaType == SingleReferenceCondition»
-        «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), null);
-    «ELSE»
-        «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
-    «ENDIF»
-    «ENDIF»
-«ENDDEFINE»
+Â«DEFINE RemoveModificationDefinition FOR ModificationÂ»
+	Â«IF this.instance != nullÂ»
+	// remove instance: Â«this.actionÂ» Â«this.instance.variableNameÂ» Â«this.instance.typeNameÂ»
+	Â«ENDIFÂ»
+    Â«IF this.reference != nullÂ»
+    // remove reference: Â«this.actionÂ» Â«this.reference.source.variableNameÂ»:Â«this.reference.source.typeNameÂ» -> Â«this.reference.referenceNameÂ» -> Â«this.reference.target.variableNameÂ»:Â«this.reference.target.typeNameÂ»
+    Â«IF this.reference.metaType == SingleReferenceConditionÂ»
+        Â«commandSetter()Â»(Â«this.reference.source.variableNameÂ», "Â«this.reference.referenceNameÂ»", Â«this.reference.source.variableNameÂ».Â«this.reference.referenceName.getter()Â»(), null);
+    Â«ELSEÂ»
+        Â«commandRemover()Â»(Â«this.reference.source.variableNameÂ», "Â«this.reference.referenceNameÂ»", Â«this.reference.target.variableNameÂ»);
+    Â«ENDIFÂ»
+    Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE ClearModificationDefinition FOR Modification»
-    «IF this.reference.metaType == ClearReferenceCondition»
-        // clear references: «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
-        while («this.reference.source.variableName».«this.reference.referenceName.getter()»().size() > 0) {
-            «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»().get(0));
+Â«DEFINE ClearModificationDefinition FOR ModificationÂ»
+    Â«IF this.reference.metaType == ClearReferenceConditionÂ»
+        // clear references: Â«this.reference.source.variableNameÂ»:Â«this.reference.source.typeNameÂ» -> Â«this.reference.referenceNameÂ» -> Â«this.reference.target.variableNameÂ»:Â«this.reference.target.typeNameÂ»
+        while (Â«this.reference.source.variableNameÂ».Â«this.reference.referenceName.getter()Â»().size() > 0) {
+            Â«commandRemover()Â»(Â«this.reference.source.variableNameÂ», "Â«this.reference.referenceNameÂ»", Â«this.reference.source.variableNameÂ».Â«this.reference.referenceName.getter()Â»().get(0));
         }
-    «ENDIF»
-«ENDDEFINE»
+    Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE CreateModificationDefinition FOR Modification»
-	«IF this.instance != null»
-	// create instance: «this.action» «this.instance.variableName» «this.instance.typeName»
-	«ENDIF»
-    «IF this.reference != null»
-    // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
-    «IF this.reference.metaType == SingleReferenceCondition»
-        «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
-	«ELSE»
-	    «commandAdder()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
-    «ENDIF»
-    «ENDIF»
-«ENDDEFINE»
+Â«DEFINE CreateModificationDefinition FOR ModificationÂ»
+	Â«IF this.instance != nullÂ»
+	// create instance: Â«this.actionÂ» Â«this.instance.variableNameÂ» Â«this.instance.typeNameÂ»
+	Â«ENDIFÂ»
+    Â«IF this.reference != nullÂ»
+    // create reference: Â«this.actionÂ» Â«this.reference.source.variableNameÂ»:Â«this.reference.source.typeNameÂ» -> Â«this.reference.referenceNameÂ» -> Â«this.reference.target.variableNameÂ»:Â«this.reference.target.typeNameÂ»
+    Â«IF this.reference.metaType == SingleReferenceConditionÂ»
+        Â«commandSetter()Â»(Â«this.reference.source.variableNameÂ», "Â«this.reference.referenceNameÂ»", Â«this.reference.source.variableNameÂ».Â«this.reference.referenceName.getter()Â»(), Â«this.reference.target.variableNameÂ»);
+	Â«ELSEÂ»
+	    Â«commandAdder()Â»(Â«this.reference.source.variableNameÂ», "Â«this.reference.referenceNameÂ»", Â«this.reference.target.variableNameÂ»);
+    Â«ENDIFÂ»
+    Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE AttributeModificationDefinition FOR Modification»
-	// set attribute: «this.attribute.instance.variableName».«this.attribute.attributeName» := «this.newAttributeValue»
-	«commandSetter()»(«this.attribute.instance.variableName», "«this.attribute.attributeName»", «this.attribute.instance.variableName».«this.attribute.attributeName.getter()»(), «this.newAttributeValue»);
-«ENDDEFINE»
+Â«DEFINE AttributeModificationDefinition FOR ModificationÂ»
+	// set attribute: Â«this.attribute.instance.variableNameÂ».Â«this.attribute.attributeNameÂ» := Â«this.newAttributeValueÂ»
+	Â«commandSetter()Â»(Â«this.attribute.instance.variableNameÂ», "Â«this.attribute.attributeNameÂ»", Â«this.attribute.instance.variableNameÂ».Â«this.attribute.attributeName.getter()Â»(), Â«this.newAttributeValueÂ»);
+Â«ENDDEFINEÂ»
 
-«DEFINE FindObjectDefinition FOR ManyReferenceCondition»
-	«LET (Rule)this.eContainer AS rule»
+Â«DEFINE FindObjectDefinition FOR ManyReferenceConditionÂ»
+	Â«LET (Rule)this.eContainer AS ruleÂ»
 	
-	private «this.target.typeName» «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.getConcreteTypeName()» source) {
-		«this.target.typeName» result = null;
+	private Â«this.target.typeNameÂ» Â«rule.name.toFirstLower()Â»_findÂ«this.target.variableName.toFirstUpper()Â»(Â«source.getConcreteTypeName()Â» source) {
+		Â«this.target.typeNameÂ» result = null;
 		
-		for («this.type.eType.name» «getVariableNameForFindReference()» : source.«getter(this.referenceName)»()) {
-		    «IF isPolymorphic()»
-		      if (!(«getVariableNameForFindReference()» instanceof «this.target.typeName»)) {
+		for (Â«this.type.eType.nameÂ» Â«getVariableNameForFindReference()Â» : source.Â«getter(this.referenceName)Â»()) {
+		    Â«IF isPolymorphic()Â»
+		      if (!(Â«getVariableNameForFindReference()Â» instanceof Â«this.target.typeNameÂ»)) {
 		        continue;
 		      }
-		      «this.target.typeName» «this.target.variableName» = («this.target.typeName»)«getVariableNameForFindReference()»;
-		    «ENDIF»
-			«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)»
-			«EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)»
+		      Â«this.target.typeNameÂ» Â«this.target.variableNameÂ» = (Â«this.target.typeNameÂ»)Â«getVariableNameForFindReference()Â»;
+		    Â«ENDIFÂ»
+			Â«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)Â»
+			Â«EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)Â»
 			
-			result = «this.target.variableName»;
+			result = Â«this.target.variableNameÂ»;
 			break;
         }
-		assertObjectFound("«this.referenceName»", "«this.target.typeName»", result);
+		assertObjectFound("Â«this.referenceNameÂ»", "Â«this.target.typeNameÂ»", result);
 		return result;
     }
     
-    «ENDLET»
-«ENDDEFINE»
+    Â«ENDLETÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE AttributeConditionsForFindObjectDefinition FOR AttributeCondition»
-	// attribute check: «instance.variableName»: «this.attributeName»
-	if («toPropertyGetters(instance.variableName + "." + this.attributeName)» != «attributeValueLiteral.toPropertyGetters()») {
+Â«DEFINE AttributeConditionsForFindObjectDefinition FOR AttributeConditionÂ»
+	// attribute check: Â«instance.variableNameÂ»: Â«this.attributeNameÂ»
+	if (Â«toPropertyGetters(instance.variableName + "." + this.attributeName)Â» != Â«attributeValueLiteral.toPropertyGetters()Â») {
 		continue;
 	}
-«ENDDEFINE»
+Â«ENDDEFINEÂ»
 
-«DEFINE ReferenceConditionsForFindObjectDefinition FOR SingleReferenceCondition»
-	// reference check: «source.variableName»: «this.referenceName»
-    «IF this.isForbid»
-    if («source.variableName».«getter(this.referenceName)»() != null) {	 	   
-	«ELSE»
-    «target.typeName» «target.variableName» = «source.variableName».«getter(this.referenceName)»();
-	if («target.variableName» == null) {
-    «ENDIF»
+Â«DEFINE ReferenceConditionsForFindObjectDefinition FOR SingleReferenceConditionÂ»
+	// reference check: Â«source.variableNameÂ»: Â«this.referenceNameÂ»
+    Â«IF this.isForbidÂ»
+    if (Â«source.variableNameÂ».Â«getter(this.referenceName)Â»() != null) {	 	   
+	Â«ELSEÂ»
+    Â«target.typeNameÂ» Â«target.variableNameÂ» = Â«source.variableNameÂ».Â«getter(this.referenceName)Â»();
+	if (Â«target.variableNameÂ» == null) {
+    Â«ENDIFÂ»
     	continue;
     }
     
-	«LET (Rule)this.eContainer AS rule»
-	«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)»
-	«EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)»
-	«ENDLET»
-«ENDDEFINE»
+	Â«LET (Rule)this.eContainer AS ruleÂ»
+	Â«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)Â»
+	Â«EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)Â»
+	Â«ENDLETÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE PreconditionsDefinition FOR Unit»
-	«LET (Transformation)this.eContainer AS transformation-»
-	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(Precondition)-»
-	«IF !transformation.isInit-»
-        «EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-»
-	«ENDIF-»
-	«ENDLET-»
-«ENDDEFINE»
+Â«DEFINE PreconditionsDefinition FOR UnitÂ»
+	Â«LET (Transformation)this.eContainer AS transformation-Â»
+	Â«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(Precondition)-Â»
+	Â«IF !transformation.isInit-Â»
+        Â«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-Â»
+	Â«ENDIF-Â»
+	Â«ENDLET-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE OldValueVariablesDefinition FOR Unit»
-	«LET (Transformation)this.eContainer AS transformation-»
-	«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH transformation.constraints.typeSelect(Postcondition).collect(c|c.oldValueVariableExpressions).flatten()-»
-	«ENDLET-»
-«ENDDEFINE»
+Â«DEFINE OldValueVariablesDefinition FOR UnitÂ»
+	Â«LET (Transformation)this.eContainer AS transformation-Â»
+	Â«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH transformation.constraints.typeSelect(Postcondition).collect(c|c.oldValueVariableExpressions).flatten()-Â»
+	Â«ENDLET-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE PostconditionsDefinition FOR Unit»
-	«LET (Transformation)this.eContainer AS transformation-»
-	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(Postcondition)-»
-	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-»
-	«ENDLET-»
-«ENDDEFINE»
+Â«DEFINE PostconditionsDefinition FOR UnitÂ»
+	Â«LET (Transformation)this.eContainer AS transformation-Â»
+	Â«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(Postcondition)-Â»
+	Â«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-Â»
+	Â«ENDLET-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE ConstraintDefinition FOR Constraint»
-    «documentation.toComment()»
-	if ((«EXPAND template::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
-	    throw new CommandConstraintException("«constraintToViolationString()»");
+Â«DEFINE ConstraintDefinition FOR ConstraintÂ»
+    Â«documentation.toComment()Â»
+	if ((Â«EXPAND template::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-Â») == false) {
+	    throw new CommandConstraintException("Â«constraintToViolationString()Â»");
 	}
-«ENDDEFINE»
+Â«ENDDEFINEÂ»

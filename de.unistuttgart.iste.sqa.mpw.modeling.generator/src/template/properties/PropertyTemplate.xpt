@@ -1,166 +1,166 @@
-«IMPORT ecore»
+Â«IMPORT ecoreÂ»
 
-«EXTENSION template::GeneratorExtensions»
+Â«EXTENSION template::GeneratorExtensionsÂ»
 
-«DEFINE PropertyDefinitions FOR EClass»
-	  «FOREACH eStructuralFeatures AS f»
-	  «IF f.isObservableProperty()»
-      private final «f.featureToObservableFieldType()» «f.name» = «f.featureToObservableFieldInstantiation()»;
-      «ELSEIF f.changeable && f.eType.isDependency()»
-      private «f.featureToJavaType()» «f.name» = «f.featureToFieldInstantiation()»;
-      «ELSEIF f.derived || f.changeable»
-      private «f.featureToJavaType()» «f.name»;
-      «ELSEIF f.isConstructorInjectedProperty()»
-      private final «f.featureToJavaType()» «f.name»;
-	  «ELSEIF !f.derived»
-      private final «f.featureToJavaType()» «f.name» = «f.featureToFieldInstantiation()»;
-	  «ENDIF»
-      «ENDFOREACH»
-«ENDDEFINE»
+Â«DEFINE PropertyDefinitions FOR EClassÂ»
+	  Â«FOREACH eStructuralFeatures AS fÂ»
+	  Â«IF f.isObservableProperty()Â»
+      private final Â«f.featureToObservableFieldType()Â» Â«f.nameÂ» = Â«f.featureToObservableFieldInstantiation()Â»;
+      Â«ELSEIF f.changeable && f.eType.isDependency()Â»
+      private Â«f.featureToJavaType()Â» Â«f.nameÂ» = Â«f.featureToFieldInstantiation()Â»;
+      Â«ELSEIF f.derived || f.changeableÂ»
+      private Â«f.featureToJavaType()Â» Â«f.nameÂ»;
+      Â«ELSEIF f.isConstructorInjectedProperty()Â»
+      private final Â«f.featureToJavaType()Â» Â«f.nameÂ»;
+	  Â«ELSEIF !f.derivedÂ»
+      private final Â«f.featureToJavaType()Â» Â«f.nameÂ» = Â«f.featureToFieldInstantiation()Â»;
+	  Â«ENDIFÂ»
+      Â«ENDFOREACHÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE ConstructorDefinition FOR EClass»
-      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
-      «LET injectedProperties.without(eStructuralFeatures) AS injectedForParentProperties»
-      public «name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToJavaType()» «f.name»«ENDFOREACH») {
-      «IF injectedForParentProperties.size > 0-»
-      super(«FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
-      «ENDIF»
-      «FOREACH injectedProperties.without(injectedForParentProperties) AS f»
-      this.«f.name» = «f.name»;
-      «ENDFOREACH»
-      «FOREACH eAllStructuralFeatures.select(f|f.isStageField()) AS f»
-      «"stage".setter()»(«f.name»);
-      «ENDFOREACH»
+Â«DEFINE ConstructorDefinition FOR EClassÂ»
+      Â«LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedPropertiesÂ»
+      Â«LET injectedProperties.without(eStructuralFeatures) AS injectedForParentPropertiesÂ»
+      public Â«nameÂ»(Â«FOREACH injectedProperties AS f SEPARATOR ", "Â»Â«f.featureToJavaType()Â» Â«f.nameÂ»Â«ENDFOREACHÂ») {
+      Â«IF injectedForParentProperties.size > 0-Â»
+      super(Â«FOREACH injectedForParentProperties AS p SEPARATOR ", "Â»Â«p.nameÂ»Â«ENDFOREACHÂ»);
+      Â«ENDIFÂ»
+      Â«FOREACH injectedProperties.without(injectedForParentProperties) AS fÂ»
+      this.Â«f.nameÂ» = Â«f.nameÂ»;
+      Â«ENDFOREACHÂ»
+      Â«FOREACH eAllStructuralFeatures.select(f|f.isStageField()) AS fÂ»
+      Â«"stage".setter()Â»(Â«f.nameÂ»);
+      Â«ENDFOREACHÂ»
       }
-      «ENDLET»
-      «ENDLET»
-«ENDDEFINE»
+      Â«ENDLETÂ»
+      Â«ENDLETÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE ImplConstructorDefinition FOR EClass»
-      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
-      public «name»Impl(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToJavaType()» «f.name»«ENDFOREACH») {
-      «FOREACH injectedProperties AS f»
-      super(«FOREACH injectedProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
-      «ENDFOREACH»
+Â«DEFINE ImplConstructorDefinition FOR EClassÂ»
+      Â«LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedPropertiesÂ»
+      public Â«nameÂ»Impl(Â«FOREACH injectedProperties AS f SEPARATOR ", "Â»Â«f.featureToJavaType()Â» Â«f.nameÂ»Â«ENDFOREACHÂ») {
+      Â«FOREACH injectedProperties AS fÂ»
+      super(Â«FOREACH injectedProperties AS p SEPARATOR ", "Â»Â«p.nameÂ»Â«ENDFOREACHÂ»);
+      Â«ENDFOREACHÂ»
       }
-      «ENDLET»
-«ENDDEFINE»
+      Â«ENDLETÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE GetPropertyValueDefinitions FOR EClass»
-	  «FOREACH eStructuralFeatures AS f»
-	  «IF f.hasPropertyGetterOperation()-»
+Â«DEFINE GetPropertyValueDefinitions FOR EClassÂ»
+	  Â«FOREACH eStructuralFeatures AS fÂ»
+	  Â«IF f.hasPropertyGetterOperation()-Â»
 	  @Override
-	  «ENDIF-»
-	  public «f.featureToJavaType()» «f.name.getter()»() {
-  	    «IF f.isObservableProperty()-»
-	  	return this.«f.name».get();
-        «ELSE-»
-	  	return this.«f.name»;
-	    «ENDIF-»
+	  Â«ENDIF-Â»
+	  public Â«f.featureToJavaType()Â» Â«f.name.getter()Â»() {
+  	    Â«IF f.isObservableProperty()-Â»
+	  	return this.Â«f.nameÂ».get();
+        Â«ELSE-Â»
+	  	return this.Â«f.nameÂ»;
+	    Â«ENDIF-Â»
 	  }
-      «ENDFOREACH»
-«ENDDEFINE»
+      Â«ENDFOREACHÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE SetPropertyValueDefinitions FOR EClass»
-    «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
-    «IF eAllOperations.without(eOperations).exists(o|o.name == f.adderOrSetter())-»
+Â«DEFINE SetPropertyValueDefinitions FOR EClassÂ»
+    Â«FOREACH eStructuralFeatures.select(e|e.changeable) AS fÂ»
+    Â«IF eAllOperations.without(eOperations).exists(o|o.name == f.adderOrSetter())-Â»
     @Override
-    «ENDIF-»
-	«f.modifierVisibility()» void «f.adderOrSetter()»(«f.featureToSingleJavaType()» «f.modifierParameterName()») {
-	     «IF f.isReference() && f.isCollection()-»
-	         «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f»
-	     «ELSEIF !f.isReference() && f.isCollection()-»
-	         «EXPAND SimpleAdderForFeatureDefinition FOR f»
-	     «ELSE-»
-	         «EXPAND SimpleSetterForFeatureDefinition FOR f»
-	     «ENDIF-»
+    Â«ENDIF-Â»
+	Â«f.modifierVisibility()Â» void Â«f.adderOrSetter()Â»(Â«f.featureToSingleJavaType()Â» Â«f.modifierParameterName()Â») {
+	     Â«IF f.isReference() && f.isCollection()-Â»
+	         Â«EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)fÂ»
+	     Â«ELSEIF !f.isReference() && f.isCollection()-Â»
+	         Â«EXPAND SimpleAdderForFeatureDefinition FOR fÂ»
+	     Â«ELSE-Â»
+	         Â«EXPAND SimpleSetterForFeatureDefinition FOR fÂ»
+	     Â«ENDIF-Â»
 	 }
-	 «IF f.isCollection()-»
-	 «f.modifierVisibility()» void «f.name.remover()»(«f.featureToSingleJavaType()» «f.modifierParameterName()») {
-	     «IF f.isReference()-»
-	         «EXPAND MultiReferenceRemoverForFeatureDefinition FOR (EReference)f»
-	     «ENDIF-»
+	 Â«IF f.isCollection()-Â»
+	 Â«f.modifierVisibility()Â» void Â«f.name.remover()Â»(Â«f.featureToSingleJavaType()Â» Â«f.modifierParameterName()Â») {
+	     Â«IF f.isReference()-Â»
+	         Â«EXPAND MultiReferenceRemoverForFeatureDefinition FOR (EReference)fÂ»
+	     Â«ENDIF-Â»
 	 }
-	 «ENDIF-»
-    «ENDFOREACH»
-«ENDDEFINE»
+	 Â«ENDIF-Â»
+    Â«ENDFOREACHÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE MultiReferenceAdderForFeatureDefinition FOR EReference»
-    «IF eOpposite != null-»
-        if («modifierParameterName()».«eOpposite.name.getter()»() != this) {
-    «ENDIF-»
+Â«DEFINE MultiReferenceAdderForFeatureDefinition FOR EReferenceÂ»
+    Â«IF eOpposite != null-Â»
+        if (Â«modifierParameterName()Â».Â«eOpposite.name.getter()Â»() != this) {
+    Â«ENDIF-Â»
           
-    this.«name».add(«modifierParameterName()»);
+    this.Â«nameÂ».add(Â«modifierParameterName()Â»);
           
-    «IF eOpposite != null-»
-        «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
+    Â«IF eOpposite != null-Â»
+        Â«EXPAND CallSetterForOppositeDefinition FOR (EReference)this-Â»
         }
-    «ENDIF-»
-«ENDDEFINE»
+    Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE MultiReferenceRemoverForFeatureDefinition FOR EReference»
-    «IF eOpposite != null-»
-        if («modifierParameterName()».«eOpposite.name.getter()»() == this) {
-    «ENDIF-»
+Â«DEFINE MultiReferenceRemoverForFeatureDefinition FOR EReferenceÂ»
+    Â«IF eOpposite != null-Â»
+        if (Â«modifierParameterName()Â».Â«eOpposite.name.getter()Â»() == this) {
+    Â«ENDIF-Â»
           
-    this.«name».remove(«modifierParameterName()»);
+    this.Â«nameÂ».remove(Â«modifierParameterName()Â»);
           
-    «IF eOpposite != null-»
-            «modifierParameterName()».«eOpposite.name.setter()»(null);
+    Â«IF eOpposite != null-Â»
+            Â«modifierParameterName()Â».Â«eOpposite.name.setter()Â»(null);
         }
-    «ENDIF-»
-«ENDDEFINE»
+    Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE SimpleSetterForFeatureDefinition FOR EStructuralFeature»
-    «IF isReference()-»
-        var «previousFieldName()» = this.«name.getter()»();
-        if («previousFieldName()» != «name») {
-    «ENDIF-»
+Â«DEFINE SimpleSetterForFeatureDefinition FOR EStructuralFeatureÂ»
+    Â«IF isReference()-Â»
+        var Â«previousFieldName()Â» = this.Â«name.getter()Â»();
+        if (Â«previousFieldName()Â» != Â«nameÂ») {
+    Â«ENDIF-Â»
           
-    «IF isObservableProperty()-»
-        this.«name».set(«name»);
-    «ELSE-»
-        this.«name» = «name»;
-    «ENDIF-»
+    Â«IF isObservableProperty()-Â»
+        this.Â«nameÂ».set(Â«nameÂ»);
+    Â«ELSE-Â»
+        this.Â«nameÂ» = Â«nameÂ»;
+    Â«ENDIF-Â»
           
-    «IF isReference()-»
-        «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
-        «EXPAND CallSetterForUnsetOppositeDefinition FOR (EReference)this-»
+    Â«IF isReference()-Â»
+        Â«EXPAND CallSetterForOppositeDefinition FOR (EReference)this-Â»
+        Â«EXPAND CallSetterForUnsetOppositeDefinition FOR (EReference)this-Â»
         }
-    «ENDIF-»
-«ENDDEFINE»
+    Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE SimpleAdderForFeatureDefinition FOR EStructuralFeature»
-    this.«name».add(«modifierParameterName()»);
-«ENDDEFINE»
+Â«DEFINE SimpleAdderForFeatureDefinition FOR EStructuralFeatureÂ»
+    this.Â«nameÂ».add(Â«modifierParameterName()Â»);
+Â«ENDDEFINEÂ»
 
-«DEFINE CallSetterForOppositeDefinition FOR EReference»
-      «IF eOpposite != null-»
-      if («modifierParameterName()» != null) {
-          «modifierParameterName()».«eOpposite.adderOrSetter()»(this);
+Â«DEFINE CallSetterForOppositeDefinition FOR EReferenceÂ»
+      Â«IF eOpposite != null-Â»
+      if (Â«modifierParameterName()Â» != null) {
+          Â«modifierParameterName()Â».Â«eOpposite.adderOrSetter()Â»(this);
       }
-      «ENDIF-»
-«ENDDEFINE»
+      Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE CallSetterForUnsetOppositeDefinition FOR EReference»
-      «IF eOpposite != null-»
-      if («previousFieldName()» != null) {
-	      «IF eOpposite.isCollection()-»
-          «previousFieldName()».«eOpposite.name.remover()»(this);
-	      «ELSE-»
-          «previousFieldName()».«eOpposite.name.setter()»(null);
-	      «ENDIF-»
+Â«DEFINE CallSetterForUnsetOppositeDefinition FOR EReferenceÂ»
+      Â«IF eOpposite != null-Â»
+      if (Â«previousFieldName()Â» != null) {
+	      Â«IF eOpposite.isCollection()-Â»
+          Â«previousFieldName()Â».Â«eOpposite.name.remover()Â»(this);
+	      Â«ELSE-Â»
+          Â«previousFieldName()Â».Â«eOpposite.name.setter()Â»(null);
+	      Â«ENDIF-Â»
       }
-      «ENDIF-»
-«ENDDEFINE»
+      Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE GetPropertyDefinitions FOR EClass»
-	  «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
-	  «IF f.hasPropertyGetterOperation()-»
+Â«DEFINE GetPropertyDefinitions FOR EClassÂ»
+	  Â«FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS fÂ»
+	  Â«IF f.hasPropertyGetterOperation()-Â»
 	  @Override
-	  «ENDIF-»
-	  public «f.featureToObservableReadonlyType()» «f.name»Property() {
-	  	return this.«f.name».getReadOnlyProperty();
+	  Â«ENDIF-Â»
+	  public Â«f.featureToObservableReadonlyType()Â» Â«f.nameÂ»Property() {
+	  	return this.Â«f.nameÂ».getReadOnlyProperty();
 	  }
-      «ENDFOREACH»
-«ENDDEFINE»
+      Â«ENDFOREACHÂ»
+Â«ENDDEFINEÂ»

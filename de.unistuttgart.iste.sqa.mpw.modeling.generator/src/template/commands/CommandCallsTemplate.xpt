@@ -1,14 +1,14 @@
-«IMPORT ecore»
+Â«IMPORT ecoreÂ»
 
-«EXTENSION template::GeneratorExtensions»
+Â«EXTENSION template::GeneratorExtensionsÂ»
 
-«DEFINE CommandDefinitions FOR EClass»
-	  «FOREACH eAllOperations.select(o|o.isCommand()) AS o»
+Â«DEFINE CommandDefinitions FOR EClassÂ»
+	  Â«FOREACH eAllOperations.select(o|o.isCommand()) AS oÂ»
 	  @Override
-	  public void «o.name»(«o.name.toFirstUpper()»CommandParameters parameters) {
+	  public void Â«o.nameÂ»(Â«o.name.toFirstUpper()Â»CommandParameters parameters) {
 	      parameters.self = this;
-	      var command = new «o.name.toFirstUpper()»Command(parameters);
+	      var command = new Â«o.name.toFirstUpper()Â»Command(parameters);
 	      parameters.commandStack.execute(command);
 	  }
-      «ENDFOREACH»
-«ENDDEFINE»
+      Â«ENDFOREACHÂ»
+Â«ENDDEFINEÂ»

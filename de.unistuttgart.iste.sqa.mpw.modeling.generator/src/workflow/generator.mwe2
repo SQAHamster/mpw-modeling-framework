@@ -37,6 +37,7 @@ var simulatorTargetSrcGenerated = "${simulatorTargetSrc}/generated"
 Workflow {
 	/* set up EMF for standalone execution */
 	bean = StandaloneSetup { 
+        scanClassPath = true
 		platformUri="${projectRoot}"
 		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
 		registerGeneratedEPackage="commandBehavior.CommandPackage"
@@ -49,16 +50,6 @@ Workflow {
 	bean = EmfRegistryMetaModel : mm_emf { }
 
 	bean = JavaBeautifier : formatter_java { }
-	
-	/* generate genmodels */
-	/* component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
-		genModel = "${platformUriPrefix}/${mpwModelProject}/model/mpw.genmodel"
-		srcPath = "${platformUriPrefix}/${mpwModelProject}/src-gen}"
-	}
-	component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
-		genModel = "${platformUriPrefix}/${transformationsProject}/model/transformations.genmodel"
-		srcPath = "${platformUriPrefix}/${transformationsProject}/src-gen"
-	} */
 
 	/* load model and store it in slots */
 	component = MultiEcoreReader {

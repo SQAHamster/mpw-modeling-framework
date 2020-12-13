@@ -1,40 +1,40 @@
-«IMPORT ecore»
+Â«IMPORT ecoreÂ»
 
-«EXTENSION template::GeneratorExtensions»
+Â«EXTENSION template::GeneratorExtensionsÂ»
 
-«DEFINE ValueTypeTemplate FOR EClass»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+Â«DEFINE ValueTypeTemplate FOR EClassÂ»
+    Â«FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"Â»package Â«this.ePackage.toJavaPackageName()Â»;
     
-    public class «this.name» {
-        «FOREACH eAttributes AS a-»
-        private «a.featureToJavaType()» «a.name»;
-        «ENDFOREACH-»
+    public class Â«this.nameÂ» {
+        Â«FOREACH eAttributes AS a-Â»
+        private Â«a.featureToJavaType()Â» Â«a.nameÂ»;
+        Â«ENDFOREACH-Â»
         
-        public «name»() {
+        public Â«nameÂ»() {
         }
         
-        public «name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToJavaType()» «a.name»«ENDFOREACH») {
-            «FOREACH eAttributes AS a-»
-                this.«a.name» = «a.name»;
-            «ENDFOREACH-»
+        public Â«nameÂ»(Â«FOREACH eAttributes AS a SEPARATOR ", "Â»Â«a.featureToJavaType()Â» Â«a.nameÂ»Â«ENDFOREACHÂ») {
+            Â«FOREACH eAttributes AS a-Â»
+                this.Â«a.nameÂ» = Â«a.nameÂ»;
+            Â«ENDFOREACH-Â»
         }
         
-        «FOREACH eAttributes AS a-»
-         public «a.featureToJavaType()» «a.name.getter()»() {
-             return this.«a.name»;
+        Â«FOREACH eAttributes AS a-Â»
+         public Â«a.featureToJavaType()Â» Â«a.name.getter()Â»() {
+             return this.Â«a.nameÂ»;
          }
-         public void «a.name.setter()»(«a.featureToJavaType()» «a.name») {
-             this.«a.name» = «a.name»;
+         public void Â«a.name.setter()Â»(Â«a.featureToJavaType()Â» Â«a.nameÂ») {
+             this.Â«a.nameÂ» = Â«a.nameÂ»;
          }
-        «ENDFOREACH-»
+        Â«ENDFOREACH-Â»
         
         @Override
 	    public int hashCode() {
 	        final int prime = 31;
 	        int result = 1;
-            «FOREACH eAttributes AS a-»
-    	        result = prime * result + «a.name»;
-            «ENDFOREACH-»
+            Â«FOREACH eAttributes AS a-Â»
+    	        result = prime * result + Â«a.nameÂ»;
+            Â«ENDFOREACH-Â»
 	        return result;
 	    }
         
@@ -49,18 +49,18 @@
             if (getClass() != obj.getClass()) {
                 return false;
             }
-            final «name» other = («name») obj;
-            «FOREACH eAttributes AS a-»
-                if («a.name» != other.«a.name») {
+            final Â«nameÂ» other = (Â«nameÂ») obj;
+            Â«FOREACH eAttributes AS a-Â»
+                if (Â«a.nameÂ» != other.Â«a.nameÂ») {
                     return false;
                 }
-            «ENDFOREACH-»
+            Â«ENDFOREACH-Â»
             return true;
         }
         
-	    public static «name» from(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToJavaType()» «a.name»«ENDFOREACH») {
-	        return new «name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.name»«ENDFOREACH»);
+	    public static Â«nameÂ» from(Â«FOREACH eAttributes AS a SEPARATOR ", "Â»Â«a.featureToJavaType()Â» Â«a.nameÂ»Â«ENDFOREACHÂ») {
+	        return new Â«nameÂ»(Â«FOREACH eAttributes AS a SEPARATOR ", "Â»Â«a.nameÂ»Â«ENDFOREACHÂ»);
 	    }
     }
-    «ENDFILE»
-«ENDDEFINE»
+    Â«ENDFILEÂ»
+Â«ENDDEFINEÂ»

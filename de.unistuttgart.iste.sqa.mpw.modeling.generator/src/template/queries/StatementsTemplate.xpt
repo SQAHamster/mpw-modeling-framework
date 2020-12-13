@@ -1,55 +1,55 @@
-«IMPORT ecore»
-«IMPORT queryBehavior»
+Â«IMPORT ecoreÂ»
+Â«IMPORT queryBehaviorÂ»
 
-«EXTENSION template::GeneratorExtensions»
+Â«EXTENSION template::GeneratorExtensionsÂ»
 
-«DEFINE StatementsDefinitions FOR StatementsExpression-»
-    «IF statements.size == 0»null«ENDIF-»
-    «FOREACH statements AS s SEPARATOR "."-»
-        «EXPAND StatementDefinition FOR s-»
-    «ENDFOREACH-»
-«ENDDEFINE»
+Â«DEFINE StatementsDefinitions FOR StatementsExpression-Â»
+    Â«IF statements.size == 0Â»nullÂ«ENDIF-Â»
+    Â«FOREACH statements AS s SEPARATOR "."-Â»
+        Â«EXPAND StatementDefinition FOR s-Â»
+    Â«ENDFOREACH-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE StatementDefinition FOR Statement»«ENDDEFINE»
+Â«DEFINE StatementDefinition FOR StatementÂ»Â«ENDDEFINEÂ»
 
-«DEFINE StatementDefinition FOR SelfStatement-»
-    «selfAlias»
-«ENDDEFINE»
+Â«DEFINE StatementDefinition FOR SelfStatement-Â»
+    Â«selfAliasÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE StatementDefinition FOR ParameterUsageStatement-»
-    «parameterName»
-«ENDDEFINE»
+Â«DEFINE StatementDefinition FOR ParameterUsageStatement-Â»
+    Â«parameterNameÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE StatementDefinition FOR FeatureStatement-»
-    «feature.name.getter()»()
-«ENDDEFINE»
+Â«DEFINE StatementDefinition FOR FeatureStatement-Â»
+    Â«feature.name.getter()Â»()
+Â«ENDDEFINEÂ»
 
-«DEFINE StatementDefinition FOR CollectionMethodStatement-»
-    «IF methodType == CollectionMethodType::NOT_EMPTY-»
+Â«DEFINE StatementDefinition FOR CollectionMethodStatement-Â»
+    Â«IF methodType == CollectionMethodType::NOT_EMPTY-Â»
         size() > 0
-    «ELSEIF methodType == CollectionMethodType::IS_EMPTY-»
+    Â«ELSEIF methodType == CollectionMethodType::IS_EMPTY-Â»
         isEmpty()
-    «ELSEIF methodType == CollectionMethodType::SIZE-»
+    Â«ELSEIF methodType == CollectionMethodType::SIZE-Â»
         size()
-    «ELSEIF methodType == CollectionMethodType::TYPE_SELECT-»
-        «LET ((EClassifier)parameters.get(0)).name AS typeSelectName-»
-        stream().filter(«typeSelectName».class::isInstance).map(«typeSelectName».class::cast).collect(Collectors.toList())
-        «ENDLET-»
-    «ELSEIF methodType == CollectionMethodType::AT-»
-        «LET (Expression)parameters.get(0) AS indexExpression-»
-        get(«EXPAND template::QueriesTemplate::ExpressionDefinition FOR indexExpression»)
-        «ENDLET-»
-    «ENDIF-»
-«ENDDEFINE»
+    Â«ELSEIF methodType == CollectionMethodType::TYPE_SELECT-Â»
+        Â«LET ((EClassifier)parameters.get(0)).name AS typeSelectName-Â»
+        stream().filter(Â«typeSelectNameÂ».class::isInstance).map(Â«typeSelectNameÂ».class::cast).collect(Collectors.toList())
+        Â«ENDLET-Â»
+    Â«ELSEIF methodType == CollectionMethodType::AT-Â»
+        Â«LET (Expression)parameters.get(0) AS indexExpression-Â»
+        get(Â«EXPAND template::QueriesTemplate::ExpressionDefinition FOR indexExpressionÂ»)
+        Â«ENDLET-Â»
+    Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE StatementDefinition FOR EnumLiteralStatement-»
-    «enumLiteral»
-«ENDDEFINE»
+Â«DEFINE StatementDefinition FOR EnumLiteralStatement-Â»
+    Â«enumLiteralÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE StatementDefinition FOR QueryStatement-»
-    «query.name»(«parameterNames.toString(", ")»)
-«ENDDEFINE»
+Â«DEFINE StatementDefinition FOR QueryStatement-Â»
+    Â«query.nameÂ»(Â«parameterNames.toString(", ")Â»)
+Â«ENDDEFINEÂ»
 
-«DEFINE StatementDefinition FOR VariableUsageStatement-»
-    «variableReference.variableName»
-«ENDDEFINE»
+Â«DEFINE StatementDefinition FOR VariableUsageStatement-Â»
+    Â«variableReference.variableNameÂ»
+Â«ENDDEFINEÂ»

@@ -4,3 +4,5 @@
 model/generated
 .antlr-generator-*.jar
 /.launch
+/target
+/workspace

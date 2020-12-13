@@ -1,107 +1,107 @@
-«IMPORT ecore»
-«IMPORT generationAnnotations»
+Â«IMPORT ecoreÂ»
+Â«IMPORT generationAnnotationsÂ»
 
-«EXTENSION template::GeneratorExtensions»
+Â«EXTENSION template::GeneratorExtensionsÂ»
 
-«REM»
+Â«REMÂ»
   Generate entity ecore files.
   Note: facade classes are generated with the more generic "GenerateClassesTemplate.xpt".
-«ENDREM»
-«DEFINE main FOR List[EPackage]»
-    «EXPAND EcoreFile FOREACH this»
-«ENDDEFINE»
+Â«ENDREMÂ»
+Â«DEFINE main FOR List[EPackage]Â»
+    Â«EXPAND EcoreFile FOREACH thisÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE EcoreFile FOR EPackage»
-    «EXPAND JavaClass FOREACH this.eClassifiers.typeSelect(EClass)
+Â«DEFINE EcoreFile FOR EPackageÂ»
+    Â«EXPAND JavaClass FOREACH this.eClassifiers.typeSelect(EClass)
                                   .reject(c|c.interface)
                                   .reject(c|c.isValueType())
-                                  .reject(c|c.isFacade())»
-    «EXPAND template::types::ValueTypeTemplate::ValueTypeTemplate FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.isValueType())»
-    «EXPAND JavaInterface FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.interface)»
-    «EXPAND JavaEnum FOREACH this.eClassifiers.typeSelect(EEnum)»
-«ENDDEFINE»
+                                  .reject(c|c.isFacade())Â»
+    Â«EXPAND template::types::ValueTypeTemplate::ValueTypeTemplate FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.isValueType())Â»
+    Â«EXPAND JavaInterface FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.interface)Â»
+    Â«EXPAND JavaEnum FOREACH this.eClassifiers.typeSelect(EEnum)Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE JavaClass FOR EClass»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+Â«DEFINE JavaClass FOR EClassÂ»
+    Â«FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"Â»package Â«this.ePackage.toJavaPackageName()Â»;
     
-    «EXPAND template::types::ImportUsedTypesTemplate::ImportDefinitions FOR this»
+    Â«EXPAND template::types::ImportUsedTypesTemplate::ImportDefinitions FOR thisÂ»
     
-    public «IF needsImplSubclass() || abstract»abstract«ENDIF» class «this.name» «this.toInheritance()» {
-      «EXPAND template::properties::PropertyTemplate::PropertyDefinitions FOR this»
-      «EXPAND template::properties::PropertyTemplate::ConstructorDefinition FOR this»
-      «EXPAND template::QueriesTemplate::QueryDefinitions FOR this»
-      «EXPAND template::commands::CommandCallsTemplate::CommandDefinitions FOR this»
-      «EXPAND template::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
-      «EXPAND template::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
-      «EXPAND template::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
-      «FOREACH eOperations AS o»
-      public abstract «o.operationToSignature()»;
-      «ENDFOREACH»
+    public Â«IF needsImplSubclass() || abstractÂ»abstractÂ«ENDIFÂ» class Â«this.nameÂ» Â«this.toInheritance()Â» {
+      Â«EXPAND template::properties::PropertyTemplate::PropertyDefinitions FOR thisÂ»
+      Â«EXPAND template::properties::PropertyTemplate::ConstructorDefinition FOR thisÂ»
+      Â«EXPAND template::QueriesTemplate::QueryDefinitions FOR thisÂ»
+      Â«EXPAND template::commands::CommandCallsTemplate::CommandDefinitions FOR thisÂ»
+      Â«EXPAND template::properties::PropertyTemplate::GetPropertyDefinitions FOR thisÂ»
+      Â«EXPAND template::properties::PropertyTemplate::GetPropertyValueDefinitions FOR thisÂ»
+      Â«EXPAND template::properties::PropertyTemplate::SetPropertyValueDefinitions FOR thisÂ»
+      Â«FOREACH eOperations AS oÂ»
+      public abstract Â«o.operationToSignature()Â»;
+      Â«ENDFOREACHÂ»
     }
-    «ENDFILE»
-    «IF needsImplSubclass()»
-    «FILE "java/" + this.ePackage.toJavaPackagePath() + "/impl/" + name + "Impl.java"»package «this.ePackage.toJavaPackageName()».impl;
+    Â«ENDFILEÂ»
+    Â«IF needsImplSubclass()Â»
+    Â«FILE "java/" + this.ePackage.toJavaPackagePath() + "/impl/" + name + "Impl.java"Â»package Â«this.ePackage.toJavaPackageName()Â».impl;
     
-    «EXPAND template::types::ImportUsedTypesTemplate::ImplImportDefinitions FOR this»
+    Â«EXPAND template::types::ImportUsedTypesTemplate::ImplImportDefinitions FOR thisÂ»
     
-    public class «this.name»Impl extends «this.name» {
-      «EXPAND template::properties::PropertyTemplate::ImplConstructorDefinition FOR this»
-      «FOREACH this.getManualImplementedOperations() AS o»
+    public class Â«this.nameÂ»Impl extends Â«this.nameÂ» {
+      Â«EXPAND template::properties::PropertyTemplate::ImplConstructorDefinition FOR thisÂ»
+      Â«FOREACH this.getManualImplementedOperations() AS oÂ»
       @Override
-      public «o.operationToSignature()» {
+      public Â«o.operationToSignature()Â» {
           throw new RuntimeException("not implemented");
       }
-      «ENDFOREACH»
+      Â«ENDFOREACHÂ»
     }
-    «ENDFILE»
-    «ENDIF»
-«ENDDEFINE»
+    Â«ENDFILEÂ»
+    Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE JavaInterface FOR EClass»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+Â«DEFINE JavaInterface FOR EClassÂ»
+    Â«FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"Â»package Â«this.ePackage.toJavaPackageName()Â»;
     
-    «EXPAND template::types::ImportUsedTypesTemplate::ImportDefinitions FOR this»
+    Â«EXPAND template::types::ImportUsedTypesTemplate::ImportDefinitions FOR thisÂ»
     
-    public interface «this.name» «toInheritance()» {
-      «FOREACH eOperations AS o»
-      «o.operationToSignature()»;
-      «IF o.isPropertyGetter()-»
-        «o.operationToObservableGetterSignature()»;
-      «ENDIF-»
-      «ENDFOREACH»
-      «EXPAND GenerationAnnotation FOREACH eAnnotations»
+    public interface Â«this.nameÂ» Â«toInheritance()Â» {
+      Â«FOREACH eOperations AS oÂ»
+      Â«o.operationToSignature()Â»;
+      Â«IF o.isPropertyGetter()-Â»
+        Â«o.operationToObservableGetterSignature()Â»;
+      Â«ENDIF-Â»
+      Â«ENDFOREACHÂ»
+      Â«EXPAND GenerationAnnotation FOREACH eAnnotationsÂ»
     }
-    «ENDFILE»
-    «IF isDependency()»
-    «FILE "java/" + this.ePackage.toJavaPackagePath() + "/impl/Dummy" + name + ".java"»package «this.ePackage.toJavaPackageName()».impl;
+    Â«ENDFILEÂ»
+    Â«IF isDependency()Â»
+    Â«FILE "java/" + this.ePackage.toJavaPackagePath() + "/impl/Dummy" + name + ".java"Â»package Â«this.ePackage.toJavaPackageName()Â».impl;
     
-    «EXPAND template::types::ImportUsedTypesTemplate::ImplImportDefinitions FOR this»
+    Â«EXPAND template::types::ImportUsedTypesTemplate::ImplImportDefinitions FOR thisÂ»
     
-    public class Dummy«this.name» implements «this.name» {
-      «FOREACH this.eAllOperations AS o»
+    public class DummyÂ«this.nameÂ» implements Â«this.nameÂ» {
+      Â«FOREACH this.eAllOperations AS oÂ»
       @Override
-      public «o.operationToSignature()» {
+      public Â«o.operationToSignature()Â» {
           throw new RuntimeException("not implemented");
       }
-      «ENDFOREACH»
+      Â«ENDFOREACHÂ»
     }
-    «ENDFILE»
-    «ENDIF»
-«ENDDEFINE»
+    Â«ENDFILEÂ»
+    Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE JavaEnum FOR EEnum»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+Â«DEFINE JavaEnum FOR EEnumÂ»
+    Â«FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"Â»package Â«this.ePackage.toJavaPackageName()Â»;
     
-    public enum «this.name» {
-      «FOREACH eLiterals AS l SEPARATOR ", "»
-      «l»
-	  «ENDFOREACH»
+    public enum Â«this.nameÂ» {
+      Â«FOREACH eLiterals AS l SEPARATOR ", "Â»
+      Â«lÂ»
+	  Â«ENDFOREACHÂ»
     }
-    «ENDFILE»
-«ENDDEFINE»
+    Â«ENDFILEÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE»
+Â«DEFINE GenerationAnnotation FOR EAnnotationÂ»Â«ENDDEFINEÂ»
 
-«DEFINE GenerationAnnotation FOR GetPropertyDeclarationAnnotation»
-    «fieldTypeName» «getterName»();
-«ENDDEFINE»
+Â«DEFINE GenerationAnnotation FOR GetPropertyDeclarationAnnotationÂ»
+    Â«fieldTypeNameÂ» Â«getterNameÂ»();
+Â«ENDDEFINEÂ»

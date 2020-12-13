@@ -1,0 +1,22 @@
+module modeling.GenModelGenerator
+
+import org.eclipse.emf.mwe.utils.StandaloneSetup
+
+var projectRoot  = ".."
+var platformUriPrefix = "platform:/resource"
+var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
+var modelingModuleBaseName = "${moduleBaseName}.modeling"
+
+var mpwModelProject  = "${modelingModuleBaseName}.mpw"
+
+Workflow {
+	bean = StandaloneSetup { 
+		platformUri="${projectRoot}"
+	}
+	
+	component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
+		genModel = "${platformUriPrefix}/${mpwModelProject}/model/mpw.genmodel"
+		srcPath = "${platformUriPrefix}/${mpwModelProject}/src-gen}"
+	}
+	
+}

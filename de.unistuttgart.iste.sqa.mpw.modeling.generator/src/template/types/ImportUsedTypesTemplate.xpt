@@ -1,29 +1,29 @@
-«IMPORT ecore»
+Â«IMPORT ecoreÂ»
 
-«EXTENSION template::GeneratorExtensions»
+Â«EXTENSION template::GeneratorExtensionsÂ»
 
-«DEFINE ImportDefinitions FOR EClass»
-	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
+Â«DEFINE ImportDefinitions FOR EClassÂ»
+	Â«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-Â»
     import java.util.List;
-	«ENDIF-»
-    «IF eStructuralFeatures.exists(e|e.isCollection() && !e.changeable)-»
+	Â«ENDIF-Â»
+    Â«IF eStructuralFeatures.exists(e|e.isCollection() && !e.changeable)-Â»
     import java.util.ArrayList;
-    «ENDIF-»
-    «FOREACH eAllOperations.select(o|o.isCommand()).collect(o|o.getCommandForOperation().targetClass.name).toSet() AS className-»
-    import «getModulePackage()».commands.«className.toLowerCase()».*;
-    «ENDFOREACH-»
-	«IF !interface && name.startsWith("Concrete") && eAllOperations.exists(o|o.isQuery())-»
-    import static «getModulePackage()».mpw.Direction.*;
+    Â«ENDIF-Â»
+    Â«FOREACH eAllOperations.select(o|o.isCommand()).collect(o|o.getCommandForOperation().targetClass.name).toSet() AS className-Â»
+    import Â«getModulePackage()Â».commands.Â«className.toLowerCase()Â».*;
+    Â«ENDFOREACH-Â»
+	Â«IF !interface && name.startsWith("Concrete") && eAllOperations.exists(o|o.isQuery())-Â»
+    import static Â«getModulePackage()Â».mpw.Direction.*;
     import java.util.stream.Collectors;
-	«ENDIF-»
-	«IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
-	    eOperations.exists(o|o.isPropertyGetter())-»
+	Â«ENDIF-Â»
+	Â«IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
+	    eOperations.exists(o|o.isPropertyGetter())-Â»
 	import javafx.beans.property.*;
-	«ENDIF-»
-	«IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection())-»
+	Â«ENDIF-Â»
+	Â«IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection())-Â»
 	import javafx.collections.FXCollections;
-	«ENDIF-»
-    «EXPAND SingleImportDefinition FOREACH eStructuralFeatures
+	Â«ENDIF-Â»
+    Â«EXPAND SingleImportDefinition FOREACH eStructuralFeatures
 		.collect(e|e.eType)
 		.union(eSuperTypes)
 		.union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())
@@ -31,24 +31,24 @@
 		.toSet()
 		.reject(t|t.ePackage == this.ePackage)
 		.reject(t|t.isBuiltInType())
-		.reject(t|t.isStereotype())»
-«ENDDEFINE»
+		.reject(t|t.isStereotype())Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE ImplImportDefinitions FOR EClass»
-    «EXPAND SingleImportDefinition FOREACH eAllOperations
+Â«DEFINE ImplImportDefinitions FOR EClassÂ»
+    Â«EXPAND SingleImportDefinition FOREACH eAllOperations
 		.collect(e|e.eType)
 		.add(this)
 		.union(eOperations.collect(o|o.getUsedTypes()).flatten())
 		.union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
 		.toSet()
 		.reject(e|e == null)
-		.reject(t|t.isBuiltInType())»
-«ENDDEFINE»
+		.reject(t|t.isBuiltInType())Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE SingleImportDefinition FOR EClassifier-»
-    import «getModulePackage()».«ePackage.name».«name»;
-«ENDDEFINE»
+Â«DEFINE SingleImportDefinition FOR EClassifier-Â»
+    import Â«getModulePackage()Â».Â«ePackage.nameÂ».Â«nameÂ»;
+Â«ENDDEFINEÂ»
 
-«DEFINE CommandEntityImportDefinition FOR EClass-»
-    import «getModulePackage()».«ePackage.name».*;
-«ENDDEFINE»
+Â«DEFINE CommandEntityImportDefinition FOR EClass-Â»
+    import Â«getModulePackage()Â».Â«ePackage.nameÂ».*;
+Â«ENDDEFINEÂ»

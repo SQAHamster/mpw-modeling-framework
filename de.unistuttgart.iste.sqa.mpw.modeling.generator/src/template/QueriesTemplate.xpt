@@ -1,62 +1,62 @@
-«IMPORT ecore»
-«IMPORT queryBehavior»
+Â«IMPORT ecoreÂ»
+Â«IMPORT queryBehaviorÂ»
 
-«EXTENSION template::GeneratorExtensions»
+Â«EXTENSION template::GeneratorExtensionsÂ»
 
-«DEFINE QueryDefinitions FOR EClass»
-	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
+Â«DEFINE QueryDefinitions FOR EClassÂ»
+	  Â«FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS qÂ»
 	  @Override
-	  public «q.eType.name.toJavaType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.eType.name.toJavaType()» «p.name»«ENDFOREACH») {
+	  public Â«q.eType.name.toJavaType()Â» Â«q.nameÂ»(Â«FOREACH q.parameters AS p SEPARATOR ", "Â»Â«p.eType.name.toJavaType()Â» Â«p.nameÂ»Â«ENDFOREACHÂ») {
 	      try {
-  	          return «EXPAND ExpressionDefinition FOR q.mainExpression-»;
+  	          return Â«EXPAND ExpressionDefinition FOR q.mainExpression-Â»;
 	      } catch (Exception e) {
-	          return «q.defaultValueLiteral»;
+	          return Â«q.defaultValueLiteralÂ»;
 	      }
 	  }
-      «ENDFOREACH»
-«ENDDEFINE»
+      Â«ENDFOREACHÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR Expression-»«ENDDEFINE»
+Â«DEFINE ExpressionDefinition FOR Expression-Â»Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR VariableExpression-»
-    «valueExpression.eType.name.toJavaType()» «variableName» = «EXPAND ExpressionDefinition FOR valueExpression»;
-«ENDDEFINE»
+Â«DEFINE ExpressionDefinition FOR VariableExpression-Â»
+    Â«valueExpression.eType.name.toJavaType()Â» Â«variableNameÂ» = Â«EXPAND ExpressionDefinition FOR valueExpressionÂ»;
+Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR NotExpression-»
-    !(«EXPAND ExpressionDefinition FOR inner-»)
-«ENDDEFINE»
+Â«DEFINE ExpressionDefinition FOR NotExpression-Â»
+    !(Â«EXPAND ExpressionDefinition FOR inner-Â»)
+Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR OldExpression-»
-    «EXPAND ExpressionDefinition FOR inner-»
-«ENDDEFINE»
+Â«DEFINE ExpressionDefinition FOR OldExpression-Â»
+    Â«EXPAND ExpressionDefinition FOR inner-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR ImpliesExpression-»
-    («EXPAND ExpressionDefinition FOR lhs») 
-    ? («EXPAND ExpressionDefinition FOR rhs») 
+Â«DEFINE ExpressionDefinition FOR ImpliesExpression-Â»
+    (Â«EXPAND ExpressionDefinition FOR lhsÂ») 
+    ? (Â«EXPAND ExpressionDefinition FOR rhsÂ») 
     : true
-«ENDDEFINE»
+Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR OrExpression-»
-    «EXPAND ExpressionDefinition FOR lhs» || «EXPAND ExpressionDefinition FOR rhs-»
-«ENDDEFINE»
+Â«DEFINE ExpressionDefinition FOR OrExpression-Â»
+    Â«EXPAND ExpressionDefinition FOR lhsÂ» || Â«EXPAND ExpressionDefinition FOR rhs-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR AndExpression-»
-    «EXPAND ExpressionDefinition FOR lhs» 
-    && «EXPAND ExpressionDefinition FOR rhs-»
-«ENDDEFINE»
+Â«DEFINE ExpressionDefinition FOR AndExpression-Â»
+    Â«EXPAND ExpressionDefinition FOR lhsÂ» 
+    && Â«EXPAND ExpressionDefinition FOR rhs-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR CompareExpression-»
-    «EXPAND ExpressionDefinition FOR lhs» «operator.toOperatorCode()» «EXPAND ExpressionDefinition FOR rhs-»
-«ENDDEFINE»
+Â«DEFINE ExpressionDefinition FOR CompareExpression-Â»
+    Â«EXPAND ExpressionDefinition FOR lhsÂ» Â«operator.toOperatorCode()Â» Â«EXPAND ExpressionDefinition FOR rhs-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR CalculationExpression-»
-    «EXPAND ExpressionDefinition FOR lhs» «operator.toOperatorCode()» «EXPAND ExpressionDefinition FOR rhs-»
-«ENDDEFINE»
+Â«DEFINE ExpressionDefinition FOR CalculationExpression-Â»
+    Â«EXPAND ExpressionDefinition FOR lhsÂ» Â«operator.toOperatorCode()Â» Â«EXPAND ExpressionDefinition FOR rhs-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR ConstantExpression-»
-    «literal-»
-«ENDDEFINE»
+Â«DEFINE ExpressionDefinition FOR ConstantExpression-Â»
+    Â«literal-Â»
+Â«ENDDEFINEÂ»
 
-«DEFINE ExpressionDefinition FOR StatementsExpression-»
-    «EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-»
-«ENDDEFINE»
+Â«DEFINE ExpressionDefinition FOR StatementsExpression-Â»
+    Â«EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-Â»
+Â«ENDDEFINEÂ»

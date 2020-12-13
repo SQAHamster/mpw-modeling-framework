@@ -1,3 +1,5 @@
 /bin/
 /ignore
 /src-gen
+/workspace
+/target/

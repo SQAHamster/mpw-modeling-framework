@@ -1,0 +1,30 @@
+module modeling.GenModelGenerator
+
+import org.eclipse.emf.mwe.utils.StandaloneSetup
+
+var projectRoot  = ".."
+var platformUriPrefix = "platform:/resource"
+var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
+var modelingModuleBaseName = "${moduleBaseName}.modeling"
+
+var transformationsProject = "${modelingModuleBaseName}.transformations"
+
+Workflow {
+	bean = StandaloneSetup { 
+        scanClassPath = true
+		platformUri="${projectRoot}"
+		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
+		registerGeneratedEPackage="de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.QuerydslPackage"
+	}
+	
+	component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
+		genModel = "${platformUriPrefix}/${transformationsProject}/model/transformations.genmodel"
+		srcPath = "${platformUriPrefix}/${transformationsProject}/src-gen"
+	}
+	
+	component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
+		genModel = "${platformUriPrefix}/${transformationsProject}/model/inputs/inputs.genmodel"
+		srcPath = "${platformUriPrefix}/${transformationsProject}/src-gen"
+	}
+	
+}
