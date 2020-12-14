@@ -30,7 +30,9 @@ public class CommandReader extends MultiResourceReader {
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		super.invokeInternal(context, monitor, issues);
 
-		var validator = createOclValidator();
+		OCL ocl = OCL.newInstance();
+
+		var validator = createOclValidator(ocl);
 		var inputs = InputsFactoryImpl.eINSTANCE.createHenshinCommandInputs();
 		var modules = inputs.getModules();
 		
@@ -56,8 +58,7 @@ public class CommandReader extends MultiResourceReader {
 		context.set(modelSlot + "Composition", inputs);
 	}
 	
-	private static EValidator createOclValidator() {
-		OCL ocl = OCL.newInstance();
+	private static EValidator createOclValidator(OCL ocl) {
 		CompleteOCLStandaloneSetup.doSetup();
 		var uri = "platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.commands/src/CommandValidation.ocl";
 		return new CompleteOCLEObjectValidator(HenshinPackage.eINSTANCE, URI.createURI(uri), ocl.getEnvironmentFactory());
