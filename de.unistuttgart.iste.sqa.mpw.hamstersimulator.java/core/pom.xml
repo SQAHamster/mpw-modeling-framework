@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>core</artifactId>
-	
+
 	<name>Polyglot Hamstersimulator Core Model Library</name>
 
 	<parent>
@@ -11,45 +11,12 @@
 		<relativePath>../parent</relativePath>
 	</parent>
 
-<!--	<repositories>-->
-<!--		<repository>-->
-<!--			<id>Henshin</id>-->
-<!--			<url>https://repo.eclipse.org/content/groups/henshin/</url>-->
-<!--			<releases><enabled>true</enabled></releases>-->
-<!--			<snapshots><enabled>true</enabled></snapshots>-->
-<!--		</repository>-->
-<!--	</repositories>-->
-
-	<repositories>
-		<repository>
-			<id>Henshin</id>
-			<url>https://github.com/Fumapps/poly-hamster-simulator/raw/repository/</url>
-			<releases><enabled>true</enabled></releases>
-		</repository>
-	</repositories>
-
 	<dependencies>
-<!--		<dependency>-->
-<!--			<groupId>org.locationtech.geotrellis</groupId>-->
-<!--			<artifactId>geotrellis-s3-testkit_2.12</artifactId>-->
-<!--			<version>2.3.2-SNAPSHOT</version>-->
-<!--		</dependency>-->
 		<dependency>
-			<groupId>org.eclipse.emf.henshin</groupId>
-			<artifactId>org.eclipse.emf.henshin.model</artifactId>
-			<version>1.6.0</version>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>14</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.eclipse.xtext</groupId>-->
-<!--			<artifactId>org.eclipse.xtext.xtext.generator</artifactId>-->
-<!--			<version>2.23.0</version>-->
-<!--		</dependency>-->
-
-	    <dependency>
-      		<groupId>org.openjfx</groupId>
-    		<artifactId>javafx-base</artifactId>
-    		<version>14</version>
-  		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
