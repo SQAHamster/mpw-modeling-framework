@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
+		<maven.compiler.release>14</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
