@@ -36,6 +36,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	private String projectName;
 	private String projectSubPath;
 	private Set<String> excludeModels = new HashSet<>();
+	private String rootPath = "..";
 	
 	protected MultiResourceReader(String fileExtension, String defaultSubPath) {
 		if (!fileExtension.matches("\\.\\w+")) {
@@ -61,6 +62,14 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		this.projectSubPath = projectSubPath;
 	}
 	
+	public String getRootPath() {
+		return rootPath;
+	}
+
+	public void setRootPath(String rootPath) {
+		this.rootPath = rootPath;
+	}
+
 	public void addExcludeModel(String modelName) {
 		if (!modelName.endsWith(fileExtension)) {
 			modelName += fileExtension;
@@ -72,7 +81,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		log.info("searching " + getModelNameFromExtension() + " models for base URI: " + getBaseUri());
 		
-		String targetDirectory = "../" + projectName + "/" + projectSubPath;
+		String targetDirectory = toJavaCompatibleAbsoluteFilePath(rootPath) + "/" + projectName + "/" + projectSubPath;
 		try (var files = listFiles(targetDirectory)) {
 			
 			var modelNames = files.map(f -> f.toFile().getPath())
@@ -95,6 +104,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	
 	private static String substringAfter(String string, String match) {
 		string = string.replaceAll("\\\\", "/");
+		match = match.replaceAll("\\\\", "/");
 		int index = string.indexOf(match);
 		return string.substring(index + match.length());
 	}
@@ -144,6 +154,17 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	
 	private String getModelNameFromExtension() {
 		return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, fileExtension.substring(1));
+	}
+	
+	/**
+	 * Converts the given path into a Java File path by using the eclipse Path class.
+	 * Background: While Eclipse can handle absolute paths starting with "/", on Windows this leads to paths like "/D:" what
+	 *             is not directly compatible with the Java path syntax. Hence the path will be processed with the Eclipse
+	 *             Path class to get a valid java path.
+	 */
+	private static String toJavaCompatibleAbsoluteFilePath(String path) {
+		var eclipsePath = new org.eclipse.core.runtime.Path(path);
+		return eclipsePath.toFile().getAbsolutePath();
 	}
 	
 }

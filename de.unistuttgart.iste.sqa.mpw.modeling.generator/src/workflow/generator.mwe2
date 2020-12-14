@@ -18,7 +18,7 @@ var modelingModuleBaseName = "${moduleBaseName}.modeling"
 
 var generatedProjectBasePackage  = "'de.unistuttgart.hamster'"
 
-var projectRoot  = ".."
+var rootPath = ".."
 var mpwModelProject  = "${modelingModuleBaseName}.mpw"
 var commandsModelProject  = "${modelingModuleBaseName}.commands"
 var queriesModelProject  = "${modelingModuleBaseName}.queries"
@@ -31,14 +31,14 @@ var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/tra
 var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/CommandTransformation.qvto"
 var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/QueryTransformation.qvto"
 var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/GenerationClassesTransformation.qvto"
-var simulatorTargetSrc = "${projectRoot}/${targetCoreSimulatorProject}/src/main"
+var simulatorTargetSrc = "${rootPath}/${targetCoreSimulatorProject}/src/main"
 var simulatorTargetSrcGenerated = "${simulatorTargetSrc}/generated"
 
 Workflow {
 	/* set up EMF for standalone execution */
 	bean = StandaloneSetup { 
         scanClassPath = true
-		platformUri="${projectRoot}"
+		platformUri="../"
 		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
 		registerGeneratedEPackage="commandBehavior.CommandPackage"
         registerGeneratedEPackage="queryBehavior.QueryPackage"
@@ -53,17 +53,20 @@ Workflow {
 
 	/* load model and store it in slots */
 	component = MultiEcoreReader {
+		rootPath = rootPath
 		projectName = mpwModelProject
 		excludeModel = "stereotypes/*"
 		modelSlot = "entityModels"
 	}
 	
 	component = QueryReader {
+		rootPath = rootPath
 		projectName = queriesModelProject
 		modelSlot = "queries"
 	}
 	
 	component = CommandReader {
+		rootPath = rootPath
 		projectName = commandsModelProject
 		modelSlot = "commands"
 	}
@@ -140,10 +143,10 @@ Workflow {
 			path = simulatorTargetSrc
 			overwrite = false
 			postprocessor = formatter_java
-			fileEncoding = "ISO-8859-1"
+			fileEncoding = "UTF-8"
 		}
 		resourceManager = ResourceManagerDefaultImpl {
-			fileEncoding = "ISO-8859-1"
+			fileEncoding = "UTF-8"
 		}
 		
 	}
@@ -160,10 +163,10 @@ Workflow {
             path = simulatorTargetSrc
             overwrite = false
             postprocessor = formatter_java
-            fileEncoding = "ISO-8859-1"
+            fileEncoding = "UTF-8"
         }
         resourceManager = ResourceManagerDefaultImpl {
-            fileEncoding = "ISO-8859-1"
+            fileEncoding = "UTF-8"
         }
         
     }
@@ -183,10 +186,10 @@ Workflow {
 		outlet = {
 			path = simulatorTargetSrcGenerated
 			postprocessor = formatter_java
-			fileEncoding = "ISO-8859-1"
+			fileEncoding = "UTF-8"
 		}
 		resourceManager = ResourceManagerDefaultImpl {
-			fileEncoding = "ISO-8859-1"
+			fileEncoding = "UTF-8"
 		}
 	}
 	
