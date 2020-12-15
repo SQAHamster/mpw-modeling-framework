@@ -11,35 +11,51 @@ modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation
   */
 library GameFacadeElementsBaseLibrary;
 
+property baseName: String;
+
+/**
+  *  Mapping: base logic for creating a facade class
+  */
 abstract mapping inout EClass::createElementsBase() {
-    var baseName := self.name;
+    baseName := self.name;
+    var concreteClass := self.getConcreteClass();
+    
     self.eStructuralFeatures += object EReference {
         name := "game";
         eType := findInstanceOfMetaClass("MiniProgrammingWorld");	
     };
     
-    var internalGameRoleField := object EReference {
-        name := "internal" + baseName;
-        eType := findClassifierForName("Concrete" + baseName);
-    };
+    var internalGameRoleField := self.map createInternalGameRoleField();
     self.eStructuralFeatures += internalGameRoleField;
     
     self.eAnnotations += object ImportTypeAnnotation {
         relativeQualifiedTypeName := "commands." + baseName.toLowerCase() + ".*";
     };
     
-    self.eAnnotations += object GetPropertyAnnotation {
-    	field := internalGameRoleField;
-    	getterTypeName := "Game" + baseName;
-    	getterOperationName := "getInternal" + baseName;
-    	eAnnotations += toAnnotation("documentation", "Get the internal game representation of the " + baseName + ".");
+    self.eAnnotations += internalGameRoleField.createInternalGameRoleGetterAnnotation();
+    self.eAnnotations += internalGameRoleField.createInternalEditorRoleGetterAnnotation();
+}
+
+mapping EClass::createInternalGameRoleField() : EReference {
+    name := "internal" + baseName;
+    eType := findClassifierForName("Concrete" + baseName);
+}
+
+helper EReference::createInternalGameRoleGetterAnnotation() : GetPropertyAnnotation {
+    return object GetPropertyAnnotation {
+        field := self;
+        getterTypeName := "Game" + baseName;
+        getterOperationName := "getInternal" + baseName;
+        eAnnotations += toAnnotation("documentation", "Get the internal game representation of the " + baseName + ".");
     };
-    
-    self.eAnnotations += object GetPropertyAnnotation {
-    	field := internalGameRoleField;
-    	getterTypeName := "Editor" + baseName;
-    	getterOperationName := "getInternalEditor" + baseName;
-    	eAnnotations += toAnnotation("documentation", "Get the internal editor representation of the " + baseName + ".");
+}
+
+helper EReference::createInternalEditorRoleGetterAnnotation() : GetPropertyAnnotation {
+    return object GetPropertyAnnotation {
+        field := self;
+        getterTypeName := "Editor" + baseName;
+        getterOperationName := "getInternalEditor" + baseName;
+        eAnnotations += toAnnotation("documentation", "Get the internal editor representation of the " + baseName + ".");
     };
 }
 
@@ -59,40 +75,49 @@ query getQueryForOperation(operation: EOperation) : Query {
                     .oclAsType(Query);
 }
 
-
+/**
+ * Mapping: create delegates for commands belonging to the facade class
+ */
 mapping inout EClass::createCommands() {
     var gameRole := findClassForName("Game" + self.name);
-    gameRole.eAllOperations[isMarkedWithAnnotation("command")]
-           ->collect(o|getCommandForOperation(o))
-           ->forEach(c) {
-	    self.eOperations += object EOperation {
-	        if (c.isInit) {
-	            name := "init";
-	        } else {
-  	            name := c.name;
-	        };
-            eParameters := c.mainUnit.parameters->map toOperationParameter();
-            if (c.isInit) {
-                // init game field from stage parameter
-                var stageParameter := eParameters->any(p|p.eType.getConcreteClass().isInstanceOf("Stage"));
-                if (stageParameter != null) {
-                    eAnnotations += object PropertyPathFieldAssignmentAnnotation {
-                        field := self.getEStructuralFeature("game");
-                        propertyPath := stageParameter.name + ".game";
-                    };
-                }
-            };
-	        eAnnotations += object CommandParameterCreationAnnotation { 
-	            command := c;
-	            parameterMappings := c.mainUnit.parameters->map toCommandCallParameterMapping();
-            };
-	        eAnnotations += object CommandCallAnnotation { 
-	            command := c;
-	            targetRoleVariableName := "internal" + self.name;
-            };
-	        eAnnotations += toAnnotation("documentation", c.documentation);
-	    };
+    self.eOperations += gameRole.eAllOperations[isMarkedWithAnnotation("command")]
+                               ->collect(o|getCommandForOperation(o))
+                               ->map toCommandOperation(self);
+}
+
+mapping Transformation::toCommandOperation(facadeClass: EClass) : EOperation {
+    name := self.getOperationName();
+    eParameters := self.mainUnit.parameters->map toOperationParameter();
+    if (self.isInit) {
+        result.map createInitGameByStageParameterAssignment(facadeClass);
     };
+    eAnnotations += object CommandParameterCreationAnnotation { 
+        command := self;
+        parameterMappings := self.mainUnit.parameters->map toCommandCallParameterMapping();
+    };
+    eAnnotations += object CommandCallAnnotation { 
+        command := self;
+        targetRoleVariableName := "internal" + facadeClass.name;
+    };
+    eAnnotations += toAnnotation("documentation", self.documentation);
+}
+
+query Transformation::getOperationName() : String {
+	if (self.isInit) {
+        return "init";
+    } else {
+        return self.name;
+    };
+}
+
+mapping inout EOperation::createInitGameByStageParameterAssignment(facadeClass: EClass) {
+    var stageParameter := eParameters->any(p|p.eType.getConcreteClass().isInstanceOf("Stage"));
+    if (stageParameter != null) {
+        eAnnotations += object PropertyPathFieldAssignmentAnnotation {
+            field := facadeClass.getEStructuralFeature("game");
+            propertyPath := stageParameter.name + ".game";
+        };
+    }
 }
 
 abstract mapping CommandModel::Parameter::toOperationParameterBase() : EParameter {
@@ -118,23 +143,26 @@ mapping CommandModel::Parameter::toCommandCallParameterMapping() : EStringToStri
 mapping CommandModel::Parameter::toOperationParameter() : EParameter merges CommandModel::Parameter::toOperationParameterBase {}
 mapping CommandModel::Parameter::toConstructorParameter() : EParameter merges CommandModel::Parameter::toOperationParameterBase {}
 
+/**
+ * Mapping: create delegates for queries belonging to the facade class
+ */
 mapping inout EClass::createQueries() {
     var readOnlyRole := findClassForName("ReadOnly" + self.name);
-    readOnlyRole.eAllOperations[isMarkedWithAnnotation("query")]
-               ->collect(o|getQueryForOperation(o))
-               ->reject(q|q.internal)
-               ->forEach(q) {
-	    self.eOperations += object EOperation {
-	        name := q.name;
-	        eType := q.eType;
-            eParameters := q.parameters->map toEParameter();
-            eAnnotations += object QueryCallAnnotation { 
-                _query := q;
-                internalRoleField := self.getEStructuralFeature("internal" + self.name).oclAsType(EReference);
-            };
-	        eAnnotations += toAnnotation("documentation", q.documentation);
-	    };
+    self.eOperations += readOnlyRole.eAllOperations[isMarkedWithAnnotation("query")]
+                                   ->collect(o|getQueryForOperation(o))
+                                   ->reject(q|q.internal)
+                                   ->map toQueryOperation(self);
+}
+
+mapping Query::toQueryOperation(facadeClass: EClass) : EOperation {
+    name := self.name;
+    eType := self.eType;
+    eParameters := self.parameters->map toEParameter();
+    eAnnotations += object QueryCallAnnotation { 
+        _query := self;
+        internalRoleField := facadeClass.getEStructuralFeature("internal" + facadeClass.name).oclAsType(EReference);
     };
+    eAnnotations += toAnnotation("documentation", self.documentation);
 }
 
 mapping QueryModel::Parameter::toEParameter() : EParameter {
@@ -143,11 +171,11 @@ mapping QueryModel::Parameter::toEParameter() : EParameter {
 }
 
 query EClassifier::getConcreteClass() : EClass {
-    var baseName := self.name;
+    var classBaseName := self.name;
     if (self.isMarkedWithAnnotation("baseName")) {
-    	baseName := self.getBaseName();
+    	classBaseName := self.getBaseName();
     };
-    return findClassifierForName("Concrete" + baseName).oclAsType(EClass);
+    return findClassifierForName("Concrete" + classBaseName).oclAsType(EClass);
 }
 
 query EClassifier::findFacadeForRoleType() : EClass {
