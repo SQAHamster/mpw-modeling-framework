@@ -28,7 +28,14 @@ Example:
     * if later downloading of ANTLR parser generator failed, also install `Xtext Antlr Runtime Feature` from http://download.itemis.com/updates/
 * Henshin SDK (Incubation) - 1.7.0
     * Update site: http://download.eclipse.org/modeling/emft/henshin/updates/nightly
-    
+
+### Optional: Setup Maven
+
+* m2e: Maven integration in Eclipse - 1.16.1
+    * Update site: https://download.eclipse.org/releases/latest
+* Tycho Project Configurators - 0.8.1
+    * under Preferences / Maven / Discovery / Open Catalog, search for the Tycho Configurators and install them 
+
 ## Setup
 
 Note: after checkout there are many errors due to ungenerated files. They shall disappear after the following steps.

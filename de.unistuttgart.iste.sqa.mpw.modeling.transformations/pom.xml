@@ -12,33 +12,8 @@
     <packaging>eclipse-plugin</packaging>
     
     <name>Transformations to Intermediate Models</name>
-    
-    
-<!-- 	<repositories> -->
-<!-- 		<repository> -->
-<!-- 			<id>Henshin</id> -->
-<!-- 			<url>https://repo.eclipse.org/content/groups/henshin/</url> -->
-<!-- 			<releases><enabled>true</enabled></releases> -->
-<!-- 			<snapshots><enabled>true</enabled></snapshots> -->
-<!-- 		</repository> -->
-<!-- 	</repositories> -->
-    
-<!--     <repositories> -->
-<!--         <repository> -->
-<!--             <id>Own Repository Branch</id> -->
-<!--             <url>https://github.com/Fumapps/poly-hamster-simulator/raw/repository/</url> -->
-<!--             <releases><enabled>true</enabled></releases> -->
-<!--         </repository> -->
-<!--     </repositories> -->
-    
-<!--     <repositories> -->
-<!--         <repository> -->
-<!--             <id>Henshin</id> -->
-<!--             <url>https://github.com/Fumapps/poly-hamster-simulator/raw/repository/</url> -->
-<!--             <releases><enabled>true</enabled></releases> -->
-<!--         </repository> -->
-<!--     </repositories> -->
-    
+
+
     <build>
         <plugins>
             <plugin>
@@ -69,11 +44,6 @@
                         <artifactId>org.eclipse.emf.mwe2.launch</artifactId>
                         <version>2.11.3</version>
                     </dependency>
-  <!--                  <dependency>
-                        <groupId>org.eclipse.emf.henshin</groupId>
-                        <artifactId>org.eclipse.emf.henshin.model</artifactId>
-                        <version>1.6.0</version>
-                    </dependency>-->
                     <dependency>
                         <groupId>org.eclipse.xtext</groupId>
                         <artifactId>org.eclipse.xtext.common.types</artifactId>
