@@ -14,6 +14,7 @@
         <module>de.unistuttgart.iste.sqa.mpw.modeling.querydsl.tests</module>
         <module>de.unistuttgart.iste.sqa.mpw.modeling.transformations</module>
         <module>de.unistuttgart.iste.sqa.mpw.modeling.generator</module>
+        <module>de.unistuttgart.iste.sqa.mpw.modeling.workflow</module>
     </modules>
     
     <properties>

@@ -1,36 +1,20 @@
-module xpand.example.Generator
+module modeling.JavaGenerator
 
-import org.eclipse.emf.mwe.utils.Reader
 import org.eclipse.emf.mwe.utils.StandaloneSetup
 import org.eclipse.emf.mwe.utils.DirectoryCleaner
 import org.eclipse.xtend.typesystem.emf.EmfRegistryMetaModel
-import org.eclipse.xtend.check.CheckComponent
 import org.eclipse.xpand2.Generator
 import org.eclipse.xpand2.output.JavaBeautifier
 import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
-import components.readers.*
-import components.writers.*
-import components.transformators.*
-
-var platformUriPrefix = "platform:/resource"
-var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
-var modelingModuleBaseName = "${moduleBaseName}.modeling"
-
-var generatedProjectBasePackage  = "'de.unistuttgart.hamster'"
 
 var rootPath = ".."
-var mpwModelProject  = "${modelingModuleBaseName}.mpw"
-var commandsModelProject  = "${modelingModuleBaseName}.commands"
-var queriesModelProject  = "${modelingModuleBaseName}.queries"
-var transformationsProject = "${modelingModuleBaseName}.transformations"
+var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
+
+var generatedProjectBasePackage  = "'de.unistuttgart.hamster'"
 
 var targetSimulatorProject = "${moduleBaseName}.hamstersimulator.java"
 var targetCoreSimulatorProject = "${targetSimulatorProject}/core"
 
-var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/RoleTransformation.qvto"
-var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/CommandTransformation.qvto"
-var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/QueryTransformation.qvto"
-var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/GenerationClassesTransformation.qvto"
 var simulatorTargetSrc = "${rootPath}/${targetCoreSimulatorProject}/src/main"
 var simulatorTargetSrcGenerated = "${simulatorTargetSrc}/generated"
 
@@ -39,10 +23,8 @@ Workflow {
 	bean = StandaloneSetup { 
         scanClassPath = true
 		platformUri="../"
-		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
 		registerGeneratedEPackage="commandBehavior.CommandPackage"
         registerGeneratedEPackage="queryBehavior.QueryPackage"
-        registerGeneratedEPackage="behaviorInputs.InputsPackage"
         registerGeneratedEPackage="generationAnnotations.GenerationAnnotationsPackage"
 	}
 	
@@ -50,81 +32,6 @@ Workflow {
 	bean = EmfRegistryMetaModel : mm_emf { }
 
 	bean = JavaBeautifier : formatter_java { }
-
-	/* load model and store it in slots */
-	component = MultiEcoreReader {
-		rootPath = rootPath
-		projectName = mpwModelProject
-		excludeModel = "stereotypes/*"
-		modelSlot = "entityModels"
-	}
-	
-	component = QueryReader {
-		rootPath = rootPath
-		projectName = queriesModelProject
-		modelSlot = "queries"
-	}
-	
-	component = CommandReader {
-		rootPath = rootPath
-		projectName = commandsModelProject
-		modelSlot = "commands"
-	}
-	
-	component = QvtoTransformator {
-		transformationUri = queryTransformationUri
-		modelSlot = "queriesComposition"
-		targetModelSlot = "queries"
-		sourceTargetRelationship = "NEW_TARGET"
-	}
-	
-    component = XmiWriter {
-        modelSlot = "queries"
-    }
-	
-	component = QvtoTransformator {
-		transformationUri = commandTransformationUri
-		modelSlot = "commands"
-		sourceTargetRelationship = "NEW_TARGET"
-	}
-	
-	component = XmiWriter {
-		modelSlot = "commands"
-	}
-	
-    component = QvtoTransformator {
-		transformationUri = roleTransformationUri
-		modelSlot = "entityModels"
-	}
-	
-	component = XmiWriter {
-		modelSlot = "entityModels"
-		fileExtension = "ecore"
-	}
-    
-    component = QvtoTransformator {
-        transformationUri = generationClassesTransformationUri
-        modelSlot = "entityModels"
-        targetModelSlot = "generationEcoreModels"
-    }
-    
-    component = XmiWriter {
-        modelSlot = "generationEcoreModels"
-        fileExtension = "ecore"
-        directorySuffix = "_generation"
-    }
-	
-	/* check model */
-	component = CheckComponent {
-		metaModel = mm_emf
-		checkFile = "util::Checks"
-		emfAllChildrenSlot = "entityModels"
-	}
-	component = CheckComponent {
-		metaModel = mm_emf
-		checkFile = "util::Checks"
-		emfAllChildrenSlot = "generationEcoreModels"
-	}
 
 	/** Clear output directory */
 	component = DirectoryCleaner {

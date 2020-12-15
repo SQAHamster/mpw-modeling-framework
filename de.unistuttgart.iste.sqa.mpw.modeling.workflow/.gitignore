@@ -1,5 +1,7 @@
 /bin/
 /src-gen
 /.settings
+/lib
+/debugout
 /target
 /workspace

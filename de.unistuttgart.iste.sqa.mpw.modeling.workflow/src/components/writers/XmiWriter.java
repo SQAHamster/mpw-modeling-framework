@@ -41,6 +41,9 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	/** suffix for the folder where the files are placed */
 	private String directorySuffix = "";
 	
+	/** the project name in which the files are written */
+	private String projectName = "de.unistuttgart.iste.sqa.mpw.modeling.workflow";
+	
 	public void setFileExtension(String fileExtension) {
 		this.fileExtension = fileExtension;
 	}
@@ -55,6 +58,14 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 
 	public void setDirectorySuffix(String directorySuffix) {
 		this.directorySuffix = directorySuffix;
+	}
+	
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	@Override
@@ -72,7 +83,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 			
 			var name = getName(object);
 			String directoryName = object.eClass().getEPackage().getName() + directorySuffix;
-			String fileUri = "platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.generator/debugout/" + directoryName + "/" + name + "." + fileExtension;
+			String fileUri = "platform:/resource/" + projectName + "/debugout/" + directoryName + "/" + name + "." + fileExtension;
 			
 			var resourceSet = new ResourceSetImpl();
 
@@ -110,6 +121,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	}
 	
 	private String replaceEntityModelNamesToPackageNames(WorkflowContext context, String text, String directoryName) {
+		String projectNameSuffix = projectName.substring(projectName.lastIndexOf('.') + 1);
 
 		var modeledEcoreFiles = (List<?>)context.get("entityModels");
 		for (var object : modeledEcoreFiles) {
@@ -119,7 +131,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 			String fileName = new File(ePackage.eResource().getURI().toPlatformString(true)).getName();
 			
 			String originalUriSuffix = "mpw/model//" + fileName;
-			String modifiedUriSuffix = "generator/debugout/" + directoryName + "//" + ePackage.getName() + ".ecore";
+			String modifiedUriSuffix = projectNameSuffix + "/debugout/" + directoryName + "//" + ePackage.getName() + ".ecore";
 			var modifiedUri = originalUri.replaceAll(originalUriSuffix, modifiedUriSuffix);
 			
 			text = text.replaceAll(originalUri, modifiedUri);

@@ -1,0 +1,117 @@
+module modeling.Workflow
+
+import org.eclipse.emf.mwe.utils.StandaloneSetup
+import org.eclipse.xtend.typesystem.emf.EmfRegistryMetaModel
+import org.eclipse.xtend.check.CheckComponent
+import components.readers.*
+import components.writers.*
+import components.transformators.*
+
+var platformUriPrefix = "platform:/resource"
+var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
+var modelingModuleBaseName = "${moduleBaseName}.modeling"
+
+var rootPath = ".."
+var mpwModelProject  = "${modelingModuleBaseName}.mpw"
+var commandsModelProject  = "${modelingModuleBaseName}.commands"
+var queriesModelProject  = "${modelingModuleBaseName}.queries"
+var transformationsProject = "${modelingModuleBaseName}.transformations"
+
+var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/RoleTransformation.qvto"
+var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/CommandTransformation.qvto"
+var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/QueryTransformation.qvto"
+var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/GenerationClassesTransformation.qvto"
+
+Workflow {
+	/* set up EMF for standalone execution */
+	bean = StandaloneSetup { 
+        scanClassPath = true
+		platformUri="../"
+		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
+		registerGeneratedEPackage="commandBehavior.CommandPackage"
+        registerGeneratedEPackage="queryBehavior.QueryPackage"
+        registerGeneratedEPackage="behaviorInputs.InputsPackage"
+        registerGeneratedEPackage="generationAnnotations.GenerationAnnotationsPackage"
+	}
+	
+	/** instantiate metamodel */
+	bean = EmfRegistryMetaModel : mm_emf { }
+
+	/* load model and store it in slots */
+	component = MultiEcoreReader {
+		rootPath = rootPath
+		projectName = mpwModelProject
+		excludeModel = "stereotypes/*"
+		modelSlot = "entityModels"
+	}
+	
+	component = QueryReader {
+		rootPath = rootPath
+		projectName = queriesModelProject
+		modelSlot = "queries"
+	}
+	
+	component = CommandReader {
+		rootPath = rootPath
+		projectName = commandsModelProject
+		modelSlot = "commands"
+	}
+	
+	component = QvtoTransformator {
+		transformationUri = queryTransformationUri
+		modelSlot = "queriesComposition"
+		targetModelSlot = "queries"
+		sourceTargetRelationship = "NEW_TARGET"
+	}
+	
+    component = XmiWriter {
+        modelSlot = "queries"
+    }
+	
+	component = QvtoTransformator {
+		transformationUri = commandTransformationUri
+		modelSlot = "commands"
+		sourceTargetRelationship = "NEW_TARGET"
+	}
+	
+	component = XmiWriter {
+		modelSlot = "commands"
+	}
+	
+    component = QvtoTransformator {
+		transformationUri = roleTransformationUri
+		modelSlot = "entityModels"
+	}
+	
+	component = XmiWriter {
+		modelSlot = "entityModels"
+		fileExtension = "ecore"
+	}
+    
+    component = QvtoTransformator {
+        transformationUri = generationClassesTransformationUri
+        modelSlot = "entityModels"
+        targetModelSlot = "generationEcoreModels"
+    }
+    
+    component = XmiWriter {
+        modelSlot = "generationEcoreModels"
+        fileExtension = "ecore"
+        directorySuffix = "_generation"
+    }
+	
+	/* check model */
+	component = CheckComponent {
+		metaModel = mm_emf
+		checkFile = "util::Checks"
+		emfAllChildrenSlot = "entityModels"
+	}
+	
+	component = CheckComponent {
+		metaModel = mm_emf
+		checkFile = "util::Checks"
+		emfAllChildrenSlot = "generationEcoreModels"
+	}
+	
+    component = @JavaGenerator auto-inject {}
+}
