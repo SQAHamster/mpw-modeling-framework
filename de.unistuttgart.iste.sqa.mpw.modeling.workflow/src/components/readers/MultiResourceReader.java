@@ -24,6 +24,8 @@ import org.eclipse.emf.mwe.utils.Reader;
 
 import com.google.common.base.CaseFormat;
 
+import components.helpers.EclipsePathHelper;
+
 /**
  * Base reader class which loads multiple EMF resources of a project in the workspace.
  * 
@@ -82,7 +84,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		log.info("searching " + getModelNameFromExtension() + " models for base URI: " + getBaseUri());
 		
-		String targetDirectory = toJavaCompatibleAbsoluteFilePath(rootPath) + "/" + projectName + "/" + projectSubPath;
+		String targetDirectory = EclipsePathHelper.toJavaCompatibleAbsoluteFilePath(rootPath) + "/" + projectName + "/" + projectSubPath;
 		try (var files = listFiles(targetDirectory)) {
 			
 			var modelNames = files.map(f -> f.toFile().getPath())
@@ -160,17 +162,6 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	
 	private String getModelNameFromExtension() {
 		return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, fileExtension.substring(1));
-	}
-	
-	/**
-	 * Converts the given path into a Java File path by using the eclipse Path class.
-	 * Background: While Eclipse can handle absolute paths starting with "/", on Windows this leads to paths like "/D:" what
-	 *             is not directly compatible with the Java path syntax. Hence the path will be processed with the Eclipse
-	 *             Path class to get a valid java path.
-	 */
-	private static String toJavaCompatibleAbsoluteFilePath(String path) {
-		var eclipsePath = new org.eclipse.core.runtime.Path(path);
-		return eclipsePath.toFile().getAbsolutePath();
 	}
 	
 }
