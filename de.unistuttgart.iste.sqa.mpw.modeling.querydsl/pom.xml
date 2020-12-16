@@ -85,6 +85,12 @@
                             </includes>
                         </fileset>
                         <fileset>
+                            <directory>${basedir}/../de.unistuttgart.iste.sqa.mpw.modeling.querydsl/xtend-gen/</directory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </fileset>
+                        <fileset>
                             <directory>${basedir}/../de.unistuttgart.iste.sqa.mpw.modeling.querydsl.tests/src-gen/</directory>
                             <includes>
                                 <include>**/*</include>
