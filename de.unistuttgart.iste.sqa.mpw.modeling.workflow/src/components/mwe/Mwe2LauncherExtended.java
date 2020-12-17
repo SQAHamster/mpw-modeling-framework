@@ -102,7 +102,7 @@ public class Mwe2LauncherExtended  {
 			return;
 		}
 	}
-
+	
 	private Mwe2StandaloneSetup createStandaloneSetup() {
 		return new Mwe2StandaloneSetup()  {
 

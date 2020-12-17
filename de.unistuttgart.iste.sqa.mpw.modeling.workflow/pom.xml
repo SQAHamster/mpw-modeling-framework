@@ -36,7 +36,8 @@
                         <argument>-p</argument>
                         <argument>rootPath=/${project.basedir}/..</argument>
                         <argument>-p</argument>
-                        <argument>additionalArchivesPath=/${project.basedir}/../de.unistuttgart.iste.sqa.mpw.modeling.generator/target</argument>
+                        <argument>additionalArchivesPaths=/${project.basedir}/../de.unistuttgart.iste.sqa.mpw.generator.java/target;
+                                                          /${project.basedir}/../de.unistuttgart.iste.sqa.mpw.generator.cpp/target</argument>
                     </arguments>
                     <classpathScope>compile</classpathScope>
                     <includePluginDependencies>true</includePluginDependencies>
@@ -70,7 +71,12 @@
                     </dependency>
                     <dependency>
                         <groupId>${project.groupId}</groupId>
-                        <artifactId>de.unistuttgart.iste.sqa.mpw.modeling.generator</artifactId>
+                        <artifactId>de.unistuttgart.iste.sqa.mpw.generator.java</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>de.unistuttgart.iste.sqa.mpw.generator.cpp</artifactId>
                         <version>${project.version}</version>
                     </dependency>
                 </dependencies>
