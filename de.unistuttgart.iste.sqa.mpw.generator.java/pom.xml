@@ -8,10 +8,10 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     
-    <artifactId>de.unistuttgart.iste.sqa.mpw.modeling.generator</artifactId>
+    <artifactId>de.unistuttgart.iste.sqa.mpw.generator.java</artifactId>
     <packaging>eclipse-plugin</packaging>
     
-    <name>Xpand Code Generator</name>
+    <name>Xpand Java Code Generator</name>
     
     
     <build>

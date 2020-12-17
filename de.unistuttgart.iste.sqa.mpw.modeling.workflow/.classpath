@@ -10,6 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.modeling.querydsl"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.modeling.mpw"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.modeling.transformations"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.modeling.generator"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.generator.java"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
