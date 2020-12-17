@@ -114,4 +114,5 @@ Workflow {
 	}
 	
     component = @JavaGenerator auto-inject {}
+    component = @CppGenerator auto-inject {}
 }

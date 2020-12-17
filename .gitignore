@@ -1,3 +1,5 @@
 /.metadata
 /workspace
 */.settings/org.eclipse.jdt.core.prefs
+
+/.vs

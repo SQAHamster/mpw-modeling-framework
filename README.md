@@ -30,6 +30,8 @@ Example:
     * if later downloading of ANTLR parser generator failed, also install `Xtext Antlr Runtime Feature` from http://download.itemis.com/updates/
 * Henshin SDK (Incubation) - 1.7.0
     * Update site: http://download.eclipse.org/modeling/emft/henshin/updates/nightly
+* C/C++ Development Tools - 10.1.0.202012020953
+    * https://download.eclipse.org/tools/cdt/releases/10.1/
 
 ### Optional: Setup Maven
 

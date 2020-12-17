@@ -30,7 +30,7 @@ class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
         
         var additionalArchivesPathParts = additionalArchivesPaths.split(";");
         for (String additionalArchivesPath : additionalArchivesPathParts) {
-        	var jars = collectAdditionalJars(additionalArchivesPath);
+        	var jars = collectAdditionalJars(additionalArchivesPath.trim());
         	classPathEntries.addAll(jars);
         }
 

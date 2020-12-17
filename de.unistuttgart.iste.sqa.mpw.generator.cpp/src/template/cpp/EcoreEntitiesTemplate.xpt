@@ -1,0 +1,86 @@
+«IMPORT ecore»
+
+«EXTENSION template::cpp::CppGlobalExtensions»
+
+«REM»
+  Generate entity ecore files.
+«ENDREM»
+«DEFINE main FOR List[EPackage]»
+    «EXPAND EcoreFile FOREACH this»
+«ENDDEFINE»
+
+«DEFINE EcoreFile FOR EPackage»
+    «EXPAND CppClass FOREACH this.eClassifiers.typeSelect(EClass)
+                                 .reject(c|c.interface)»
+    «EXPAND CppInterface FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.interface)»
+    «EXPAND CppEnum FOREACH this.eClassifiers.typeSelect(EEnum)»
+«ENDDEFINE»
+
+«DEFINE CppClass FOR EClass»
+    «EXPAND CppClassHeader FOR this»
+    «EXPAND CppClassSource FOR this»
+«ENDDEFINE»
+
+«DEFINE CppClassHeader FOR EClass»
+    «FILE "generated/" + name + ".h"»
+    
+    namespace «this.ePackage.name» 
+    {
+    
+    class «this.name»
+    {
+    };
+    
+    }
+    «ENDFILE»
+«ENDDEFINE»
+
+«DEFINE CppClassSource FOR EClass»
+    «addGeneratedSourceFile("generated/" + name + ".cpp")»
+    «FILE "generated/" + name + ".cpp"»#include "«name».h"
+    
+    namespace «this.ePackage.name» 
+    {
+    }
+    «ENDFILE»
+«ENDDEFINE»
+
+«DEFINE CppInterface FOR EClass»
+    «FILE "generated/" + name + ".h"»
+    
+    namespace «this.ePackage.name» 
+    {
+    
+    class «this.name»
+    {
+    };
+    
+    }
+    «ENDFILE»
+«ENDDEFINE»
+
+«DEFINE CppEnum FOR EEnum»
+    «FILE "generated/" + name + ".h"»
+    
+    enum class «this.name» {
+      «FOREACH eLiterals AS l SEPARATOR ", "»
+      «l»
+	  «ENDFOREACH»
+    };
+    «ENDFILE»
+«ENDDEFINE»
+
+«DEFINE CMakeLists FOR List[EPackage]»
+    «FILE "generated/CMakeLists.txt"-»
+    
+«REM»«FOREACH getGeneratedSourceFiles() AS filePath»
+    set(GEN_SRCS ${GEN_SRCS} "core/src/«filePath»" PARENT_SCOPE)
+    «ENDFOREACH»«ENDREM»
+
+set(GEN_SRCS ${GEN_SRCS}
+    «FOREACH this.eClassifiers.typeSelect(EClass).reject(c|c.interface) AS c-»
+    "core/src/generated/«c.name».cpp"
+    «ENDFOREACH-»
+PARENT_SCOPE)
+    «ENDFILE»
+«ENDDEFINE»

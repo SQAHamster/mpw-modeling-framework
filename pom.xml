@@ -24,6 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <xtext.version>2.23.0</xtext.version>
         <henshin.version>1.6.0</henshin.version>
+        <cdt.version>10.1</cdt.version>
         <tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
     </properties>
 
@@ -38,10 +39,20 @@
             <layout>p2</layout>
             <url>https://download.eclipse.org/modeling/tmf/xtext/updates/releases/${xtext.version}/</url>
         </repository>
+        <repository>
+            <id>Xpand/Xtend Additional Support Update Site</id>
+            <layout>p2</layout>
+            <url>https://download.eclipse.org/modeling/m2t/xpand/updates/</url>
+        </repository>
 		<repository>
 			<id>Henshin Update Site</id>
 			<layout>p2</layout>
 			<url>https://download.eclipse.org/modeling/emft/henshin/updates/${henshin.version}/</url>
+		</repository>
+		<repository>
+			<id>CDT Update Site</id>
+			<layout>p2</layout>
+			<url>https://download.eclipse.org/tools/cdt/releases/${cdt.version}/</url>
 		</repository>
     </repositories>
     

@@ -15,7 +15,7 @@ var generatedProjectBasePackage  = "'de.unistuttgart.hamster'"
 var targetSimulatorProject = "${moduleBaseName}.hamstersimulator.cpp"
 var targetCoreSimulatorProject = "${targetSimulatorProject}/core"
 
-var simulatorTargetSrc = "${rootPath}/${targetCoreSimulatorProject}/src/main"
+var simulatorTargetSrc = "${rootPath}/${targetCoreSimulatorProject}/src"
 var simulatorTargetSrcGenerated = "${simulatorTargetSrc}/generated"
 
 Workflow {
@@ -37,5 +37,38 @@ Workflow {
 	component = DirectoryCleaner {
 		directory = simulatorTargetSrcGenerated
 	}
-	
+
+    /* generate entities */
+    component = Generator {
+        globalVarDef = {
+            name = "module_package"
+            value = generatedProjectBasePackage
+        }
+        metaModel = mm_emf
+        expand = "template::cpp::EcoreEntitiesTemplate::main FOR entityModels"
+        outlet = {
+            path = simulatorTargetSrc
+            overwrite = false
+            postprocessor = formatter_cpp
+        }
+        resourceManager = ResourceManagerDefaultImpl {
+            fileEncoding = "UTF-8"
+        }
+        
+    }
+
+    /* generate CMakeLists.txt */
+    component = Generator {
+        metaModel = mm_emf
+        expand = "template::cpp::EcoreEntitiesTemplate::CMakeLists FOR entityModels"
+        outlet = {
+            path = simulatorTargetSrc
+            overwrite = false
+        }
+        resourceManager = ResourceManagerDefaultImpl {
+            fileEncoding = "UTF-8"
+        }
+        
+    }
+    
 }
