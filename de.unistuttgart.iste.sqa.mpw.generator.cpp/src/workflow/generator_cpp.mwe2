@@ -1,0 +1,41 @@
+module modeling.CppGenerator
+
+import org.eclipse.emf.mwe.utils.StandaloneSetup
+import org.eclipse.emf.mwe.utils.DirectoryCleaner
+import org.eclipse.xtend.typesystem.emf.EmfRegistryMetaModel
+import org.eclipse.xpand2.Generator
+import org.eclipse.xpand.support.cdt.CppBeautifier
+import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
+
+var rootPath = ".."
+var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
+
+var generatedProjectBasePackage  = "'de.unistuttgart.hamster'"
+
+var targetSimulatorProject = "${moduleBaseName}.hamstersimulator.cpp"
+var targetCoreSimulatorProject = "${targetSimulatorProject}/core"
+
+var simulatorTargetSrc = "${rootPath}/${targetCoreSimulatorProject}/src/main"
+var simulatorTargetSrcGenerated = "${simulatorTargetSrc}/generated"
+
+Workflow {
+	/* set up EMF for standalone execution */
+	bean = StandaloneSetup { 
+        scanClassPath = true
+		platformUri="../"
+		registerGeneratedEPackage="commandBehavior.CommandPackage"
+        registerGeneratedEPackage="queryBehavior.QueryPackage"
+        registerGeneratedEPackage="generationAnnotations.GenerationAnnotationsPackage"
+	}
+	
+	/** instantiate metamodel */
+	bean = EmfRegistryMetaModel : mm_emf { }
+
+	bean = CppBeautifier : formatter_cpp { }
+
+	/** Clear output directory */
+	component = DirectoryCleaner {
+		directory = simulatorTargetSrcGenerated
+	}
+	
+}

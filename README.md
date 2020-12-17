@@ -23,6 +23,8 @@ Example:
     * Update site: https://download.eclipse.org/releases/latest
 * Xpand SDK	- 2.2.0
     * Update site: https://download.eclipse.org/releases/latest
+* Xpand/Xtend Additional Support - 2.2.0
+    * Update site: https://download.eclipse.org/modeling/m2t/xpand/updates/
 * Xtext Complete SDK - 2.23.0
     * Update site: https://download.eclipse.org/releases/latest
     * if later downloading of ANTLR parser generator failed, also install `Xtext Antlr Runtime Feature` from http://download.itemis.com/updates/
