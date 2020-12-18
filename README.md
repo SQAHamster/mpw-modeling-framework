@@ -28,8 +28,8 @@ Example:
 * Xtext Complete SDK - 2.23.0
     * Update site: https://download.eclipse.org/releases/latest
     * if later downloading of ANTLR parser generator failed, also install `Xtext Antlr Runtime Feature` from http://download.itemis.com/updates/
-* Henshin SDK (Incubation) - 1.7.0
-    * Update site: http://download.eclipse.org/modeling/emft/henshin/updates/nightly
+* Henshin SDK (Incubation) - 1.6.0
+    * Update site: http://download.eclipse.org/modeling/emft/henshin/updates/release
 * C/C++ Development Tools - 10.1.0.202012020953
     * https://download.eclipse.org/tools/cdt/releases/10.1/
 
