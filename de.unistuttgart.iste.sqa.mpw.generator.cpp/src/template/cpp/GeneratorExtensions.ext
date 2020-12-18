@@ -1,0 +1,8 @@
+import ecore;
+
+/*
+ * Top-level extension file which reexports all other extension files.
+ */
+
+extension util::Extensions reexport;
+extension template::cpp::types::MetaModelGeneratorExtensions reexport;

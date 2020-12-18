@@ -1,6 +1,6 @@
 «IMPORT ecore»
 
-«EXTENSION template::cpp::CppGlobalExtensions»
+«EXTENSION template::cpp::GeneratorExtensions»
 
 «REM»
   Generate entity ecore files.
@@ -24,6 +24,9 @@
 «DEFINE CppClassHeader FOR EClass»
     «FILE "generated/" + name + ".h"»
     
+    #ifndef «this.toCppIncludeGuard()»
+    #define «this.toCppIncludeGuard()»
+    
     namespace «this.ePackage.name» 
     {
     
@@ -32,11 +35,13 @@
     };
     
     }
+    
+    #endif //«this.toCppIncludeGuard()»
+    
     «ENDFILE»
 «ENDDEFINE»
 
 «DEFINE CppClassSource FOR EClass»
-    «addGeneratedSourceFile("generated/" + name + ".cpp")»
     «FILE "generated/" + name + ".cpp"»#include "«name».h"
     
     namespace «this.ePackage.name» 
@@ -48,6 +53,9 @@
 «DEFINE CppInterface FOR EClass»
     «FILE "generated/" + name + ".h"»
     
+    #ifndef «this.toCppIncludeGuard()»
+    #define «this.toCppIncludeGuard()»
+    
     namespace «this.ePackage.name» 
     {
     
@@ -56,31 +64,36 @@
     };
     
     }
+    
+    #endif //«this.toCppIncludeGuard()»
+    
     «ENDFILE»
 «ENDDEFINE»
 
 «DEFINE CppEnum FOR EEnum»
     «FILE "generated/" + name + ".h"»
     
+    #ifndef «this.toCppIncludeGuard()»
+    #define «this.toCppIncludeGuard()»
+    
     enum class «this.name» {
       «FOREACH eLiterals AS l SEPARATOR ", "»
       «l»
 	  «ENDFOREACH»
     };
+    
+    #endif //«this.toCppIncludeGuard()»
+    
     «ENDFILE»
 «ENDDEFINE»
 
 «DEFINE CMakeLists FOR List[EPackage]»
     «FILE "generated/CMakeLists.txt"-»
     
-«REM»«FOREACH getGeneratedSourceFiles() AS filePath»
-    set(GEN_SRCS ${GEN_SRCS} "core/src/«filePath»" PARENT_SCOPE)
-    «ENDFOREACH»«ENDREM»
-
 set(GEN_SRCS ${GEN_SRCS}
     «FOREACH this.eClassifiers.typeSelect(EClass).reject(c|c.interface) AS c-»
     "core/src/generated/«c.name».cpp"
     «ENDFOREACH-»
-PARENT_SCOPE)
+    PARENT_SCOPE)
     «ENDFILE»
 «ENDDEFINE»

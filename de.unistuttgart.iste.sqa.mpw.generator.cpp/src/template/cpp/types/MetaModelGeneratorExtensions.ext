@@ -1,0 +1,11 @@
+import ecore;
+
+extension util::Extensions;
+extension template::cpp::util::GlobalsGeneratorExtensions;
+
+/*
+ * Extensions related to the MPW Metamodel types.
+ */
+
+toCppIncludeGuard(EClassifier this) :
+    getModulePackage().replaceAll("\\.", "_").toUpperCase() + "_" + this.name.toUpperCase() + "_H";
