@@ -1,0 +1,106 @@
+import ecore;
+import generationAnnotations;
+
+extension template::cpp::types::MetaModelGeneratorExtensions;
+
+/*
+ * Extensions related to EMF Metamodel types.
+ * Note: currently duplicated, later refactored into central place.
+ */
+
+getter(String this) :
+	"get" + this.toFirstUpper();
+	
+setter(String this) :
+	"set" + this.toFirstUpper();
+	
+adder(String this) :
+    "addTo" + this.toFirstUpper();
+    
+remover(String this) :
+    "removeFrom" + this.toFirstUpper();
+
+adderOrSetter(EStructuralFeature this) :
+    if (isCollection()) then name.adder() else name.setter();
+
+modifierParameterName(EStructuralFeature this) :
+    if (isCollection()) then name.toSingleName() else name;
+
+previousFieldName(EStructuralFeature this) :
+    "previous" + modifierParameterName().toFirstUpper();
+    
+modifierVisibility(EStructuralFeature this) :
+    if (derived) then "protected" else "public";
+    
+private toSingleName(String this) : 
+    if (endsWith("ies")) then subString(0, length-3) + "y"
+    else if (endsWith("s")) then subString(0, length-1)
+    else this;
+	
+isCollection(ETypedElement this) :
+    upperBound == -1;
+    
+isReference(EStructuralFeature this) :
+    EReference.isInstance(this);
+	
+isConstructorInjectedProperty(EStructuralFeature this) :
+    !this.changeable && !this.isContainment() && !this.derived;
+
+// e.g. Territory is a concrete references for derviced "stage" reference.
+isStageField(EStructuralFeature this) :
+    EClass.isInstance(this.eType) && ((EClass)this.eType).eSuperTypes.exists(t|t.name == "Stage");
+    
+isContainment(EStructuralFeature this) :
+    EReference.isInstance(this) && ((EReference)this).containment;
+    
+toCppType(String this, EPackage thisPackage, EPackage currentNamespacePackage) :
+	if (this == "EInt") then "int"
+	else if (this == "EBoolean") then "bool"
+	else if (this == "EString") then "std::string"
+	else if (this == "EObject" || this == "Object") then "void*"
+	else "std::shared_ptr<" + toTypeUsage(this, thisPackage, currentNamespacePackage) + ">";
+	
+isBuiltInType(EClassifier this) :
+    isPrimitive() || this.name == "Object";
+
+isPrimitive(EClassifier this) :
+    (this.name == "EInt" || this.name == "EBoolean" || this.name == "EString");
+
+featureToSingleCppType(EStructuralFeature this, EPackage currentNamespacePackage) : this.eType.name.toCppType(this.eType.ePackage, currentNamespacePackage);
+featureToCppType(EStructuralFeature this, EPackage currentNamespacePackage) : elementToCppType(currentNamespacePackage);
+operationToCppType(EOperation this, EPackage currentNamespacePackage) : elementToCppType(currentNamespacePackage);
+	
+private elementToCppType(ETypedElement this, EPackage currentNamespacePackage) :
+    if (isMarkedWithAnnotation("constructor")) then "" 
+    else if (this.eType == null) then "void" 
+	else if (this.upperBound == -1) then "std::vector<" + this.eType.name.toCppType(this.eType.ePackage, currentNamespacePackage) + ">"
+	else this.eType.name.toCppType(this.eType.ePackage, currentNamespacePackage);
+	
+defaultValueOf(EStructuralFeature f) :
+    if (f.eType == "EInt") then "0"
+	else if (f.eType == "EBoolean") then "false"
+	else if (f.defaultValueLiteral != null) then f.defaultValueLiteral
+	else null;
+    
+List[EClassifier] getUsedTypes(EOperation this) :
+    this.eParameters.collect(p|p.eType).union({this.eType}.reject(r|r == null));
+    
+toCppDoc(String this) :
+    if (length > 0) then 
+        "/** " + this + " */"
+    else "";
+    
+toComment(String this) :
+    if (length > 0) then 
+        "/* " + this + " */"
+    else "";
+
+isMarkedWithAnnotation(EModelElement this, String key) : 
+    eAnnotations.exists(a|a.source == key);
+
+getAnnotationValue(EModelElement this, String key) : 
+    eAnnotations.selectFirst(a|a.source == key).details.selectFirst(d|d.key == key).value;
+
+isEnum(EClassifier this) : metaType.name == "ecore::EEnum";
+isDataType(EClassifier this) : metaType.name == "ecore::EDataType";
+    

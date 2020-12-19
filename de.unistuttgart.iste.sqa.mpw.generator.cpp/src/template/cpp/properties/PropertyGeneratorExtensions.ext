@@ -1,0 +1,11 @@
+import ecore;
+
+extension template::cpp::properties::ObservablePropertyGeneratorExtensions reexport;
+
+/*
+ * Extensions related to the generation of Properties and transitive property getters.
+ * Note: currently duplicated, later refactored into central place.
+ */
+
+String toPropertyGetters(String s) : "";
+    // JAVA template.properties.PropertyPathUtils.toPropertyGetters(java.lang.String);

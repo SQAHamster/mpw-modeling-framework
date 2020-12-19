@@ -1,0 +1,9 @@
+«IMPORT ecore»
+
+«EXTENSION template::cpp::GeneratorExtensions»
+
+«DEFINE PropertyDefinitions FOR EClass»
+	  «FOREACH eStructuralFeatures AS f»
+      «f.featureToCppType(ePackage)» «f.name» { «defaultValueOf(f)» };
+      «ENDFOREACH»
+«ENDDEFINE»

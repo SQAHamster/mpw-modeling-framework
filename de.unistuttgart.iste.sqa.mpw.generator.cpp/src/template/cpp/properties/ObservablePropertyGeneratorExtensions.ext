@@ -1,0 +1,35 @@
+import ecore;
+
+extension template::cpp::types::EmfGeneratorExtensions;
+extension template::cpp::types::MetaModelGeneratorExtensions;
+
+/*
+ * Extensions related to EStructuralFeatures which shall be generated as observable properties.
+ * Note: currently duplicated, later refactored into central place.
+ */
+
+isObservableProperty(EStructuralFeature this) :
+    this.changeable && !this.derived && !this.eType.isDependency() && this.eContainingClass.eAllSuperTypes.notExists(t|t.name == "Command");
+    
+featureToObservableFieldType(EStructuralFeature this) :
+	if (this.upperBound == -1) then "ReadOnlyListWrapper<" + this.eType.name.toCppType() + ">"
+	else if (this.eType.isBuiltInType()) then "ReadOnly" + this.eType.name.toCppType() + "Wrapper"
+	else "ReadOnlyObjectWrapper<" + this.eType.name + ">";
+	
+featureToObservableReadonlyType(EStructuralFeature this) : elementToObservableReadonlyType();
+	
+private elementToObservableReadonlyType(ETypedElement this) :
+	if (this.upperBound == -1) then "ReadOnlyListProperty<" + this.eType.name.toCppType() + ">"
+	else if (this.eType.isBuiltInType()) then "ReadOnly" + this.eType.name.toCppType() + "Property"
+	else "ReadOnlyObjectProperty<" + this.eType.name + ">";
+
+featureToObservableFieldInstantiation(EStructuralFeature this) :
+    let defaultValue = defaultValueOf(this) :
+    let defaultValuePart = if (defaultValue != null) then ", " + defaultValue else "" :
+    
+	if (this.upperBound == -1) then "new ReadOnlyListWrapper<>(this, \"" + this.name + "\", FXCollections.observableArrayList())"
+	else if (this.eType.isBuiltInType()) then "new ReadOnly" + this.eType.name.toCppType() + "Wrapper(this, \"" + this.name + "\"" + defaultValuePart + ")"
+	else "new ReadOnlyObjectWrapper<>(this, \"" + this.name + "\")";
+
+operationToObservableGetterSignature(EOperation this) :
+    elementToObservableReadonlyType() + " " + name + "Property()";

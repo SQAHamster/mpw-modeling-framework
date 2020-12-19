@@ -5,7 +5,42 @@ extension template::cpp::util::GlobalsGeneratorExtensions;
 
 /*
  * Extensions related to the MPW Metamodel types.
+ * Note: currently duplicated, later refactored into central place.
  */
+
+isStereotype(EClassifier this) :
+    this.isInStereotypePackage();
+    
+private isInStereotypePackage(EClassifier this) :
+    ePackage.nsPrefix == "viewmodel" || ePackage.nsPrefix == "stereotypes";
+
+hasStereotype(EClassifier this, String stereotype) :
+    let eClass = (EClass)this :
+    EClass.isInstance(this) && eClass.eAllSuperTypes.exists(t|t.isStereotype() && t.name == stereotype);
+
+isViewModelType(EClassifier this) :
+    EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewModel");
+
+toInheritance(EClass this, EPackage currentPackage) :
+    let filteredSuperTypes = eSuperTypes.reject(e|e.isStereotype()) :
+    if (filteredSuperTypes.size > 0) then ": " + filteredSuperTypes.collect(i|"public " + toTypeUsage(i, currentPackage)).toString(", ")
+    else "";
+
+toTypeUsage(EClass this, EPackage currentNamespacePackage) :
+    if (this.ePackage == currentNamespacePackage) then this.name
+    else this.ePackage.name + "::" + this.name;
+
+toTypeUsage(String this, EPackage thisPackage, EPackage currentNamespacePackage) :
+    if (thisPackage == currentNamespacePackage) then this
+    else thisPackage.name + "::" + this;
+    
+isValueType(EClassifier this) : hasStereotype("ValueType");
+isDependency(EClassifier this) : hasStereotype("Dependency");
+isFacade(EClassifier this) : eAnnotations.exists(a|a.source == "facade");
+
+// TODO: resolve EClass to check stereotype
+isValueType(String this) :
+   this == "Location";
 
 toCppIncludeGuard(EClassifier this) :
     getModulePackage().replaceAll("\\.", "_").toUpperCase() + "_" + this.name.toUpperCase() + "_H";
