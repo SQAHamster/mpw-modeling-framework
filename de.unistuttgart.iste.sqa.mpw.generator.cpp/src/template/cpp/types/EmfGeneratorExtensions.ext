@@ -52,13 +52,16 @@ isStageField(EStructuralFeature this) :
     
 isContainment(EStructuralFeature this) :
     EReference.isInstance(this) && ((EReference)this).containment;
+        
+toCppType(ETypedElement this) : toCppType(this.eType.name, this.eType.metaType.name, this.eType.ePackage);
     
-toCppType(String this, EPackage thisPackage, EPackage currentNamespacePackage) :
-	if (this == "EInt") then "int"
-	else if (this == "EBoolean") then "bool"
-	else if (this == "EString") then "std::string"
-	else if (this == "EObject" || this == "Object") then "void*"
-	else "std::shared_ptr<" + toTypeUsage(this, thisPackage, currentNamespacePackage) + ">";
+toCppType(String this, String metaTypeName, EPackage thisPackage) :
+    if (this == "EInt") then "int"
+    else if (this == "EBoolean") then "bool"
+    else if (this == "EString") then "std::string"
+    else if (this == "EObject" || this == "Object") then "void*"
+    else if (metaTypeName == "ecore::EEnum") then toQualifiedTypeName(this, thisPackage)
+    else "std::shared_ptr<" + toQualifiedTypeName(this, thisPackage) + ">";
 	
 isBuiltInType(EClassifier this) :
     isPrimitive() || this.name == "Object";
@@ -66,16 +69,23 @@ isBuiltInType(EClassifier this) :
 isPrimitive(EClassifier this) :
     (this.name == "EInt" || this.name == "EBoolean" || this.name == "EString");
 
-featureToSingleCppType(EStructuralFeature this, EPackage currentNamespacePackage) : this.eType.name.toCppType(this.eType.ePackage, currentNamespacePackage);
-featureToCppType(EStructuralFeature this, EPackage currentNamespacePackage) : elementToCppType(currentNamespacePackage);
-operationToCppType(EOperation this, EPackage currentNamespacePackage) : elementToCppType(currentNamespacePackage);
+featureToSingleCppType(EStructuralFeature this) : this.toCppType();
+featureToCppType(EStructuralFeature this) : elementToCppType();
+operationToCppType(EOperation this) : elementToCppType();
 	
-private elementToCppType(ETypedElement this, EPackage currentNamespacePackage) :
+private elementToCppType(ETypedElement this) :
     if (isMarkedWithAnnotation("constructor")) then "" 
     else if (this.eType == null) then "void" 
-	else if (this.upperBound == -1) then "std::vector<" + this.eType.name.toCppType(this.eType.ePackage, currentNamespacePackage) + ">"
-	else this.eType.name.toCppType(this.eType.ePackage, currentNamespacePackage);
-	
+	else if (this.upperBound == -1) then "std::vector<" + this.toCppType() + ">"
+	else this.toCppType();
+
+featureToFieldInstantiation(EStructuralFeature this) :
+    // if (this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).size > 0) then this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first().toInitialization()
+    if (this.upperBound == -1) then "{}"
+    else if (this.eType.isDependency()) then "{ std::make_shared<impl.Dummy" + this.eType.name + ">() }"
+    else if (this.eType.needsImplSubclass()) then "new " + this.eType.name + "Impl()"
+    else "new " + this.eType.name + "()";
+
 defaultValueOf(EStructuralFeature f) :
     if (f.eType == "EInt") then "0"
 	else if (f.eType == "EBoolean") then "false"
@@ -101,6 +111,6 @@ isMarkedWithAnnotation(EModelElement this, String key) :
 getAnnotationValue(EModelElement this, String key) : 
     eAnnotations.selectFirst(a|a.source == key).details.selectFirst(d|d.key == key).value;
 
-isEnum(EClassifier this) : metaType.name == "ecore::EEnum";
-isDataType(EClassifier this) : metaType.name == "ecore::EDataType";
+isEnum(EClassifier this) : EEnum.isInstance(this);
+isDataType(EClassifier this) : metaType.name == "ecore::EDataType"; // note: EDataType.isInstance(this) does not work
     

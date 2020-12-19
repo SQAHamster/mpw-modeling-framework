@@ -33,7 +33,7 @@
     
     namespace «this.ePackage.name» {
     
-    class «this.name» «this.toInheritance(ePackage)» {
+    class «this.name» «this.toInheritance()» {
     
     private:
     
@@ -73,7 +73,7 @@
     
     namespace «this.ePackage.name» {
     
-    class «this.name» «this.toInheritance(ePackage)» {
+    class «this.name» «this.toInheritance()» {
     
     public:
     

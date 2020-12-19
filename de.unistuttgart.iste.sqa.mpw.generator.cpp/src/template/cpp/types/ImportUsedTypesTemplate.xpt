@@ -8,8 +8,12 @@
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
     #include <vector>
 	«ENDIF-»
+    «IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
+        eOperations.exists(o|o.isPropertyGetter())-»
+	#include "ObservableProperty.hpp"
+    «ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection())-»
-	// include observable stuff
+	#include "ObservableList.hpp"
 	«ENDIF-»
     «EXPAND SingleImportDefinition FOREACH eSuperTypes
         .union(eStructuralFeatures.collect(f|f.eType).select(t|t.isEnum()))

@@ -1,0 +1,39 @@
+import ecore;
+
+extension template::cpp::types::EmfGeneratorExtensions;
+// extension template::cpp::commands::CommandGeneratorExtensions;
+// extension template::cpp::properties::PropertyGeneratorExtensions;
+extension util::Extensions;
+
+/*
+ * Extensions related to EOperations.
+ * Note: currently duplicated, later refactored into central place.
+ */
+
+/*operationToSignature(EOperation this) :
+    let parameters = if (isCommand()) then name.toFirstUpper() + "CommandParameters parameters" else eParameters.collect(e|e.eType.name.toCppType() + " " + e.name).joinToString(", ") :
+    documentationToCppDoc() + operationToCppType() + " " + effectiveOperationName() + "(" + parameters + ")";*/
+
+/*documentationToCppDoc(EOperation this) :
+    let documentationDetail = eAnnotations.collect(a|a.details).flatten().selectFirst(d|d.key == "documentation") :
+    if (documentationDetail != null) then documentationDetail.value.toCppDoc() else "";*/
+
+private effectiveOperationName(EOperation this) :
+    if (isPropertyGetter()) then name.getter() else name;
+
+hasPropertyGetterOperation(EStructuralFeature this) :
+    let class = (EClass)eContainer :
+    class.eAllSuperTypes.exists(t|t.eOperations.exists(o|o.isPropertyGetter() && o.name == name));
+    
+isPropertyGetter(EOperation this) : isMarkedWith("isPropertyGetter");
+    
+isCommand(EOperation this) : isMarkedWith("command");
+    
+isQuery(EOperation this) : isMarkedWith("query");
+
+private isMarkedWith(EOperation this, String key) :
+    eAnnotations.exists(a|a.source == key || a.details.exists(d|d.key == key));
+
+//toConstructorCall(String constructorTypeName, List[String] parameterPropertyPaths)
+//    : "new " + constructorTypeName + "(" + parameterPropertyPaths.collect(path|path.toPropertyGetters()).toString(", ") + ")";
+    

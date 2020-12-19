@@ -1,7 +1,8 @@
 import ecore;
 
-extension util::Extensions;
+extension template::cpp::operations::OperationGeneratorExtensions;
 extension template::cpp::util::GlobalsGeneratorExtensions;
+extension util::Extensions;
 
 /*
  * Extensions related to the MPW Metamodel types.
@@ -18,21 +19,29 @@ hasStereotype(EClassifier this, String stereotype) :
     let eClass = (EClass)this :
     EClass.isInstance(this) && eClass.eAllSuperTypes.exists(t|t.isStereotype() && t.name == stereotype);
 
+needsImplSubclass(EClassifier this) :
+    let eClass = (EClass)this :
+    EClass.isInstance(this) && !isViewModelType() && eClass.getManualImplementedOperations().size > 0 && !eClass.abstract;
+
+getManualImplementedOperations(EClass this) :
+    eAllOperations.reject(o|o.isGenerated());
+
+private isGenerated(EOperation this) : true;
+    //isCommand() || isQuery() || isPropertyGetter();
+
 isViewModelType(EClassifier this) :
     EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewModel");
 
-toInheritance(EClass this, EPackage currentPackage) :
+toInheritance(EClass this) :
     let filteredSuperTypes = eSuperTypes.reject(e|e.isStereotype()) :
-    if (filteredSuperTypes.size > 0) then ": " + filteredSuperTypes.collect(i|"public " + toTypeUsage(i, currentPackage)).toString(", ")
+    if (filteredSuperTypes.size > 0) then ": " + filteredSuperTypes.collect(t|"public " + toQualifiedTypeName(t)).toString(", ")
     else "";
 
-toTypeUsage(EClass this, EPackage currentNamespacePackage) :
-    if (this.ePackage == currentNamespacePackage) then this.name
-    else this.ePackage.name + "::" + this.name;
+toQualifiedTypeName(EClassifier this) :
+    this.ePackage.name + "::" + this.name;
 
-toTypeUsage(String this, EPackage thisPackage, EPackage currentNamespacePackage) :
-    if (thisPackage == currentNamespacePackage) then this
-    else thisPackage.name + "::" + this;
+toQualifiedTypeName(String this, EPackage package) :
+    package.name + "::" + this;
     
 isValueType(EClassifier this) : hasStereotype("ValueType");
 isDependency(EClassifier this) : hasStereotype("Dependency");
