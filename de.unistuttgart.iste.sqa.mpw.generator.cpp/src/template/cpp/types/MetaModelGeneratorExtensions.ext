@@ -27,15 +27,34 @@ getManualImplementedOperations(EClass this) :
     eAllOperations.reject(o|o.isGenerated());
 
 private isGenerated(EOperation this) : true;
-    //isCommand() || isQuery() || isPropertyGetter();
+    // TODO isCommand() || isQuery() || isPropertyGetter();
 
 isViewModelType(EClassifier this) :
     EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewModel");
 
+isInheritedEntity(EClass this) :
+    eAllSuperTypes.exists(t|t.name == "Entity");
+    
 toInheritance(EClass this) :
-    let filteredSuperTypes = eSuperTypes.reject(e|e.isStereotype()) :
-    if (filteredSuperTypes.size > 0) then ": " + filteredSuperTypes.collect(t|"public " + toQualifiedTypeName(t)).toString(", ")
+    let filteredExtends = eSuperTypes.typeSelect(EClass)
+        .reject(e|e.interface) :
+    let filteredInterfaces = eSuperTypes.typeSelect(EClass)
+        .reject(e|e.isStereotype())
+        .select(e|e.interface) :
+    if (filteredExtends.size > 0 && filteredInterfaces.size > 0) then ": public " + toQualifiedTypeName(filteredExtends.get(0)) + ", public virtual " + filteredInterfaces.collect(i|toQualifiedTypeName(i)).toString(", public virtual ")
+    else if (filteredExtends.size > 0) then ": public " + toQualifiedTypeName(filteredExtends.get(0))
+    else if (filteredInterfaces.size > 0) then ": public " + filteredInterfaces.collect(i|toQualifiedTypeName(i)).toString(", public ")
     else "";
+
+toInheritedAlias(EClass this) :
+    let baseClass = getBaseClass() :
+    if (baseClass != null) then "using inherited = " + baseClass.name + ";"
+    else "";
+
+EClass getBaseClass(EClass this) :
+    let filteredSuperTypes = eSuperTypes.reject(e|e.interface) :
+    if (filteredSuperTypes.size > 0) then filteredSuperTypes.first()
+    else null;
 
 toQualifiedTypeName(EClassifier this) :
     this.ePackage.name + "::" + this.name;

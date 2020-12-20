@@ -12,4 +12,6 @@ set(FRAMEWORK_SRCS
     "core/src/framework/ObservablePrimitiveList.hpp"
     "core/src/framework/ObservablePrimitiveProperty.hpp"
     "core/src/framework/ObservableProperties.h"
+    "core/src/framework/Any.h"
+    "core/src/framework/ReflectivePropertyObject.h"
     PARENT_SCOPE)

@@ -83,7 +83,7 @@ private elementToCppType(ETypedElement this) :
 	else this.toCppType();
 
 featureToFieldInstantiation(EStructuralFeature this) :
-    // if (this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).size > 0) then this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first().toInitialization()
+    // TODO if (this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).size > 0) then this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first().toInitialization()
     if (this.upperBound == -1) then "{}"
     else if (this.eType.isDependency()) then "{ std::make_shared<impl.Dummy" + this.eType.name + ">() }"
     else if (this.eType.needsImplSubclass()) then "new " + this.eType.name + "Impl()"

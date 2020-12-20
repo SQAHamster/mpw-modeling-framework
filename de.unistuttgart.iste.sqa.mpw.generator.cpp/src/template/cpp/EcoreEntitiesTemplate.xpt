@@ -1,4 +1,5 @@
 «IMPORT ecore»
+«IMPORT generationAnnotations»
 
 «EXTENSION template::cpp::GeneratorExtensions»
 
@@ -43,6 +44,8 @@
     
     private:
     
+      «this.toInheritedAlias()-»
+    
       «EXPAND template::cpp::properties::PropertyTemplate::PropertyDefinitions FOR this»
       
     public:
@@ -56,9 +59,15 @@
     
       virtual ~«this.name»() = default;
         
-      «FOREACH eOperations AS o»
+      «FOREACH eOperations AS o-»
       «o.operationToSignature()» = 0;
-      «ENDFOREACH»
+      «ENDFOREACH-»
+      
+      «IF isInheritedEntity()-»
+      void setProperty(const std::string& propertyName, Any value) override;
+      void addToCollection(const std::string& propertyName, EntityReference reference) override;
+      void removeFromCollection(const std::string& propertyName, EntityReference reference) override;
+      «ENDIF-»
     };
     
     }
@@ -79,7 +88,82 @@
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
+        «FOREACH eOperations AS o»
+        // «o.operationToSignature()»;
+        «ENDFOREACH»
+
+        «IF isInheritedEntity()-»
+        void «name»::setProperty(const std::string& propertyName, Any value) {
+            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == 1) AS f-»
+            if (propertyName == "«f.name»") {
+                «IF f.eType.isValueType()-»
+                // TODO value type
+                «ELSEIF EReference.isInstance(f)-»
+                auto reference = std::get<EntityReference>(value);
+                auto typedElement = reinterpret_cast<«f.eType.name»*>(reference);
+                auto sharedPtr = std::static_pointer_cast<«f.eType.name»>(typedElement->shared_from_this());
+                «f.name.setter()»(sharedPtr);
+                «ELSEIF f.eType.isEnum()-»
+                // TODO enum
+                «ELSE-»
+                auto typedValue = std::get<«f.toCppType()»>(value);
+                «f.name.setter()»(typedValue);
+                «ENDIF-»
+                return;
+            }
+            «ENDFOREACH-»
+            
+            «IF getBaseClass() != null-»
+            inherited::setProperty(propertyName, value);
+            «ELSE-»
+            throw std::runtime_error("property '" + propertyName + "' is not supported");
+            «ENDIF-»
+        }
         
+        void «name»::addToCollection(const std::string& propertyName, EntityReference reference) {
+            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == -1) AS f-»
+            if (propertyName == "«f.name»") {
+                «IF EReference.isInstance(f)-»
+                auto typedElement = reinterpret_cast<«f.eType.name»*>(reference);
+                auto sharedPtr = std::static_pointer_cast<«f.eType.name»>(typedElement->shared_from_this());
+                «f.name.adder()»(sharedPtr);
+                «ELSE-»
+                auto typedValue = std::get<«f.toCppType()»>(value);
+                «f.name.adder()»(typedValue);
+                «ENDIF-»
+                return;
+            }
+            «ENDFOREACH-»
+            
+            «IF getBaseClass() != null-»
+            inherited::addToCollection(propertyName, reference);
+            «ELSE-»
+            throw std::runtime_error("property '" + propertyName + "' is not supported");
+            «ENDIF-»
+        }
+        
+        void «name»::removeFromCollection(const std::string& propertyName, EntityReference reference) {
+            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == -1) AS f-»
+            if (propertyName == "«f.name»") {
+                «IF EReference.isInstance(f)-»
+                auto typedElement = reinterpret_cast<«f.eType.name»*>(reference);
+                auto sharedPtr = std::static_pointer_cast<«f.eType.name»>(typedElement->shared_from_this());
+                «f.name.remover()»(sharedPtr);
+                «ELSE-»
+                auto typedValue = std::get<«f.toCppType()»>(value);
+                «f.name.remover()»(typedValue);
+                «ENDIF-»
+                return;
+            }
+            «ENDFOREACH-»
+            
+            «IF getBaseClass() != null-»
+            inherited::removeFromCollection(propertyName, reference);
+            «ELSE-»
+            throw std::runtime_error("property '" + propertyName + "' is not supported");
+            «ENDIF-»
+        }
+        «ENDIF-»
     }
     «ENDFILE»
 «ENDDEFINE»
@@ -119,15 +203,11 @@
     
     namespace «this.ePackage.name» {
     
-    class «this.name» «this.toInheritance()» «IF name == "Entity"»: public std::enable_shared_from_this<Entity>«ENDIF» {
+    class «this.name» «this.toInheritance()» «IF name == "Entity"»: public std::enable_shared_from_this<Entity>, public ReflectivePropertyObject«ENDIF» {
     
     public:
     
-      «IF name == "Entity"-»
       virtual ~«this.name»() = default;
-      «ELSE-»
-      virtual ~«this.name»() = 0;
-      «ENDIF-»
         
       «FOREACH eOperations AS o»
       «o.operationToSignature()» = 0;
@@ -135,6 +215,7 @@
       «o.operationToObservableGetterSignature()» = 0;
       «ENDIF-»
       «ENDFOREACH»
+      «EXPAND GenerationAnnotation FOREACH eAnnotations»
     };
     
     }
@@ -185,4 +266,11 @@ set(GEN_SRCS ${GEN_SRCS}
     «ENDFOREACH-»
     PARENT_SCOPE)
     «ENDFILE»
+«ENDDEFINE»
+
+
+«DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR GetPropertyDeclarationAnnotation»
+    // «fieldTypeName» «getterName»();
 «ENDDEFINE»
