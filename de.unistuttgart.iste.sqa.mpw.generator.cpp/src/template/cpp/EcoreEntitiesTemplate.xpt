@@ -11,7 +11,13 @@
 
 «DEFINE EcoreFile FOR EPackage»
     «EXPAND CppClass FOREACH this.eClassifiers.typeSelect(EClass)
-                                 .reject(c|c.interface)»
+                                 .reject(c|c.interface)
+                                 .reject(c|c.isValueType())
+                                 .reject(c|c.isFacade())»
+    «EXPAND CppStubClass FOREACH this.eClassifiers.typeSelect(EClass)
+                                 .select(c|c.isFacade())»
+    «EXPAND CppStubClass FOREACH this.eClassifiers.typeSelect(EClass)
+                                 .select(c|c.isValueType())»
     «EXPAND CppInterface FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.interface)»
     «EXPAND CppEnum FOREACH this.eClassifiers.typeSelect(EEnum)»
 «ENDDEFINE»
@@ -37,11 +43,22 @@
     
     private:
     
-        «EXPAND template::cpp::properties::PropertyTemplate::PropertyDefinitions FOR this»
+      «EXPAND template::cpp::properties::PropertyTemplate::PropertyDefinitions FOR this»
+      
+    public:
+      «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDeclaration FOR this»
+      «REM»«EXPAND template::commands::CommandCallsTemplate::CommandDefinitions FOR this»«ENDREM»
+      «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDeclarations FOR this»
+      «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDeclarations FOR this»
+      «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDeclarations FOR this»
       
     public:
     
-        virtual ~«this.name»() = default;
+      virtual ~«this.name»() = default;
+        
+      «FOREACH eOperations AS o»
+      «o.operationToSignature()» = 0;
+      «ENDFOREACH»
     };
     
     }
@@ -57,7 +74,36 @@
     «EXPAND template::cpp::types::ImportUsedTypesTemplate::SourceImportDefinitions FOR this»
     
     namespace «this.ePackage.name» {
+    
+        «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDefinition FOR this»
+        «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
+        «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
+        «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
+        
     }
+    «ENDFILE»
+«ENDDEFINE»
+
+«REM»DUMMY«ENDREM»
+«DEFINE CppStubClass FOR EClass»
+    «FILE "generated/" + name + ".h"»
+    
+    #ifndef «this.toCppIncludeGuard()»
+    #define «this.toCppIncludeGuard()»
+    
+    namespace «this.ePackage.name» {
+    
+    class «this.name» {
+    
+    public:
+    
+      virtual ~«this.name»() = default;
+    };
+    
+    }
+    
+    #endif //«this.toCppIncludeGuard()»
+    
     «ENDFILE»
 «ENDDEFINE»
 
@@ -73,11 +119,22 @@
     
     namespace «this.ePackage.name» {
     
-    class «this.name» «this.toInheritance()» {
+    class «this.name» «this.toInheritance()» «IF name == "Entity"»: public std::enable_shared_from_this<Entity>«ENDIF» {
     
     public:
     
-        virtual ~«this.name»() = default;
+      «IF name == "Entity"-»
+      virtual ~«this.name»() = default;
+      «ELSE-»
+      virtual ~«this.name»() = 0;
+      «ENDIF-»
+        
+      «FOREACH eOperations AS o»
+      «o.operationToSignature()» = 0;
+      «IF o.isPropertyGetter()-»
+      «o.operationToObservableGetterSignature()» = 0;
+      «ENDIF-»
+      «ENDFOREACH»
     };
     
     }
@@ -112,10 +169,18 @@
     «FILE "generated/CMakeLists.txt"-»
     
 set(GEN_SRCS ${GEN_SRCS}
-    «FOREACH this.eClassifiers.typeSelect(EClass).reject(c|c.interface) AS c-»
+    «FOREACH this.eClassifiers.typeSelect(EClass)
+                              .reject(c|c.isDataType())
+                              .reject(c|c.interface)
+                              .reject(c|c.isFacade())
+                              .reject(c|c.isValueType()) AS c-»
     "core/src/generated/«c.name».cpp"
     «ENDFOREACH-»
-    «FOREACH this.eClassifiers.reject(c|c.isDataType()) AS c-»
+    «FOREACH this.eClassifiers.typeSelect(EClass)
+                              .reject(c|c.isDataType()) AS c-»
+    "core/src/generated/«c.name».h"
+    «ENDFOREACH-»
+    «FOREACH this.eClassifiers.typeSelect(EEnum) AS c-»
     "core/src/generated/«c.name».h"
     «ENDFOREACH-»
     PARENT_SCOPE)

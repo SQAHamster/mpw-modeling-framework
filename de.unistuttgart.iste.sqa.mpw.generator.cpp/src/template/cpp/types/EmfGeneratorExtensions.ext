@@ -61,6 +61,7 @@ toCppType(String this, String metaTypeName, EPackage thisPackage) :
     else if (this == "EString") then "std::string"
     else if (this == "EObject" || this == "Object") then "void*"
     else if (metaTypeName == "ecore::EEnum") then toQualifiedTypeName(this, thisPackage)
+    else if (this == "Throwable") then "std::runtime_error"
     else "std::shared_ptr<" + toQualifiedTypeName(this, thisPackage) + ">";
 	
 isBuiltInType(EClassifier this) :
@@ -76,7 +77,7 @@ operationToCppType(EOperation this) : elementToCppType();
 private elementToCppType(ETypedElement this) :
     if (isMarkedWithAnnotation("constructor")) then "" 
     else if (this.eType == null) then "void" 
-	else if (this.upperBound == -1) then "std::vector<" + this.toCppType() + ">"
+	else if (this.upperBound == -1) then "std::list<" + this.toCppType() + ">"
 	else this.toCppType();
 
 featureToFieldInstantiation(EStructuralFeature this) :

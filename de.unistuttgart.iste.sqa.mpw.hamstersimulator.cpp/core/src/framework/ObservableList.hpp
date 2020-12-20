@@ -18,8 +18,12 @@ private:
 
 public:
 
+  std::list<T> get() const {
+    return elements;
+  }
+
   void add(const T& element) {
-    elements.insert(element);
+    elements.push_back(element);
 
     for (auto& l : addedListeners) {
       l(element);
@@ -27,8 +31,7 @@ public:
   }
 
   void remove(const T& element) {
-    auto iter = elements.remove(element);
-    elements.erase(iter);
+    elements.remove(element);
 
     T copyToAvoidDeletion = element;
 

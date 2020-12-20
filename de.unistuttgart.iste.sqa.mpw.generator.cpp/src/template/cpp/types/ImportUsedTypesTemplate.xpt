@@ -6,7 +6,7 @@
     #include <memory>
     #include <string>
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
-    #include <vector>
+    #include <list>
 	«ENDIF-»
     «IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
         eOperations.exists(o|o.isPropertyGetter())-»

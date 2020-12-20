@@ -17,3 +17,160 @@
       «ENDIF»
       «ENDFOREACH»
 «ENDDEFINE»
+
+«DEFINE ConstructorDeclaration FOR EClass»
+      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
+      «LET injectedProperties.without(eStructuralFeatures) AS injectedForParentProperties»
+      «name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
+      «ENDLET»
+      «ENDLET»
+«ENDDEFINE»
+
+«DEFINE ConstructorDefinition FOR EClass»
+      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
+      «LET injectedProperties.without(eStructuralFeatures) AS injectedForParentProperties»
+      «name»::«name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
+      «IF injectedForParentProperties.size > 0-»
+      : («FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+      «ENDIF-» {
+      «FOREACH injectedProperties.without(injectedForParentProperties) AS f-»
+      this->«f.name» = «f.name»;
+      «ENDFOREACH-»
+      «FOREACH eAllStructuralFeatures.select(f|f.isStageField()) AS f-»
+      «"stage".setter()»(«f.name»);
+      «ENDFOREACH-»
+      }
+      «ENDLET»
+      «ENDLET»
+«ENDDEFINE»
+
+«DEFINE GetPropertyValueDeclarations FOR EClass»
+      «FOREACH eStructuralFeatures AS f»
+      «f.featureToCppType()» «f.name.getter()»() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE GetPropertyValueDefinitions FOR EClass»
+      «FOREACH eStructuralFeatures AS f»
+      «f.featureToCppType()» «name»::«f.name.getter()»() {
+        «IF f.isObservableProperty()-»
+        return this->«f.name».get();
+        «ELSE-»
+        return this->«f.name»;
+        «ENDIF-»
+      }
+      «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE SetPropertyValueDeclarations FOR EClass»
+    «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
+    void «f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()») «IF eAllOperations.without(eOperations).exists(o|o.name == f.adderOrSetter())»override«ENDIF-»;
+    «IF f.isCollection()-»
+    void «f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()»);
+    «ENDIF-»
+    «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE SetPropertyValueDefinitions FOR EClass»
+    «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
+    void «name»::«f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()») {
+         «IF f.isReference() && f.isCollection()-»
+             «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f»
+         «ELSEIF !f.isReference() && f.isCollection()-»
+             «EXPAND SimpleAdderForFeatureDefinition FOR f»
+         «ELSE-»
+             «EXPAND SimpleSetterForFeatureDefinition FOR f-»
+         «ENDIF-»
+     }
+     «IF f.isCollection()-»
+     void «name»::«f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()») {
+         «IF f.isReference()-»
+             «EXPAND MultiReferenceRemoverForFeatureDefinition FOR (EReference)f»
+         «ENDIF-»
+     }
+     «ENDIF-»
+    «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE MultiReferenceAdderForFeatureDefinition FOR EReference»
+    «IF eOpposite != null-»
+        if («modifierParameterName()»->«eOpposite.name.getter()»().get() != this) {
+    «ENDIF-»
+          
+    this->«name».add(«modifierParameterName()»);
+          
+    «IF eOpposite != null-»
+        «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
+        }
+    «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE MultiReferenceRemoverForFeatureDefinition FOR EReference»
+    «IF eOpposite != null-»
+        if («modifierParameterName()»->«eOpposite.name.getter()»().get() == this) {
+    «ENDIF-»
+          
+    this->«name».remove(«modifierParameterName()»);
+          
+    «IF eOpposite != null-»
+            «modifierParameterName()»->«eOpposite.name.setter()»(nullptr);
+        }
+    «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE SimpleSetterForFeatureDefinition FOR EStructuralFeature-»
+    «IF isReference()-»
+        auto «previousFieldName()» = this->«name.getter()»();
+        if («previousFieldName()» != «name») {
+    «ENDIF-»
+    «IF isObservableProperty()-»
+        this->«name».set(«name»);
+    «ELSE-»
+        this->«name» = «name»;
+    «ENDIF-»
+    «IF isReference()-»
+        «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
+        «EXPAND CallSetterForUnsetOppositeDefinition FOR (EReference)this-»
+        }
+    «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE SimpleAdderForFeatureDefinition FOR EStructuralFeature»
+    this->«name».add(«modifierParameterName()»);
+«ENDDEFINE»
+
+«DEFINE CallSetterForOppositeDefinition FOR EReference»
+      «IF eOpposite != null-»
+      if («modifierParameterName()» != nullptr) {
+          auto thisPtr = std::static_pointer_cast<«this.eContainingClass.name»>(this->shared_from_this());
+          «modifierParameterName()»->«eOpposite.adderOrSetter()»(thisPtr);
+      }
+      «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE CallSetterForUnsetOppositeDefinition FOR EReference»
+      «IF eOpposite != null-»
+      if («previousFieldName()» != nullptr) {
+          «IF eOpposite.isCollection()-»
+          auto thisPtr = std::static_pointer_cast<«this.eContainingClass.name»>(this->shared_from_this());
+          «previousFieldName()»->«eOpposite.name.remover()»(thisPtr);
+          «ELSE-»
+          «previousFieldName()»->«eOpposite.name.setter()»(nullptr);
+          «ENDIF-»
+      }
+      «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE GetPropertyDeclarations FOR EClass»
+      «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
+      const «f.featureToObservableFieldType()»& «f.name»Property() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE GetPropertyDefinitions FOR EClass»
+      «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
+      const «f.featureToObservableFieldType()»& «name»::«f.name»Property() {
+        return this->«f.name»;
+      }
+      «ENDFOREACH»
+«ENDDEFINE»
