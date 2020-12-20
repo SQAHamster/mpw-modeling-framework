@@ -86,6 +86,8 @@
      void «name»::«f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()») {
          «IF f.isReference()-»
              «EXPAND MultiReferenceRemoverForFeatureDefinition FOR (EReference)f»
+         «ELSE-»
+             «EXPAND SimpleRemoverForFeatureDefinition FOR f»
          «ENDIF-»
      }
      «ENDIF-»
@@ -137,6 +139,10 @@
 
 «DEFINE SimpleAdderForFeatureDefinition FOR EStructuralFeature»
     this->«name».add(«modifierParameterName()»);
+«ENDDEFINE»
+
+«DEFINE SimpleRemoverForFeatureDefinition FOR EStructuralFeature»
+    this->«name».remove(«modifierParameterName()»);
 «ENDDEFINE»
 
 «DEFINE CallSetterForOppositeDefinition FOR EReference»
