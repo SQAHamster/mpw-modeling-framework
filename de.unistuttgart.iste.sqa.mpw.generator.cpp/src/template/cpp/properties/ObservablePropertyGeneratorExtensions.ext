@@ -12,8 +12,30 @@ isObservableProperty(EStructuralFeature this) :
     this.changeable && !this.derived && !this.eType.isDependency() && this.eContainingClass.eAllSuperTypes.notExists(t|t.name == "Command");
     
 featureToObservableFieldType(ETypedElement this) :
-	if (this.upperBound == -1) then "framework::ObservableList<" + this.toCppType() + ">"
-	else "framework::ObservableProperty<" + this.toCppType() + ">";
+    if (EReference.isInstance(this)) then ((EReference)this).referenceToObservableFieldType()
+	else ((EAttribute)this).attributeToObservableFieldType();
+    
+private referenceToObservableFieldType(EReference this) :
+	if (this.upperBound == -1) then (
+	    if (this.containment) then "framework::ObservableObjectContainmentList<" + this.eType.name + ">"
+	    else "framework::ObservableObjectReferenceList<" + this.eType.name + ">" )
+	else (
+	    if (this.containment) then "framework::ObservableObjectContainmentProperty<" + this.eType.name + ">"
+        else "framework::ObservableObjectReferenceProperty<" + this.eType.name + ">" );
+    
+private attributeToObservableFieldType(EAttribute this) :
+	if (this.upperBound == -1) then "framework::ObservablePrimitiveList<" + this.toCppType() + ">"
+	else "framework::ObservablePrimitiveProperty<" + this.toCppType() + ">";
+
+propertyGetterToObservableFieldType(ETypedElement this) : 
+    if (this.upperBound == -1) then "framework::ObservableList<" + toCppInPropertyName() + ">"
+    else if (EAttribute.isInstance(this) || eType.isBuiltInType()) then "framework::ObservableProperty<" + toCppInPropertyName() + ">"
+    else "framework::ObservableObjectProperty<" + toCppInPropertyName() + ">";
+    
+// Avoid that std::shared_ptr is wrapped around references
+private toCppInPropertyName(ETypedElement this) :
+    if (EAttribute.isInstance(this) || this.eType.isBuiltInType()) then toCppType()
+    else eType.ePackage.name + "::" + eType.name;
 
 featureToObservableFieldInstantiation(EStructuralFeature this) :
     let defaultValue = defaultValueOf(this) :
@@ -24,5 +46,5 @@ featureToObservableFieldInstantiation(EStructuralFeature this) :
 	else "{ nullptr }";
 
 operationToObservableGetterSignature(EOperation this) :
-    "virtual const " + featureToObservableFieldType() + "& " + name + "Property()";
+    "virtual const " + propertyGetterToObservableFieldType() + "& " + name + "Property()";
     

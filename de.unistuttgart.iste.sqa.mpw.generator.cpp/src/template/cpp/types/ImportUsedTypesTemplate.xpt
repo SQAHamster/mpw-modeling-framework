@@ -10,10 +10,10 @@
 	«ENDIF-»
     «IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
         eOperations.exists(o|o.isPropertyGetter())-»
-	#include "ObservableProperty.hpp"
+	#include "ObservableProperties.h"
     «ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection())-»
-	#include "ObservableList.hpp"
+	#include "ObservableLists.h"
 	«ENDIF-»
     «EXPAND SingleImportDefinition FOREACH eSuperTypes
         .union(eStructuralFeatures.collect(f|f.eType).select(t|t.isEnum()))

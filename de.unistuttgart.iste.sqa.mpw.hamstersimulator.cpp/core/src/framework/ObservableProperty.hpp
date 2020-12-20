@@ -10,35 +10,27 @@ namespace framework {
 template<typename T>
 class ObservableProperty {
 
-private:
+protected:
 
-  T value {};
-  std::vector< std::function<void(const T&, const T&)> > listeners;
+    std::vector<std::function<void(const T &, const T &)> > listeners;
+
+    void notifyChanged(const T &oldValue, const T &newValue) const {
+        for (auto &l : listeners) {
+            l(oldValue, newValue);
+        }
+    }
 
 public:
 
-  void set(const T& value) {
-    T oldValue = this->value;
+    virtual const T& get() const = 0;
 
-    if (this->value != value) {
-      this->value = value;
-      for (auto& l : listeners) {
-        l(oldValue, value);
-      }
+    void addListener(std::function<void(const T &, const T &)> listener) {
+        listeners.push_back(listener);
     }
-  }
 
-  const T& get() const {
-    return this->value;
-  }
-
-  void addListener(std::function<void(const T&, const T&)> listener) {
-    listeners.push_back(listener);
-  }
-
-  void removeListener(std::function<void(const T&, const T&)> listener) {
-    listeners.erase(listener);
-  }
+    void removeListener(std::function<void(const T &, const T &)> listener) {
+        listeners.erase(listener);
+    }
 };
 
 }

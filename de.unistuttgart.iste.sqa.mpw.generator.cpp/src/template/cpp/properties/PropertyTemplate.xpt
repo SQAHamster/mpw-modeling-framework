@@ -163,13 +163,13 @@
 
 «DEFINE GetPropertyDeclarations FOR EClass»
       «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
-      const «f.featureToObservableFieldType()»& «f.name»Property() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      const «f.propertyGetterToObservableFieldType()»& «f.name»Property() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
       «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE GetPropertyDefinitions FOR EClass»
       «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
-      const «f.featureToObservableFieldType()»& «name»::«f.name»Property() {
+      const «f.propertyGetterToObservableFieldType()»& «name»::«f.name»Property() {
         return this->«f.name»;
       }
       «ENDFOREACH»

@@ -4,49 +4,43 @@
 
 #include <list>
 #include <functional>
+#include <memory>
 
 namespace framework {
 
 template<typename T>
 class ObservableList {
 
-private:
+protected:
 
-  std::list<T> elements {};
-  std::vector< std::function<void(const T&)> > addedListeners;
-  std::vector< std::function<void(const T&)> > removedListeners;
+    std::vector<std::function<void(const T &)> > addedListeners;
+    std::vector<std::function<void(const T &)> > removedListeners;
+
+    void notifyAdded(const T &element) const {
+        for (auto &l : addedListeners) {
+            l(element);
+        }
+    }
+
+    void notifyRemoved(const T &element) const {
+        for (auto &l : removedListeners) {
+            l(element);
+        }
+    }
 
 public:
 
-  std::list<T> get() const {
-    return elements;
-  }
+    virtual ~ObservableList() = default;
 
-  void add(const T& element) {
-    elements.push_back(element);
+    virtual void forEach(std::function<void(const T &)> consumer) const = 0;
 
-    for (auto& l : addedListeners) {
-      l(element);
+    void addOnAddedListener(std::function<void(const T &)> listener) {
+        addedListeners.push_back(listener);
     }
-  }
 
-  void remove(const T& element) {
-    elements.remove(element);
-
-    T copyToAvoidDeletion = element;
-
-    for (auto& l : removedListeners) {
-      l(element);
+    void removeOnAddedListener(std::function<void(const T &)> listener) {
+        addedListeners.erase(listener);
     }
-  }
-
-  void addOnAddedListener(std::function<void(const T&)> listener) {
-    addedListeners.push_back(listener);
-  }
-
-  void removeOnAddedListener(std::function<void(const T&)> listener) {
-    addedListeners.erase(listener);
-  }
 };
 
 }
