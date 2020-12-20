@@ -29,7 +29,7 @@ private attributeToObservableFieldType(EAttribute this) :
 
 propertyGetterToObservableFieldType(ETypedElement this) : 
     if (this.upperBound == -1) then "framework::ObservableList<" + toCppInPropertyName() + ">"
-    else if (EAttribute.isInstance(this) || eType.isBuiltInType()) then "framework::ObservableProperty<" + toCppInPropertyName() + ">"
+    else if (EAttribute.isInstance(this) || eType.isBuiltInType()) then "framework::ObservablePrimitiveProperty<" + toCppInPropertyName() + ">"
     else "framework::ObservableObjectProperty<" + toCppInPropertyName() + ">";
     
 // Avoid that std::shared_ptr is wrapped around references

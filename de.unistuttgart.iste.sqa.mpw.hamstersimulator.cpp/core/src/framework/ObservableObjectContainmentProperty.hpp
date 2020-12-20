@@ -22,12 +22,28 @@ public:
 
         if (this->element != element) {
             this->element = element;
-            ObservableProperty<std::shared_ptr<T>>::notifyChanged(oldElement, element);
+            ObservableObjectProperty<T>::notifyChanged(*oldElement.get(), *element);
         }
     }
 
-    const std::shared_ptr<T> &get() const override {
+    std::shared_ptr<T> get() const override {
         return this->element;
+    }
+
+    typename ObservableObjectProperty<T>::OptionalObjectConstReference getReference() const override {
+        typename ObservableObjectProperty<T>::OptionalObjectConstReference result;
+        if (this->element != nullptr) {
+            result = *this->element;
+        }
+        return result;
+    }
+
+    typename ObservableObjectProperty<T>::OptionalObjectReference getReference() override {
+        typename ObservableObjectProperty<T>::OptionalObjectReference result;
+        if (this->element != nullptr) {
+            result = *this->element;
+        }
+        return result;
     }
 
 };

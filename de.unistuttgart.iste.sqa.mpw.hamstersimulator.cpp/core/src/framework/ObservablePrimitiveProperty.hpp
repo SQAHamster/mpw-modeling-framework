@@ -4,16 +4,23 @@
 
 #include <vector>
 #include <functional>
-#include "ObservableProperty.hpp"
 
 namespace framework {
 
 template<typename T>
-class ObservablePrimitiveProperty : public ObservableProperty<T> {
+class ObservablePrimitiveProperty {
 
 private:
 
     T value{};
+
+    std::vector<std::function<void(const T &, const T &)> > listeners;
+
+    void notifyChanged(const T &oldValue, const T &newValue) const {
+        for (auto &l : listeners) {
+            l(oldValue, newValue);
+        }
+    }
 
 public:
 
@@ -22,12 +29,20 @@ public:
 
         if (this->value != value) {
             this->value = value;
-            ObservableProperty<T>::notifyChanged(oldValue, value);
+            notifyChanged(oldValue, value);
         }
     }
 
-    const T &get() const override {
+    const T &get() const {
         return this->value;
+    }
+
+    void addListener(std::function<void(const T &, const T &)> listener) {
+        listeners.push_back(listener);
+    }
+
+    void removeListener(std::function<void(const T &, const T &)> listener) {
+        listeners.erase(listener);
     }
 
 };

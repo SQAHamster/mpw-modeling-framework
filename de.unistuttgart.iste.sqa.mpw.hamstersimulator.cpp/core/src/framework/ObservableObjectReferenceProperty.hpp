@@ -22,12 +22,28 @@ public:
 
         if (this->element.lock() != element) {
             this->element = element;
-            ObservableProperty<std::shared_ptr<T>>::notifyChanged(oldElement, element);
+            ObservableObjectProperty<T>::notifyChanged(*oldElement.get(), *element);
         }
     }
 
-    const std::shared_ptr<T>& get() const override {
+    std::shared_ptr<T> get() const override {
         return this->element.lock();
+    }
+
+    typename ObservableObjectProperty<T>::OptionalObjectConstReference getReference() const override {
+        typename ObservableObjectProperty<T>::OptionalObjectConstReference result;
+        if (this->element.lock() != nullptr) {
+            result = *this->element.lock();
+        }
+        return result;
+    }
+
+    typename ObservableObjectProperty<T>::OptionalObjectReference getReference() override {
+        typename ObservableObjectProperty<T>::OptionalObjectReference result;
+        if (this->element.lock() != nullptr) {
+            result = *this->element.lock();
+        }
+        return result;
     }
 
 };
