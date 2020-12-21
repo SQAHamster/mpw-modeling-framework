@@ -26,8 +26,8 @@ needsImplSubclass(EClassifier this) :
 getManualImplementedOperations(EClass this) :
     eAllOperations.reject(o|o.isGenerated());
 
-private isGenerated(EOperation this) : true;
-    // TODO isCommand() || isQuery() || isPropertyGetter();
+private isGenerated(EOperation this) :
+    isCommand() || isQuery() || isPropertyGetter();
 
 isViewModelType(EClassifier this) :
     EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewModel");
