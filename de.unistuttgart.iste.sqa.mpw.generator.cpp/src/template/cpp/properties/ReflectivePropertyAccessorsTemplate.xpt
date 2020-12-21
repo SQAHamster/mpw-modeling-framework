@@ -62,7 +62,9 @@ removeFromCollection(const std::string& propertyName, EntityReference reference)
 «ENDDEFINE»
 
 «DEFINE SetValueTypeProperty FOR EStructuralFeature»
-    // TODO value type
+    auto reference = std::get<ValueReference>(value);
+    auto valuePtr = reinterpret_cast<«eType.name»*>(reference);
+    «name.setter()»(*valuePtr);
 «ENDDEFINE»
 
 «DEFINE SetEntityReferenceProperty FOR EStructuralFeature»
@@ -73,7 +75,9 @@ removeFromCollection(const std::string& propertyName, EntityReference reference)
 «ENDDEFINE»
 
 «DEFINE SetEnumProperty FOR EStructuralFeature»
-    // TODO enum
+    int raw = std::get<int>(value);
+    auto enumValue = static_cast<«eType.name»>(raw);
+    «name.setter()»(enumValue);
 «ENDDEFINE»
 
 «DEFINE SetSimpleProperty FOR EStructuralFeature»

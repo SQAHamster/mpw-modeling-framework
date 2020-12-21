@@ -4,12 +4,14 @@
 #include <variant>
 #include <string>
 
-using EntityReference = void*;
+using RawReference = void*;
+using EntityReference = RawReference;
+using ValueReference = RawReference;
 using Any = std::variant<
         int,
         float,
         bool,
         std::string,
-        EntityReference>;
+        RawReference>;
 
 #endif //DE_UNISTUTTGART_ISTE_SQA_MPW_HAMSTERSIMULATOR_CPP_ANY_H
