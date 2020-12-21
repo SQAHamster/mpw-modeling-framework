@@ -19,8 +19,8 @@
 	#include "ObservableLists.h"
 	«ENDIF-»
     «EXPAND SingleImportDefinition FOREACH eSuperTypes
-        .union(eStructuralFeatures.collect(f|f.eType).select(t|t.isEnum()))
-        .union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten().select(t|t.isEnum()))
+        .union(eStructuralFeatures.collect(f|f.eType).select(t|t.isEnum() || t.isValueType()))
+        .union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten().select(t|t.isEnum() || t.isValueType()))
 		.reject(t|t.isDataType())
 		.reject(t|t.isStereotype())»
 «ENDDEFINE»
@@ -36,6 +36,7 @@
 		.reject(t|t == this)
 		.reject(t|t.isDataType())
 		.reject(t|t.isEnum())
+        .reject(t|t.isValueType())
 		.reject(t|t.isBuiltInType())
 		.reject(t|t.isStereotype())»
 «ENDDEFINE»
@@ -49,6 +50,7 @@
 		.reject(t|t == this)
 		.reject(t|t.isDataType())
 		.reject(t|t.isEnum())
+		.reject(t|t.isValueType())
 		.reject(t|t.isBuiltInType())
 		.reject(t|t.isStereotype())»
 «ENDDEFINE»

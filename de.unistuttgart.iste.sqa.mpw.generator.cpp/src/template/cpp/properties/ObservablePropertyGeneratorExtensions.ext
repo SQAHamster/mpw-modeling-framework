@@ -12,7 +12,7 @@ isObservableProperty(EStructuralFeature this) :
     this.changeable && !this.derived && !this.eType.isDependency() && this.eContainingClass.eAllSuperTypes.notExists(t|t.name == "Command");
     
 featureToObservableFieldType(ETypedElement this) :
-    if (EReference.isInstance(this)) then ((EReference)this).referenceToObservableFieldType()
+    if (EReference.isInstance(this) && !this.eType.isValueType()) then ((EReference)this).referenceToObservableFieldType()
 	else ((EAttribute)this).attributeToObservableFieldType();
     
 private referenceToObservableFieldType(EReference this) :
@@ -23,13 +23,13 @@ private referenceToObservableFieldType(EReference this) :
 	    if (this.containment) then "framework::ObservableObjectContainmentProperty<" + this.eType.name + ">"
         else "framework::ObservableObjectReferenceProperty<" + this.eType.name + ">" );
     
-private attributeToObservableFieldType(EAttribute this) :
+private attributeToObservableFieldType(EStructuralFeature this) :
 	if (this.upperBound == -1) then "framework::ObservablePrimitiveList<" + this.toCppType() + ">"
 	else "framework::ObservablePrimitiveProperty<" + this.toCppType() + ">";
 
 propertyGetterToObservableFieldType(ETypedElement this) : 
     if (this.upperBound == -1) then "framework::ObservableList<" + toCppInPropertyName() + ">"
-    else if (EAttribute.isInstance(this) || eType.isBuiltInType()) then "framework::ObservablePrimitiveProperty<" + toCppInPropertyName() + ">"
+    else if (EAttribute.isInstance(this) || eType.isBuiltInType() || eType.isEnum() || eType.isValueType()) then "framework::ObservablePrimitiveProperty<" + toCppInPropertyName() + ">"
     else "framework::ObservableObjectProperty<" + toCppInPropertyName() + ">";
     
 // Avoid that std::shared_ptr is wrapped around references

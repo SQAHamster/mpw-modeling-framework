@@ -60,7 +60,7 @@ toCppType(String this, String metaTypeName, EPackage thisPackage) :
     else if (this == "EBoolean") then "bool"
     else if (this == "EString") then "std::string"
     else if (this == "EObject" || this == "Object") then "void*"
-    else if (metaTypeName == "ecore::EEnum") then toQualifiedTypeName(this, thisPackage)
+    else if (this.isValueType() || metaTypeName == "ecore::EEnum") then toQualifiedTypeName(this, thisPackage)
     else if (this == "Throwable") then "std::runtime_error"
     else "std::shared_ptr<" + toQualifiedTypeName(this, thisPackage) + ">";
 	
@@ -90,11 +90,11 @@ featureToFieldInstantiation(EStructuralFeature this) :
     else "new " + this.eType.name + "()";
 
 defaultValueOf(EStructuralFeature f) :
-    if (f.eType == "EInt") then "0"
-	else if (f.eType == "EBoolean") then "false"
+    if (f.eType.name == "EInt") then "0"
+	else if (f.eType.name == "EBoolean") then "false"
 	else if (f.defaultValueLiteral != null) then f.defaultValueLiteral
 	else null;
-    
+
 List[EClassifier] getUsedTypes(EOperation this) :
     this.eParameters.collect(p|p.eType).union({this.eType}.reject(r|r == null));
     

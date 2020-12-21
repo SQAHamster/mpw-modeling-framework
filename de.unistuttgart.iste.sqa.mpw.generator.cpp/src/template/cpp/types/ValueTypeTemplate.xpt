@@ -1,0 +1,100 @@
+«IMPORT ecore»
+
+«EXTENSION template::cpp::GeneratorExtensions»
+
+«DEFINE ValueTypeTemplate FOR EClass»
+    «EXPAND ValueTypeTemplateHeader FOR this»
+    «EXPAND ValueTypeTemplateSource FOR this»
+«ENDDEFINE»
+
+«DEFINE ValueTypeTemplateHeader FOR EClass»
+    «FILE "generated/" + name + ".h"»
+    
+    #ifndef «this.toCppIncludeGuard()»
+    #define «this.toCppIncludeGuard()»
+    
+    #include <cstddef>
+
+    namespace «this.ePackage.name» {
+    
+    struct «this.name» final {
+    
+    private:
+    
+        «FOREACH eAttributes AS a-»
+        «a.featureToCppType()» «a.name» = «defaultValueOf(a)»;
+        «ENDFOREACH-»
+        
+    public:
+    
+        «name»() = default;
+        
+        «name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToCppType()» «a.name»«ENDFOREACH»);
+        
+        «FOREACH eAttributes AS a-»
+         inline «a.featureToCppType()» «a.name.getter()»() const {
+             return this->«a.name»;
+         }
+         inline void «a.name.setter()»(«a.featureToCppType()» «a.name») {
+             this->«a.name» = «a.name»;
+         }
+        «ENDFOREACH-»
+        
+        friend bool operator==(const Location& lhs, const Location& rhs);
+
+        friend bool operator!=(const Location& lhs, const Location& rhs);
+        
+        friend std::size_t hash_value(const Location& obj);
+        
+	    inline static «name» from(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToCppType()» «a.name»«ENDFOREACH») {
+	        return «name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.name»«ENDFOREACH»);
+	    }
+    };
+    
+    }
+    
+    #endif //«this.toCppIncludeGuard()»
+    
+    «ENDFILE»
+«ENDDEFINE»
+
+«DEFINE ValueTypeTemplateSource FOR EClass»
+    «FILE "generated/" + name + ".cpp"»#include "«name».h"
+    
+    #include <memory>
+    
+    namespace «this.ePackage.name» {
+    
+        «name»::«name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToCppType()» «a.name»«ENDFOREACH»)
+          : «FOREACH eAttributes AS a SEPARATOR ","»
+                «a.name»(«a.name»)
+            «ENDFOREACH-» 
+        {}
+        
+        bool operator==(const Location& lhs, const Location& rhs) {
+            «FOREACH eAttributes AS a-»
+                if (lhs.«a.name» != rhs.«a.name») {
+                    return false;
+                }
+            «ENDFOREACH-»
+            return true;
+        }
+
+        bool operator!=(const Location& lhs, const Location& rhs) {
+            return !(lhs == rhs);
+        }
+        
+        std::size_t hash_value(const Location& obj) {
+            std::size_t prime = 31;
+            std::size_t result = 1;
+            «FOREACH eAttributes AS a-»
+                result = prime * result + std::hash<«a.toCppType()»>()(obj.«a.name»);
+            «ENDFOREACH-»
+            return result;
+        }
+    
+    }
+    
+    «ENDFILE»
+«ENDDEFINE»
+
