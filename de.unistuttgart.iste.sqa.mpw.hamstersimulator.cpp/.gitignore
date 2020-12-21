@@ -6,3 +6,4 @@
 
 /.vs
 /out
+*.DotSettings.user
