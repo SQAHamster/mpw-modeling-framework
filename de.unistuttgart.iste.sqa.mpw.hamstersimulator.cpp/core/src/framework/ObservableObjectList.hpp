@@ -2,6 +2,7 @@
 #ifndef DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTLIST_H
 #define DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTLIST_H
 
+#include <algorithm>
 #include <list>
 #include <functional>
 #include "ObservableList.hpp"

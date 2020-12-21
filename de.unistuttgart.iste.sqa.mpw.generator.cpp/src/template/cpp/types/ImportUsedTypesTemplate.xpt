@@ -26,6 +26,8 @@
 «ENDDEFINE»
 
 «DEFINE SourceImportDefinitions FOR EClass»
+    #include <stdexcept>
+    
     «EXPAND SingleImportDefinition FOREACH eStructuralFeatures
 		.collect(e|e.eType)
 		.union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())
