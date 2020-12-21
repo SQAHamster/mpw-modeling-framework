@@ -63,11 +63,8 @@
       «o.operationToSignature()» = 0;
       «ENDFOREACH-»
       
-      «IF isInheritedEntity()-»
-      void setProperty(const std::string& propertyName, Any value) override;
-      void addToCollection(const std::string& propertyName, EntityReference reference) override;
-      void removeFromCollection(const std::string& propertyName, EntityReference reference) override;
-      «ENDIF-»
+      «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodDeclarations FOR this»
+
     };
     
     }
@@ -89,81 +86,10 @@
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
         «FOREACH eOperations AS o»
-        // «o.operationToSignature()»;
+        // TODO «o.operationToSignature()»;
         «ENDFOREACH»
-
-        «IF isInheritedEntity()-»
-        void «name»::setProperty(const std::string& propertyName, Any value) {
-            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == 1) AS f-»
-            if (propertyName == "«f.name»") {
-                «IF f.eType.isValueType()-»
-                // TODO value type
-                «ELSEIF EReference.isInstance(f)-»
-                auto reference = std::get<EntityReference>(value);
-                auto typedElement = reinterpret_cast<«f.eType.name»*>(reference);
-                auto sharedPtr = std::static_pointer_cast<«f.eType.name»>(typedElement->shared_from_this());
-                «f.name.setter()»(sharedPtr);
-                «ELSEIF f.eType.isEnum()-»
-                // TODO enum
-                «ELSE-»
-                auto typedValue = std::get<«f.toCppType()»>(value);
-                «f.name.setter()»(typedValue);
-                «ENDIF-»
-                return;
-            }
-            «ENDFOREACH-»
-            
-            «IF getBaseClass() != null-»
-            inherited::setProperty(propertyName, value);
-            «ELSE-»
-            throw std::runtime_error("property '" + propertyName + "' is not supported");
-            «ENDIF-»
-        }
         
-        void «name»::addToCollection(const std::string& propertyName, EntityReference reference) {
-            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == -1) AS f-»
-            if (propertyName == "«f.name»") {
-                «IF EReference.isInstance(f)-»
-                auto typedElement = reinterpret_cast<«f.eType.name»*>(reference);
-                auto sharedPtr = std::static_pointer_cast<«f.eType.name»>(typedElement->shared_from_this());
-                «f.name.adder()»(sharedPtr);
-                «ELSE-»
-                auto typedValue = std::get<«f.toCppType()»>(value);
-                «f.name.adder()»(typedValue);
-                «ENDIF-»
-                return;
-            }
-            «ENDFOREACH-»
-            
-            «IF getBaseClass() != null-»
-            inherited::addToCollection(propertyName, reference);
-            «ELSE-»
-            throw std::runtime_error("property '" + propertyName + "' is not supported");
-            «ENDIF-»
-        }
-        
-        void «name»::removeFromCollection(const std::string& propertyName, EntityReference reference) {
-            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == -1) AS f-»
-            if (propertyName == "«f.name»") {
-                «IF EReference.isInstance(f)-»
-                auto typedElement = reinterpret_cast<«f.eType.name»*>(reference);
-                auto sharedPtr = std::static_pointer_cast<«f.eType.name»>(typedElement->shared_from_this());
-                «f.name.remover()»(sharedPtr);
-                «ELSE-»
-                auto typedValue = std::get<«f.toCppType()»>(value);
-                «f.name.remover()»(typedValue);
-                «ENDIF-»
-                return;
-            }
-            «ENDFOREACH-»
-            
-            «IF getBaseClass() != null-»
-            inherited::removeFromCollection(propertyName, reference);
-            «ELSE-»
-            throw std::runtime_error("property '" + propertyName + "' is not supported");
-            «ENDIF-»
-        }
-        «ENDIF-»
+        «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodSources FOR this»
     }
     «ENDFILE»
 «ENDDEFINE»

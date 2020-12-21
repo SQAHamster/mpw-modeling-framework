@@ -1,0 +1,153 @@
+«IMPORT ecore»
+
+«EXTENSION template::cpp::GeneratorExtensions»
+
+«REM»Template for reflective operation in C++«ENDREM»
+«DEFINE ReflectivePropertyMethodDeclarations FOR EClass»
+      «IF isInheritedEntity()-»
+      void «EXPAND ReflectiveSetPropertyMethodSignature FOR this» override;
+      void «EXPAND ReflectiveAddToCollectionMethodSignature FOR this» override;
+      void «EXPAND ReflectiveRemoveFromCollectionMethodSignature FOR this» override;
+      «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE ReflectiveSetPropertyMethodSignature FOR Object-»
+setProperty(const std::string& propertyName, Any value)
+«ENDDEFINE»
+
+«DEFINE ReflectiveAddToCollectionMethodSignature FOR Object-»
+addToCollection(const std::string& propertyName, EntityReference reference)
+«ENDDEFINE»
+
+«DEFINE ReflectiveRemoveFromCollectionMethodSignature FOR Object-»
+removeFromCollection(const std::string& propertyName, EntityReference reference)
+«ENDDEFINE»
+
+«DEFINE ReflectivePropertyMethodSources FOR EClass»
+        «IF isInheritedEntity()-»
+        «EXPAND ReflectiveSetPropertyMethod FOR this»
+        
+        «EXPAND ReflectiveAddToCollectionMethod FOR this»
+        
+        «EXPAND ReflectiveRemoveFromCollectionMethod FOR this»
+        «ENDIF-»
+«ENDDEFINE»
+
+«REM»
+    Set Property
+«ENDREM»
+«DEFINE ReflectiveSetPropertyMethod FOR EClass»
+        void «name»::«EXPAND ReflectiveSetPropertyMethodSignature FOR this» {
+            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == 1) AS f-»
+            if (propertyName == "«f.name»") {
+                «IF f.eType.isValueType()-»
+                    «EXPAND SetValueTypeProperty FOR f»
+                «ELSEIF EReference.isInstance(f)-»
+                    «EXPAND SetEntityReferenceProperty FOR f»
+                «ELSEIF f.eType.isEnum()-»
+                    «EXPAND SetEnumProperty FOR f»
+                «ELSE-»
+                    «EXPAND SetSimpleProperty FOR f»
+                «ENDIF-»
+                return;
+            }
+            «ENDFOREACH-»
+            
+            «IF getBaseClass() != null-»
+            inherited::setProperty(propertyName, value);
+            «ELSE-»
+            throw std::runtime_error("property '" + propertyName + "' is not supported");
+            «ENDIF-»
+        }
+«ENDDEFINE»
+
+«DEFINE SetValueTypeProperty FOR EStructuralFeature»
+    // TODO value type
+«ENDDEFINE»
+
+«DEFINE SetEntityReferenceProperty FOR EStructuralFeature»
+    auto reference = std::get<EntityReference>(value);
+    auto typedElement = reinterpret_cast<«eType.name»*>(reference);
+    auto sharedPtr = std::static_pointer_cast<«eType.name»>(typedElement->shared_from_this());
+    «name.setter()»(sharedPtr);
+«ENDDEFINE»
+
+«DEFINE SetEnumProperty FOR EStructuralFeature»
+    // TODO enum
+«ENDDEFINE»
+
+«DEFINE SetSimpleProperty FOR EStructuralFeature»
+    auto typedValue = std::get<«toCppType()»>(value);
+    «name.setter()»(typedValue);
+«ENDDEFINE»
+
+«REM»
+    Add to collection
+«ENDREM»
+«DEFINE ReflectiveAddToCollectionMethod FOR EClass»
+        void «name»::«EXPAND ReflectiveAddToCollectionMethodSignature FOR this» {
+            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == -1) AS f-»
+            if (propertyName == "«f.name»") {
+                «IF EReference.isInstance(f)-»
+                    «EXPAND AddEntityReference FOR f»
+                «ELSE-»
+                    «EXPAND AddSimpleReference FOR f»
+                «ENDIF-»
+                return;
+            }
+            «ENDFOREACH-»
+            
+            «IF getBaseClass() != null-»
+            inherited::addToCollection(propertyName, reference);
+            «ELSE-»
+            throw std::runtime_error("property '" + propertyName + "' is not supported");
+            «ENDIF-»
+        }
+«ENDDEFINE»
+
+«DEFINE AddEntityReference FOR EStructuralFeature»
+    auto typedElement = reinterpret_cast<«eType.name»*>(reference);
+    auto sharedPtr = std::static_pointer_cast<«eType.name»>(typedElement->shared_from_this());
+    «name.adder()»(sharedPtr);
+«ENDDEFINE»
+
+«DEFINE AddSimpleReference FOR EStructuralFeature»
+    auto typedValue = std::get<«toCppType()»>(value);
+    «name.adder()»(typedValue);
+«ENDDEFINE»
+
+
+«REM»
+    Remove from collection
+«ENDREM»
+«DEFINE ReflectiveRemoveFromCollectionMethod FOR EClass»
+        void «name»::«EXPAND ReflectiveRemoveFromCollectionMethodSignature FOR this» {
+            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == -1) AS f-»
+            if (propertyName == "«f.name»") {
+                «IF EReference.isInstance(f)-»
+                    «EXPAND RemoveEntityReference FOR f»
+                «ELSE-»
+                    «EXPAND RemoveSimpleReference FOR f»
+                «ENDIF-»
+                return;
+            }
+            «ENDFOREACH-»
+            
+            «IF getBaseClass() != null-»
+            inherited::removeFromCollection(propertyName, reference);
+            «ELSE-»
+            throw std::runtime_error("property '" + propertyName + "' is not supported");
+            «ENDIF-»
+        }
+«ENDDEFINE»
+
+«DEFINE RemoveEntityReference FOR EStructuralFeature»
+    auto typedElement = reinterpret_cast<«eType.name»*>(reference);
+    auto sharedPtr = std::static_pointer_cast<«eType.name»>(typedElement->shared_from_this());
+    «name.remover()»(sharedPtr);
+«ENDDEFINE»
+
+«DEFINE RemoveSimpleReference FOR EStructuralFeature»
+    auto typedValue = std::get<«toCppType()»>(value);
+    «name.remover()»(typedValue);
+«ENDDEFINE»
