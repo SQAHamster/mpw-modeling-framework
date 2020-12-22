@@ -37,6 +37,7 @@ class QueryDslParsingTest {
               className: Hamster
               elements: [
                 Query myQuery:
+                  internal: false
                   expressions: [
                     BoolConstant:
                       value: true
@@ -57,8 +58,10 @@ class QueryDslParsingTest {
               className: Hamster
               elements: [
                 Query myQuery1:
+                  internal: false
                   «simpleExpression»
                 Query myQuery2:
+                  internal: false
                   «simpleExpression»
               ]
         ''')
@@ -204,6 +207,7 @@ class QueryDslParsingTest {
               elements: [
                 Query myQuery:
                   documentation: /** This query returns something useful. */
+                  internal: false
                   «simpleExpression»
               ]
         ''')

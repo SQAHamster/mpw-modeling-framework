@@ -9,7 +9,7 @@
     </parent>
     
     <artifactId>de.unistuttgart.iste.sqa.mpw.modeling.querydsl.tests</artifactId>
-    <packaging>eclipse-plugin</packaging>
+    <packaging>eclipse-test-plugin</packaging>
     
     <name>QueryDSL Tests</name>
     
