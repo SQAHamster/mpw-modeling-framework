@@ -83,11 +83,14 @@ private elementToCppType(ETypedElement this) :
 	else this.toCppType();
 
 featureToFieldInstantiation(EStructuralFeature this) :
-    // TODO if (this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).size > 0) then this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first().toInitialization()
-    if (this.upperBound == -1) then "{}"
+    if (this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).size > 0) then this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first().toInitialization()
+    else if (this.upperBound == -1) then "{}"
     else if (this.eType.isDependency()) then "{ std::make_shared<impl.Dummy" + this.eType.name + ">() }"
     else if (this.eType.needsImplSubclass()) then "new " + this.eType.name + "Impl()"
     else "new " + this.eType.name + "()";
+
+toInitialization(InlineSimpleFieldInitializationAnnotation this) : "";
+    // TDOO "new " + field.eType.name + "(" + parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ") + ")";
 
 defaultValueOf(EStructuralFeature f) :
     if (f.eType.name == "EInt") then "0"

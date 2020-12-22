@@ -1,0 +1,99 @@
+package components;
+
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.stream.Collectors;
+
+import org.eclipse.emf.ecore.EClass;
+import org.junit.jupiter.api.Test;
+
+import components.generation.PropertyPathParseException;
+import components.generation.PropertyPathParser;
+import components.generation.PropertyPathParser.PropertyPath;
+import components.generation.PropertyPathParser.PropertyPathSegment;
+import mpw.MpwPackage;
+
+public class PropertyPathParserTest {
+	private static final EClass ACTOR_ECLASS = MpwPackage.eINSTANCE.getActor();
+	private static final EClass STAGE_ECLASS = MpwPackage.eINSTANCE.getStage();
+	private static final EClass TILE_ECLASS = MpwPackage.eINSTANCE.getTile();
+	
+	private PropertyPathParser sut;
+	private PropertyPath actualParsedPropertyPath;
+	
+	@Test // Scenario: empty path
+	public void givenActorClass_andEmptyString_whenParsePropertyPath_thenErrorIsThrown() {
+		withInput(ACTOR_ECLASS);
+		assertThrows(PropertyPathParseException.class, () -> {
+			parse("");
+		});
+	}
+	
+	@Test // Scenario: simple type
+	public void givenActorClass_andPropertyPathForDirection_whenParsePropertyPath_thenIsDirectionType() {
+		withInput(ACTOR_ECLASS);
+		parse("direction");
+		assertParsedPath("direction:Direction");
+	}
+	
+	@Test // Scenario: value type
+	public void givenTileClass_andPropertyPathForLocation_whenParsePropertyPath_thenIsLocationType() {
+		withInput(TILE_ECLASS);
+		parse("location");
+		assertParsedPath("location:Location");
+	}
+	
+	@Test // Scenario: object reference
+	public void givenActorClass_andPropertyPathForCurrentTile_whenParsePropertyPath_thenIsTileReference() {
+		withInput(ACTOR_ECLASS);
+		parse("currentTile");
+		assertParsedPath("currentTile:Tile[ref]");
+	}
+	
+	@Test // Scenario: reference list
+	public void givenStageClass_andPropertyPathForTiles_whenParsePropertyPath_thenIsTileReferenceList() {
+		withInput(STAGE_ECLASS);
+		parse("tiles");
+		assertParsedPath("tiles:Tile[ref-list]");
+	}
+	
+	// Scenario: y + 1
+	// Scenario: 0
+	// Scenario: location.row
+	// Scenario: this
+	// Scenario: parameters
+	// Scenario: thisInstance.direction==NORTH
+	// Scenario: game.userInputInterface
+	
+	private void withInput(EClass contextClass) {
+		sut = new PropertyPathParser(contextClass);
+	}
+	
+	private void parse(String propertyPath) {
+		actualParsedPropertyPath = sut.parse(propertyPath);
+	}
+	
+	private void assertParsedPath(String expected) {
+		String actual = actualParsedPropertyPath.segments.stream()
+		    .map(s -> toDebugString(s))
+		    .collect(Collectors.joining("|"));
+		assertEquals(expected, actual);
+	}
+	
+	private String toDebugString(PropertyPathSegment segment) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(segment.originalSegment);
+		stringBuilder.append(":");
+		stringBuilder.append(segment.segmentType.getName());
+		if (segment.isObjectReference && segment.isCollection) {
+			stringBuilder.append("[ref-list]");
+		} else if (segment.isObjectReference) {
+			stringBuilder.append("[ref]");
+		} else if (segment.isCollection) {
+			stringBuilder.append("[list]");
+		}
+		return stringBuilder.toString();
+	}
+}
