@@ -65,6 +65,7 @@ Workflow {
 	}
 	
     component = XmiWriter {
+        rootPath = rootPath
         modelSlot = "queries"
     }
 	
@@ -75,6 +76,7 @@ Workflow {
 	}
 	
 	component = XmiWriter {
+        rootPath = rootPath
 		modelSlot = "commands"
 	}
 	
@@ -84,6 +86,7 @@ Workflow {
 	}
 	
 	component = XmiWriter {
+        rootPath = rootPath
 		modelSlot = "entityModels"
 		fileExtension = "ecore"
 	}
@@ -95,6 +98,7 @@ Workflow {
     }
     
     component = XmiWriter {
+        rootPath = rootPath
         modelSlot = "generationEcoreModels"
         fileExtension = "ecore"
         directorySuffix = "_generation"

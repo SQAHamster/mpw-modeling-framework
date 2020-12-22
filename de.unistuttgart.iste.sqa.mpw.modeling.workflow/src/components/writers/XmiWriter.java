@@ -28,6 +28,7 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xtext.EcoreUtil2;
 
 import components.helpers.CustomAnnotationConverter;
+import components.helpers.EclipsePathHelper;
 
 /**
  * Component used to debugging purposes. It writes EMF resources in some points of the workflow to a XMI / Ecore file.
@@ -43,6 +44,8 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	
 	/** the project name in which the files are written */
 	private String projectName = "de.unistuttgart.iste.sqa.mpw.modeling.workflow";
+
+	private String rootPath = "..";
 	
 	public void setFileExtension(String fileExtension) {
 		this.fileExtension = fileExtension;
@@ -66,6 +69,14 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	
+	public String getRootPath() {
+		return rootPath;
+	}
+
+	public void setRootPath(String rootPath) {
+		this.rootPath = rootPath;
 	}
 
 	@Override
@@ -111,7 +122,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	 * @param context 
 	 */
 	private void replaceEcoreLinksToGeneratedOnes(WorkflowContext context, String resourceUri, String directoryName) throws IOException {
-		var filePath = ".." + URI.createURI(resourceUri).toPlatformString(true);
+		var filePath = EclipsePathHelper.toJavaCompatibleAbsoluteFilePath(rootPath) + URI.createURI(resourceUri).toPlatformString(true);
 		var path = Paths.get(filePath);
 		var charset = StandardCharsets.UTF_8;
 
