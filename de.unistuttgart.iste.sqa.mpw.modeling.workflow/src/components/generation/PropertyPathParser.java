@@ -22,9 +22,14 @@ public class PropertyPathParser {
 	private static final Pattern PROPERTY_PATH_PATTERN = Pattern.compile("[\\w]+(\\.[\\w]+)*");
 	
 	private final EClass contextClass;
-	private EClass currentType;
+	private EClassifier currentType;
+	
+	private PropertyPath resultPath;
 	
 	public PropertyPathParser(EClass contextClass) {
+		if (contextClass == null) {
+			throw new NullPointerException("contextClass must not be null");
+		}
 		this.contextClass = contextClass;
 	}
 	
@@ -37,14 +42,14 @@ public class PropertyPathParser {
 	 */
 	public PropertyPath parse(String propertyPathString) {
 		validatePathSyntax(propertyPathString);
+		initializeParsing();
 		
-		currentType = contextClass;
-		
-		final PropertyPath path = new PropertyPath();
-		if (propertyPathString.length() > 0) {
-			path.segments.add(toSegment(propertyPathString));
+		String[] parts = propertyPathString.split("\\.");
+		for (String part : parts) {
+			handleNextPropertyPart(part);
 		}
-		return path;
+		
+		return resultPath;
 	}
 
 	private void validatePathSyntax(String propertyPathString) {
@@ -53,16 +58,68 @@ public class PropertyPathParser {
 			throw new PropertyPathParseException("invalid format: " + propertyPathString);
 		}
 	}
+
+	private void initializeParsing() {
+		currentType = contextClass;
+		resultPath = new PropertyPath();
+	}
+	
+	private void handleNextPropertyPart(String part) {
+		var segment = toSegment(part);
+		resultPath.segments.add(segment);
+		currentType = segment.segmentType;
+		validateCurrentType();
+	}
 	
 	private PropertyPathSegment toSegment(String part) {
-		EStructuralFeature feature = currentType.getEStructuralFeature(part);
-		
+		if ("this".equals(part)) {
+			return toThisPart();
+		} else {
+			return toFeaturePart(part);
+		}
+
+	}
+	
+	private PropertyPathSegment toThisPart() {
+		validateForThisIsUsedOnlyAsFirst();
+		PropertyPathSegment segment = new PropertyPathSegment();
+		segment.isObjectReference = true;
+		segment.originalSegment = "this";
+		segment.segmentType = currentType;
+		return segment;
+	}
+	
+	private void validateForThisIsUsedOnlyAsFirst() {
+		if (resultPath.segments.size() > 0) {
+			throw new IllegalStateException("'this' is only allowed as first part in a property path");
+		}
+	}
+
+	private PropertyPathSegment toFeaturePart(String part) {
+		EStructuralFeature feature = getFeature(part);
+
 		PropertyPathSegment segment = new PropertyPathSegment();
 		segment.isCollection = feature.getUpperBound() == -1;
 		segment.isObjectReference = isObjectReference(feature);
 		segment.originalSegment = part;
 		segment.segmentType = feature.getEType();
 		return segment;
+	}
+
+	private EStructuralFeature getFeature(String part) {
+		EStructuralFeature feature = getCurrentTypeAsEClass().getEStructuralFeature(part);
+		if (feature == null) {
+			throw new IllegalStateException(part + " is no feature of " + currentType.getName());
+		}
+		return feature;
+	}
+	
+	private EClass getCurrentTypeAsEClass() {
+		boolean isEClass = currentType instanceof EClass;
+		if (!isEClass) {
+			throw new IllegalStateException("the current type '" + currentType.getName() + "' is no EClass any more, hence it has no further properties");
+		}
+		return (EClass)currentType;
 	}
 	
 	private boolean isObjectReference(EStructuralFeature feature) {
@@ -76,6 +133,16 @@ public class PropertyPathParser {
 					.anyMatch(t -> t.equals(VALUE_TYPE_ECLASS));
 		}
 		return false;
+	}
+	
+	private void validateCurrentType() {
+		if (currentType == null) {
+			throw new IllegalStateException("current type must not be null");
+		}
+	}
+
+	public void addParameter(String parameterName, String parameterName2) {
+		// TODO
 	}
 	
 	public static class PropertyPath {

@@ -19,6 +19,7 @@ public class PropertyPathParserTest {
 	private static final EClass ACTOR_ECLASS = MpwPackage.eINSTANCE.getActor();
 	private static final EClass STAGE_ECLASS = MpwPackage.eINSTANCE.getStage();
 	private static final EClass TILE_ECLASS = MpwPackage.eINSTANCE.getTile();
+	private static final EClass MPW_ECLASS = MpwPackage.eINSTANCE.getMiniProgrammingWorld();
 	
 	private PropertyPathParser sut;
 	private PropertyPath actualParsedPropertyPath;
@@ -59,16 +60,38 @@ public class PropertyPathParserTest {
 		assertParsedPath("tiles:Tile[ref-list]");
 	}
 	
+	@Test // Scenario: value type nested property
+	public void givenTileClass_andPropertyPathForLocationRow_whenParsePropertyPath_thenHasTwoSegments() {
+		withInput(TILE_ECLASS);
+		parse("location.row");
+		assertParsedPath("location:Location|row:EInt");
+	}
+	
+	// TODO @Test // Scenario: reference nested property
+	public void givenMiniWorldAsParameter_andPropertyPathForInputInterface_whenParsePropertyPath_thenHasTwoSegments_andBothAreReferences() {
+		withInput(TILE_ECLASS);
+		andParameter("game", MPW_ECLASS);
+		parse("game.userInputInterface");
+		assertParsedPath("game:MiniProgrammingWorld[ref]|userInputInterface[ref]");
+	}
+
+	@Test // Scenario: this
+	public void givenActorClass_andPropertyPathForThis_whenParsePropertyPath_thenIsActorType() {
+		withInput(ACTOR_ECLASS);
+		parse("this");
+		assertParsedPath("this:Actor[ref]");
+	}
+	
 	// Scenario: y + 1
 	// Scenario: 0
-	// Scenario: location.row
-	// Scenario: this
-	// Scenario: parameters
 	// Scenario: thisInstance.direction==NORTH
-	// Scenario: game.userInputInterface
 	
 	private void withInput(EClass contextClass) {
 		sut = new PropertyPathParser(contextClass);
+	}
+
+	private void andParameter(String parameterName, EClass parameterType) {
+		sut.addParameter(parameterName, parameterName);
 	}
 	
 	private void parse(String propertyPath) {
