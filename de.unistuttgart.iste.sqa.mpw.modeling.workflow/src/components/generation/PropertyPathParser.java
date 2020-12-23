@@ -2,6 +2,7 @@ package components.generation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,8 @@ import stereotypes.StereotypesPackage;
  *  Note: a property path always starts with 
  */
 public class PropertyPathParser {
+	private static final String THIS_REFERENCE = "this";
+
 	private static final EClass VALUE_TYPE_ECLASS = StereotypesPackage.eINSTANCE.getValueType();
 	
 	private static final Pattern PROPERTY_PATH_PATTERN = Pattern.compile("[\\w]+(\\.[\\w]+)*");
@@ -25,6 +28,11 @@ public class PropertyPathParser {
 	private EClassifier currentType;
 	
 	private PropertyPath resultPath;
+
+	/**
+	 * Additional parameters which may be used as "starting point" in a property path
+	 */
+	private final List<Parameter> parameters = new ArrayList<>();
 	
 	public PropertyPathParser(EClass contextClass) {
 		if (contextClass == null) {
@@ -72,27 +80,58 @@ public class PropertyPathParser {
 	}
 	
 	private PropertyPathSegment toSegment(String part) {
-		if ("this".equals(part)) {
+		if (THIS_REFERENCE.equals(part)) {
 			return toThisPart();
+		} else if (usesParameter(part)) {
+			return toParameterPart(part);
 		} else {
 			return toFeaturePart(part);
 		}
 
 	}
-	
+
 	private PropertyPathSegment toThisPart() {
 		validateForThisIsUsedOnlyAsFirst();
 		PropertyPathSegment segment = new PropertyPathSegment();
 		segment.isObjectReference = true;
-		segment.originalSegment = "this";
+		segment.originalSegment = THIS_REFERENCE;
 		segment.segmentType = currentType;
 		return segment;
 	}
 	
+	private boolean usesParameter(String part) {
+		return isStartOfPropertyPath() 
+				&& parameters.stream().anyMatch(p -> p.name.equals(part));
+	}
+
+	private PropertyPathSegment toParameterPart(String part) {
+		Parameter parameter = getParameterForName(part);
+		
+		PropertyPathSegment segment = new PropertyPathSegment();
+		segment.isObjectReference = isObjectReference(parameter);
+		segment.originalSegment = part;
+		segment.segmentType = parameter.type;
+		return segment;
+	}
+
+	private Parameter getParameterForName(String name) {
+		Optional<Parameter> optionalParameter = parameters.stream()
+				.filter(p -> p.name.equals(name))
+				.findFirst();
+		if (optionalParameter.isEmpty()) {
+			throw new IllegalStateException("parameter with name '" + name + "' does not exist");
+		}
+		return optionalParameter.get();
+	}
+	
 	private void validateForThisIsUsedOnlyAsFirst() {
-		if (resultPath.segments.size() > 0) {
+		if (!isStartOfPropertyPath()) {
 			throw new IllegalStateException("'this' is only allowed as first part in a property path");
 		}
+	}
+	
+	private boolean isStartOfPropertyPath() {
+		return resultPath.segments.isEmpty();
 	}
 
 	private PropertyPathSegment toFeaturePart(String part) {
@@ -122,8 +161,35 @@ public class PropertyPathParser {
 		return (EClass)currentType;
 	}
 	
+	/**
+	 * A feature is a object reference if it is
+	 * a) a EReference
+	 * b) no value type
+	 */
 	private boolean isObjectReference(EStructuralFeature feature) {
 		return feature instanceof EReference && !isValueType(feature.getEType());
+	}
+	
+	/**
+	 * To determine if a parameter is a object reference, some heuristics have to be applied to determine if its a object reference
+	 * a) no value type
+	 * b) no primitive
+	 */
+	private boolean isObjectReference(Parameter parameter) {
+		return !isValueType(parameter.type) && !isPrimitive(parameter.type);
+	}
+
+	private boolean isPrimitive(EClassifier type) {
+		switch (type.getName()) {
+		case "EInt":
+		case "EFloat":
+		case "EBoolean":
+		case "EString":
+			return true;
+		default:
+			break;
+		}
+		return false;
 	}
 
 	private boolean isValueType(EClassifier type) {
@@ -141,8 +207,11 @@ public class PropertyPathParser {
 		}
 	}
 
-	public void addParameter(String parameterName, String parameterName2) {
-		// TODO
+	public void addParameter(String parameterName, EClassifier parameterType) {
+		Parameter parameter = new Parameter();
+		parameter.name = parameterName;
+		parameter.type = parameterType;
+		this.parameters.add(parameter);
 	}
 	
 	public static class PropertyPath {
@@ -154,6 +223,11 @@ public class PropertyPathParser {
 		public EClassifier segmentType;
 		public boolean isCollection;
 		public boolean isObjectReference;
+	}
+
+	public static class Parameter {
+		public String name;
+		public EClassifier type;
 	}
 	
 }
