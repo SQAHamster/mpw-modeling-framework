@@ -22,9 +22,9 @@ public class PropertyPathParser {
 
 	private static final EClass VALUE_TYPE_ECLASS = StereotypesPackage.eINSTANCE.getValueType();
 	
-	private static final Pattern PROPERTY_PATH_PATTERN = Pattern.compile("[\\w]+(\\.[\\w]+)*");
+	public static final Pattern PROPERTY_PATH_PATTERN = Pattern.compile("[\\w]+(\\.[\\w]+)*");
 	
-	private final EClass contextClass;
+	private final EClassifier contextClass;
 	private EClassifier currentType;
 	
 	private PropertyPath resultPath;
@@ -34,7 +34,7 @@ public class PropertyPathParser {
 	 */
 	private final List<Parameter> parameters = new ArrayList<>();
 	
-	public PropertyPathParser(EClass contextClass) {
+	public PropertyPathParser(EClassifier contextClass) {
 		if (contextClass == null) {
 			throw new NullPointerException("contextClass must not be null");
 		}
@@ -58,6 +58,20 @@ public class PropertyPathParser {
 		}
 		
 		return resultPath;
+	}
+
+	/**
+	 * Checks if the given string is a parsable property path.
+	 * Note: it checks if the pattern matches and the starting segment is a valid variable.
+	 */
+	public boolean checkIsParsable(String string) {
+		boolean matches = PROPERTY_PATH_PATTERN.matcher(string).matches();
+		if (!matches) {
+			return false;
+		}
+		String[] parts = string.split("\\.");
+		String firstPart = parts[0];
+		return firstPart.equals("this") || parameters.stream().anyMatch(p -> p.name.equals(firstPart));
 	}
 
 	private void validatePathSyntax(String propertyPathString) {

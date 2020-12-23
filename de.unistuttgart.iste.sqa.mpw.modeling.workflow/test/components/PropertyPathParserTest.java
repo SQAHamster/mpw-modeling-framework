@@ -23,6 +23,7 @@ public class PropertyPathParserTest {
 	
 	private PropertyPathParser sut;
 	private PropertyPath actualParsedPropertyPath;
+	private boolean actualParsable;
 	
 	@Test // Scenario: empty path
 	public void givenActorClass_andEmptyString_whenParsePropertyPath_thenErrorIsThrown() {
@@ -81,7 +82,14 @@ public class PropertyPathParserTest {
 		parse("this");
 		assertParsedPath("this:Actor[ref]");
 	}
-	
+
+	@Test // Scenario: unknown name
+	public void givenActorClass_andPropertyPathWithUnknownName_whenCheckIsParseablePropertyPath_thenIsFalse() {
+		withInput(ACTOR_ECLASS);
+		checkIsParsable("myVariable");
+		assertParsable(false);
+	}
+
 	private void withInput(EClass contextClass) {
 		sut = new PropertyPathParser(contextClass);
 	}
@@ -93,12 +101,20 @@ public class PropertyPathParserTest {
 	private void parse(String propertyPath) {
 		actualParsedPropertyPath = sut.parse(propertyPath);
 	}
+
+	private void checkIsParsable(String string) {
+		actualParsable = sut.checkIsParsable(string);
+	}
 	
 	private void assertParsedPath(String expected) {
 		String actual = actualParsedPropertyPath.segments.stream()
 		    .map(s -> toDebugString(s))
 		    .collect(Collectors.joining("|"));
 		assertEquals(expected, actual);
+	}
+
+	private void assertParsable(boolean expected) {
+		assertEquals(expected, actualParsable);
 	}
 	
 	private String toDebugString(PropertyPathSegment segment) {
