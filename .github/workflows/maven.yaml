@@ -17,7 +17,31 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 14
+
+      # Run MDE Workflow
       - name: Build with Maven
         run: mvn clean package --file pom.xml
+
+      # Build and test Java Simulator
       - name: Built Java Simulator
         run: mvn -Dmaven.javadoc.skip=true -B package --file de.unistuttgart.iste.sqa.mpw.hamstersimulator.java/pom.xml
+
+      # Build and test C++ Simulator
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v6
+        with:
+          # Just install vcpkg for now, do not install any ports in this step yet.
+          setupOnly: true
+          # Location of the vcpkg as submodule of the repository.
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+          # Since the cache must be invalidated when content of the vcpkg.json file changes, let's
+          # compute its hash and append this to the computed cache's key.
+          appendedCacheKey: ${{ hashFiles( '**/vcpkg.json' ) }}
+          vcpkgTriplet: ${{ matrix.triplet }}
+      - name: 'Run CMake with Ninja, install dependencies with vcpkg, build with CMake'
+        uses: lukka/run-cmake@v3
+        with:
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeListsTxtPath: '${{ github.workspace }}/de.unistuttgart.iste.sqa.mpw.hamstersimulator.cpp/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          cmakeAppendedArgs: '-GNinja '
