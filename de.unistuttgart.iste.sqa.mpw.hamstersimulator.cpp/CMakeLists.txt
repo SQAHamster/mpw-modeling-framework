@@ -14,6 +14,8 @@ add_library(hamster_core_lib STATIC ${SRCS})
 
 ## Setup GTEST
 
+enable_testing()
+
 ## from: https://github.com/google/googletest/tree/master/googletest#incorporating-into-an-existing-cmake-project
 
 # Download and unpack googletest at configure time

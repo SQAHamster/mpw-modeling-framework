@@ -19,17 +19,21 @@ jobs:
           java-version: 14
 
       # Run MDE Workflow
-      - name: Build with Maven
+      - name: Process MDE workflow with Maven
         run: mvn clean package --file pom.xml
 
       # Build and test Java Simulator
-      - name: Built Java Simulator
+      - name: Build Java Simulator
         run: mvn -Dmaven.javadoc.skip=true -B package --file de.unistuttgart.iste.sqa.mpw.hamstersimulator.java/pom.xml
 
       # Build and test C++ Simulator
-      - name: Setup cmake
+      - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.5
         with:
           cmake-version: '3.17.x'
-      - name: Use cmake
-        run: cmake de.unistuttgart.iste.sqa.mpw.hamstersimulator.cpp
+      - name: Build C++ Simulator
+        run: cmake -S $SIMULATOR_CPP_DIR -B $BUILD_DIR && cmake --build $BUILD_DIR && cd $BUILD_DIR && ctest
+        env:
+          SIMULATOR_CPP_DIR: de.unistuttgart.iste.sqa.mpw.hamstersimulator.cpp
+          BUILD_DIR: $SIMULATOR_CPP_DIR/build
+
