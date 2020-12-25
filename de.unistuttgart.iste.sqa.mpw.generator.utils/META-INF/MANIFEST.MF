@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: de.unistuttgart.iste.sqa.mpw.generator.utils
+Bundle-SymbolicName: de.unistuttgart.iste.sqa.mpw.generator.utils; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.apache.commons.logging,
+ org.apache.log4j;resolution:=optional,
+ org.eclipse.jdt.core;bundle-version="3.5.0",
+ org.eclipse.core.runtime;bundle-version="3.5.0",
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore.xmi;bundle-version="2.5.0",
+ org.eclipse.jface.text;bundle-version="3.5.0",
+ org.eclipse.xpand;bundle-version="1.0.0",
+ org.eclipse.xtend;bundle-version="1.0.0",
+ org.eclipse.xtend.typesystem.emf;bundle-version="1.0.0",
+ org.eclipse.core.resources;bundle-version="3.13.800",
+ org.junit,
+ org.junit.jupiter.api,
+ de.unistuttgart.iste.sqa.mpw.modeling.mpw;bundle-version="1.0.0",
+ de.unistuttgart.iste.sqa.mpw.modeling.transformations;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-14
+Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.generator.utils
+Export-Package: components.generation

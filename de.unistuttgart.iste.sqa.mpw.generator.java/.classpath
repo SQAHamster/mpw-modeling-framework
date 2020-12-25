@@ -10,5 +10,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.modeling.transformations"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.modeling.mpw"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.generator.utils"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -67,4 +67,11 @@
         </pluginManagement>
     </build>
     
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>de.unistuttgart.iste.sqa.mpw.generator.utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>
