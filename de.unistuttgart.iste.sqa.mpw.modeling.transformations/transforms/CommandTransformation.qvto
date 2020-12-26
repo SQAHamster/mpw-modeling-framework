@@ -5,6 +5,7 @@ import util.BasicHelpers;
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
 modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
+modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
 modeltype CommandModel uses "http://www.mpw.uni-stuttgart.de/behavior/command";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
@@ -143,7 +144,7 @@ mapping Henshin::Unit::toInvocation(parentUnit: Henshin::Unit) : CommandModel::I
   	var foundMapping = parentUnit.parameterMappings->any(m|m.target = p);
   	assert(foundMapping != null);
   	if (foundMapping != null) {
-  		result.mappedParameters += foundMapping.source.resolveone(CommandModel::Parameter);
+  		result.mappedParameters += foundMapping.source.resolveone(BaseTypes::Parameter);
   	}
   	
   }
@@ -168,16 +169,16 @@ mapping Henshin::Node::toCreateInstanceCondition() : CommandModel::InstanceCondi
   } endif
 }
 
-mapping Henshin::Parameter::toParameter() : CommandModel::Parameter
+mapping Henshin::Parameter::toParameter() : BaseTypes::Parameter
   when { self.kind = ParameterKind::IN; } {
   name := self.name;
-  type := self.type.toTypeName();  
+  type := self.type;
 }
 
 mapping Henshin::Parameter::toVariableDeclaration() : CommandModel::VariableDeclaration
   when { self.kind = ParameterKind::VAR; } {
-  name := self.name;
-  type := self.type.toTypeName();
+  variableName := self.name;
+  variableType := self.type;
 }
 
 mapping Henshin::Attribute::toAttributeCondition() : CommandModel::AttributeCondition
@@ -364,7 +365,7 @@ query Henshin::Node::resolveInstance() : CommandModel::InstanceCondition {
 
 query ecore::EClassifier::toTypeName() : String {
     if (self.oclAsType(EClass).eSuperTypes->exists(t|t.name = "Stage" or t.name = "Actor")) {
-    	return SourceModelUri.toRole().firstToUpper() + self.name;
+        return SourceModelUri.toRole().firstToUpper() + self.name;
     };
-	return self.name;
+    return self.name;
 }

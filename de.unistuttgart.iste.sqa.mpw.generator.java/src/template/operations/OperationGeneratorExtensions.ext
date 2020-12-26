@@ -1,4 +1,5 @@
 import ecore;
+import behaviorsbase;
 
 extension template::types::EmfGeneratorExtensions;
 extension template::commands::CommandGeneratorExtensions;
@@ -35,4 +36,3 @@ private isMarkedWith(EOperation this, String key) :
 
 toConstructorCall(String constructorTypeName, List[String] parameterPropertyPaths)
     : "new " + constructorTypeName + "(" + parameterPropertyPaths.collect(path|path.toPropertyGetters()).toString(", ") + ")";
-    

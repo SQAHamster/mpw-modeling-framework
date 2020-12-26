@@ -3,6 +3,7 @@ import types.EmfHelpers;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
+modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
 modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
 modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
@@ -22,6 +23,9 @@ transformation RoleTransformation(inout ecore: Ecore);
 configuration property Queries: List(QueryModel::Module);
 configuration property Commands: List(CommandModel::Transformation);
 
+/* track relations between cloned commands which are embedded into the EOperations */
+property clonedCommandsMap: Dict(CommandModel::Transformation, CommandModel::Transformation);
+
 main() {
     ecore.rootObjects()[EPackage]->map transformClasses();
 }
@@ -29,6 +33,7 @@ main() {
 mapping Ecore::EPackage::transformClasses() {
   var classes := self.eClassifiers[EClass];
   classes[isRelevantType()]->map transformToRoles();
+  self->map replaceRoleReferences();
 }
 
 helper Ecore::EClass::isRelevantType() : Boolean {
@@ -94,16 +99,16 @@ helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
 
 mapping QueryModel::Query::transformQueryToOperation() : EOperation {
     name := self.name;
-    eType := self.eType;
+    eType := self.type;
     if (self.isCollection) {
         upperBound := -1; 
     };
     eParameters := self.parameters->map toEParameter();
 }
 
-mapping QueryModel::Parameter::toEParameter() : EParameter {
+mapping BaseTypes::Parameter::toEParameter() : EParameter {
     name := self.name;
-    eType := self.eType;
+    eType := self.type;
 }
 
 helper ecore::EClass::embedQueriesInOperations(queries: Set(QueryModel::Query)) {
@@ -155,7 +160,9 @@ mapping CommandModel::Transformation::transformCommandToOperation() : EOperation
     var annotation := "command".toMarkerAnnotation();
     eAnnotations += annotation;
     
-    annotation.contents += self.oclAsType(ecore::EObject).deepclone();
+    var clonedCommand := self.oclAsType(ecore::EObject).deepclone();
+    annotation.contents += clonedCommand;
+    clonedCommandsMap->put(clonedCommand.oclAsType(CommandModel::Transformation), self);
 }
 
 mapping EStructuralFeature::transformFeatureToGetterOperation() : EOperation {
@@ -171,4 +178,33 @@ query EOperation::isPropertyGetter() : Boolean {
 
 query EOperation::getSimplePropertyGetterName() : String {
     return "get" + self.name.firstToUpper();
+}
+
+/*
+ * Ensure that each command does reference the roled-type of a Stage / Actor, since they are still bound to the "Concrete" ones.
+ */
+mapping inout Ecore::EPackage::replaceRoleReferences() {
+    self.allSubobjectsOfType(CommandModel::Transformation)->map replaceRoleReferencesInCommand();
+}
+
+mapping inout CommandModel::Transformation::replaceRoleReferencesInCommand() {
+	self.allSubobjectsOfKind(BaseTypes::Parameter)->replaceRoleReferencesInParameter(roleName);
+	self.allSubobjectsOfKind(CommandModel::VariableDeclaration)->replaceRoleReferencesInVariableDeclaration(roleName);
+	
+	clonedCommandsMap->get(self)->map replaceRoleReferencesInCommand();
+}
+
+mapping inout BaseTypes::Parameter::replaceRoleReferencesInParameter(roleName: String) {
+    self.type := self.type.toRoledType(roleName);
+}
+
+mapping inout CommandModel::VariableDeclaration::replaceRoleReferencesInVariableDeclaration(roleName: String) {
+    self.variableType := self.variableType.toRoledType(roleName);
+}
+
+query ecore::EClassifier::toRoledType(roleName: String) : ecore::EClassifier {
+    if (self.oclAsType(EClass).eSuperTypes->exists(t|t.name = "Stage" or t.name = "Actor")) {
+        return findClassifierForName(roleName.firstToUpper() + self.name);
+    };
+    return self;
 }

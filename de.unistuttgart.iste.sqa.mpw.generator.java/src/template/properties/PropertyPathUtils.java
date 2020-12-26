@@ -50,5 +50,21 @@ public class PropertyPathUtils {
 		}
 		return "get" + s.substring(0, 1).toUpperCase() + s.substring(1) + "()";
 	}
+
+    /*
+	public static String toPropertyGetters(String string, List<ContextVariable> variables) {
+		var parameters = variables.stream()
+		                          .map(v -> toETypedElement(v))
+		                          .collect(Collectors.toList());
+		
+		return PropertyPathReplacer.replacePropertyPaths(string, parameters, PropertyPathReplacer.JAVA_CONFIG);
+	}
 	
+	private static ETypedElement toETypedElement(ContextVariable variable) {
+		EParameter parameter = EcorePackage.eINSTANCE.getEcoreFactory().createEParameter();
+		parameter.setName(variable.getName());
+		parameter.setEType(variable.getType());
+		return parameter;
+	}
+     */
 }

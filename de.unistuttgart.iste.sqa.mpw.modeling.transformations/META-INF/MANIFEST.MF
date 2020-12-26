@@ -13,7 +13,10 @@ Require-Bundle: org.eclipse.core.runtime,
  de.unistuttgart.iste.sqa.mpw.modeling.querydsl;bundle-version="1.0.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-14
-Export-Package: commandBehavior,
+Export-Package: behaviorsbase,
+ behaviorsbase.impl,
+ behaviorsbase.util,
+ commandBehavior,
  commandBehavior.impl,
  commandBehavior.util,
  generationAnnotations,

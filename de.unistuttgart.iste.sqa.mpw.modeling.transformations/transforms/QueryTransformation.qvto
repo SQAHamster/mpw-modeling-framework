@@ -2,6 +2,7 @@ import queries.ExpressionTransformation;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
+modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
 modeltype Input uses "http://www.mpw.uni-stuttgart.de/transformation/inputs";
 modeltype QueryInput uses "http://www.mpw.uni-stuttgart.de/querydsl";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
@@ -52,17 +53,17 @@ helper String::trimMarkers() : String {
 
 mapping QueryInput::Query::toElement() : QueryModel::Query inherits QueryInput::Element::toElementBase {
     name := self.name;
-	eType := result.mainExpression.eType;
+	type := result.mainExpression.type;
 	internal := self.internal;
-	defaultValueLiteral := result.eType.defaultValue.toString();
+	defaultValueLiteral := result.type.defaultValue.toString();
 	if (self.parameterList != null) {
 		parameters := self.parameterList.parameters->map toParameter();
 	};
 }
 
-mapping QueryInput::Parameter::toParameter() : QueryModel::Parameter {
+mapping QueryInput::Parameter::toParameter() : BaseTypes::Parameter {
     name := self.variableName;
-    eType := findClassifierForName(self.typeName);
+    type := findClassifierForName(self.typeName);
 }
 
 mapping QueryInput::CommandConstraint::toCommandConstraintBase() : QueryModel::CommandConstraint inherits QueryInput::Element::toElementBase {

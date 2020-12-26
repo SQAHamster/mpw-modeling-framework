@@ -29,6 +29,14 @@
             class="queryBehavior.QueryPackage"
             genModel="model/transformations.genmodel"/>
    </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated transformations -->
+      <package
+            uri="http://www.mpw.uni-stuttgart.de/behavior/basetypes"
+            class="behaviorsbase.BehaviorsbasePackage"
+            genModel="model/transformations.genmodel"/>
+   </extension>
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated inputs -->
       <package

@@ -2,6 +2,7 @@ import types.AnnotationHelpers;
 import types.EmfHelpers;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
 modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
 modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
@@ -120,9 +121,9 @@ mapping inout EOperation::createInitGameByStageParameterAssignment(facadeClass: 
     }
 }
 
-abstract mapping CommandModel::Parameter::toOperationParameterBase() : EParameter {
+abstract mapping BaseTypes::Parameter::toOperationParameterBase() : EParameter {
     name := self.name;
-    eType := findClassifierForName(self.type);
+    eType := self.type;
     
     // facades do rely on other facade types, e.g. Hamster -> Territory instead of GameTerritory
     if (eType.isMarkedWithAnnotation("role")) {
@@ -130,18 +131,18 @@ abstract mapping CommandModel::Parameter::toOperationParameterBase() : EParamete
     }
 }
 
-mapping CommandModel::Parameter::toCommandCallParameterMapping() : EStringToStringMapEntry {
+mapping BaseTypes::Parameter::toCommandCallParameterMapping() : EStringToStringMapEntry {
     key := self.name;
     value := self.name;
-    var eType := findClassifierForName(self.type);
+    var eType := self.type;
     if (eType.isMarkedWithAnnotation("role")) {
         var baseName := eType.getBaseName();
         value := value + ".internal" + baseName;
     }
 }
 
-mapping CommandModel::Parameter::toOperationParameter() : EParameter merges CommandModel::Parameter::toOperationParameterBase {}
-mapping CommandModel::Parameter::toConstructorParameter() : EParameter merges CommandModel::Parameter::toOperationParameterBase {}
+mapping BaseTypes::Parameter::toOperationParameter() : EParameter merges BaseTypes::Parameter::toOperationParameterBase {}
+mapping BaseTypes::Parameter::toConstructorParameter() : EParameter merges BaseTypes::Parameter::toOperationParameterBase {}
 
 /**
  * Mapping: create delegates for queries belonging to the facade class
@@ -156,7 +157,7 @@ mapping inout EClass::createQueries() {
 
 mapping Query::toQueryOperation(facadeClass: EClass) : EOperation {
     name := self.name;
-    eType := self.eType;
+    eType := self.type;
     eParameters := self.parameters->map toEParameter();
     eAnnotations += object QueryCallAnnotation { 
         _query := self;
@@ -165,9 +166,9 @@ mapping Query::toQueryOperation(facadeClass: EClass) : EOperation {
     eAnnotations += toAnnotation("documentation", self.documentation);
 }
 
-mapping QueryModel::Parameter::toEParameter() : EParameter {
+mapping BaseTypes::Parameter::toEParameter() : EParameter {
     name := self.name;
-    eType := self.eType;
+    eType := self.type;
 }
 
 query EClassifier::getConcreteClass() : EClass {

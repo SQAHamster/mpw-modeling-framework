@@ -16,10 +16,8 @@
     </genEnums>
     <genClasses ecoreClass="CommandBehaviors.ecore#//Module">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Module/transformations"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Module/name"/>
     </genClasses>
     <genClasses ecoreClass="CommandBehaviors.ecore#//Transformation">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Transformation/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Transformation/units"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Transformation/mainUnit"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Transformation/roleName"/>
@@ -30,7 +28,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Transformation/isInit"/>
     </genClasses>
     <genClasses image="false" ecoreClass="CommandBehaviors.ecore#//Unit">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Unit/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Unit/parameters"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Unit/mainUnit"/>
     </genClasses>
@@ -78,8 +75,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableAssignment/value"/>
     </genClasses>
     <genClasses ecoreClass="CommandBehaviors.ecore#//VariableDeclaration">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableDeclaration/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableDeclaration/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableDeclaration/variableName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//VariableDeclaration/variableType"/>
     </genClasses>
     <genClasses ecoreClass="CommandBehaviors.ecore#//SequentialUnit">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//SequentialUnit/targetInvocations"/>
@@ -91,10 +88,6 @@
     <genClasses ecoreClass="CommandBehaviors.ecore#//Invocation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Invocation/targetMethodName"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Invocation/mappedParameters"/>
-    </genClasses>
-    <genClasses ecoreClass="CommandBehaviors.ecore#//Parameter">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Parameter/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Parameter/name"/>
     </genClasses>
     <genClasses ecoreClass="CommandBehaviors.ecore#//ConditionalUnit">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//ConditionalUnit/conditions"/>
@@ -213,16 +206,10 @@
       <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CollectionMethodType/TYPE_SELECT"/>
       <genEnumLiterals ecoreEnumLiteral="QueryBehaviors.ecore#//CollectionMethodType/AT"/>
     </genEnums>
-    <genClasses image="false" ecoreClass="QueryBehaviors.ecore#//TypedElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//TypedElement/isCollection"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//TypedElement/eType"/>
-    </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//Module">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//Module/elements"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Module/name"/>
     </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//ExpressionalElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//ExpressionalElement/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//ExpressionalElement/mainExpression"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//ExpressionalElement/contextClass"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//ExpressionalElement/documentation"/>
@@ -231,9 +218,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Query/defaultValueLiteral"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//Query/parameters"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Query/internal"/>
-    </genClasses>
-    <genClasses ecoreClass="QueryBehaviors.ecore#//Parameter">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute QueryBehaviors.ecore#//Parameter/name"/>
     </genClasses>
     <genClasses ecoreClass="QueryBehaviors.ecore#//Constraint"/>
     <genClasses ecoreClass="QueryBehaviors.ecore#//CommandConstraint">
@@ -303,5 +287,15 @@
     <genClasses ecoreClass="QueryBehaviors.ecore#//VariableUsageStatement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference QueryBehaviors.ecore#//VariableUsageStatement/variableReference"/>
     </genClasses>
+  </genPackages>
+  <genPackages prefix="Behaviorsbase" ecorePackage="BehaviorsBaseTypes.ecore#/">
+    <genClasses ecoreClass="BehaviorsBaseTypes.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BehaviorsBaseTypes.ecore#//NamedElement/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="BehaviorsBaseTypes.ecore#//TypedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BehaviorsBaseTypes.ecore#//TypedElement/isCollection"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BehaviorsBaseTypes.ecore#//TypedElement/type"/>
+    </genClasses>
+    <genClasses ecoreClass="BehaviorsBaseTypes.ecore#//Parameter"/>
   </genPackages>
 </genmodel:GenModel>

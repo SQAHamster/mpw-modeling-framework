@@ -24,7 +24,7 @@
             «ENDIF-»
 			«IF mainUnit != null»
 			«FOREACH mainUnit.parameters AS p»
-			private final «p.type.toJavaType()» «p.name»;
+			private final «p.type.name.toJavaType()» «p.name»;
 			«ENDFOREACH»
 			«ENDIF»
 		
@@ -55,7 +55,7 @@
             public GameLog gameLog;
 		    «ENDIF-»
             «FOREACH mainUnit.parameters AS p»
-            public «p.type.toJavaType()» «p.name»;
+            public «p.type.name.toJavaType()» «p.name»;
             «ENDFOREACH»
         }
     «ENDFILE»
@@ -63,7 +63,7 @@
 
 «DEFINE UnitExpand FOR Unit»
     «IF mainUnit»@Override«ENDIF-»
-	«getVisibility()» void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
+	«getVisibility()» void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
     «IF mainUnit-»
         «EXPAND PreconditionsDefinition FOR this»
         «EXPAND OldValueVariablesDefinition FOR this»
@@ -145,8 +145,8 @@
 «ENDDEFINE»
 
 «DEFINE VariableDefinition FOR VariableDeclaration»
-    // new variable «this.name»: «this.type»
-    «this.type.toJavaType()» «this.name»;
+    // new variable «this.variableName»: «this.variableType.name»
+    «this.variableType.name.toJavaType()» «this.variableName»;
 «ENDDEFINE»
 
 «DEFINE ReferenceDefinition FOR ReferenceCondition»

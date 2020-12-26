@@ -39,21 +39,21 @@ abstract mapping Input::Statement::toStatementBase() : QueryModel::Statement {
     }
     end {
         result.debugName := self.toDebugName();
-        currentExpressionTypes->put(self.parentExpression(), result.eType);
+        currentExpressionTypes->put(self.parentExpression(), result.type);
         currentExpressionTypeCollectionInfo->put(self.parentExpression(), result.isCollection);
     }
 }
 
 mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement merges Input::Statement::toStatementBase
     when { self.target = "self"; } {
-    eType := self.parentContext().className.resolveone(ecore::EClass);
+    type := self.parentContext().className.resolveone(ecore::EClass);
     selfAlias := self.determineSelfAlias();
 }
 
 mapping Input::Statement::toParameterUsageStatement() : QueryModel::ParameterUsageStatement merges Input::Statement::toStatementBase
     when { self.parameterList() != null and self.parameterList().parameters->exists(p|p.variableName = self.target) } {
     var parameter := self.parameterList().parameters->any(p|p.variableName = self.target);
-    eType := findClassifierForName(parameter.typeName);
+    type := findClassifierForName(parameter.typeName);
     parameterName := parameter.variableName;
     isCollection := false;
 }
@@ -71,7 +71,7 @@ mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement merges
     var inputQuery := getAllQueries()->any(q|isStatementMatchingQuery(self, q));
     _query := inputQuery.resolveone(QueryModel::Query);
     assert(_query != null) with log('query ' + inputQuery.name + ' could not be resolved');
-    eType := _query.eType;
+    type := _query.type;
     parameterNames := self.methodCall.parameters;
 }
 
@@ -81,7 +81,7 @@ mapping Input::Statement::toFeatureStatement() : QueryModel::FeatureStatement me
     
     feature := eClass.eAllStructuralFeatures->any(f|f.name = self.target);
     isCollection := feature.upperBound = -1;
-    eType := feature.eType;
+    type := feature.eType;
 }
 
 mapping Input::Statement::toCollectionMethodStatement() : QueryModel::CollectionMethodStatement merges Input::Statement::toStatementBase
@@ -94,31 +94,31 @@ mapping Input::Statement::toCollectionMethodStatement() : QueryModel::Collection
     
     switch {
         case (isSimple and simpleCollectionMethod.method = "notEmpty") {
-            eType := ecore::EBoolean.oclAsType(ecore::EClassifier);
+            type := ecore::EBoolean.oclAsType(ecore::EClassifier);
             isCollection := false;
             methodType := QueryModel::CollectionMethodType::NOT_EMPTY;
         }
         case (isSimple and simpleCollectionMethod.method = "isEmpty") {
-            eType := ecore::EBoolean.oclAsType(ecore::EClassifier);
+            type := ecore::EBoolean.oclAsType(ecore::EClassifier);
             isCollection := false;
             methodType := QueryModel::CollectionMethodType::IS_EMPTY;
         }
         case (isSimple and simpleCollectionMethod.method = "size") {
-            eType := findClassifierForName(parametrizedCollectionMethod.typeSelect);
-            eType := ecore::EInt.oclAsType(ecore::EClassifier);
+            type := findClassifierForName(parametrizedCollectionMethod.typeSelect);
+            type := ecore::EInt.oclAsType(ecore::EClassifier);
             isCollection := false;
             methodType := QueryModel::CollectionMethodType::SIZE;
         }
         case (not isSimple and parametrizedCollectionMethod.typeSelect != null) {
-            eType := findClassifierForName(parametrizedCollectionMethod.typeSelect);
+            type := findClassifierForName(parametrizedCollectionMethod.typeSelect);
             isCollection := true;
             methodType := QueryModel::CollectionMethodType::TYPE_SELECT;
-            parameters += eType.oclAsType(ecore::EObject);
+            parameters += type.oclAsType(ecore::EObject);
         }
         case (not isSimple and parametrizedCollectionMethod.indexExpression != null) {
             methodType := QueryModel::CollectionMethodType::AT;
             isCollection := false;
-            eType := self.getCurrentExpressionType();
+            type := self.getCurrentExpressionType();
             var expression := parametrizedCollectionMethod.indexExpression.resolveone(QueryModel::Expression).oclAsType(EObject);
             parameters += expression;
             contents += expression; // ensure containment
@@ -132,7 +132,7 @@ mapping Input::Statement::toCollectionMethodStatement() : QueryModel::Collection
 mapping Input::Statement::toEnumLiteralStatement() : QueryModel::EnumLiteralStatement merges Input::Statement::toStatementBase
     when { self.isEnumLiteral(); } {
     enumLiteral := EntityModels->collect(m|m.allSubobjectsOfType(ecore::EEnumLiteral))->flatten()->any(l|l.name = self.target);
-    eType := enumLiteral.container().oclAsType(ecore::EEnum);
+    type := enumLiteral.container().oclAsType(ecore::EEnum);
 }
 
 query Input::Statement::isBasedOnQuery() : Boolean {

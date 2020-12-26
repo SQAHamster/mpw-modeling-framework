@@ -6,7 +6,7 @@
 «DEFINE QueryDefinitions FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
 	  @Override
-	  public «q.eType.name.toJavaType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.eType.name.toJavaType()» «p.name»«ENDFOREACH») {
+	  public «q.type.name.toJavaType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH») {
 	      try {
   	          return «EXPAND ExpressionDefinition FOR q.mainExpression-»;
 	      } catch (Exception e) {
@@ -19,7 +19,7 @@
 «DEFINE ExpressionDefinition FOR Expression-»«ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR VariableExpression-»
-    «valueExpression.eType.name.toJavaType()» «variableName» = «EXPAND ExpressionDefinition FOR valueExpression»;
+    «valueExpression.type.name.toJavaType()» «variableName» = «EXPAND ExpressionDefinition FOR valueExpression»;
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR NotExpression-»
