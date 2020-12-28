@@ -47,6 +47,32 @@ class QueryDslParsingTest {
     }
     
     @Test
+    def void givenQueryWithTwoParameters_whenParse_thenQueryWithParametersIsParsed() {
+        val result = parseHelper.parse('''
+            context Hamster
+            query myQuery(a: EString, b: EInt): true;
+        ''')
+        assertModel(result, '''
+            ClassContext:
+              className: Hamster
+              elements: [
+                Query myQuery:
+                  internal: false
+                  «simpleExpression»
+                  parameterList: ParameterList:
+                    parameters: [
+                      Parameter:
+                        variableName: a
+                        typeName: EString
+                      Parameter:
+                        variableName: b
+                        typeName: EInt
+                    ]
+              ]
+        ''')
+    }
+    
+    @Test
     def void givenTwoSimpleQuerys_whenParse_thenBothQueriesAreParsed() {
         val result = parseHelper.parse('''
             context Hamster
