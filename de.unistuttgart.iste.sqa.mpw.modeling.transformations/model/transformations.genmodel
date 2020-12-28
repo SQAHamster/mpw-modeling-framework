@@ -43,12 +43,13 @@
     <genClasses ecoreClass="CommandBehaviors.ecore#//AttributeCondition">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//AttributeCondition/instance"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//AttributeCondition/attributeName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//AttributeCondition/attributeValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//AttributeCondition/attributeValueLiteral"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//AttributeCondition/isCreate"/>
     </genClasses>
     <genClasses ecoreClass="CommandBehaviors.ecore#//InstanceCondition">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//InstanceCondition/variableName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//InstanceCondition/typeName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//InstanceCondition/instanceType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//InstanceCondition/isCreate"/>
     </genClasses>
     <genClasses image="false" ecoreClass="CommandBehaviors.ecore#//ReferenceCondition">
@@ -72,7 +73,8 @@
     </genClasses>
     <genClasses ecoreClass="CommandBehaviors.ecore#//VariableAssignment">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableAssignment/variableName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableAssignment/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//VariableAssignment/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableAssignment/debugValueString"/>
     </genClasses>
     <genClasses ecoreClass="CommandBehaviors.ecore#//VariableDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//VariableDeclaration/variableName"/>
@@ -93,7 +95,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//ConditionalUnit/conditions"/>
     </genClasses>
     <genClasses ecoreClass="CommandBehaviors.ecore#//Condition">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Condition/condition"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Condition/condition"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Condition/unit"/>
     </genClasses>
   </genPackages>

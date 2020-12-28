@@ -190,6 +190,7 @@ mapping inout Ecore::EPackage::replaceRoleReferences() {
 mapping inout CommandModel::Transformation::replaceRoleReferencesInCommand() {
 	self.allSubobjectsOfKind(BaseTypes::Parameter)->replaceRoleReferencesInParameter(roleName);
 	self.allSubobjectsOfKind(CommandModel::VariableDeclaration)->replaceRoleReferencesInVariableDeclaration(roleName);
+	self.allSubobjectsOfKind(CommandModel::InstanceCondition)->replaceRoleReferencesInInstanceCondition(roleName);
 	
 	clonedCommandsMap->get(self)->map replaceRoleReferencesInCommand();
 }
@@ -200,6 +201,10 @@ mapping inout BaseTypes::Parameter::replaceRoleReferencesInParameter(roleName: S
 
 mapping inout CommandModel::VariableDeclaration::replaceRoleReferencesInVariableDeclaration(roleName: String) {
     self.variableType := self.variableType.toRoledType(roleName);
+}
+
+mapping inout CommandModel::InstanceCondition::replaceRoleReferencesInInstanceCondition(roleName: String) {
+    self.instanceType := self.instanceType.toRoledType(roleName).oclAsType(EClass);
 }
 
 query ecore::EClassifier::toRoledType(roleName: String) : ecore::EClassifier {

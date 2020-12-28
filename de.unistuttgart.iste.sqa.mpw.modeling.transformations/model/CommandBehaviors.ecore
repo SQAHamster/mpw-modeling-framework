@@ -6,7 +6,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="transformations" upperBound="-1"
         eType="#//Transformation" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Transformation" eSuperTypes="BehaviorsBaseTypes.ecore#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Transformation" eSuperTypes="BehaviorsBaseTypes.ecore#//NamedElement http://www.eclipse.org/emf/2002/Ecore#//EModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="units" upperBound="-1"
         eType="#//Unit" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mainUnit" lowerBound="1"
@@ -50,16 +50,18 @@
         eType="#//InstanceCondition"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeValue" lowerBound="1"
+        eType="ecore:EClass QueryBehaviors.ecore#//Expression" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeValueLiteral"
-        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isCreate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InstanceCondition">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instanceType" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isCreate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
@@ -97,7 +99,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="VariableAssignment">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass QueryBehaviors.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debugValueString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VariableDeclaration">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"
@@ -125,8 +129,8 @@
         eType="#//Condition" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Condition">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+        eType="ecore:EClass QueryBehaviors.ecore#//Expression" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="unit" lowerBound="1" eType="#//Unit"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -13,19 +13,20 @@ Require-Bundle: org.eclipse.core.runtime,
  de.unistuttgart.iste.sqa.mpw.modeling.querydsl;bundle-version="1.0.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-14
-Export-Package: behaviorsbase,
+Export-Package: behaviorInputs,
+ behaviorInputs.impl,
+ behaviorInputs.util,
+ behaviorsbase,
  behaviorsbase.impl,
  behaviorsbase.util,
  commandBehavior,
  commandBehavior.impl,
  commandBehavior.util,
+ converter,
  generationAnnotations,
  generationAnnotations.impl,
  generationAnnotations.util,
  queryBehavior,
  queryBehavior.impl,
- queryBehavior.util,
- behaviorInputs,
- behaviorInputs.impl,
- behaviorInputs.util
+ queryBehavior.util
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.transformations

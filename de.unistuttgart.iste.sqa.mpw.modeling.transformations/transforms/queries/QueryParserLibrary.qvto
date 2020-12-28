@@ -1,0 +1,47 @@
+import converter.StringToQueryDslConverter;
+import QueryTransformation;
+import queries.CreateRootParameterListTransformation;
+
+/**
+  *  Library used to ad-hoc parse query expressions used in several situations where expressions are used, e.g. in command attribute conditions. 
+  */
+
+library QueryParserLibrary();
+
+modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+    
+modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
+modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
+modeltype QueryDsl uses "http://www.mpw.uni-stuttgart.de/querydsl";
+modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
+
+query parseQuery(string: String, contextClass: EClassifier) : QueryModel::Query {
+	return parseQueryWithParameters(string, contextClass, List{});
+}
+
+query parseQueryWithParameters(string: String, contextClass: EClassifier, parameters: List(QueryDsl::Parameter)) : QueryModel::Query {
+    var queryInputContext := toQuery(string, contextClass.name.toString(), parameters).oclAsType(QueryDsl::Context);
+    assert (queryInputContext != null);
+    var queryInput := queryInputContext.elements->first().oclAsType(QueryDsl::Query);
+    assert (queryInput != null);
+    return queryInput.map toElement();
+}
+
+query parseQueryWithHenshinParameters(string: String, contextClass: EClassifier, parameters: OrderedSet(Henshin::Parameter)) : QueryModel::Query {
+    var dummyModelExtent := QueryDsl.createEmptyModel().oclAsType(QueryDsl);
+    new CreateRootParameterListTransformation(dummyModelExtent).transform();
+    var dummyParameterList := dummyModelExtent.rootObjects()->asList()->first().oclAsType(QueryDsl::ParameterList);
+
+    var queryDslParameters := parameters->reject(name = "self")->collect(p|p.map toQueryDslParameter());
+    var resultQuery := parseQueryWithParameters(string, contextClass, queryDslParameters);
+    queryDslParameters->forEach (p) {
+        // avoid that the temporary parameters are orphan
+    	dummyParameterList.parameters += p;
+    };
+    return resultQuery;
+}
+
+mapping Henshin::Parameter::toQueryDslParameter() : QueryDsl::Parameter {
+	variableName := self.name;
+	typeName := self.type.name;
+}

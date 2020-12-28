@@ -1,9 +1,11 @@
 import commands.RuleReferenceSorter;
+import queries.QueryParserLibrary;
+import types.AnnotationHelpers;
 import types.EmfHelpers;
 import util.BasicHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
-	
+
 modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
 modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
 modeltype CommandModel uses "http://www.mpw.uni-stuttgart.de/behavior/command";
@@ -151,7 +153,7 @@ mapping Henshin::Unit::toInvocation(parentUnit: Henshin::Unit) : CommandModel::I
 }
 
 mapping Henshin::Node::toInstanceCondition() : CommandModel::InstanceCondition {
-  typeName := self.type.toTypeName();
+  instanceType := self.type;
   variableName := self.name;
   if variableName = null then {
   	variableName := "o" + number.toString();
@@ -160,7 +162,7 @@ mapping Henshin::Node::toInstanceCondition() : CommandModel::InstanceCondition {
 }
 
 mapping Henshin::Node::toCreateInstanceCondition() : CommandModel::InstanceCondition {
-  typeName := self.type.toTypeName();
+  instanceType := self.type;
   variableName := self.name;
   isCreate := true;
   if variableName = null then {
@@ -185,8 +187,19 @@ mapping Henshin::Attribute::toAttributeCondition() : CommandModel::AttributeCond
     when { not self.isVariableAssignment(); } {
     var inName = self.type.name;
     
+    var rootModule := self.root().resolveone(CommandModel::Transformation);
+    var parameters := self.getGraph().getRule().parameters;
+    var parsedQuery := parseQueryWithHenshinParameters(self.value.toEffectiveValueLiteral(), self.node.type, parameters);
+    
+    // embed query as content into rootModule, since only the expression is directly used
+    rootModule.eAnnotations += object EAnnotation {
+        contents += parsedQuery.oclAsType(EObject);
+    };
+    
     attributeName := inName;
     attributeValueLiteral := self.value.toEffectiveValueLiteral();
+    attributeValue := parsedQuery.mainExpression;
+    
     if (self.type.eType.name = "EBoolean") {
     	attributeName := "is" + inName.substring(1, 1).toUpper();
     	if (inName.size() >= 2) {
@@ -199,7 +212,15 @@ mapping Henshin::Attribute::toAttributeCondition() : CommandModel::AttributeCond
 mapping Henshin::Attribute::toVariableAssignment() : CommandModel::VariableAssignment
     when { self.isVariableAssignment(); } {
     variableName := self.value;
-    value := self.node.resolveone(CommandModel::InstanceCondition).variableName + "." + self.type.name;
+    debugValueString := self.node.resolveone(CommandModel::InstanceCondition).variableName + "." + self.type.name;
+    value := object StatementsExpression {
+        statements += object ParameterUsageStatement { // TODO refactor to semantically better match the string-based variable usage
+            parameterName := self.node.resolveone(CommandModel::InstanceCondition).variableName;
+    	};
+    	statements += object FeatureStatement {
+            feature := self.type;
+        };
+    };
 }
 
 query Henshin::Attribute::isVariableAssignment() : Boolean {
@@ -208,6 +229,9 @@ query Henshin::Attribute::isVariableAssignment() : Boolean {
   return self.node.graph = rule.lhs and rule.parameters->exists(p|p.name = attributeValueLiteral);
 }
 
+/*
+ * henshin requires quotes for Enum Literals, so remove them since they are not needed for further processing
+ */
 query String::toEffectiveValueLiteral() : EString {
 	return self.replaceAll("\"(WEST|NORTH|SOUTH|EAST)\"", "$1");
 }
@@ -215,7 +239,6 @@ query String::toEffectiveValueLiteral() : EString {
 mapping Henshin::Attribute::toCreateAttributeCondition() : CommandModel::AttributeCondition merges Henshin::Attribute::toAttributeCondition {
     isCreate := true;
 }
-
 
 mapping Henshin::Edge::toReferenceCondition() : CommandModel::SingleReferenceCondition {
   referenceName := self.type.name;
@@ -328,10 +351,40 @@ helper createConditionalMainUnitForRules(inout m: CommandModel::Transformation) 
 
 mapping CommandModel::Rule::toCondition() : CommandModel::Condition {
   unit := self;
+  condition := self.createAttributeConditionExpression();
+}
+
+helper CommandModel::Rule::createAttributeConditionExpression() : QueryModel::Expression {
+	var attributeConditions := self.attributeConditions->select(c|c.instance = self.thisInstance);
+    assert(attributeConditions->notEmpty());
   
-  var attributeConditions := self.attributeConditions->select(c|c.instance = self.thisInstance);
-  assert(attributeConditions->notEmpty());
-  condition := attributeConditions->collect(c|"thisInstance." + c.attributeName + "==" + c.attributeValueLiteral)->joinToString(" && ");
+    return attributeConditions->iterate(iter : CommandModel::AttributeCondition;
+        acc : Expression = null |
+        if (acc = null) then
+        	iter.map toCompareExpression()
+        else
+        	iter.toAndExpressionForAccumulator(acc)
+        endif
+    );
+}
+
+helper CommandModel::AttributeCondition::toAndExpressionForAccumulator(acc : Expression) : QueryModel::AndExpression {
+    return object AndExpression {
+        lhs := acc;
+        rhs := self.map toCompareExpression();
+    };
+}
+
+mapping CommandModel::AttributeCondition::toCompareExpression() : QueryModel::CompareExpression {
+    lhs := object QueryModel::StatementsExpression {
+    	statements += object SelfStatement {
+    		selfAlias := "thisInstance";
+    	};
+    	statements += object FeatureStatement {
+    		feature := self.instance.instanceType.getEStructuralFeature(self.attributeName); 
+    	};
+    };
+    rhs := self.attributeValue.deepclone();
 }
 
 helper CommandModel::Transformation::obtainConstraints() : List(QueryModel::Constraint) {
@@ -361,11 +414,4 @@ query Henshin::Node::resolveInstance() : CommandModel::InstanceCondition {
     };
 
     return res;
-}
-
-query ecore::EClassifier::toTypeName() : String {
-    if (self.oclAsType(EClass).eSuperTypes->exists(t|t.name = "Stage" or t.name = "Actor")) {
-        return SourceModelUri.toRole().firstToUpper() + self.name;
-    };
-    return self.name;
 }

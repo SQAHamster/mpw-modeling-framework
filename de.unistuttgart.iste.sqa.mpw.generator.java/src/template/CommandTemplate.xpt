@@ -83,7 +83,7 @@
 
 «DEFINE UnitExpandBody FOR ConditionalUnit»
     if«FOREACH conditions AS c SEPARATOR " else if "-»
-    («c.condition.toPropertyGetters()») {
+    («EXPAND template::QueriesTemplate::ExpressionDefinition FOR c.condition») {
 	«EXPAND UnitInvokeExpand FOR c.unit»
 	}
     «ENDFOREACH»
@@ -134,13 +134,13 @@
 «ENDDEFINE»
 
 «DEFINE ThisInstanceDefinition FOR InstanceCondition»
-    // this: «this.variableName»:«this.typeName»
+    // this: «this.variableName»:«this.instanceType.name»
 «ENDDEFINE»
 
 «DEFINE InstanceDefinition FOR InstanceCondition»
 	«IF isCreate»
-		// new instance: «this.variableName»:«this.typeName»
-    	«this.typeName» «this.variableName» = new «this.typeName»();
+		// new instance: «this.variableName»:«this.instanceType.name»
+    	«this.instanceType.name» «this.variableName» = new «this.instanceType.name»();
 	«ENDIF»
 «ENDDEFINE»
 
@@ -159,46 +159,46 @@
 
 «DEFINE SingleReferenceDefinition FOR SingleReferenceCondition»
 	«IF !this.isCreate && !this.isForbid»
-		// new variable from reference: «this.source.variableName»:«this.source.typeName» -> «this.referenceName» -> «this.target.variableName»:«this.target.typeName»
-		«this.target.typeName» «this.target.variableName» = «this.source.variableName».«getter(this.referenceName)»();
+		// new variable from reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
+		«this.target.instanceType.name» «this.target.variableName» = «this.source.variableName».«getter(this.referenceName)»();
 		assertInstanceNotNull("«this.source.variableName».«this.referenceName»", «this.target.variableName»);
 	«ENDIF»
 «ENDDEFINE»
 
 «DEFINE ManyReferenceDefinition FOR ManyReferenceCondition»
 	«IF !this.isCreate»
-		// find new variable from many-reference: «this.source.variableName»:«this.source.typeName» -> «this.referenceName» -> «this.target.variableName»:«this.target.typeName»
+		// find new variable from many-reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
 		«LET (Rule)this.eContainer AS rule»
-	    «this.target.typeName» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.variableName»);
+	    «this.target.instanceType.name» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.variableName»);
 	    «ENDLET»
 	«ENDIF»
 «ENDDEFINE»
 
 «DEFINE VariableAssignmentDefinition FOR VariableAssignment»
-    «variableName» = «value.toPropertyGetters()»;
+    «variableName» = «EXPAND template::QueriesTemplate::ExpressionDefinition FOR value»;
 «ENDDEFINE»
 
 «DEFINE AttributeDefinition FOR AttributeCondition»
 	«IF this.isCreate»
-	    «IF instance.typeName.isValueType()-»
+	    «IF instance.instanceType.isValueType()-»
     	    // set attribute condition «instance.variableName».«attributeName» := «attributeValueLiteral»
-	        «instance.variableName».«attributeName.setter()»(«attributeValueLiteral.toPropertyGetters()»);
+	        «instance.variableName».«attributeName.setter()»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
 	    «ELSE»
 	        // set value type field «instance.variableName».«attributeName» := «attributeValueLiteral»
-	        «commandSetter()»(«instance.variableName», "«attributeName»", «instance.variableName».«attributeName.getter()»(), «attributeValueLiteral.toPropertyGetters()»);
+	        «commandSetter()»(«instance.variableName», "«attributeName»", «instance.variableName».«attributeName.getter()»(), «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
 	    «ENDIF-»
 	«ELSE»	
 		// assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
-		assertAttributeCondition("«instance.variableName».«attributeName» == «attributeValueLiteral.toPropertyGetters()»", «toPropertyGetters(instance.variableName + "." + attributeName)» == «attributeValueLiteral.toPropertyGetters()»);
+		assertAttributeCondition("«instance.variableName».«attributeName-» == «attributeValueLiteral»", «toPropertyGetters(instance.variableName + "." + attributeName)» == «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
 	«ENDIF»
 «ENDDEFINE»
 
 «DEFINE RemoveModificationDefinition FOR Modification»
 	«IF this.instance != null»
-	// remove instance: «this.action» «this.instance.variableName» «this.instance.typeName»
+	// remove instance: «this.action» «this.instance.variableName» «this.instance.instanceType.name»
 	«ENDIF»
     «IF this.reference != null»
-    // remove reference: «this.action» «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
+    // remove reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
     «IF this.reference.metaType == SingleReferenceCondition»
         «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), null);
     «ELSE»
@@ -209,7 +209,7 @@
 
 «DEFINE ClearModificationDefinition FOR Modification»
     «IF this.reference.metaType == ClearReferenceCondition»
-        // clear references: «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
+        // clear references: «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
         while («this.reference.source.variableName».«this.reference.referenceName.getter()»().size() > 0) {
             «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»().get(0));
         }
@@ -218,10 +218,10 @@
 
 «DEFINE CreateModificationDefinition FOR Modification»
 	«IF this.instance != null»
-	// create instance: «this.action» «this.instance.variableName» «this.instance.typeName»
+	// create instance: «this.action» «this.instance.variableName» «this.instance.instanceType.name»
 	«ENDIF»
     «IF this.reference != null»
-    // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.typeName» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.typeName»
+    // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
     «IF this.reference.metaType == SingleReferenceCondition»
         «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
 	«ELSE»
@@ -238,15 +238,15 @@
 «DEFINE FindObjectDefinition FOR ManyReferenceCondition»
 	«LET (Rule)this.eContainer AS rule»
 	
-	private «this.target.typeName» «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.getConcreteTypeName()» source) {
-		«this.target.typeName» result = null;
+	private «this.target.instanceType.name» «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.getConcreteTypeName()» source) {
+		«this.target.instanceType.name» result = null;
 		
 		for («this.type.eType.name» «getVariableNameForFindReference()» : source.«getter(this.referenceName)»()) {
 		    «IF isPolymorphic()»
-		      if (!(«getVariableNameForFindReference()» instanceof «this.target.typeName»)) {
+		      if (!(«getVariableNameForFindReference()» instanceof «this.target.instanceType.name»)) {
 		        continue;
 		      }
-		      «this.target.typeName» «this.target.variableName» = («this.target.typeName»)«getVariableNameForFindReference()»;
+		      «this.target.instanceType.name» «this.target.variableName» = («this.target.instanceType.name»)«getVariableNameForFindReference()»;
 		    «ENDIF»
 			«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)»
 			«EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)»
@@ -254,7 +254,7 @@
 			result = «this.target.variableName»;
 			break;
         }
-		assertObjectFound("«this.referenceName»", "«this.target.typeName»", result);
+		assertObjectFound("«this.referenceName»", "«this.target.instanceType.name»", result);
 		return result;
     }
     
@@ -263,7 +263,7 @@
 
 «DEFINE AttributeConditionsForFindObjectDefinition FOR AttributeCondition»
 	// attribute check: «instance.variableName»: «this.attributeName»
-	if («toPropertyGetters(instance.variableName + "." + this.attributeName)» != «attributeValueLiteral.toPropertyGetters()») {
+	if («toPropertyGetters(instance.variableName + "." + this.attributeName)» != «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
 		continue;
 	}
 «ENDDEFINE»
@@ -273,7 +273,7 @@
     «IF this.isForbid»
     if («source.variableName».«getter(this.referenceName)»() != null) {	 	   
 	«ELSE»
-    «target.typeName» «target.variableName» = «source.variableName».«getter(this.referenceName)»();
+    «target.instanceType.name» «target.variableName» = «source.variableName».«getter(this.referenceName)»();
 	if («target.variableName» == null) {
     «ENDIF»
     	continue;

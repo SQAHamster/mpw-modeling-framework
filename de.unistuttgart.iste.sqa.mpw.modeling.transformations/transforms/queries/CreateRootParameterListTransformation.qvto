@@ -1,0 +1,13 @@
+modeltype QueryDsl uses "http://www.mpw.uni-stuttgart.de/querydsl";
+
+/**
+  * Dummy transformation only used to create a ParameterList root object in the given model-extent.
+  * Motivation: found no other way to add a temporary object to a model-extent to avoid that it becomes orphan.
+  * 
+  * Note: the use case is to temporarily create QueryDsl::Parameter objects, but avoid that they will be added to the main model-extents.
+  */
+transformation CreateRootParameterListTransformation(inout model: QueryDsl);
+
+main() {
+	object QueryDsl::ParameterList@model {};
+}
