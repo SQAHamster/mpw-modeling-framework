@@ -10,6 +10,14 @@ library EmfHelpers;
 
 configuration property EntityModels: List(EPackage);
 
+query String::getter() : String {
+	return "get" + self.firstToUpper();
+}
+
+query String::setter() : String {
+    return "set" + self.firstToUpper();
+}
+
 helper Element::root() : Element {
     var element := self;
     while (element.container() != null) {

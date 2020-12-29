@@ -1,5 +1,8 @@
+import types.MetaModelHelpers;
 import types.AnnotationHelpers;
 import types.EmfHelpers;
+
+import util.ExpressionHelperLibrary;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
@@ -15,24 +18,31 @@ library GameFacadeElementsBaseLibrary;
 property baseName: String;
 
 /**
-  *  Mapping: base logic for creating a facade class
+  * Mapping: add common fields of a facade class
   */
-abstract mapping inout EClass::createElementsBase() {
+abstract mapping inout EClass::createFieldsBase() {
     baseName := self.name;
-    var concreteClass := self.getConcreteClass();
     
     self.eStructuralFeatures += object EReference {
         name := "game";
         eType := findInstanceOfMetaClass("MiniProgrammingWorld");	
     };
     
-    var internalGameRoleField := self.map createInternalGameRoleField();
-    self.eStructuralFeatures += internalGameRoleField;
+    self.eStructuralFeatures += self.map createInternalGameRoleField();
+}
+
+/**
+  *  Mapping: base logic for creating a facade class
+  */
+abstract mapping inout EClass::createElementsBase() {
+    baseName := self.name;
+    var concreteClass := self.getConcreteClass();
     
     self.eAnnotations += object ImportTypeAnnotation {
         relativeQualifiedTypeName := "commands." + baseName.toLowerCase() + ".*";
     };
     
+    var internalGameRoleField := self.getEStructuralFeature("internal" + baseName);
     self.eAnnotations += internalGameRoleField.createInternalGameRoleGetterAnnotation();
     self.eAnnotations += internalGameRoleField.createInternalEditorRoleGetterAnnotation();
 }
@@ -42,7 +52,7 @@ mapping EClass::createInternalGameRoleField() : EReference {
     eType := findClassifierForName("Concrete" + baseName);
 }
 
-helper EReference::createInternalGameRoleGetterAnnotation() : GetPropertyAnnotation {
+helper EStructuralFeature::createInternalGameRoleGetterAnnotation() : GetPropertyAnnotation {
     return object GetPropertyAnnotation {
         field := self;
         getterTypeName := "Game" + baseName;
@@ -51,7 +61,7 @@ helper EReference::createInternalGameRoleGetterAnnotation() : GetPropertyAnnotat
     };
 }
 
-helper EReference::createInternalEditorRoleGetterAnnotation() : GetPropertyAnnotation {
+helper EStructuralFeature::createInternalEditorRoleGetterAnnotation() : GetPropertyAnnotation {
     return object GetPropertyAnnotation {
         field := self;
         getterTypeName := "Editor" + baseName;
@@ -92,6 +102,9 @@ mapping Transformation::toCommandOperation(facadeClass: EClass) : EOperation {
     if (self.isInit) {
         result.map createInitGameByStageParameterAssignment(facadeClass);
     };
+    
+    result.map createGameVariablesForFacadeParameters();
+
     eAnnotations += object CommandParameterCreationAnnotation { 
         command := self;
         parameterMappings := self.mainUnit.parameters->map toCommandCallParameterMapping();
@@ -101,6 +114,34 @@ mapping Transformation::toCommandOperation(facadeClass: EClass) : EOperation {
         targetRoleVariableName := "internal" + facadeClass.name;
     };
     eAnnotations += toAnnotation("documentation", self.documentation);
+}
+
+mapping inout EOperation::createGameVariablesForFacadeParameters() {
+	self.eAnnotations += self.eParameters->select(p|p.isStageParameter())
+	                                     ->map stageFacadeParameterToGameVariable();
+}
+
+query EParameter::isStageParameter() : Boolean {
+	return self.eType.isMarkedWithAnnotation("facade") and self.eType.getConcreteClass().isInstanceOf("Stage");
+}
+
+mapping EParameter::stageFacadeParameterToGameVariable() : VariableDefinitionAnnotation {
+    variableName := "game" + self.name.firstToUpper();
+    
+    var stageBaseName := self.eType.name;
+    
+    var parameterStatement := object ParameterUsageStatement {
+        parameterName := self.name;
+        type := self.eType;
+    };
+    var getInternalGameStatement := object GetPropertyStatement {
+        propertyGetterName := "internal".getter() + stageBaseName;
+        type := findClassForName("Game" + stageBaseName);
+    };
+    
+    rhs := object ExpressionAnnotation {
+    	expression := createStatementsExpression(List{parameterStatement, getInternalGameStatement});
+    }
 }
 
 query Transformation::getOperationName() : String {
@@ -114,9 +155,9 @@ query Transformation::getOperationName() : String {
 mapping inout EOperation::createInitGameByStageParameterAssignment(facadeClass: EClass) {
     var stageParameter := eParameters->any(p|p.eType.getConcreteClass().isInstanceOf("Stage"));
     if (stageParameter != null) {
-        eAnnotations += object PropertyPathFieldAssignmentAnnotation {
+        eAnnotations += object ExpressionFieldAssignmentAnnotation {
             field := facadeClass.getEStructuralFeature("game");
-            propertyPath := stageParameter.name + ".game";
+            expression := createPathExpression(stageParameter, "game");
         };
     }
 }
@@ -137,7 +178,7 @@ mapping BaseTypes::Parameter::toCommandCallParameterMapping() : EStringToStringM
     var eType := self.type;
     if (eType.isMarkedWithAnnotation("role")) {
         var baseName := eType.getBaseName();
-        value := value + ".internal" + baseName;
+        value := "game" + self.name.firstToUpper();
     }
 }
 
@@ -171,19 +212,7 @@ mapping BaseTypes::Parameter::toEParameter() : EParameter {
     eType := self.type;
 }
 
-query EClassifier::getConcreteClass() : EClass {
-    var classBaseName := self.name;
-    if (self.isMarkedWithAnnotation("baseName")) {
-    	classBaseName := self.getBaseName();
-    };
-    return findClassifierForName("Concrete" + classBaseName).oclAsType(EClass);
-}
-
 query EClassifier::findFacadeForRoleType() : EClass {
 	var baseName := self.getBaseName();
     return findClassForName(baseName);
 };
-
-query EClassifier::getBaseName() : String {
-	return self.getAnnotationValue("baseName");
-}

@@ -53,7 +53,7 @@
     «parametersVariableName».gameLog = game.getGameLog();
     «ENDIF-»
     «FOREACH parameterMappings AS mapping-»
-         «parametersVariableName».«mapping.key» = «mapping.value.toPropertyGetters()»; 
+         «parametersVariableName».«mapping.key» = «mapping.value»; 
     «ENDFOREACH-»
 «ENDDEFINE»
 
@@ -70,15 +70,15 @@
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR ConstructorSimpleFieldInitializationAnnotation-»
-    this.«field.name» = «toConstructorCall(constructorTypeName, parameterInputVariablePropertyPaths)»;
+    this.«field.name» = new «constructorTypeName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR PropertyPathFieldAssignmentAnnotation-»
-    this.«field.name» = «propertyPath.toPropertyGetters()»;
+«DEFINE GenerationAnnotation FOR ExpressionFieldAssignmentAnnotation-»
+    this.«field.name» = «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression»;
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR AddVariableToCollectionAnnotation-»
-    «collectionPropertyPath.toPropertyGetters()».add(«parameterPropertyPath.toPropertyGetters()»);
+    «EXPAND template::QueriesTemplate::ExpressionDefinition FOR collectionExpression».add(«EXPAND template::QueriesTemplate::ExpressionDefinition FOR parameterExpression»);
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR GetPropertyAnnotation-»
@@ -90,19 +90,19 @@
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR MethodCallAnnotation-»
-    «variableName».«methodName»(«parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ")»);
+    «variableName».«methodName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR PropertyPathReturnAnnotation-»
-    return «propertyPath.toPropertyGetters()»;
+«DEFINE GenerationAnnotation FOR ReturnAnnotation-»
+    return «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression»;
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR PropertyPathAnnotation-»
-    «propertyPath.toPropertyGetters()»
+«DEFINE GenerationAnnotation FOR ExpressionAnnotation-»
+    «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression-»
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR VariableObjectConstructionAnnotation-»
-    var «variableName» = «toConstructorCall(constructorTypeName, parameterInputVariablePropertyPaths)»;
+    var «variableName» = new «constructorTypeName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR VariableDefinitionAnnotation-»

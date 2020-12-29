@@ -46,6 +46,10 @@
     «enumLiteral»
 «ENDDEFINE»
 
+«DEFINE StatementDefinition FOR GetPropertyStatement-»
+    «propertyGetterName»()
+«ENDDEFINE»
+
 «DEFINE StatementDefinition FOR QueryStatement-»
     «query.name»(«parameterNames.toString(", ")»)
 «ENDDEFINE»

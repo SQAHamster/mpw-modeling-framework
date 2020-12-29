@@ -1,6 +1,8 @@
 import facade.gamefacade.GameFacadeElementsBaseLibrary;
+import util.ExpressionHelperLibrary;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
 /**
@@ -17,6 +19,13 @@ property stringType = EString.oclAsType(EClassifier);
 
 property baseName: String;
 property concreteClass: EClass;
+
+/**
+ * Mapping: create actor game facade fields
+ */
+mapping inout EClass::createActorGameFacadeFields() inherits EClass::createFieldsBase
+    when { self.getConcreteClass().isInstanceOf("Actor") } {
+}
 
 /**
  * Mapping: create actor game facade elements
@@ -61,6 +70,9 @@ query EClass::findInitCommandOperation() : EOperation {
 	return self.eAllOperations->any(o|o.isMarkedWithAnnotation("command") and getCommandForOperation(o).isInit);
 }
 
+/*
+ * Creates a constructor which is used by the relating stage, e.g. to initialize a "default hamster"
+ */
 helper EClass::createConstructorWithParamsOperation(initCommand: EOperation) : EOperation {
 	return object EOperation {
     	name := self.name;
@@ -75,10 +87,16 @@ helper EClass::createConstructorWithParamsOperation(initCommand: EOperation) : E
     	eAnnotations += object MethodCallAnnotation {
     	    variableName := "this";
     		methodName := "init";
-    		parameterInputVariablePropertyPaths += eParameters->collect(p|p.name);
+    		parameterInputVariableExpressions += eParameters->map createParameterExpression();
     	};
     	
     	eAnnotations += toAnnotation("documentation", "Create a new " + baseName + " object by initializing it with the relating init() method.");
+    };
+}
+
+mapping EParameter::createParameterExpression() : StatementsExpression {
+    statements += object ParameterUsageStatement {
+        parameterName := self.name;
     };
 }
 
@@ -137,8 +155,8 @@ helper EClass::createGameLogVariableAnnotation() : VariableDefinitionAnnotation 
 	return object VariableDefinitionAnnotation {
         variableName := "gameLog";
         variableTypeName := "GameLog";
-        rhs := object PropertyPathAnnotation {
-            propertyPath := "game.gameLog";
+        rhs := object ExpressionAnnotation {
+            expression := createPathExpression(self.getEStructuralFeature("game"), "gameLog");
         };
     };
 }
@@ -147,7 +165,7 @@ helper EClass::createCallWriteAnnotation() : MethodCallAnnotation {
 	return object MethodCallAnnotation {
         variableName := "gameLog";
         methodName := "write";
-        parameterInputVariablePropertyPaths += "message";
+        parameterInputVariableExpressions += createPathExpression("message", stringType);
     };
 }
 
@@ -176,11 +194,11 @@ helper EClass::createReadIntOperation() : EOperation {
         	rhs := object MethodCallAnnotation {
         	    variableName := "gameInterface";
         		methodName := "readInteger";
-        		parameterInputVariablePropertyPaths += "message";
+        		parameterInputVariableExpressions += createPathExpression("message", stringType);
         	};
         };
-        eAnnotations += object PropertyPathReturnAnnotation {
-        	propertyPath := "result";
+        eAnnotations += object ReturnAnnotation {
+        	expression := createPathExpression("result", intType);
         };
     };
 }
@@ -188,25 +206,26 @@ helper EClass::createReadIntOperation() : EOperation {
 helper EClass::createReadStringOperation() : EOperation {
 	return object EOperation {
         name := "readString";
-        eParameters += object EParameter {
+        var messageParameter := object EParameter {
             name := "message";
             eType := stringType;    
         };
+        eParameters += messageParameter;
         eType := stringType;
         
         eAnnotations += self.createGameInterfaceVariableAnnotation();
         
         eAnnotations += object VariableDefinitionAnnotation {
             variableName := "result";
-            variableTypeName := intType.name;
+            variableTypeName := stringType.name;
             rhs := object MethodCallAnnotation {
                 variableName := "gameInterface";
                 methodName := "readString";
-                parameterInputVariablePropertyPaths += "message";
+                parameterInputVariableExpressions += createPathExpression(messageParameter);
             };
         };
-        eAnnotations += object PropertyPathReturnAnnotation {
-            propertyPath := "result";
+        eAnnotations += object ReturnAnnotation {
+            expression := createPathExpression("result", stringType);
         };
     };
 }
@@ -215,8 +234,8 @@ helper EClass::createGameInterfaceVariableAnnotation() : VariableDefinitionAnnot
 	return object VariableDefinitionAnnotation {
         variableName := "gameInterface";
         variableTypeName := "UserInputInferface";
-        rhs := object PropertyPathAnnotation {
-            propertyPath := "game.userInputInterface";
+        rhs := object ExpressionAnnotation {
+            expression := createPathExpression(self.getEStructuralFeature("game"), "userInputInterface");
         };
     };
 }

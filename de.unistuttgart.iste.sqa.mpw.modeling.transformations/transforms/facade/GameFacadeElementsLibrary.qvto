@@ -10,6 +10,14 @@ modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
   */
 library FacadeElementsLibrary;
 
+/*
+ * create fields before creating the rest of the classes, since the operations may have references to the 
+ * features of the other facade classes.
+ */
+mapping inout EClass::createGameFacadeFields()
+    disjuncts EClass::createActorGameFacadeFields,
+              EClass::createStageGameFacadeFields {}
+
 mapping inout EClass::createElements()
     disjuncts EClass::createActorGameFacadeElements,
               EClass::createStageGameFacadeElements {}

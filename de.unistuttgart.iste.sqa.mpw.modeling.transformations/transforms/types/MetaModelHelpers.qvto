@@ -1,0 +1,39 @@
+import types.AnnotationHelpers;
+import types.EmfHelpers;
+
+modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+
+/**
+  *  Library with some convinience utilities in context of the MPW Meta-Models.
+  */
+library MetaModelhelpers;
+
+/*
+ * Regards the case that a type with a role (Game, Editor, ReadOnly) is given, but for the caller
+ * the concrete type shall be used.
+ *
+ * Example: for Hamster or GameHamster the class ConcreteHamster will be returned.
+ */
+query EClassifier::getConcreteClass() : EClass {
+    var classBaseName := self.name;
+    if (self.isMarkedWithAnnotation("baseName")) {
+        classBaseName := self.getBaseName();
+    };
+    return findClassifierForName("Concrete" + classBaseName).oclAsType(EClass);
+}
+
+query EClassifier::getBaseName() : String {
+    return self.getAnnotationValue("baseName");
+}
+
+query EClassifier::getFeatureByName(name: String) : EStructuralFeature {
+    var feature := self.oclAsType(EClass).getEStructuralFeature(name);
+    if (feature = null) {
+        feature := self.getConcreteClass().getEStructuralFeature(name);
+    };
+    return feature;
+}
+
+query EClassifier::getOperationByName(name: String) : EOperation {
+    return self.oclAsType(EClass).eAllOperations->any(o|o.name = name);
+}

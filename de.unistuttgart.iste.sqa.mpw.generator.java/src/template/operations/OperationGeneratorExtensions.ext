@@ -33,6 +33,3 @@ isQuery(EOperation this) : isMarkedWith("query");
 
 private isMarkedWith(EOperation this, String key) :
     eAnnotations.exists(a|a.source == key || a.details.exists(d|d.key == key));
-
-toConstructorCall(String constructorTypeName, List[String] parameterPropertyPaths)
-    : "new " + constructorTypeName + "(" + parameterPropertyPaths.collect(path|path.toPropertyGetters()).toString(", ") + ")";

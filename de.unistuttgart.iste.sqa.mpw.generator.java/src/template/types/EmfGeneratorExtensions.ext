@@ -77,8 +77,14 @@ private elementToJavaType(ETypedElement this) :
 	else if (this.upperBound == -1) then "List<" + this.eType.name.toJavaType() + ">"
 	else this.eType.name.toJavaType();
 
+hasInitializationAnnotation(EStructuralFeature this) :
+    getInitializationAnnotation() != null;
+
+getInitializationAnnotation(EStructuralFeature this) :
+    this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first();
+
 featureToFieldInstantiation(EStructuralFeature this) :
-    if (this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).size > 0) then this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first().toInitialization()
+    if (hasInitializationAnnotation()) then "ERROR: featureToFieldInstantiation() must not be called for InlineSimpleFieldInitializationAnnotation"
 	else if (this.upperBound == -1) then "new ArrayList<>()"
 	else if (this.eType.isDependency()) then "new " + this.eType.ePackage.toJavaPackageName() + ".impl.Dummy" + this.eType.name + "()"
 	else if (this.eType.needsImplSubclass()) then "new " + this.eType.ePackage.toJavaPackageName() + ".impl." + this.eType.name + "Impl()"
@@ -91,9 +97,6 @@ toUnboxedJavaTypeName(String this) :
 	else if (this == "EObject") then "Object"
 	else this;
 	
-toInitialization(InlineSimpleFieldInitializationAnnotation this) :
-	"new " + field.eType.name + "(" + parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ") + ")";
-
 defaultValueOf(EStructuralFeature f) :
     if (f.eType.name == "EInt") then "0"
 	else if (f.eType.name == "EBoolean") then "false"

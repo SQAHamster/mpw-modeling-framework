@@ -30,6 +30,7 @@ mapping inout EPackage::transformPackage() {
     eClassifiers += facadeClasses;
     
     // generate elements of facade after classes are created, since they may rely on other facade types
+    facadeClasses->map createGameFacadeFields();
     facadeClasses->map createElements();
     
     eClassifiers += self.eClassifiers[EClass][hasAnnotationValue("role", "editor")]->map createBuilderClass();
@@ -51,7 +52,7 @@ mapping inout EClass::useFacades() {
     		f.eType := findClassForName(baseName);
     		f.eAnnotations += object InlineSimpleFieldInitializationAnnotation {
     			field := f;
-    			parameterInputVariablePropertyPaths += "this";
+    			parameterInputVariableExpressions += createSelfExpression("this", self);
     		};
     	}
     };

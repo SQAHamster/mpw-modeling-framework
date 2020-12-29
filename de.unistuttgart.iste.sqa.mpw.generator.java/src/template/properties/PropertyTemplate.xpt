@@ -7,15 +7,25 @@
 	  «IF f.isObservableProperty()»
       private final «f.featureToObservableFieldType()» «f.name» = «f.featureToObservableFieldInstantiation()»;
       «ELSEIF f.changeable && f.eType.isDependency()»
-      private «f.featureToJavaType()» «f.name» = «f.featureToFieldInstantiation()»;
+      private «f.featureToJavaType()» «f.name» = «EXPAND InlineFeatureFieldInstantiation FOR f»;
       «ELSEIF f.derived || f.changeable»
       private «f.featureToJavaType()» «f.name»;
       «ELSEIF f.isConstructorInjectedProperty()»
       private final «f.featureToJavaType()» «f.name»;
 	  «ELSEIF !f.derived»
-      private final «f.featureToJavaType()» «f.name» = «f.featureToFieldInstantiation()»;
+      private final «f.featureToJavaType()» «f.name» = «EXPAND InlineFeatureFieldInstantiation FOR f»;
 	  «ENDIF»
       «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE InlineFeatureFieldInstantiation FOR EStructuralFeature-»
+    «IF hasInitializationAnnotation()-»
+        «LET getInitializationAnnotation() AS annotation-»
+        new «annotation.field.eType.name»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH annotation.parameterInputVariableExpressions SEPARATOR ", "»)
+        «ENDLET-»
+    «ELSE-»
+        «featureToFieldInstantiation()»
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE ConstructorDefinition FOR EClass»

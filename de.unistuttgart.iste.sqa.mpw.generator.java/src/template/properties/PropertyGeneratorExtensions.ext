@@ -5,6 +5,3 @@ extension template::properties::ObservablePropertyGeneratorExtensions reexport;
 /*
  * Extensions related to the generation of Properties and transitive property getters.
  */
-
-String toPropertyGetters(String s) :
-    JAVA template.properties.PropertyPathUtils.toPropertyGetters(java.lang.String);

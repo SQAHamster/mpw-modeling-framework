@@ -1,0 +1,71 @@
+import types.MetaModelHelpers;
+
+/**
+  *  Library with some convinience utilities for building QueryModel::Expression objects
+  */
+library ExpressionHelperLibrary;
+
+modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
+modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
+
+/*
+ * Creates an expression based on a ETypedElement and one further feature-call.
+ */
+helper createPathExpression(element: ETypedElement, featureName: String) : Expression {
+    return createPathExpression(element, List{featureName});
+}
+
+helper createPathExpression(element: ETypedElement, featureNames: List(String)) : Expression {
+    var pathStatements: List(Statement);
+    pathStatements += object ParameterUsageStatement {
+        parameterName := element.name;
+        type := element.eType;
+    };
+    
+    featureNames->forEach (name) {
+        var lastStatement := pathStatements->last();
+        
+        var nextFeature := lastStatement.type.getFeatureByName(name);
+        pathStatements += object FeatureStatement { 
+            feature := nextFeature;
+            type := feature.eType;
+        };
+    };
+    return createStatementsExpression(pathStatements);
+}
+
+/*
+ * Creates an simple expression based on a given element name.
+ */
+helper createPathExpression(element: ETypedElement) : Expression {
+    return createPathExpression(element.name, element.eType);
+}
+
+helper createPathExpression(elementName: String, elementType: EClassifier) : Expression {
+    return createStatementsExpression(object ParameterUsageStatement {
+        parameterName := elementName;
+        type := elementType;
+    });
+}
+
+helper createSelfExpression(aliasName: String, contextClass: EClassifier) : Expression {
+    return createStatementsExpression(object SelfStatement {
+        selfAlias := aliasName;
+        type := contextClass;
+    });
+}
+
+helper createStatementsExpression(statement: Statement) : StatementsExpression {
+    return object StatementsExpression {
+        statements += statement;
+        type := statement.type;
+    };
+}
+
+helper createStatementsExpression(inputStatements: List(Statement)) : StatementsExpression {
+    return object StatementsExpression {
+        statements := inputStatements;
+        type := inputStatements->last().type;
+    };
+}

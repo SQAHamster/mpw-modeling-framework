@@ -189,7 +189,7 @@
 	    «ENDIF-»
 	«ELSE»	
 		// assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
-		assertAttributeCondition("«instance.variableName».«attributeName-» == «attributeValueLiteral»", «toPropertyGetters(instance.variableName + "." + attributeName)» == «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+		assertAttributeCondition("«instance.variableName».«attributeName-» == «attributeValueLiteral»", «instance.variableName».«attributeName.getter()»() == «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
 	«ENDIF»
 «ENDDEFINE»
 
@@ -263,7 +263,7 @@
 
 «DEFINE AttributeConditionsForFindObjectDefinition FOR AttributeCondition»
 	// attribute check: «instance.variableName»: «this.attributeName»
-	if («toPropertyGetters(instance.variableName + "." + this.attributeName)» != «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
+	if («instance.variableName».«this.attributeName.getter()»() != «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
 		continue;
 	}
 «ENDDEFINE»

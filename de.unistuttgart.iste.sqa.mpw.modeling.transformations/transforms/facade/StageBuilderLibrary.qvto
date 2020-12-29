@@ -3,6 +3,7 @@ import util.BasicHelpers;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
+modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
 modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
 
 /**
@@ -63,15 +64,31 @@ abstract mapping inout EClass::createConstructor() {
     		parameter := gameParameter;
     	};
     	
-    	eAnnotations += object PropertyPathFieldAssignmentAnnotation {
+    	eAnnotations += object ExpressionFieldAssignmentAnnotation {
     		field := self.getEStructuralFeature(baseName.firstToLower());
-    		propertyPath := "game.territory.internalEditor" + baseName;
+    		expression := createInternalEditorExpression();
     	};
     	
     	eAnnotations += toAnnotation("documentation", "Creates a new " + self.name + " object which then can be used to defined the given " + baseName + ".");
     };
     eOperations += constructorOperation;
     
+}
+
+query EClass::createInternalEditorExpression() : Expression {
+    var gameStatement := object ParameterUsageStatement {
+        parameterName := "game";
+        type := findInstanceOfMetaClass("MiniProgrammingWorld");
+    };
+    var stageStatement := object FeatureStatement {
+    	feature := gameStatement.type.getFeatureByName(self.getBaseName().firstToLower());
+    	type := feature.eType;
+    };
+    var getInternalEditorStatement := object GetPropertyStatement { 
+        propertyGetterName := "internalEditor".getter() + self.getBaseName();
+        type := findClassForName("Editor" + self.getBaseName());
+    };
+    return createStatementsExpression(List{gameStatement, stageStatement, getInternalEditorStatement});
 }
 
 mapping Transformation::toBuilderOperation(parentBuilderClass: EClass) : EOperation {
@@ -91,8 +108,8 @@ mapping Transformation::toBuilderOperation(parentBuilderClass: EClass) : EOperat
         targetRoleVariableName := parentBuilderClass.getBaseName().firstToLower();
     };
     
-    eAnnotations += object PropertyPathReturnAnnotation {
-	    propertyPath := "this";
+    eAnnotations += object ReturnAnnotation {
+	    expression := createSelfExpression("this", parentBuilderClass);
 	};
 }
 
@@ -100,15 +117,17 @@ mapping EOperation::cloneSimplifiedBuilderOperation() : EOperation {
     name := self.name;
     eType := self.eType;
     
+    var intType := EInt.oclAsType(EClassifier);
+    
     self.eParameters->forEach(p) {
     	if (p.name = "location") {
     		eParameters += object EParameter {
     			name := "locationX";
-    			eType := EInt.oclAsType(EClassifier);
+    			eType := intType;
     		};
     		eParameters += object EParameter {
     			name := "locationY";
-    			eType := EInt.oclAsType(EClassifier);
+    			eType := intType;
     		};
     	} else {
     		eParameters += p.deepclone();
@@ -117,8 +136,8 @@ mapping EOperation::cloneSimplifiedBuilderOperation() : EOperation {
     
     eAnnotations += object VariableObjectConstructionAnnotation {
     	variableName := "location";
-    	parameterInputVariablePropertyPaths += "locationX";
-    	parameterInputVariablePropertyPaths += "locationY";
+    	parameterInputVariableExpressions += createPathExpression("locationX", intType);
+    	parameterInputVariableExpressions += createPathExpression("locationY", intType);
     	constructorTypeName := "Location";
     };
     

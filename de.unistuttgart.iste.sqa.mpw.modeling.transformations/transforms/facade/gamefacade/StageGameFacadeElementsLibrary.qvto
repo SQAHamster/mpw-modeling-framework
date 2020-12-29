@@ -16,6 +16,18 @@ property baseName: String;
 property concreteClass: EClass;
 
 /**
+ * Mapping: create stage game facade fields
+ */
+mapping inout EClass::createStageGameFacadeFields() inherits EClass::createFieldsBase
+    when { self.getConcreteClass().isInstanceOf("Stage") } {
+    
+    concreteClass := self.getConcreteClass();
+    
+    var actorFields := concreteClass.getActorFields();
+    eStructuralFeatures += actorFields->map toFacadeActorFieldReference();
+}
+
+/**
  * Mapping: create elements for stage game facade
  */
 mapping inout EClass::createStageGameFacadeElements() inherits EClass::createElementsBase
@@ -25,7 +37,6 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
     concreteClass := self.getConcreteClass();
     
     var actorFields := concreteClass.getActorFields();
-    eStructuralFeatures += actorFields->map toFacadeActorFieldReference();
     eAnnotations += actorFields->map toGetPropertyAnnotation();
     self.map createConstructorOperation(actorFields);
     
@@ -81,14 +92,14 @@ mapping inout EClass::createConstructorOperation(actorFields: OrderedSet(ERefere
     constructorOperation.eAnnotations += actorFields->map toConstructorFieldInitialization(self);
 }
 
-mapping EReference::toConstructorFieldInitialization(facadeClass: EClass): ConstructorSimpleFieldInitializationAnnotation {
-    field := facadeClass.getEStructuralFeature(self.name);
-    parameterInputVariablePropertyPaths += "game";
-    parameterInputVariablePropertyPaths += "internal" + baseName + "." + self.name;
-    constructorTypeName := field.eType.name;
-}
-
 mapping EOperation::toAssignParameterToFieldAnnotation(parameterName: String, fieldName: String) : ParameterToFieldAssignmentAnnotation {
     parameter := self.eParameters->any(p|p.name = parameterName);
     field := self.eContainingClass.eAllStructuralFeatures->any(f|f.name = fieldName);
+}
+
+mapping EReference::toConstructorFieldInitialization(facadeClass: EClass): ConstructorSimpleFieldInitializationAnnotation {
+    field := facadeClass.getEStructuralFeature(self.name);
+    parameterInputVariableExpressions += createPathExpression("game", findClassForName("MiniProgrammingWorld"));
+    parameterInputVariableExpressions += createPathExpression(facadeClass.getEStructuralFeature("internal" + baseName), self.name);
+    constructorTypeName := field.eType.name;
 }
