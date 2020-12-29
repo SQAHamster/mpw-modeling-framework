@@ -192,7 +192,7 @@ mapping Henshin::Attribute::toAttributeCondition() : CommandModel::AttributeCond
     var parsedQuery := parseQueryWithHenshinParameters(self.value.toEffectiveValueLiteral(), self.node.type, parameters);
     
     // embed query as content into rootModule, since only the expression is directly used
-    rootModule.eAnnotations += object EAnnotation {
+    rootModule.annotations += object EAnnotation {
         contents += parsedQuery.oclAsType(EObject);
     };
     

@@ -11,4 +11,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//TypedElement #//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotationableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAnnotation" containment="true"/>
+  </eClassifiers>
 </ecore:EPackage>

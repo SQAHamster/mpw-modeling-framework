@@ -302,5 +302,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BehaviorsBaseTypes.ecore#//TypedElement/type"/>
     </genClasses>
     <genClasses ecoreClass="BehaviorsBaseTypes.ecore#//Parameter"/>
+    <genClasses ecoreClass="BehaviorsBaseTypes.ecore#//AnnotationableElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BehaviorsBaseTypes.ecore#//AnnotationableElement/annotations"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>
