@@ -8,14 +8,17 @@ import org.eclipse.m2m.qvt.oml.blackbox.java.Operation;
 import org.eclipse.m2m.qvt.oml.blackbox.java.Operation.Kind;
 import org.eclipse.xtext.parser.IParser;
 
-import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 
-import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDslRuntimeModule;
+import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.QueryDslStandaloneSetup;
 import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.ClassContext;
 import de.unistuttgart.iste.sqa.mpw.modeling.querydsl.querydsl.Parameter;
 
 public class StringToQueryDslConverter {
+	@Inject
+	private IParser parser;
+	
 	/*
 	 * Due to: https://www.eclipse.org/forums/index.php/t/156231/
 	 * Use "Object" for complex parameter types and return type, since e.g. the usage of the Query-class will 
@@ -24,8 +27,15 @@ public class StringToQueryDslConverter {
 	@Operation(kind = Kind.HELPER)
 	public static Object toQuery(String string, String contextClassName, List<Object> parameterObjects) {
 		var parameters = parameterObjects.stream().map(Parameter.class::cast).collect(Collectors.toList());
-		var parser = createParser();
-		
+		return new StringToQueryDslConverter().convertToQuery(string, contextClassName, parameters);
+	}
+	
+	private StringToQueryDslConverter() {
+		Injector injector = new QueryDslStandaloneSetup().createInjector();
+		injector.injectMembers(this);
+	}
+	
+	private ClassContext convertToQuery(String string, String contextClassName, List<Parameter> parameters) {
 		String parseInputString = toParseString(string, contextClassName, parameters);
 		StringReader reader = new StringReader(parseInputString);
 		var result = parser.parse(reader);
@@ -36,12 +46,6 @@ public class StringToQueryDslConverter {
 			return null;
         }
 		return (ClassContext)result.getRootASTElement();
-	}
-
-	private static IParser createParser() {
-		Injector injector = Guice.createInjector(new QueryDslRuntimeModule());
-		var parser = injector.getInstance(IParser.class);
-		return parser;
 	}
 	
 	private static String toParseString(String string, String contextClassName, List<Parameter> parameters) {
