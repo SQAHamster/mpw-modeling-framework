@@ -30,20 +30,16 @@ public class StringToQueryDslConverter {
 		return new StringToQueryDslConverter().convertToQuery(string, contextClassName, parameters);
 	}
 	
-	private StringToQueryDslConverter() {
+	private ClassContext convertToQuery(String string, String contextClassName, List<Parameter> parameters) {
 		Injector injector = new QueryDslStandaloneSetup().createInjector();
 		injector.injectMembers(this);
-	}
-	
-	private ClassContext convertToQuery(String string, String contextClassName, List<Parameter> parameters) {
+		
 		String parseInputString = toParseString(string, contextClassName, parameters);
 		StringReader reader = new StringReader(parseInputString);
 		var result = parser.parse(reader);
 		
 		if (result.hasSyntaxErrors()) {
-            // TODO check how to handle this correctly, avoid exceptions in IDE
-			// throw new ParseException("String cannot be parsed to a query: " + result.getSyntaxErrors().toString());
-			return null;
+			throw new RuntimeException("String cannot be parsed to a query: " + result.getSyntaxErrors().toString());
         }
 		return (ClassContext)result.getRootASTElement();
 	}

@@ -3,9 +3,8 @@ import QueryTransformation;
 import queries.CreateRootParameterListTransformation;
 
 /**
-  *  Library used to ad-hoc parse query expressions used in several situations where expressions are used, e.g. in command attribute conditions. 
-  */
-
+ * Library used to ad-hoc parse query expressions used in several situations where expressions are used, e.g. in command attribute conditions. 
+ */
 library QueryParserLibrary();
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
