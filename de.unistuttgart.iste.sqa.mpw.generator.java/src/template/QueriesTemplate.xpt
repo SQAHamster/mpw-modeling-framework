@@ -4,7 +4,7 @@
 «EXTENSION template::GeneratorExtensions»
 
 «DEFINE QueryDefinitions FOR EClass»
-	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
+	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q-»
 	  @Override
 	  public «q.type.name.toJavaType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH») {
 	      try {
@@ -13,7 +13,8 @@
 	          return «q.defaultValueLiteral»;
 	      }
 	  }
-      «ENDFOREACH»
+	  «EXPAND HelperStatementDefinitions FOREACH q.eAllContents.typeSelect(StatementsExpression).select(e|e.needsHelperMethod)-»
+      «ENDFOREACH-»
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR Expression-»«ENDDEFINE»
@@ -58,5 +59,19 @@
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR StatementsExpression-»
-    «EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-»
+    «IF needsHelperMethod-»
+        «EXPAND CallHelperStatementMethod FOR this-»
+    «ELSE-»
+        «EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-»
+    «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE CallHelperStatementMethod FOR StatementsExpression-»
+    «helperMethodName.toJavaConformName()»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+«ENDDEFINE»
+
+«DEFINE HelperStatementDefinitions FOR StatementsExpression»
+      private «this.type.name.toJavaType()» «helperMethodName.toJavaConformName()»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH») {
+          return «EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-»;
+      }
 «ENDDEFINE»

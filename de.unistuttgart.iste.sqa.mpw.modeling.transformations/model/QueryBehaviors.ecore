@@ -84,6 +84,17 @@
   <eClassifiers xsi:type="ecore:EClass" name="StatementsExpression" eSuperTypes="#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//Statement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="helperMethodName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="For each StatementsExpression a separate helper method is generated. This property holds the method-name which will be used."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="needsHelperMethod" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If the statements are simple enough, they do not need a separate helper method and can be generated inline."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true" eSuperTypes="BehaviorsBaseTypes.ecore#//TypedElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="debugName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

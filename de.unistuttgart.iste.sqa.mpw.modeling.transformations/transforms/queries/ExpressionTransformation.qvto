@@ -1,4 +1,5 @@
 import queries.StatementTransformation;
+import queries.StatementHelperMethodLibrary;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
@@ -192,4 +193,10 @@ mapping Input::StatementsExpression::toStatementExpression() : QueryModel::State
     statements += self.statements->map toStatement();
     type := statements->last().type;
     isCollection := statements->last().isCollection;
+    isOptional := statements->exists(s|s.isOptional);
+    
+    needsHelperMethod := result.needsHelperMethod();
+    if (needsHelperMethod) {
+    	helperMethodName := result.getHelperMethodName();
+    }
 }

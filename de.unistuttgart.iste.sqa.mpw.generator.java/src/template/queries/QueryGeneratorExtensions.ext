@@ -1,4 +1,6 @@
 import ecore;
+import emf;
+import behaviorsbase;
 import queryBehavior;
 
 /*
@@ -33,3 +35,14 @@ constraintToViolationString(queryBehavior::Constraint this) :
     "Violation of " + typeName + 
         (if (this.documentation != null) then ": " + documentation 
         else "");
+        
+List[Parameter] findParameterList(Expression this) :
+    eContainer.findParameterListOfEObject();
+    
+private List[Parameter] findParameterListOfEObject(emf::EObject object) :
+    if (object == null) then null
+    else if (Query.isInstance(object)) then ((Query)object).parameters
+    else findParameterListOfEObject(object.eContainer);
+    
+String toJavaConformName(String this) :
+    JAVA template.queries.CamelCaseStringConverter.lowerUnderscoreToCamelCase(java.lang.String);
