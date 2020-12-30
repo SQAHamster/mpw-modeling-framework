@@ -13,7 +13,7 @@
 	          return «q.defaultValueLiteral»;
 	      }
 	  }
-	  «EXPAND HelperStatementDefinitions FOREACH q.eAllContents.typeSelect(StatementsExpression).select(e|e.needsHelperMethod)-»
+	  «EXPAND HelperStatementDefinition FOREACH q.eAllContents.typeSelect(StatementsExpression).select(e|e.needsHelperMethod)-»
       «ENDFOREACH-»
 «ENDDEFINE»
 
@@ -70,7 +70,7 @@
     «helperMethodName.toJavaConformName()»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
 «ENDDEFINE»
 
-«DEFINE HelperStatementDefinitions FOR StatementsExpression»
+«DEFINE HelperStatementDefinition FOR StatementsExpression»
       private «this.type.name.toJavaType()» «helperMethodName.toJavaConformName()»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH») {
           return «EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-»;
       }
