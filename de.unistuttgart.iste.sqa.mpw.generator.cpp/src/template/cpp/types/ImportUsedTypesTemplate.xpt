@@ -16,7 +16,7 @@
 	#include "ObservableProperties.h"
     «ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection())-»
-	#include "ObservableLists.h"
+	#include "ObservableListProperties.h"
 	«ENDIF-»
     «EXPAND SingleImportDefinition FOREACH eSuperTypes
         .union(eStructuralFeatures.collect(f|f.eType).select(t|t.isEnum() || t.isValueType()))

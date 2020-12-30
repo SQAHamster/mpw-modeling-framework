@@ -17,18 +17,18 @@ featureToObservableFieldType(ETypedElement this) :
     
 private referenceToObservableFieldType(EReference this) :
 	if (this.upperBound == -1) then (
-	    if (this.containment) then "framework::ObservableObjectContainmentList<" + this.eType.name + ">"
-	    else "framework::ObservableObjectReferenceList<" + this.eType.name + ">" )
+	    if (this.containment) then "framework::ObservableObjectContainmentListProperty<" + this.eType.name + ">"
+	    else "framework::ObservableObjectReferenceListProperty<" + this.eType.name + ">" )
 	else (
 	    if (this.containment) then "framework::ObservableObjectContainmentProperty<" + this.eType.name + ">"
         else "framework::ObservableObjectReferenceProperty<" + this.eType.name + ">" );
     
 private attributeToObservableFieldType(EStructuralFeature this) :
-	if (this.upperBound == -1) then "framework::ObservablePrimitiveList<" + this.toCppType() + ">"
+	if (this.upperBound == -1) then "framework::ObservablePrimitiveListProperty<" + this.toCppType() + ">"
 	else "framework::ObservablePrimitiveProperty<" + this.toCppType() + ">";
 
 propertyGetterToObservableFieldType(ETypedElement this) : 
-    if (this.upperBound == -1) then "framework::ObservableList<" + toCppInPropertyName() + ">"
+    if (this.upperBound == -1) then "framework::ObservableListProperty<" + toCppInPropertyName() + ">"
     else if (EAttribute.isInstance(this) || eType.isBuiltInType() || eType.isEnum() || eType.isValueType()) then "framework::ObservablePrimitiveProperty<" + toCppInPropertyName() + ">"
     else "framework::ObservableObjectProperty<" + toCppInPropertyName() + ">";
     

@@ -1,6 +1,6 @@
 
-#ifndef DE_UNISTUTTGART_FRAMEWORK_OBSERVABLELIST_H
-#define DE_UNISTUTTGART_FRAMEWORK_OBSERVABLELIST_H
+#ifndef DE_UNISTUTTGART_FRAMEWORK_OBSERVABLELISTPROPERTY_H
+#define DE_UNISTUTTGART_FRAMEWORK_OBSERVABLELISTPROPERTY_H
 
 #include <list>
 #include <functional>
@@ -9,7 +9,7 @@
 namespace framework {
 
 template<typename T>
-class ObservableList {
+class ObservableListProperty {
 
 protected:
 
@@ -30,7 +30,7 @@ protected:
 
 public:
 
-    virtual ~ObservableList() = default;
+    virtual ~ObservableListProperty() = default;
 
     virtual void forEach(std::function<void(const T &)> consumer) const = 0;
 
@@ -45,4 +45,4 @@ public:
 
 }
 
-#endif //DE_UNISTUTTGART_FRAMEWORK_OBSERVABLELIST_H
+#endif //DE_UNISTUTTGART_FRAMEWORK_OBSERVABLELISTPROPERTY_H

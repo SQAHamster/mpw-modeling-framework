@@ -1,16 +1,16 @@
 
-#ifndef DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTLIST_H
-#define DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTLIST_H
+#ifndef DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTLISTPROPERTY_H
+#define DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTLISTPROPERTY_H
 
 #include <algorithm>
 #include <list>
 #include <functional>
-#include "ObservableList.hpp"
+#include "ObservableListProperty.hpp"
 
 namespace framework {
 
 template<typename T>
-class ObservableObjectList : public ObservableList<T> {
+class ObservableObjectListProperty : public ObservableListProperty<T> {
 
 protected:
 
@@ -29,4 +29,4 @@ public:
 
 }
 
-#endif //DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTLIST_H
+#endif //DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTLISTPROPERTY_H
