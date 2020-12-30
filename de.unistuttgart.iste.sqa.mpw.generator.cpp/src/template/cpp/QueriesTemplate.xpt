@@ -85,6 +85,6 @@
 
 «DEFINE HelperStatementDefinition FOR StatementsExpression»
       «this.toCppType()» «findContextClass().name»::«helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») {
-          return {}; /*«EXPAND template::cpp::queries::StatementsTemplate::StatementsDefinitions FOR this-»;*/
+          return «EXPAND template::cpp::queries::StatementsTemplate::StatementsDefinitions FOR this-»;
       }
 «ENDDEFINE»

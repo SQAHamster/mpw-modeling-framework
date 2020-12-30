@@ -69,10 +69,18 @@ isObjectReferenceAccess(Statement statement) :
     else false;
     
 isFunctionStatement(Statement this) :
-    CollectionMethodStatement.isInstance(this) && ((CollectionMethodStatement)this).methodType == CollectionMethodType::AT;
+    let collectionMethodStatement = (CollectionMethodStatement)this :
+    CollectionMethodStatement.isInstance(this) && (
+        collectionMethodStatement.methodType == CollectionMethodType::AT ||
+        collectionMethodStatement.methodType == CollectionMethodType::TYPE_SELECT);
     
 getFunctionStatementCall(Statement this) :
-    "collectionhelpers::get_at(";
+    let collectionMethodStatement = (CollectionMethodStatement)this :
+    if (collectionMethodStatement.methodType == CollectionMethodType::AT) then "collectionhelpers::get_at("
+    else if (collectionMethodStatement.methodType == CollectionMethodType::TYPE_SELECT) then (
+        let selectedType = (EClassifier)collectionMethodStatement.parameters.get(0) :
+        "collectionhelpers::type_select<" + selectedType.ePackage.name + "::" + selectedType.name + ">(" )
+    else "";
     
 toCppQueryReturnType(Query this) : 
     if (this.isOptional) then "std::optional<" + toCppType() + ">"

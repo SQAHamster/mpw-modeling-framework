@@ -1,4 +1,5 @@
 import ecore;
+import behaviorsbase;
 import generationAnnotations;
 
 extension template::cpp::types::MetaModelGeneratorExtensions;
@@ -99,7 +100,12 @@ defaultValueOf(EStructuralFeature f) :
 	else null;
 
 List[EClassifier] getUsedTypes(EOperation this) :
-    this.eParameters.collect(p|p.eType).union({this.eType}.reject(r|r == null));
+    this.eParameters
+        .collect(p|p.eType)
+        .union({this.eType})
+        .union(eAllContents.typeSelect(TypedElement).collect(e|e.type))
+        .reject(t|t == null)
+        .reject(t|t.name == "EObject");
     
 toCppDoc(String this) :
     if (length > 0) then 
