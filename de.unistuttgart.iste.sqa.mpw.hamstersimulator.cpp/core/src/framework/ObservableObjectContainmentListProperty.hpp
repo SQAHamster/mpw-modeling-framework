@@ -18,6 +18,10 @@ private:
 
 public:
 
+    std::list<std::shared_ptr<T>> get() const override {
+        return elements;
+    }
+
     const std::list<std::shared_ptr<T>>& getElements() const {
         return elements;
     }

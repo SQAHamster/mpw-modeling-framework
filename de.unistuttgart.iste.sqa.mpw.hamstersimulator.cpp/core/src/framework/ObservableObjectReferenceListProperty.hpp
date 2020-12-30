@@ -18,7 +18,17 @@ private:
 
 public:
 
-    const std::list<std::shared_ptr<T>>& getElements() const {
+    std::list<std::shared_ptr<T>> get() const override {
+        std::list<std::shared_ptr<T>> result;
+        for (auto elementWeak : elements) {
+            if (auto element = elementWeak.lock()) {
+                result.push_back(element);
+            }
+        }
+        return result;
+    }
+
+    const std::list<std::weak_ptr<T>>& getElements() const {
         return elements;
     }
 

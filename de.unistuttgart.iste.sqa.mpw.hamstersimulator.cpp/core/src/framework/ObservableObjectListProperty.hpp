@@ -18,9 +18,11 @@ protected:
 
 public:
 
-    const std::list<std::reference_wrapper<T>> &get() const {
+    const std::list<std::reference_wrapper<T>>& getReferences() const {
         return references;
     }
+
+    virtual std::list<std::shared_ptr<T>> get() const = 0;
 
     void forEach(std::function<void(const T &)> consumer) const override {
         std::for_each(references.cbegin(), references.cend(), consumer);
