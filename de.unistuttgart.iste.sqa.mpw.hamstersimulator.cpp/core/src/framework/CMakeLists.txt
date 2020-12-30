@@ -14,4 +14,5 @@ set(FRAMEWORK_SRCS
     "core/src/framework/ObservableProperties.h"
     "core/src/framework/Any.h"
     "core/src/framework/ReflectivePropertyObject.h"
+    "core/src/framework/CollectionHelpers.hpp"
     PARENT_SCOPE)
