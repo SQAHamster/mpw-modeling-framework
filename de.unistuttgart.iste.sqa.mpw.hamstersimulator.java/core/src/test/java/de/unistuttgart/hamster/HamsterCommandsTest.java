@@ -220,6 +220,16 @@ public class HamsterCommandsTest {
 		});
 	}
 
+	@Test // test of invariant "isInitialized"
+	public void givenHamsterWithCurrentTileIsNull_whenMove_ThenExceptionIsThrown() {
+		withTerritory(" <;");
+		removeFromStage();
+
+		assertThrows(CommandConstraintException.class, () -> {
+			move();
+		});
+	}
+
 	//</editor-fold>
 
 	//<editor-fold desc="Feature: gameLog">
@@ -255,6 +265,12 @@ public class HamsterCommandsTest {
 
 	private void initNewHamster(Location location, Direction direction) {
 		sut = new Hamster(game.getTerritory(), location, direction, 0);
+	}
+
+	private void removeFromStage() {
+		// use internal class to be able to set an "invalid state" where the stage is not set
+		var internalHamster = (ConcreteHamster) sut.getInternalHamster();
+		internalHamster.setStage(null);
 	}
 
 	private static Location locationOf(int x, int y) {

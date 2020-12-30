@@ -40,6 +40,11 @@
 		
 			«EXPAND UnitExpand FOR mainUnit»
             «EXPAND UnitExpand FOREACH units.excluding(mainUnit)»
+            «EXPAND template::QueriesTemplate::HelperStatementDefinition FOREACH this.eAllContents
+                                                                                     .typeSelect(Constraint)
+                                                                                     .eAllContents
+                                                                                     .typeSelect(StatementsExpression)
+                                                                                     .select(e|e.needsHelperMethod)-»
         }
     «ENDFILE»
     «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "CommandParameters.java"»package «this.getCommandJavaPackageName()»;
