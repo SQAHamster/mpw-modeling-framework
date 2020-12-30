@@ -9,7 +9,7 @@
     «REM»DUMMY«ENDREM-»
     «FOREACH statements AS s-»
         «IF s.isFunctionStatement()-»
-            «s.getFunctionStatementCall()»
+            «s.getFunctionStatementCall()-»
         «ENDIF-»
     «ENDFOREACH-»
     
@@ -17,7 +17,7 @@
         «IF s.previous != null && !s.isFunctionStatement()-»
             «IF s.isObjectReferenceAccess()-»->«ELSE».«ENDIF-»
         «ENDIF-»
-        «EXPAND StatementDefinition FOR s»
+        «EXPAND StatementDefinition FOR s-»
     «ENDFOREACH-»
 «ENDDEFINE»
 
@@ -37,18 +37,18 @@
 
 «DEFINE StatementDefinition FOR CollectionMethodStatement-»
     «IF methodType == CollectionMethodType::NOT_EMPTY-»
-        size() > 0
+        size() > 0«REM»avoid newline«ENDREM-»
     «ELSEIF methodType == CollectionMethodType::IS_EMPTY-»
-        empty()
+        empty()«REM»avoid newline«ENDREM-»
     «ELSEIF methodType == CollectionMethodType::SIZE-»
-        size()
+        size()«REM»avoid newline«ENDREM-»
     «ELSEIF methodType == CollectionMethodType::TYPE_SELECT-»
         «LET ((EClassifier)parameters.get(0)).name AS typeSelectName-»
-        stream().filter(«typeSelectName».class::isInstance).map(«typeSelectName».class::cast).collect(Collectors.toList())
+        stream().filter(«typeSelectName».class::isInstance).map(«typeSelectName».class::cast).collect(Collectors.toList())«REM»avoid newline«ENDREM-»
         «ENDLET-»
     «ELSEIF methodType == CollectionMethodType::AT-»
         «LET (Expression)parameters.get(0) AS indexExpression-»
-        , «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR indexExpression»)
+        , «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR indexExpression»)«REM»avoid newline«ENDREM-»
         «ENDLET-»
     «ENDIF-»
 «ENDDEFINE»
@@ -58,11 +58,11 @@
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR GetPropertyStatement-»
-    «propertyGetterName»()
+    «propertyGetterName»()«REM»avoid newline«ENDREM-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR QueryStatement-»
-    «query.name»(«parameterNames.toString(", ")»)
+    «query.name»(«parameterNames.toString(", ")»)«REM»avoid newline«ENDREM-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR VariableUsageStatement-»

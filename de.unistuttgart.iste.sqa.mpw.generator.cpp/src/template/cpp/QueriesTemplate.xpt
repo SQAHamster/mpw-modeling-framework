@@ -38,9 +38,7 @@
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR ImpliesExpression-»
-    («EXPAND ExpressionDefinition FOR lhs») 
-    ? («EXPAND ExpressionDefinition FOR rhs») 
-    : true
+    («EXPAND ExpressionDefinition FOR lhs») ? («EXPAND ExpressionDefinition FOR rhs») : true
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR OrExpression-»
@@ -48,8 +46,7 @@
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR AndExpression-»
-    «EXPAND ExpressionDefinition FOR lhs» 
-    && «EXPAND ExpressionDefinition FOR rhs-»
+    «EXPAND ExpressionDefinition FOR lhs» && «EXPAND ExpressionDefinition FOR rhs-»
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR CompareExpression-»
