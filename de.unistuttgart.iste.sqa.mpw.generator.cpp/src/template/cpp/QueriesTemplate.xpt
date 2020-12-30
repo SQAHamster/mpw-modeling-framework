@@ -1,0 +1,70 @@
+«IMPORT ecore»
+«IMPORT queryBehavior»
+
+«EXTENSION template::cpp::GeneratorExtensions»
+
+«DEFINE QueryDeclarations FOR EClass»
+	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
+	  «q.toCppType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») override;
+      «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE QueryDefinitions FOR EClass»
+	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
+      «q.toCppType()» «name»::«q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») {
+	      try {
+	          /*
+  	          return «EXPAND ExpressionDefinition FOR q.mainExpression-»;
+  	          */
+  	          return {};
+	      } catch (...) {
+	          return «q.getDefaultValueLiteralString()»;
+	      }
+	  }
+      «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR Expression-»«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR VariableExpression-»
+    «valueExpression.toCppType()» «variableName» = «EXPAND ExpressionDefinition FOR valueExpression»;
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR NotExpression-»
+    !(«EXPAND ExpressionDefinition FOR inner-»)
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR OldExpression-»
+    «EXPAND ExpressionDefinition FOR inner-»
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR ImpliesExpression-»
+    («EXPAND ExpressionDefinition FOR lhs») 
+    ? («EXPAND ExpressionDefinition FOR rhs») 
+    : true
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR OrExpression-»
+    «EXPAND ExpressionDefinition FOR lhs» || «EXPAND ExpressionDefinition FOR rhs-»
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR AndExpression-»
+    «EXPAND ExpressionDefinition FOR lhs» 
+    && «EXPAND ExpressionDefinition FOR rhs-»
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR CompareExpression-»
+    «EXPAND ExpressionDefinition FOR lhs» «operator.toOperatorCode()» «EXPAND ExpressionDefinition FOR rhs-»
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR CalculationExpression-»
+    «EXPAND ExpressionDefinition FOR lhs» «operator.toOperatorCode()» «EXPAND ExpressionDefinition FOR rhs-»
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR ConstantExpression-»
+    «literal-»
+«ENDDEFINE»
+
+«DEFINE ExpressionDefinition FOR StatementsExpression-»
+    «EXPAND template::cpp::queries::StatementsTemplate::StatementsDefinitions FOR this-»
+«ENDDEFINE»

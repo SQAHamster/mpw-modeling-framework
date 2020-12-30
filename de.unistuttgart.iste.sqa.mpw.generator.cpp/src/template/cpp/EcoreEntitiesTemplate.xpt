@@ -49,6 +49,7 @@
       
     public:
       «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDeclaration FOR this»
+      «EXPAND template::cpp::QueriesTemplate::QueryDeclarations FOR this»
       «REM»«EXPAND template::commands::CommandCallsTemplate::CommandDefinitions FOR this»«ENDREM»
       «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDeclarations FOR this»
       «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDeclarations FOR this»
@@ -81,6 +82,7 @@
     namespace «this.ePackage.name» {
     
         «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDefinition FOR this»
+        «EXPAND template::cpp::QueriesTemplate::QueryDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»

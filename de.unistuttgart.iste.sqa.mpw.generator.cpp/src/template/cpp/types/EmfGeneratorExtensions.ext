@@ -119,4 +119,8 @@ getAnnotationValue(EModelElement this, String key) :
 
 isEnum(EClassifier this) : EEnum.isInstance(this);
 isDataType(EClassifier this) : metaType.name == "ecore::EDataType"; // note: EDataType.isInstance(this) does not work
+
+toCppLiteral(String this) :
+    if (this == "null") then "nullptr"
+    else this;
     

@@ -1,0 +1,59 @@
+«IMPORT ecore»
+«IMPORT queryBehavior»
+
+«EXTENSION template::cpp::GeneratorExtensions»
+
+«DEFINE StatementsDefinitions FOR StatementsExpression-»
+    «IF statements.size == 0»nullptr«ENDIF-»
+    «FOREACH statements AS s-»
+        «EXPAND StatementDefinition FOR s»
+    «ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR Statement»«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR SelfStatement-»
+    «selfAlias»
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR ParameterUsageStatement-»
+    «parameterName»
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR FeatureStatement-»
+    «feature.name.getter()»()
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR CollectionMethodStatement-»
+    «IF methodType == CollectionMethodType::NOT_EMPTY-»
+        size() > 0
+    «ELSEIF methodType == CollectionMethodType::IS_EMPTY-»
+        empty()
+    «ELSEIF methodType == CollectionMethodType::SIZE-»
+        size()
+    «ELSEIF methodType == CollectionMethodType::TYPE_SELECT-»
+        «LET ((EClassifier)parameters.get(0)).name AS typeSelectName-»
+        stream().filter(«typeSelectName».class::isInstance).map(«typeSelectName».class::cast).collect(Collectors.toList())
+        «ENDLET-»
+    «ELSEIF methodType == CollectionMethodType::AT-»
+        «LET (Expression)parameters.get(0) AS indexExpression-»
+        get(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR indexExpression»)
+        «ENDLET-»
+    «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR EnumLiteralStatement-»
+    «enumLiteral»
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR GetPropertyStatement-»
+    «propertyGetterName»()
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR QueryStatement-»
+    «query.name»(«parameterNames.toString(", ")»)
+«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR VariableUsageStatement-»
+    «variableReference.variableName»
+«ENDDEFINE»
