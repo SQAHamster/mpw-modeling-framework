@@ -42,5 +42,42 @@ toCppType(behaviorsbase::TypedElement element) :
     toCppType(element.type.name, element.type.metaType.name, element.type.ePackage);
 
 getDefaultValueLiteralString(Query query) :
-    if (query.type.isValueType()) then "{}"
+    if (query.isOptional) then "std::nullopt"
+    else if (query.type.isValueType()) then "{}"
     else query.defaultValueLiteral.toCppLiteral();
+
+List[Parameter] findParameterList(Expression this) :
+    eContainer.findParameterListOfEObject();
+
+private List[Parameter] findParameterListOfEObject(emf::EObject object) :
+    if (object == null) then null
+    else if (Query.isInstance(object)) then ((Query)object).parameters
+    else findParameterListOfEObject(object.eContainer);
+
+EClassifier findContextClass(Expression this) :
+    eContainer.findContextClassOfEObject();
+
+private EClassifier findContextClassOfEObject(emf::EObject object) :
+    if (object == null) then null
+    else if (ExpressionalElement.isInstance(object)) then ((ExpressionalElement)object).contextClass
+    else findContextClassOfEObject(object.eContainer);
+
+isObjectReferenceAccess(Statement statement) :
+    if (statement.previous.isCollection) then false
+    else if (FeatureStatement.isInstance(statement.previous) && ((FeatureStatement)statement.previous).feature.isReference()) then true
+    else if (SelfStatement.isInstance(statement.previous)) then true
+    else false;
+    
+isFunctionStatement(Statement this) :
+    CollectionMethodStatement.isInstance(this) && ((CollectionMethodStatement)this).methodType == CollectionMethodType::AT;
+    
+getFunctionStatementCall(Statement this) :
+    "collectionhelpers::get_at(";
+    
+toCppQueryReturnType(Query this) : 
+    if (this.isOptional) then "std::optional<" + toCppQueryReturnTypeNested() + ">"
+    else toCppQueryReturnTypeNested();
+    
+private toCppQueryReturnTypeNested(Query this) : 
+    if (this.type.isPrimitive() || this.type.isValueType() || this.type.isEnum()) then toCppType()
+    else "std::reference_wrapper<" + this.type.ePackage.name + "::" + this.type.name + ">";

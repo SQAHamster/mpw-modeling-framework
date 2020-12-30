@@ -5,22 +5,21 @@
 
 «DEFINE QueryDeclarations FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
-	  «q.toCppType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») override;
+	  «q.toCppQueryReturnType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») override;
+      «EXPAND HelperStatementDeclarations FOR q.eAllContents.typeSelect(StatementsExpression).select(e|e.needsHelperMethod)-»
       «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE QueryDefinitions FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
-      «q.toCppType()» «name»::«q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») {
+      «q.toCppQueryReturnType()» «name»::«q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») {
 	      try {
-	          /*
   	          return «EXPAND ExpressionDefinition FOR q.mainExpression-»;
-  	          */
-  	          return {};
 	      } catch (...) {
 	          return «q.getDefaultValueLiteralString()»;
 	      }
 	  }
+      «EXPAND HelperStatementDefinition FOREACH q.eAllContents.typeSelect(StatementsExpression).select(e|e.needsHelperMethod)-»
       «ENDFOREACH»
 «ENDDEFINE»
 
@@ -66,5 +65,29 @@
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR StatementsExpression-»
-    «EXPAND template::cpp::queries::StatementsTemplate::StatementsDefinitions FOR this-»
+    «IF needsHelperMethod-»
+        «EXPAND CallHelperStatementMethod FOR this-»
+    «ELSE-»
+        «EXPAND template::cpp::queries::StatementsTemplate::StatementsDefinitions FOR this-»
+    «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE CallHelperStatementMethod FOR StatementsExpression-»
+    «helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+«ENDDEFINE»
+
+«DEFINE HelperStatementDeclarations FOR List[StatementsExpression]»
+      «IF this.size > 0»private:«ENDIF»
+      «EXPAND HelperStatementDeclaration FOREACH this»
+      «IF this.size > 0»public:«ENDIF»
+«ENDDEFINE»
+
+«DEFINE HelperStatementDeclaration FOR StatementsExpression»
+      «this.toCppType()» «helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»);
+«ENDDEFINE»
+
+«DEFINE HelperStatementDefinition FOR StatementsExpression»
+      «this.toCppType()» «findContextClass().name»::«helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») {
+          return {}; /*«EXPAND template::cpp::queries::StatementsTemplate::StatementsDefinitions FOR this-»;*/
+      }
 «ENDDEFINE»

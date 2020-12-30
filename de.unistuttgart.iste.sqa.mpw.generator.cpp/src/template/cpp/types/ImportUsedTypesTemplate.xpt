@@ -28,6 +28,10 @@
 «DEFINE SourceImportDefinitions FOR EClass»
     #include <stdexcept>
     
+    «IF eAllOperations.exists(o|o.isQuery())-»
+    #include "CollectionHelpers.hpp"
+    «ENDIF-»
+    
     «EXPAND SingleImportDefinition FOREACH eStructuralFeatures
 		.collect(e|e.eType)
 		.union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())

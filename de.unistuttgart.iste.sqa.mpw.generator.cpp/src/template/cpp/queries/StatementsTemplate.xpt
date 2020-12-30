@@ -5,7 +5,18 @@
 
 «DEFINE StatementsDefinitions FOR StatementsExpression-»
     «IF statements.size == 0»nullptr«ENDIF-»
+    
+    «REM»DUMMY«ENDREM-»
     «FOREACH statements AS s-»
+        «IF s.isFunctionStatement()-»
+            «s.getFunctionStatementCall()»
+        «ENDIF-»
+    «ENDFOREACH-»
+    
+    «FOREACH statements AS s-»
+        «IF s.previous != null && !s.isFunctionStatement()-»
+            «IF s.isObjectReferenceAccess()-»->«ELSE».«ENDIF-»
+        «ENDIF-»
         «EXPAND StatementDefinition FOR s»
     «ENDFOREACH-»
 «ENDDEFINE»
@@ -13,15 +24,15 @@
 «DEFINE StatementDefinition FOR Statement»«ENDDEFINE»
 
 «DEFINE StatementDefinition FOR SelfStatement-»
-    «selfAlias»
+    «selfAlias-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR ParameterUsageStatement-»
-    «parameterName»
+    «parameterName-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR FeatureStatement-»
-    «feature.name.getter()»()
+    «feature.name.getter()»()«REM»avoid newline«ENDREM-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR CollectionMethodStatement-»
@@ -37,13 +48,13 @@
         «ENDLET-»
     «ELSEIF methodType == CollectionMethodType::AT-»
         «LET (Expression)parameters.get(0) AS indexExpression-»
-        get(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR indexExpression»)
+        , «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR indexExpression»)
         «ENDLET-»
     «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR EnumLiteralStatement-»
-    «enumLiteral»
+    «type.toQualifiedTypeName()»::«enumLiteral-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR GetPropertyStatement-»
@@ -55,5 +66,5 @@
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR VariableUsageStatement-»
-    «variableReference.variableName»
+    «variableReference.variableName-»
 «ENDDEFINE»

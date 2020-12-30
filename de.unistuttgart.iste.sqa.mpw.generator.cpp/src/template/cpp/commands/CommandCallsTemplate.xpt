@@ -1,0 +1,10 @@
+«IMPORT ecore»
+
+«EXTENSION template::cpp::GeneratorExtensions»
+
+«DEFINE CommandDefinitions FOR EClass»
+	  «FOREACH eAllOperations.select(o|o.isCommand()) AS o»
+	  void «o.name»(/*«o.name.toFirstUpper()»CommandParameters parameters*/) override {
+	  }
+      «ENDFOREACH»
+«ENDDEFINE»

@@ -50,10 +50,11 @@
     public:
       «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDeclaration FOR this»
       «EXPAND template::cpp::QueriesTemplate::QueryDeclarations FOR this»
-      «REM»«EXPAND template::commands::CommandCallsTemplate::CommandDefinitions FOR this»«ENDREM»
+      «EXPAND template::cpp::commands::CommandCallsTemplate::CommandDefinitions FOR this»
       «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDeclarations FOR this»
       «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDeclarations FOR this»
       «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDeclarations FOR this»
+      «EXPAND template::cpp::properties::PropertyTemplate::VirtualBaseMethodDelegateDefinitions FOR this»
       
     public:
     

@@ -46,7 +46,7 @@
 
 «DEFINE GetPropertyValueDeclarations FOR EClass»
       «FOREACH eStructuralFeatures AS f»
-      «f.featureToCppType()» «f.name.getter()»() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToCppType()» «f.name.getter()»() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
       «ENDFOREACH»
 «ENDDEFINE»
 
@@ -64,9 +64,9 @@
 
 «DEFINE SetPropertyValueDeclarations FOR EClass»
     «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
-    void «f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()») «IF eAllOperations.without(eOperations).exists(o|o.name == f.adderOrSetter())»override«ENDIF-»;
+    virtual void «f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()»);
     «IF f.isCollection()-»
-    void «f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()»);
+    virtual void «f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()»);
     «ENDIF-»
     «ENDFOREACH»
 «ENDDEFINE»
@@ -169,7 +169,7 @@
 
 «DEFINE GetPropertyDeclarations FOR EClass»
       «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
-      const «f.propertyGetterToObservableFieldType()»& «f.name»Property() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»const «f.propertyGetterToObservableFieldType()»& «f.name»Property() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
       «ENDFOREACH»
 «ENDDEFINE»
 
@@ -179,4 +179,18 @@
         return this->«f.name»;
       }
       «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE VirtualBaseMethodDelegateDefinitions FOR EClass»
+    «IF !abstract-»
+	    «FOREACH eAllStructuralFeatures.without(eStructuralFeatures).select(f|f.hasPropertyGetterOperation(this)) AS f»
+	    const «f.propertyGetterToObservableFieldType()»& «f.name»Property() override {
+	        return inherited::«f.name»Property();
+	    }
+	    
+	    «f.featureToCppType()» «f.name.getter()»() override {
+	        return inherited::«f.name.getter()»();
+	    }
+	    «ENDFOREACH»
+    «ENDIF-»
 «ENDDEFINE»

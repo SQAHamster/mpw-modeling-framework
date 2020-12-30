@@ -1,7 +1,7 @@
 import ecore;
 
 extension template::cpp::types::EmfGeneratorExtensions;
-// extension template::cpp::commands::CommandGeneratorExtensions;
+extension template::cpp::queries::QueryGeneratorExtensions;
 // extension template::cpp::properties::PropertyGeneratorExtensions;
 extension util::Extensions;
 
@@ -12,7 +12,11 @@ extension util::Extensions;
 
 operationToSignature(EOperation this) :
     let parameters = if (isCommand()) then "/*" + name.toFirstUpper() + "CommandParameters parameters */" else eParameters.collect(e|e.toCppType() + " " + e.name).joinToString(", ") :
-    documentationToCppDoc() + "virtual " + operationToCppType() + " " + effectiveOperationName() + "(" + parameters + ")";
+    documentationToCppDoc() + "virtual " + operationToReturnType() + " " + effectiveOperationName() + "(" + parameters + ")";
+
+private operationToReturnType(EOperation this) :
+    if (isQuery()) then this.getQueryForOperation().toCppQueryReturnType()
+    else operationToCppType();
 
 documentationToCppDoc(EOperation this) :
     let documentationDetail = eAnnotations.collect(a|a.details.selectFirst(d|d.key == "documentation")).selectFirst(d|d != null) :
@@ -22,8 +26,10 @@ private effectiveOperationName(EOperation this) :
     if (isPropertyGetter()) then name.getter() else name;
 
 hasPropertyGetterOperation(EStructuralFeature this) :
-    let class = (EClass)eContainer :
-    class.eAllSuperTypes.exists(t|t.eOperations.exists(o|o.isPropertyGetter() && o.name == name));
+    hasPropertyGetterOperation(this.eContainingClass);
+
+hasPropertyGetterOperation(EStructuralFeature this, EClass targetClass) :
+    targetClass.eAllSuperTypes.exists(t|t.eOperations.exists(o|o.isPropertyGetter() && o.name == name));
     
 isPropertyGetter(EOperation this) : isMarkedWith("isPropertyGetter");
     
@@ -33,7 +39,3 @@ isQuery(EOperation this) : isMarkedWith("query");
 
 private isMarkedWith(EOperation this, String key) :
     eAnnotations.exists(a|a.source == key || a.details.exists(d|d.key == key));
-
-//toConstructorCall(String constructorTypeName, List[String] parameterPropertyPaths)
-//    : "new " + constructorTypeName + "(" + parameterPropertyPaths.collect(path|path.toPropertyGetters()).toString(", ") + ")";
-    
