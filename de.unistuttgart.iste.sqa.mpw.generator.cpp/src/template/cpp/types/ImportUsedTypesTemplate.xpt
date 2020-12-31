@@ -12,6 +12,9 @@
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
     #include <list>
 	«ENDIF-»
+	«IF eStructuralFeatures.union(eOperations).exists(e|e.isAny())-»
+    #include "Any.h"
+	«ENDIF-»
     «IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
         eOperations.exists(o|o.isPropertyGetter())-»
 	#include "ObservableProperties.h"
