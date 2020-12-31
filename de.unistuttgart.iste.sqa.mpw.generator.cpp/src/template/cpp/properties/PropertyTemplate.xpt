@@ -44,6 +44,10 @@
       «ENDLET»
 «ENDDEFINE»
 
+«DEFINE DestructorDefinition FOR EClass»
+    «IF needsImplSubclass() || abstract»«name»::~«name»() = default;«ENDIF»
+«ENDDEFINE»
+
 «DEFINE GetPropertyValueDeclarations FOR EClass»
       «FOREACH eStructuralFeatures AS f»
       «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToCppType()» «f.name.getter()»() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;

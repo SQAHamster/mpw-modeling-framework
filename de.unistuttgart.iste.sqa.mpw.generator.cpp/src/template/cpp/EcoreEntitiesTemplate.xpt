@@ -58,7 +58,7 @@
       
     public:
     
-      virtual ~«this.name»() = default;
+      virtual ~«this.name»() = «IF needsImplSubclass() || abstract»0«ELSE»default«ENDIF»;
         
       «FOREACH eOperations AS o-»
       «o.operationToSignature()» = 0;
@@ -83,6 +83,7 @@
     namespace «this.ePackage.name» {
     
         «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDefinition FOR this»
+        «EXPAND template::cpp::properties::PropertyTemplate::DestructorDefinition FOR this»
         «EXPAND template::cpp::QueriesTemplate::QueryDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
