@@ -5,9 +5,11 @@
 
 #include <memory>
 
-
 #include "CompositeCommandBase.h"
 #include "ConcreteTerritory.h"
+#include "SetPropertyCommandImpl.h"
+#include "AddEntityCommandImpl.h"
+#include "RemoveEntityCommandImpl.h"
 
 using namespace mpw;
 using namespace hamster;
@@ -59,5 +61,68 @@ TEST(AddRemoveTest, testAddRemove) {
 
   dummyParentCommand->removeFromSubCommands(dummySubCommand);
   EXPECT_EQ(0, dummyParentCommand->getSubCommands().size());
+}
+
+class CompositeCommandDummyTest : public testing::Test, public commands::CompositeCommandBase {
+public:
+    void execute() override { }
+
+    Command& at(size_t i) {
+        auto list = getSubCommands();
+        auto iter = list.begin();
+        std::advance(iter, i);
+        return *(*iter);
+    }
+};
+
+TEST_F(CompositeCommandDummyTest, testPrimitiveCommands) {
+    auto hamster = std::make_shared<ConcreteHamster>();
+    hamster->setDirection(Direction::SOUTH);
+    auto territory = std::make_shared<ConcreteTerritory>();
+    auto tile = std::make_shared<Tile>();
+
+    executeSetProperty(hamster, "direction", (int)hamster->getDirection(), (int)Direction::WEST);
+    executeSetValueProperty(tile, "location", tile->getLocation(), Location::from(1, 2));
+    executeAddReference(territory, "tiles", tile);
+
+    EXPECT_EQ(Direction::WEST, hamster->getDirection());
+    EXPECT_EQ(Location::from(1, 2), tile->getLocation());
+    EXPECT_EQ(territory->getTiles().front(), tile);
+
+    executeSetProperty(hamster, "direction", (int)hamster->getDirection(), (int)Direction::NORTH);
+    executeSetValueProperty(tile, "location", tile->getLocation(), Location::from(3, 5));
+    executeRemoveReference(territory, "tiles", tile);
+
+    EXPECT_EQ(Direction::NORTH, hamster->getDirection());
+    EXPECT_EQ(Location::from(3, 5), tile->getLocation());
+    EXPECT_TRUE(territory->getTiles().empty());
+
+    at(5).undo();
+    at(4).undo();
+    at(3).undo();
+
+    EXPECT_EQ(Direction::WEST, hamster->getDirection());
+    EXPECT_EQ(Location::from(1, 2), tile->getLocation());
+    EXPECT_EQ(territory->getTiles().front(), tile);
+
+    at(3).redo();
+    at(4).redo();
+    at(5).redo();
+
+    EXPECT_EQ(Direction::NORTH, hamster->getDirection());
+    EXPECT_EQ(Location::from(3, 5), tile->getLocation());
+    EXPECT_TRUE(territory->getTiles().empty());
+
+    this->undo();
+
+    EXPECT_EQ(Direction::SOUTH, hamster->getDirection());
+    EXPECT_EQ(Location::from(0, 0), tile->getLocation());
+    EXPECT_TRUE(territory->getTiles().empty());
+
+    this->redo();
+
+    EXPECT_EQ(Direction::NORTH, hamster->getDirection());
+    EXPECT_EQ(Location::from(3, 5), tile->getLocation());
+    EXPECT_TRUE(territory->getTiles().empty());
 }
 

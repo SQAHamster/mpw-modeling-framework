@@ -1,6 +1,6 @@
 #include "AddEntityCommandImpl.h"
 
-#include <stdexcept>
+#include "Entity.h"
 
 namespace commands {
 
@@ -8,15 +8,19 @@ AddEntityCommandImpl::AddEntityCommandImpl() {
 }
 
 void AddEntityCommandImpl::execute() {
-	throw std::runtime_error("not implemented");
+    auto entity = getEntity();
+    EntityReference reference = getEntityToAdd().get();
+    entity->addToCollection(getPropertyName(), reference);
 }
 
 void AddEntityCommandImpl::undo() {
-	throw std::runtime_error("not implemented");
+    auto entity = getEntity();
+    EntityReference reference = getEntityToAdd().get();
+    entity->removeFromCollection(getPropertyName(), reference);
 }
 
 void AddEntityCommandImpl::redo() {
-	throw std::runtime_error("not implemented");
+	execute();
 }
 
 }

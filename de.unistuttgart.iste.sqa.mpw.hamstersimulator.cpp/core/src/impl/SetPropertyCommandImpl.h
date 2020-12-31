@@ -16,6 +16,16 @@ public:
 
 	void redo() override;
 
+    /// \brief injected lambda which deletes the raw values, which shall be owned by handleLifeCycleOfValues() semantics
+    using deleter = std::function<void(ValueReference)>;
+
+	/// \brief Used for value-types to make unique-pointers owning the raw references of the given values
+	void handleLifeCycleOfValues(deleter deletionFunction);
+
+private:
+
+    std::unique_ptr<void, deleter> oldValueUniquePtr;
+    std::unique_ptr<void, deleter> newValueUniquePtr;
 };
 
 }

@@ -1,6 +1,6 @@
 #include "SetPropertyCommandImpl.h"
 
-#include <stdexcept>
+#include "Entity.h"
 
 namespace commands {
 
@@ -8,15 +8,24 @@ SetPropertyCommandImpl::SetPropertyCommandImpl() {
 }
 
 void SetPropertyCommandImpl::execute() {
-	throw std::runtime_error("not implemented");
+    auto entity = getEntity();
+    entity->setProperty(getPropertyName(), getNewValue());
 }
 
 void SetPropertyCommandImpl::undo() {
-	throw std::runtime_error("not implemented");
+    auto entity = getEntity();
+    entity->setProperty(getPropertyName(), getOldValue());
 }
 
 void SetPropertyCommandImpl::redo() {
-	throw std::runtime_error("not implemented");
+    execute();
+}
+
+void SetPropertyCommandImpl::handleLifeCycleOfValues(deleter deletionFunction) {
+    ValueReference oldValue = std::get<ValueReference>(getOldValue());
+    ValueReference newValue = std::get<ValueReference>(getNewValue());
+    oldValueUniquePtr = std::unique_ptr<void, deleter>(oldValue, deletionFunction);
+    newValueUniquePtr = std::unique_ptr<void, deleter>(newValue, deletionFunction);
 }
 
 }

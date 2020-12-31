@@ -7,6 +7,7 @@
 
 #include "Any.h"
 #include "CompositeCommand.h"
+#include "SetPropertyCommandImpl.h"
 #include "Entity.h"
 
 namespace commands {
@@ -19,8 +20,23 @@ namespace commands {
   protected:
 
     void executeSetProperty(std::shared_ptr<Entity> entity, std::string propertyName, Any oldValue, Any newValue);
+
+    /// \brief special variant to set a value, which can be used for value-types
+    /// \note \param oldValue and \param newValue are created as copied raw pointers of unmanaged memory on the heap
+    template<typename T>
+    void executeSetValueProperty(std::shared_ptr<Entity> entity, std::string propertyName, T oldValue, T newValue) {
+        auto& command = internalExecuteSetProperty(entity, propertyName, new T(oldValue), new T(newValue));
+        command.handleLifeCycleOfValues([](ValueReference reference) {
+            delete reinterpret_cast<T*>(reference);
+        });
+    }
+
     void executeAddReference(std::shared_ptr<Entity> entity, std::string propertyName, std::shared_ptr<Entity> entityToAdd);
     void executeRemoveReference(std::shared_ptr<Entity> entity, std::string propertyName, std::shared_ptr<Entity> entityToRemove);
+
+  private:
+
+    SetPropertyCommandImpl& internalExecuteSetProperty(std::shared_ptr<Entity> entity, std::string propertyName, Any oldValue, Any newValue);
   };
 }
 

@@ -1,6 +1,6 @@
 #include "RemoveEntityCommandImpl.h"
 
-#include <stdexcept>
+#include "Entity.h"
 
 namespace commands {
 
@@ -8,15 +8,20 @@ RemoveEntityCommandImpl::RemoveEntityCommandImpl() {
 }
 
 void RemoveEntityCommandImpl::execute() {
-	throw std::runtime_error("not implemented");
+    auto entity = getEntity();
+    EntityReference reference = getEntityToRemove().get();
+    entity->removeFromCollection(getPropertyName(), reference);
 }
 
 void RemoveEntityCommandImpl::undo() {
-	throw std::runtime_error("not implemented");
+
+    auto entity = getEntity();
+    EntityReference reference = getEntityToRemove().get();
+    entity->addToCollection(getPropertyName(), reference);
 }
 
 void RemoveEntityCommandImpl::redo() {
-	throw std::runtime_error("not implemented");
+	execute();
 }
 
 }

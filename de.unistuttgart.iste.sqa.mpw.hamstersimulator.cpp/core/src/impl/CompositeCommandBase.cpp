@@ -1,13 +1,12 @@
 #include "CompositeCommandBase.h"
 
-#include "SetPropertyCommandImpl.h"
 #include "AddEntityCommandImpl.h"
 #include "RemoveEntityCommandImpl.h"
 
 namespace commands {
   void CompositeCommandBase::undo() {
     auto subCommands = getSubCommands();
-    for (auto iter = subCommands.rend(); iter != subCommands.rbegin(); ++iter) {
+    for (auto iter = subCommands.rbegin(); iter != subCommands.rend(); ++iter) {
       auto& subCommand = *iter;
       subCommand->undo();
     }
@@ -21,6 +20,10 @@ namespace commands {
   }
 
   void CompositeCommandBase::executeSetProperty(std::shared_ptr<Entity> entity, std::string propertyName, Any oldValue, Any newValue) {
+    internalExecuteSetProperty(entity, propertyName, oldValue, newValue);
+  }
+
+  SetPropertyCommandImpl& CompositeCommandBase::internalExecuteSetProperty(std::shared_ptr<Entity> entity, std::string propertyName, Any oldValue, Any newValue) {
     auto command = std::make_shared<SetPropertyCommandImpl>();
     command->setEntity(entity);
     command->setOldValue(oldValue);
@@ -29,6 +32,7 @@ namespace commands {
 
     addToSubCommands(command);
     command->execute();
+    return *command;
   }
 
   void CompositeCommandBase::executeAddReference(std::shared_ptr<Entity> entity, std::string propertyName, std::shared_ptr<Entity> entityToAdd) {
@@ -50,4 +54,5 @@ namespace commands {
     addToSubCommands(command);
     command->execute();
   }
+
 }
