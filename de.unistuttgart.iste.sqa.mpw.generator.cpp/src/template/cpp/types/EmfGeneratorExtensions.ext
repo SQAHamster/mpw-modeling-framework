@@ -55,6 +55,7 @@ isContainment(EStructuralFeature this) :
     EReference.isInstance(this) && ((EReference)this).containment;
         
 toCppType(ETypedElement this) : toCppType(this.eType.name, this.eType.metaType.name, this.eType.ePackage);
+toCppType(EClassifier this) : toCppType(name, metaType.name, ePackage);
     
 toCppType(String this, String metaTypeName, EPackage thisPackage) :
     if (this == "EInt") then "int"

@@ -100,3 +100,9 @@
     «EXPAND SingleForwardDeclarationDefinition FOREACH mainUnit.parameters.collect(p|p.type)
                                                               .select(t|t.isEntity())»
 «ENDDEFINE»
+
+«DEFINE CommandUsedTypeIncludeDefinitions FOR Transformation»
+    «EXPAND SingleImportDefinition FOREACH mainUnit.parameters.collect(p|p.type)
+                                                              .union(this.eAllContents.typeSelect(InstanceCondition).collect(c|c.instanceType))
+                                                              .reject(t|t.isDataType())»
+«ENDDEFINE»
