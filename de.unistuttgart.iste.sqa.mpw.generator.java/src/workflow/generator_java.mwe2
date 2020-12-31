@@ -68,7 +68,7 @@ Workflow {
         expand = "template::GenerateClassesTemplate::main FOREACH generationEcoreModels"
         outlet = {
             path = simulatorTargetSrc
-            overwrite = false
+            overwrite = false // avoid that Impl classes are overwritten
             postprocessor = formatter_java
             fileEncoding = "UTF-8"
         }

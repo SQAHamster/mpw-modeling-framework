@@ -20,9 +20,7 @@
 
 «DEFINE ConstructorDeclaration FOR EClass»
       «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
-      «LET injectedProperties.without(eStructuralFeatures) AS injectedForParentProperties»
       «name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
-      «ENDLET»
       «ENDLET»
 «ENDDEFINE»
 
@@ -41,6 +39,22 @@
       «ENDFOREACH-»
       }
       «ENDLET»
+      «ENDLET»
+«ENDDEFINE»
+
+«DEFINE ImplConstructorDeclaration FOR EClass-»
+      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
+      «name»Impl(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
+      «ENDLET»
+«ENDDEFINE»
+
+«DEFINE ImplConstructorDefinition FOR EClass»
+      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
+      «name»Impl::«name»Impl(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
+      «IF injectedProperties.size > 0-»
+      : («FOREACH injectedProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+      «ENDIF-» {
+      }
       «ENDLET»
 «ENDDEFINE»
 

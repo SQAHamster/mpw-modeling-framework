@@ -48,6 +48,7 @@ Workflow {
         expand = "template::cpp::EcoreEntitiesTemplate::main FOR entityModels"
         outlet = {
             path = simulatorTargetSrc
+            overwrite = false // avoid that Impl classes are overwritten
             postprocessor = formatter_cpp
         }
         resourceManager = ResourceManagerDefaultImpl {
@@ -83,7 +84,7 @@ Workflow {
         expand = "template::cpp::EcoreEntitiesTemplate::CMakeLists FOR entityModels"
         outlet = {
             path = simulatorTargetSrc
-            overwrite = false
+            overwrite = true
         }
         resourceManager = ResourceManagerDefaultImpl {
             fileEncoding = "UTF-8"
@@ -95,7 +96,7 @@ Workflow {
         expand = "template::cpp::CommandTemplate::CMakeLists FOR commands"
         outlet = {
             path = simulatorTargetSrc
-            overwrite = false
+            overwrite = true
         }
         resourceManager = ResourceManagerDefaultImpl {
             fileEncoding = "UTF-8"

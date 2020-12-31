@@ -61,7 +61,7 @@
       virtual ~«this.name»() = «IF needsImplSubclass() || abstract»0«ELSE»default«ENDIF»;
         
       «FOREACH eOperations AS o-»
-      «o.operationToSignature()» = 0;
+      «o.operationToVirtualSignature()» = 0;
       «ENDFOREACH-»
       
       «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodDeclarations FOR this»
@@ -73,6 +73,29 @@
     #endif //«this.toCppIncludeGuard()»
     
     «ENDFILE»
+    
+    «IF needsImplSubclass()»
+    «FILE "impl/" + name + "Impl.h"»
+    #ifndef «this.toCppImplIncludeGuard()»
+    #define «this.toCppImplIncludeGuard()»
+    
+    «EXPAND template::cpp::types::ImportUsedTypesTemplate::ImplImportDefinitions FOR this»
+    
+    namespace «this.ePackage.name» {
+    
+    class «this.name»Impl : public «this.name» {
+    public:
+      «EXPAND template::cpp::properties::PropertyTemplate::ImplConstructorDeclaration FOR this»
+      «FOREACH this.getManualImplementedOperations() AS o»
+      «o.operationToOverrideSignature()»;
+      «ENDFOREACH»
+    };
+    
+    }
+    
+    #endif //«this.toCppImplIncludeGuard()»
+    «ENDFILE»
+    «ENDIF»
 «ENDDEFINE»
 
 «DEFINE CppClassSource FOR EClass»
@@ -89,12 +112,32 @@
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
         «FOREACH eOperations AS o»
-        // TODO «o.operationToSignature()»;
+        // TODO Source Operation «o.operationToSourceSignature(name)» {}
         «ENDFOREACH»
         
         «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodSources FOR this»
     }
     «ENDFILE»
+    
+    «IF needsImplSubclass()»
+    «FILE "impl/" + name + "Impl.cpp"»#include "«name»Impl.h"
+    
+    #include <stdexcept>
+      
+    namespace «this.ePackage.name» {
+      
+    «EXPAND template::cpp::properties::PropertyTemplate::ImplConstructorDefinition FOR this»
+    
+    «FOREACH this.getManualImplementedOperations() AS o»
+    «o.operationToSourceSignature(name + "Impl")» {
+        throw std::runtime_error("not implemented");
+    }
+    «ENDFOREACH»
+      
+    }
+    
+    «ENDFILE»
+    «ENDIF»
 «ENDDEFINE»
 
 «REM»DUMMY«ENDREM»
@@ -139,7 +182,7 @@
       virtual ~«this.name»() = default;
         
       «FOREACH eOperations AS o»
-      «o.operationToSignature()» = 0;
+      «o.operationToVirtualSignature()» = 0;
       «IF o.isPropertyGetter()-»
       «o.operationToObservableGetterSignature()» = 0;
       «ENDIF-»
@@ -203,5 +246,14 @@ set(GEN_SRCS ${GEN_SRCS}
     ${GEN_COMMAND_SRCS}
     PARENT_SCOPE)
 
+    «ENDFILE»
+    «FILE "impl/CMakeListsImpl.cmake"-»
+set(IMPL_GEN_SRCS ${IMPL_GEN_SRCS}
+    «FOREACH this.eClassifiers.typeSelect(EClass)
+                              .select(c|c.needsImplSubclass())
+                              .reject(c|c.isFacade()) AS c-»
+    "core/src/impl/«c.name»Impl.h"
+    "core/src/impl/«c.name»Impl.cpp"
+    «ENDFOREACH-»)
     «ENDFILE»
 «ENDDEFINE»

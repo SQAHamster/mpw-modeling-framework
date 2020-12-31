@@ -10,9 +10,18 @@ extension util::Extensions;
  * Note: currently duplicated, later refactored into central place.
  */
 
-operationToSignature(EOperation this) :
-    let parameters = if (isCommand()) then "/*" + name.toFirstUpper() + "CommandParameters parameters */" else eParameters.collect(e|e.toCppType() + " " + e.name).joinToString(", ") :
-    documentationToCppDoc() + "virtual " + operationToReturnType() + " " + effectiveOperationName() + "(" + parameters + ")";
+operationToVirtualSignature(EOperation this) :
+    documentationToCppDoc() + "virtual " + operationToReturnType() + " " + effectiveOperationName() + "(" + getOperationParameters() + ")";
+
+operationToOverrideSignature(EOperation this) :
+    operationToReturnType() + " " + effectiveOperationName() + "(" + getOperationParameters() + ") override";
+
+operationToSourceSignature(EOperation this, String className) :
+    operationToReturnType() + " " + className + "::" + effectiveOperationName() + "(" + getOperationParameters() + ")";
+
+private getOperationParameters(EOperation this) :
+    if (isCommand()) then "/*" + name.toFirstUpper() + "CommandParameters parameters */" 
+    else eParameters.collect(e|e.toCppType() + " " + e.name).joinToString(", ");
 
 private operationToReturnType(EOperation this) :
     if (isQuery()) then this.getQueryForOperation().toCppQueryReturnType()

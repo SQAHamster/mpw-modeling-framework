@@ -60,6 +60,17 @@
 		.reject(t|t.isStereotype())»
 «ENDDEFINE»
 
+«DEFINE ImplImportDefinitions FOR EClass»
+    «EXPAND SingleImportDefinition FOREACH eAllOperations
+        .collect(e|e.eType)
+        .add(this)
+        .union(eOperations.collect(o|o.getUsedTypes()).flatten())
+        .union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
+        .toSet()
+        .reject(e|e == null)
+        .reject(t|t.isBuiltInType())»
+«ENDDEFINE»
+
 «DEFINE SingleImportDefinition FOR EClassifier-»
     #include "«name».h"
 «ENDDEFINE»

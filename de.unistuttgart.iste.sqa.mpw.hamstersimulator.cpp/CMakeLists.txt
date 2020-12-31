@@ -4,10 +4,12 @@ project(de_unistuttgart_iste_sqa_mpw_hamstersimulator_cpp)
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(core/src/generated)
+add_subdirectory(core/src/impl)
 add_subdirectory(core/src/framework)
-set(SRCS ${GEN_SRCS} ${FRAMEWORK_SRCS})
+set(SRCS ${GEN_SRCS} ${IMPL_SRCS} ${FRAMEWORK_SRCS})
 
 include_directories(core/src/generated)
+include_directories(core/src/impl)
 include_directories(core/src/framework)
 add_library(hamster_core SHARED ${SRCS})
 add_library(hamster_core_lib STATIC ${SRCS})
