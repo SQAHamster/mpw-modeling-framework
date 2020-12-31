@@ -1,6 +1,8 @@
 #ifndef DE_UNISTUTTGART_HAMSTER_SETPROPERTYCOMMANDIMPL_H
 #define DE_UNISTUTTGART_HAMSTER_SETPROPERTYCOMMANDIMPL_H
 
+#include <functional>
+
 #include "SetPropertyCommand.h"
 
 namespace commands {
