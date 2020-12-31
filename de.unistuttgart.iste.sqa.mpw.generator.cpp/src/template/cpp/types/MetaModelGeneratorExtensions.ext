@@ -43,7 +43,7 @@ toInheritance(EClass this) :
         .select(e|e.interface) :
     if (filteredExtends.size > 0 && filteredInterfaces.size > 0) then ": public " + toQualifiedTypeName(filteredExtends.get(0)) + ", public virtual " + filteredInterfaces.collect(i|toQualifiedTypeName(i)).toString(", public virtual ")
     else if (filteredExtends.size > 0) then ": public " + toQualifiedTypeName(filteredExtends.get(0))
-    else if (filteredInterfaces.size > 0) then ": public " + filteredInterfaces.collect(i|toQualifiedTypeName(i)).toString(", public ")
+    else if (filteredInterfaces.size > 0) then ": public virtual " + filteredInterfaces.collect(i|toQualifiedTypeName(i)).toString(", public virtual ")
     else "";
 
 toInheritedAlias(EClass this) :

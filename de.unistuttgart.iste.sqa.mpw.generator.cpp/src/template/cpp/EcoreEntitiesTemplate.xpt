@@ -49,6 +49,7 @@
       
     public:
       «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDeclaration FOR this»
+      «EXPAND template::cpp::properties::PropertyTemplate::StaticSharedFromThisDefinition FOR this»
       «EXPAND template::cpp::QueriesTemplate::QueryDeclarations FOR this»
       «EXPAND template::cpp::commands::CommandCallsTemplate::CommandDefinitions FOR this»
       «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDeclarations FOR this»
@@ -180,6 +181,8 @@
     public:
     
       virtual ~«this.name»() = default;
+      
+      «EXPAND template::cpp::properties::PropertyTemplate::StaticSharedFromThisDefinition FOR this»
         
       «FOREACH eOperations AS o»
       «o.operationToVirtualSignature()» = 0;

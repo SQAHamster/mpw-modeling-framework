@@ -18,6 +18,16 @@
       «ENDFOREACH»
 «ENDDEFINE»
 
+«REM»Generates a convenience shared_from_this method which statically returns the "this" type«ENDREM»
+«DEFINE StaticSharedFromThisDefinition FOR EClass»
+      «IF isEntity()-»
+      /// \brief returns a shared_ptr of type «this.name» which shares ownership of *this
+	  std::shared_ptr<«this.name»> shared_from_this() {
+	    return std::dynamic_pointer_cast<«this.name»>(commands::Entity::shared_from_this());
+	  }
+      «ENDIF-»
+«ENDDEFINE»
+
 «DEFINE ConstructorDeclaration FOR EClass»
       «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
       «name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
@@ -116,8 +126,12 @@
     «IF eOpposite != null-»
         if («modifierParameterName()»->«eOpposite.name.getter()»().get() != this) {
     «ENDIF-»
-          
+    
+    «IF isObservableProperty()-»
     this->«name».add(«modifierParameterName()»);
+    «ELSE-»
+    this->«name».push_back(«modifierParameterName()»);
+    «ENDIF-»
           
     «IF eOpposite != null-»
         «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
@@ -166,7 +180,7 @@
 «DEFINE CallSetterForOppositeDefinition FOR EReference»
       «IF eOpposite != null-»
       if («modifierParameterName()» != nullptr) {
-          auto thisPtr = std::static_pointer_cast<«this.eContainingClass.name»>(this->shared_from_this());
+          auto thisPtr = this->shared_from_this();
           «modifierParameterName()»->«eOpposite.adderOrSetter()»(thisPtr);
       }
       «ENDIF-»
@@ -176,7 +190,7 @@
       «IF eOpposite != null-»
       if («previousFieldName()» != nullptr) {
           «IF eOpposite.isCollection()-»
-          auto thisPtr = std::static_pointer_cast<«this.eContainingClass.name»>(this->shared_from_this());
+          auto thisPtr = this->shared_from_this();
           «previousFieldName()»->«eOpposite.name.remover()»(thisPtr);
           «ELSE-»
           «previousFieldName()»->«eOpposite.name.setter()»(nullptr);
