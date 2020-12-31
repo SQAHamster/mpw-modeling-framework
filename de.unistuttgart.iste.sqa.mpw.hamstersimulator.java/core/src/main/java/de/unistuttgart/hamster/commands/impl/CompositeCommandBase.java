@@ -30,7 +30,7 @@ public abstract class CompositeCommandBase extends CompositeCommand {
         command.setNewValue(newValue);
         command.setPropertyName(propertyName);
 
-        getSubCommands().add(command);
+        addToSubCommands(command);
         command.execute();
     }
 
@@ -40,7 +40,7 @@ public abstract class CompositeCommandBase extends CompositeCommand {
         command.setEntityToAdd(entityToAdd);
         command.setPropertyName(propertyName);
 
-        getSubCommands().add(command);
+        addToSubCommands(command);
         command.execute();
     }
 
@@ -50,7 +50,7 @@ public abstract class CompositeCommandBase extends CompositeCommand {
         command.setEntityToRemove(entityToRemove);
         command.setPropertyName(propertyName);
 
-        getSubCommands().add(command);
+        addToSubCommands(command);
         command.execute();
     }
 

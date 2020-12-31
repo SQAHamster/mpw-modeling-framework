@@ -8,6 +8,8 @@
       private final «f.featureToObservableFieldType()» «f.name» = «f.featureToObservableFieldInstantiation()»;
       «ELSEIF f.changeable && f.eType.isDependency()»
       private «f.featureToJavaType()» «f.name» = «EXPAND InlineFeatureFieldInstantiation FOR f»;
+      «ELSEIF f.isCollection()»
+      private final «f.featureToJavaType()» «f.name» = «EXPAND InlineFeatureFieldInstantiation FOR f»;
       «ELSEIF f.derived || f.changeable»
       private «f.featureToJavaType()» «f.name»;
       «ELSEIF f.isConstructorInjectedProperty()»

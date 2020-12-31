@@ -60,7 +60,7 @@
       <details key="documentation" value="A more complex type of commands which makes use of multiple sub-commands. Usually the sub-commands are PrimitiveCommands.&#xD;&#xA;&#xD;&#xA;Example Hamster-Simulation: Game commands: Move, PickGrain, PutGrain or TurnLeft. Editor commands: InitTerritory or InitHamster."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subCommands" upperBound="-1"
-        eType="#//Command" changeable="false" containment="true"/>
+        eType="#//Command" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Entity" abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

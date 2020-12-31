@@ -6,7 +6,7 @@
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
     import java.util.List;
 	«ENDIF-»
-    «IF eStructuralFeatures.exists(e|e.isCollection() && !e.changeable)-»
+    «IF eStructuralFeatures.exists(e|e.isCollection())-»
     import java.util.ArrayList;
     «ENDIF-»
     «FOREACH eAllOperations.select(o|o.isCommand()).collect(o|o.getCommandForOperation().targetClass.name).toSet() AS className-»
