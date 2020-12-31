@@ -65,10 +65,13 @@ toQualifiedTypeName(String this, EPackage package) :
 isValueType(EClassifier this) : hasStereotype("ValueType");
 isDependency(EClassifier this) : hasStereotype("Dependency");
 isFacade(EClassifier this) : eAnnotations.exists(a|a.source == "facade");
+isEntity(EClassifier this) : EClass.isInstance(this) && ((EClass)this).eAllSuperTypes.exists(t|t.name == "Entity");
 
 // TODO: resolve EClass to check stereotype
 isValueType(String this) :
    this == "Location";
 
-toCppIncludeGuard(EClassifier this) :
-    getModulePackage().replaceAll("\\.", "_").toUpperCase() + "_" + this.name.toUpperCase() + "_H";
+toCppIncludeGuard(EClassifier this) : toCppIncludeGuard(this.name);
+
+toCppIncludeGuard(String this) :
+    getModulePackage().replaceAll("\\.", "_").toUpperCase() + "_" + this.toUpperCase() + "_H";

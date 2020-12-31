@@ -1,0 +1,59 @@
+import commandBehavior;
+import queryBehavior;
+import ecore;
+
+extension template::cpp::types::MetaModelGeneratorExtensions;
+extension template::cpp::types::EmfGeneratorExtensions;
+extension template::cpp::util::GlobalsGeneratorExtensions;
+
+/*
+ * Extensions related to the generation of commands.
+ * Note: currently duplicated, later refactored into central place.
+ */
+
+getCommandNamespace(Transformation this) :
+    "commands";
+
+getQualifiedCommandCppName(Transformation this) :
+    getCommandNamespace() + "::" + targetClass.name.toLowerCase();
+
+Transformation getCommandForOperation(EOperation operation) : 
+    operation.eAnnotations.selectFirst(a|a.source == "command").contents.first();
+
+getConcreteName(EClass this) : "Concrete" + name;
+
+getConcreteTypeName(InstanceCondition this) :
+  let transformation = (Transformation)eRootContainer : 
+  if (transformation.targetClass.name == this.instanceType.name) then "Concrete" + this.instanceType.name
+  else this.instanceType.name;
+
+getVisibility(Unit this) : 
+  if (name == "execute") then "public" else "private";
+  
+getVariableNameForFindReference(ManyReferenceCondition this) :
+  if (isPolymorphic()) then target.variableName + this.type.eType.name
+  else target.variableName;
+  
+isPolymorphic(ManyReferenceCondition this) :
+  this.type.eType.name != this.target.instanceType.name;
+  
+getParentTransformation(Unit this):
+    (Transformation)eContainer;
+  
+toLogMessage(Transformation this):
+    name.toFirstUpper().replaceAll("([a-z])([A-Z])", "$1 $2");
+  
+isActorCommand(Transformation this):
+    targetClass.eAllSuperTypes.exists(t|t.name == "Actor");
+    
+commandSetter() : "executeSetProperty";
+    
+commandAdder() : "executeAddReference";
+    
+commandRemover() : "executeRemoveReference";
+
+toCppIncludeGuard(Transformation this) :
+    ("Commands" + this.name).toCppIncludeGuard();
+
+toCppParameterIncludeGuard(Transformation this) :
+    ("Commands" + this.name + "Parameters").toCppIncludeGuard();

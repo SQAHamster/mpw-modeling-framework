@@ -1,4 +1,5 @@
 «IMPORT ecore»
+«IMPORT commandBehavior»
 
 «EXTENSION template::cpp::GeneratorExtensions»
 
@@ -65,4 +66,23 @@
 
 «DEFINE SingleForwardDeclarationDefinition FOR EClassifier-»
     namespace «ePackage.name» { class «name»; }
+«ENDDEFINE»
+
+«DEFINE CommandParameterIncludeDefinitions FOR Transformation»
+    #include <memory>
+
+    «EXPAND SingleImportDefinition FOREACH mainUnit.parameters.collect(p|p.type)
+                                                              .select(t|t.isEnum() || t.isValueType())
+                                                              .reject(t|t.isDataType())»
+    namespace «targetClass.ePackage.name» {
+        class «targetClass.getConcreteName()»;
+    }
+    namespace mpw {
+        class CommandStack;
+        «IF isActorCommand()-»
+        class GameLog;
+        «ENDIF-»
+    }
+    «EXPAND SingleForwardDeclarationDefinition FOREACH mainUnit.parameters.collect(p|p.type)
+                                                              .select(t|t.isEntity())»
 «ENDDEFINE»

@@ -1,0 +1,384 @@
+«IMPORT commandBehavior»
+«IMPORT queryBehavior»
+
+«EXTENSION template::cpp::GeneratorExtensions»
+
+«DEFINE main FOR Transformation»
+    «FILE "generated/commands/" + name.toFirstUpper() + "Command.h"»
+    	
+        #ifndef «this.toCppIncludeGuard()»
+        #define «this.toCppIncludeGuard()»
+    	
+    	namespace «getCommandNamespace()» {
+    	
+    	«documentation.toCppDoc()»
+		class «name.toFirstUpper()»Command final /*: public CompositeCommandBase*/ {
+    	«REM»
+			private final «targetClass.getConcreteName()» thisInstance;
+            «IF isActorCommand()-»
+            private final GameLog gameLog;
+            «ENDIF-»
+			«IF mainUnit != null»
+			«FOREACH mainUnit.parameters AS p»
+			private final «p.type.name.toJavaType()» «p.name»;
+			«ENDFOREACH»
+			«ENDIF»
+		
+			public «name.toFirstUpper()»Command(«name.toFirstUpper()»CommandParameters parameters) {
+				this.thisInstance = parameters.self;
+	            «IF isActorCommand()-»
+	            this.gameLog = parameters.gameLog;
+	            «ENDIF-»
+				«FOREACH mainUnit.parameters AS p-»
+                   this.«p.name» = parameters.«p.name»;
+                «ENDFOREACH-»
+			}
+		
+			«EXPAND UnitExpand FOR mainUnit»
+            «EXPAND UnitExpand FOREACH units.excluding(mainUnit)»
+            «EXPAND template::cpp::QueriesTemplate::HelperStatementDefinition FOREACH this.eAllContents
+                                                                                     .typeSelect(Constraint)
+                                                                                     .eAllContents
+                                                                                     .typeSelect(StatementsExpression)
+                                                                                     .select(e|e.needsHelperMethod)-»
+            «ENDREM»
+        };
+        
+        }
+        
+        #endif //«this.toCppIncludeGuard()»
+
+    «ENDFILE»
+    «FILE "generated/commands/" + name.toFirstUpper() + "Command.cpp"»#include "«name.toFirstUpper()»Command.h"
+        #include "FrameworkAssert.h"
+    
+        namespace «getCommandNamespace()» {
+        
+        «REM»
+        public class «name.toFirstUpper()»Command extends CompositeCommandBase {
+            private final «targetClass.getConcreteName()» thisInstance;
+            «IF isActorCommand()-»
+            private final GameLog gameLog;
+            «ENDIF-»
+            «IF mainUnit != null»
+            «FOREACH mainUnit.parameters AS p»
+            private final «p.type.name.toJavaType()» «p.name»;
+            «ENDFOREACH»
+            «ENDIF»
+        
+            public «name.toFirstUpper()»Command(«name.toFirstUpper()»CommandParameters parameters) {
+                this.thisInstance = parameters.self;
+                «IF isActorCommand()-»
+                this.gameLog = parameters.gameLog;
+                «ENDIF-»
+                «FOREACH mainUnit.parameters AS p-»
+                   this.«p.name» = parameters.«p.name»;
+                «ENDFOREACH-»
+            }
+        
+            «EXPAND UnitExpand FOR mainUnit»
+            «EXPAND UnitExpand FOREACH units.excluding(mainUnit)»
+            «EXPAND template::cpp::QueriesTemplate::HelperStatementDefinition FOREACH this.eAllContents
+                                                                                     .typeSelect(Constraint)
+                                                                                     .eAllContents
+                                                                                     .typeSelect(StatementsExpression)
+                                                                                     .select(e|e.needsHelperMethod)-»
+        }
+        «ENDREM»
+        }
+        
+    «ENDFILE»
+    «FILE "generated/commands/" + name.toFirstUpper() + "CommandParameters.h"»
+    
+	    #ifndef «this.toCppParameterIncludeGuard()»
+	    #define «this.toCppParameterIncludeGuard()»
+	    
+        namespace «getCommandNamespace()» {
+        
+        «EXPAND template::cpp::types::ImportUsedTypesTemplate::CommandParameterIncludeDefinitions FOR this»
+        
+        struct «name.toFirstUpper()»CommandParameters final {
+            «targetClass.ePackage.name»::«targetClass.getConcreteName()»& self;
+            mpw::CommandStack& commandStack;
+		    «IF isActorCommand()-»
+            mpw::GameLog& gameLog;
+		    «ENDIF-»
+            «FOREACH mainUnit.parameters AS p»
+            «p.toCppType()» «p.name»;
+            «ENDFOREACH»
+        };
+        
+        }
+        
+        #endif //«this.toCppParameterIncludeGuard()»
+
+    «ENDFILE»
+«ENDDEFINE»
+
+«REM»
+«DEFINE UnitExpand FOR Unit»
+    «IF mainUnit»@Override«ENDIF-»
+	«getVisibility()» void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
+    «IF mainUnit-»
+        «EXPAND PreconditionsDefinition FOR this»
+        «EXPAND OldValueVariablesDefinition FOR this»
+    «ENDIF-»
+    «IF mainUnit && getParentTransformation().isActorCommand()-»
+        gameLog.write("«getParentTransformation().toLogMessage()»");
+    «ENDIF-»
+	«EXPAND UnitExpandBody FOR this»
+    «IF mainUnit-»
+        «EXPAND PostconditionsDefinition FOR this»
+    «ENDIF-»
+	}
+	«EXPAND PostUnitExpand FOR this»
+«ENDDEFINE»
+
+«DEFINE UnitExpandBody FOR Unit»«ENDDEFINE»
+
+«DEFINE UnitExpandBody FOR ConditionalUnit»
+    if«FOREACH conditions AS c SEPARATOR " else if "-»
+    («EXPAND template::QueriesTemplate::ExpressionDefinition FOR c.condition») {
+	«EXPAND UnitInvokeExpand FOR c.unit»
+	}
+    «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE UnitExpandBody FOR SequentialUnit»
+	«EXPAND UnitInvokeExpand FOR this»
+«ENDDEFINE»
+
+«DEFINE UnitExpandBody FOR IteratedUnit»
+	«EXPAND UnitInvokeExpand FOR this»
+«ENDDEFINE»
+
+«DEFINE UnitInvokeExpand FOR Unit»«ENDDEFINE»
+
+«DEFINE UnitInvokeExpand FOR SequentialUnit»
+	«FOREACH targetInvocations AS i»
+	«i.targetMethodName»(«FOREACH i.mappedParameters AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
+	«ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE UnitInvokeExpand FOR IteratedUnit»
+	for (int i = 0; i < («repeat»); i++) {
+		«targetInvocation.targetMethodName»(«FOREACH targetInvocation.mappedParameters AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
+	}
+«ENDDEFINE»
+
+«DEFINE UnitInvokeExpand FOR Rule»
+    «name»();
+«ENDDEFINE»
+
+«DEFINE UnitExpandBody FOR Rule»
+    «EXPAND VariableDefinition FOREACH variables»
+    «EXPAND InstanceDefinition FOREACH instanceConditions»
+    «EXPAND ReferenceDefinition FOREACH referenceConditions»
+    «EXPAND VariableAssignmentDefinition FOREACH variableAssignments»
+    «EXPAND AttributeDefinition FOREACH attributeConditions»
+    «EXPAND RemoveModificationDefinition FOREACH modifications.select(m|m.action == Action::DELETE)»
+    «EXPAND ClearModificationDefinition FOREACH modifications.select(m|m.action == Action::CLEAR)»
+    «EXPAND CreateModificationDefinition FOREACH modifications.select(m|m.action == Action::CREATE)»
+    «EXPAND AttributeModificationDefinition FOREACH modifications.select(m|m.action == Action::MODIFY)»
+«ENDDEFINE»
+
+«DEFINE PostUnitExpand FOR Unit»«ENDDEFINE»
+
+«DEFINE PostUnitExpand FOR Rule»
+    «EXPAND FindObjectDefinition FOREACH referenceConditions.typeSelect(ManyReferenceCondition).select(r|!r.isCreate)»
+«ENDDEFINE»
+
+«DEFINE ThisInstanceDefinition FOR InstanceCondition»
+    // this: «this.variableName»:«this.instanceType.name»
+«ENDDEFINE»
+
+«DEFINE InstanceDefinition FOR InstanceCondition»
+	«IF isCreate»
+		// new instance: «this.variableName»:«this.instanceType.name»
+    	«this.instanceType.name» «this.variableName» = new «this.instanceType.name»();
+	«ENDIF»
+«ENDDEFINE»
+
+«DEFINE VariableDefinition FOR VariableDeclaration»
+    // new variable «this.variableName»: «this.variableType.name»
+    «this.variableType.name.toJavaType()» «this.variableName»;
+«ENDDEFINE»
+
+«DEFINE ReferenceDefinition FOR ReferenceCondition»
+	«IF this.metaType == SingleReferenceCondition»
+      «EXPAND SingleReferenceDefinition FOR (SingleReferenceCondition)this»
+    «ELSEIF this.metaType == ManyReferenceCondition»
+      «EXPAND ManyReferenceDefinition FOR (ManyReferenceCondition)this»
+	«ENDIF»
+«ENDDEFINE»
+
+«DEFINE SingleReferenceDefinition FOR SingleReferenceCondition»
+	«IF !this.isCreate && !this.isForbid»
+		// new variable from reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
+		«this.target.instanceType.name» «this.target.variableName» = «this.source.variableName».«getter(this.referenceName)»();
+		assertInstanceNotNull("«this.source.variableName».«this.referenceName»", «this.target.variableName»);
+	«ENDIF»
+«ENDDEFINE»
+
+«DEFINE ManyReferenceDefinition FOR ManyReferenceCondition»
+	«IF !this.isCreate»
+		// find new variable from many-reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
+		«LET (Rule)this.eContainer AS rule»
+	    «this.target.instanceType.name» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.variableName»);
+	    «ENDLET»
+	«ENDIF»
+«ENDDEFINE»
+
+«DEFINE VariableAssignmentDefinition FOR VariableAssignment»
+    «variableName» = «EXPAND template::QueriesTemplate::ExpressionDefinition FOR value»;
+«ENDDEFINE»
+
+«DEFINE AttributeDefinition FOR AttributeCondition»
+	«IF this.isCreate»
+	    «IF instance.instanceType.isValueType()-»
+    	    // set attribute condition «instance.variableName».«attributeName» := «attributeValueLiteral»
+	        «instance.variableName».«attributeName.setter()»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+	    «ELSE»
+	        // set value type field «instance.variableName».«attributeName» := «attributeValueLiteral»
+	        «commandSetter()»(«instance.variableName», "«attributeName»", «instance.variableName».«attributeName.getter()»(), «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+	    «ENDIF-»
+	«ELSE»	
+		// assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
+		assertAttributeCondition("«instance.variableName».«attributeName-» == «attributeValueLiteral»", «instance.variableName».«attributeName.getter()»() == «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+	«ENDIF»
+«ENDDEFINE»
+
+«DEFINE RemoveModificationDefinition FOR Modification»
+	«IF this.instance != null»
+	// remove instance: «this.action» «this.instance.variableName» «this.instance.instanceType.name»
+	«ENDIF»
+    «IF this.reference != null»
+    // remove reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
+    «IF this.reference.metaType == SingleReferenceCondition»
+        «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), null);
+    «ELSE»
+        «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
+    «ENDIF»
+    «ENDIF»
+«ENDDEFINE»
+
+«DEFINE ClearModificationDefinition FOR Modification»
+    «IF this.reference.metaType == ClearReferenceCondition»
+        // clear references: «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
+        while («this.reference.source.variableName».«this.reference.referenceName.getter()»().size() > 0) {
+            «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»().get(0));
+        }
+    «ENDIF»
+«ENDDEFINE»
+
+«DEFINE CreateModificationDefinition FOR Modification»
+	«IF this.instance != null»
+	// create instance: «this.action» «this.instance.variableName» «this.instance.instanceType.name»
+	«ENDIF»
+    «IF this.reference != null»
+    // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
+    «IF this.reference.metaType == SingleReferenceCondition»
+        «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
+	«ELSE»
+	    «commandAdder()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
+    «ENDIF»
+    «ENDIF»
+«ENDDEFINE»
+
+«DEFINE AttributeModificationDefinition FOR Modification»
+	// set attribute: «this.attribute.instance.variableName».«this.attribute.attributeName» := «this.newAttributeValue»
+	«commandSetter()»(«this.attribute.instance.variableName», "«this.attribute.attributeName»", «this.attribute.instance.variableName».«this.attribute.attributeName.getter()»(), «this.newAttributeValue»);
+«ENDDEFINE»
+
+«DEFINE FindObjectDefinition FOR ManyReferenceCondition»
+	«LET (Rule)this.eContainer AS rule»
+	
+	private «this.target.instanceType.name» «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.getConcreteTypeName()» source) {
+		«this.target.instanceType.name» result = null;
+		
+		for («this.type.eType.name» «getVariableNameForFindReference()» : source.«getter(this.referenceName)»()) {
+		    «IF isPolymorphic()»
+		      if (!(«getVariableNameForFindReference()» instanceof «this.target.instanceType.name»)) {
+		        continue;
+		      }
+		      «this.target.instanceType.name» «this.target.variableName» = («this.target.instanceType.name»)«getVariableNameForFindReference()»;
+		    «ENDIF»
+			«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)»
+			«EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)»
+			
+			result = «this.target.variableName»;
+			break;
+        }
+		assertObjectFound("«this.referenceName»", "«this.target.instanceType.name»", result);
+		return result;
+    }
+    
+    «ENDLET»
+«ENDDEFINE»
+
+«DEFINE AttributeConditionsForFindObjectDefinition FOR AttributeCondition»
+	// attribute check: «instance.variableName»: «this.attributeName»
+	if («instance.variableName».«this.attributeName.getter()»() != «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
+		continue;
+	}
+«ENDDEFINE»
+
+«DEFINE ReferenceConditionsForFindObjectDefinition FOR SingleReferenceCondition»
+	// reference check: «source.variableName»: «this.referenceName»
+    «IF this.isForbid»
+    if («source.variableName».«getter(this.referenceName)»() != null) {	 	   
+	«ELSE»
+    «target.instanceType.name» «target.variableName» = «source.variableName».«getter(this.referenceName)»();
+	if («target.variableName» == null) {
+    «ENDIF»
+    	continue;
+    }
+    
+	«LET (Rule)this.eContainer AS rule»
+	«EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)»
+	«EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)»
+	«ENDLET»
+«ENDDEFINE»
+
+«DEFINE PreconditionsDefinition FOR Unit»
+	«LET (Transformation)this.eContainer AS transformation-»
+	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(Precondition)-»
+	«IF !transformation.isInit-»
+        «EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-»
+	«ENDIF-»
+	«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE OldValueVariablesDefinition FOR Unit»
+	«LET (Transformation)this.eContainer AS transformation-»
+	«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH transformation.constraints.typeSelect(Postcondition).collect(c|c.oldValueVariableExpressions).flatten()-»
+	«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE PostconditionsDefinition FOR Unit»
+	«LET (Transformation)this.eContainer AS transformation-»
+	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(Postcondition)-»
+	«EXPAND ConstraintDefinition FOREACH transformation.constraints.typeSelect(ClassInvariant)-»
+	«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE ConstraintDefinition FOR Constraint»
+    «documentation.toComment()»
+	if ((«EXPAND template::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
+	    throw new CommandConstraintException("«constraintToViolationString()»");
+	}
+«ENDDEFINE»
+«ENDREM»
+
+«DEFINE CMakeLists FOR List[Transformation]»
+    «FILE "generated/commands/CMakeLists.txt"-»
+    
+set(GEN_COMMAND_SRCS ${GEN_COMMAND_SRCS}
+    «FOREACH this AS c-»
+    "core/src/generated/commands/«c.name.toFirstUpper()»CommandParameters.h"
+    "core/src/generated/commands/«c.name.toFirstUpper()»Command.h"
+    "core/src/generated/commands/«c.name.toFirstUpper()»Command.cpp"
+    «ENDFOREACH-»
+    PARENT_SCOPE)
+    «ENDFILE»
+«ENDDEFINE»

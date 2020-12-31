@@ -9,6 +9,6 @@ extension template::cpp::types::EmfGeneratorExtensions reexport;
 extension template::cpp::types::MetaModelGeneratorExtensions reexport;
 extension template::cpp::properties::PropertyGeneratorExtensions reexport;
 extension template::cpp::operations::OperationGeneratorExtensions reexport;
-//extension template::cpp::commands::CommandGeneratorExtensions reexport;
+extension template::cpp::commands::CommandGeneratorExtensions reexport;
 extension template::cpp::queries::QueryGeneratorExtensions reexport;
 extension template::cpp::util::GlobalsGeneratorExtensions reexport;

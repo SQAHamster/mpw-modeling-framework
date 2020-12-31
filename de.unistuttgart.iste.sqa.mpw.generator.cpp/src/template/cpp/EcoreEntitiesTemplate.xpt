@@ -174,8 +174,16 @@
     «ENDFILE»
 «ENDDEFINE»
 
+«DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR GetPropertyDeclarationAnnotation»
+    // «fieldTypeName» «getterName»();
+«ENDDEFINE»
+
 «DEFINE CMakeLists FOR List[EPackage]»
     «FILE "generated/CMakeLists.txt"-»
+    
+add_subdirectory(commands)
     
 set(GEN_SRCS ${GEN_SRCS}
     «FOREACH this.eClassifiers.typeSelect(EClass)
@@ -191,13 +199,8 @@ set(GEN_SRCS ${GEN_SRCS}
     «FOREACH this.eClassifiers.typeSelect(EEnum) AS c-»
     "core/src/generated/«c.name».h"
     «ENDFOREACH-»
+    ${GEN_COMMAND_SRCS}
     PARENT_SCOPE)
+
     «ENDFILE»
-«ENDDEFINE»
-
-
-«DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE»
-
-«DEFINE GenerationAnnotation FOR GetPropertyDeclarationAnnotation»
-    // «fieldTypeName» «getterName»();
 «ENDDEFINE»

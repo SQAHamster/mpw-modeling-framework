@@ -48,7 +48,6 @@ Workflow {
         expand = "template::cpp::EcoreEntitiesTemplate::main FOR entityModels"
         outlet = {
             path = simulatorTargetSrc
-            overwrite = false
             postprocessor = formatter_cpp
         }
         resourceManager = ResourceManagerDefaultImpl {
@@ -56,11 +55,44 @@ Workflow {
         }
         
     }
+    
+    /* generate commands */
+    component = Generator {
+        globalVarDef = {
+            name = "module_package"
+            value = generatedProjectBasePackage
+        }
+        globalVarDef = {
+            name = "queries"
+            value = "queries"
+        }
+        metaModel = mm_emf
+        expand = "template::cpp::CommandTemplate::main FOREACH commands"
+        outlet = {
+            path = simulatorTargetSrc
+            postprocessor = formatter_cpp
+        }
+        resourceManager = ResourceManagerDefaultImpl {
+            fileEncoding = "UTF-8"
+        }
+    }
 
     /* generate CMakeLists.txt */
     component = Generator {
         metaModel = mm_emf
         expand = "template::cpp::EcoreEntitiesTemplate::CMakeLists FOR entityModels"
+        outlet = {
+            path = simulatorTargetSrc
+            overwrite = false
+        }
+        resourceManager = ResourceManagerDefaultImpl {
+            fileEncoding = "UTF-8"
+        }
+        
+    }
+    component = Generator {
+        metaModel = mm_emf
+        expand = "template::cpp::CommandTemplate::CMakeLists FOR commands"
         outlet = {
             path = simulatorTargetSrc
             overwrite = false
