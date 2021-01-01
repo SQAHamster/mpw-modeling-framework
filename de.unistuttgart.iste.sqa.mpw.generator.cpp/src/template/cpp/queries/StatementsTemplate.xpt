@@ -6,7 +6,6 @@
 «DEFINE StatementsDefinitions FOR StatementsExpression-»
     «IF statements.size == 0»nullptr«ENDIF-»
     
-    «REM»DUMMY«ENDREM-»
     «FOREACH statements.reverse() AS s-»
         «IF s.isFunctionStatement()-»
             «s.getFunctionStatementCall()-»
@@ -14,6 +13,9 @@
     «ENDFOREACH-»
     
     «FOREACH statements AS s-»
+        «IF QueryStatement.isInstance(s.previous) && s.previous.isOptional-»
+            .value()«REM»TODO implement safe optional access«ENDREM-»
+        «ENDIF-»
         «IF s.previous != null && !s.isFunctionStatement()-»
             «IF s.isObjectReferenceAccess()-»->«ELSE».«ENDIF-»
         «ENDIF-»

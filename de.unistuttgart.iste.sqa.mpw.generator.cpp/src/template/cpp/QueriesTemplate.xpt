@@ -58,7 +58,7 @@
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR ConstantExpression-»
-    «literal-»
+    «literal.toCppLiteral()-»
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR StatementsExpression-»
@@ -83,8 +83,12 @@
       «this.toCppType()» «helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»);
 «ENDDEFINE»
 
-«DEFINE HelperStatementDefinition FOR StatementsExpression»
-      «this.toCppType()» «findContextClass().name»::«helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») {
+«DEFINE HelperStatementDefinition FOR StatementsExpression-»
+      «EXPAND HelperStatementDefinitionForClassName(findContextClass().name) FOR this-»
+«ENDDEFINE»
+
+«DEFINE HelperStatementDefinitionForClassName(String className) FOR StatementsExpression»
+      «this.toCppType()» «className»::«helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») {
           return «EXPAND template::cpp::queries::StatementsTemplate::StatementsDefinitions FOR this-»;
       }
 «ENDDEFINE»

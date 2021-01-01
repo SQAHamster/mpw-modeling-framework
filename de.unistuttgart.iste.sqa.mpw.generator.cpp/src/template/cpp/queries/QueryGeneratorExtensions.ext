@@ -1,5 +1,6 @@
 import ecore;
 import queryBehavior;
+import commandBehavior;
 import behaviorsbase;
 
 extension template::cpp::types::EmfGeneratorExtensions;
@@ -64,8 +65,7 @@ private EClassifier findContextClassOfEObject(emf::EObject object) :
 
 isObjectReferenceAccess(Statement statement) :
     if (statement.previous.isCollection) then false
-    else if (FeatureStatement.isInstance(statement.previous) && ((FeatureStatement)statement.previous).feature.isReference()) then true
-    else if (SelfStatement.isInstance(statement.previous)) then true
+    else if (statement.previous != null && statement.previous.type.isObjectReference()) then true
     else false;
     
 isFunctionStatement(Statement this) :
@@ -85,3 +85,11 @@ getFunctionStatementCall(Statement this) :
 toCppQueryReturnType(Query this) : 
     if (this.isOptional) then "std::optional<" + toCppType() + ">"
     else toCppType();
+
+accessor(ReferenceCondition this) : accessor(this.source);
+accessor(AttributeCondition this) : accessor(this.instance);
+
+accessor(InstanceCondition this) :
+    if (this.instanceType.isValueType()) then "."
+    else "->";
+    

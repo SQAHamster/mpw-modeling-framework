@@ -4,7 +4,10 @@
 «EXTENSION template::cpp::GeneratorExtensions»
 
 «DEFINE UnitDeclaration FOR Unit»
+    «REM»mainUnit is separately defined as public execute()«ENDREM-»
+    «IF !mainUnit-»
     void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF»);
+    «ENDIF-»
     «EXPAND FindObjectDeclaration FOREACH eAllContents.typeSelect(ManyReferenceCondition)-»
 «ENDDEFINE»
 
@@ -15,7 +18,7 @@
 «ENDDEFINE»
 
 «DEFINE UnitExpand FOR Unit»
-    void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF») {
+    void «getParentTransformation().name.toFirstUpper()»Command::«name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF») {
     «IF mainUnit-»
         «EXPAND PreconditionsDefinition FOR this»
         «EXPAND OldValueVariablesDefinition FOR this»
@@ -92,7 +95,7 @@
 «DEFINE InstanceDefinition FOR InstanceCondition»
     «IF isCreate»
         // new instance: «this.variableName»:«this.instanceType.name»
-        auto «this.variableName» = std::make_shared<«this.instanceType.name»>();
+        «this.instanceType.toCppType()» «this.variableName»«IF !this.instanceType.isValueType()» = std::make_shared<«this.instanceType.toQualifiedTypeName()»>()«ENDIF»;
     «ENDIF»
 «ENDDEFINE»
 
@@ -112,8 +115,10 @@
 «DEFINE SingleReferenceDefinition FOR SingleReferenceCondition»
     «IF !this.isCreate && !this.isForbid»
         // new variable from reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
-        «this.target.instanceType.name» «this.target.variableName» = «this.source.variableName».«getter(this.referenceName)»();
-        assertInstanceNotNull("«this.source.variableName».«this.referenceName»", «this.target.variableName»);
+        «this.target.instanceType.toCppType()» «this.target.variableName» = «this.source.variableName»«accessor()»«getter(this.referenceName)»();
+        «IF !this.target.instanceType.isValueType()-»
+            assertInstanceNotNull("«this.source.variableName»«accessor()»«this.referenceName»", «this.target.variableName».get());
+        «ENDIF-»
     «ENDIF»
 «ENDDEFINE»
 
@@ -121,7 +126,7 @@
     «IF !this.isCreate»
         // find new variable from many-reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
         «LET (Rule)this.eContainer AS rule»
-        «this.target.instanceType.name» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.variableName»);
+        «this.target.instanceType.toCppType()» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(*«source.variableName»);
         «ENDLET»
     «ENDIF»
 «ENDDEFINE»
@@ -134,14 +139,14 @@
     «IF this.isCreate»
         «IF instance.instanceType.isValueType()-»
             // set attribute condition «instance.variableName».«attributeName» := «attributeValueLiteral»
-            «instance.variableName».«attributeName.setter()»(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+            «instance.variableName»«accessor()»«attributeName.setter()»(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
         «ELSE»
             // set value type field «instance.variableName».«attributeName» := «attributeValueLiteral»
-            «commandSetter()»(«instance.variableName», "«attributeName»", «instance.variableName».«attributeName.getter()»(), «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+            «commandSetter(this.attributeValue.type)»(«instance.variableName», "«attributeName»", «instance.variableName»«accessor()»«attributeName.getter()»(), «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
         «ENDIF-»
     «ELSE»  
         // assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
-        assertAttributeCondition("«instance.variableName».«attributeName-» == «attributeValueLiteral»", «instance.variableName».«attributeName.getter()»() == «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+        assertAttributeCondition("«instance.variableName»«accessor()»«attributeName-» == «attributeValueLiteral»", «instance.variableName»«instance.accessor()»«attributeName.getter()»() == «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
     «ENDIF»
 «ENDDEFINE»
 
@@ -152,7 +157,7 @@
     «IF this.reference != null»
     // remove reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
     «IF this.reference.metaType == SingleReferenceCondition»
-        «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), null);
+        «commandSetter(this.reference.source.instanceType)»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»(), nullptr);
     «ELSE»
         «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
     «ENDIF»
@@ -162,8 +167,8 @@
 «DEFINE ClearModificationDefinition FOR Modification»
     «IF this.reference.metaType == ClearReferenceCondition»
         // clear references: «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
-        while («this.reference.source.variableName».«this.reference.referenceName.getter()»().size() > 0) {
-            «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»().get(0));
+        while («this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»().size() > 0) {
+            «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»().front());
         }
     «ENDIF»
 «ENDDEFINE»
@@ -175,7 +180,7 @@
     «IF this.reference != null»
     // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
     «IF this.reference.metaType == SingleReferenceCondition»
-        «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
+        «commandSetter(this.reference.target.instanceType)»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
     «ELSE»
         «commandAdder()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
     «ENDIF»
@@ -184,29 +189,29 @@
 
 «DEFINE AttributeModificationDefinition FOR Modification»
     // set attribute: «this.attribute.instance.variableName».«this.attribute.attributeName» := «this.newAttributeValue»
-    «commandSetter()»(«this.attribute.instance.variableName», "«this.attribute.attributeName»", «this.attribute.instance.variableName».«this.attribute.attributeName.getter()»(), «this.newAttributeValue»);
+    «commandSetter(this.attribute.attributeValue.type)»(«this.attribute.instance.variableName», "«this.attribute.attributeName»", «this.attribute.instance.variableName»«this.attribute.accessor()»«this.attribute.attributeName.getter()»(), «this.toNewAttributeValueCppString()»);
 «ENDDEFINE»
 
 «DEFINE FindObjectDefinition FOR ManyReferenceCondition»
     «LET (Rule)this.eContainer AS rule»
     
-    std::shared_ptr<«this.target.instanceType.name»> «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.toFindParameterTypeName()» source) {
-        «this.target.instanceType.name» result = null;
+    std::shared_ptr<«this.target.instanceType.toQualifiedTypeName()»> «rule.getParentTransformation().name.toFirstUpper()»Command::«rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.toFindParameterTypeName()» source) {
+        «this.target.instanceType.toCppType()» result = nullptr;
         
-        for («this.type.eType.name» «getVariableNameForFindReference()» : source.«getter(this.referenceName)»()) {
+        for (auto& «getVariableNameForFindReference()» : source.«getter(this.referenceName)»()) {
             «IF isPolymorphic()»
-              if (!(«getVariableNameForFindReference()» instanceof «this.target.instanceType.name»)) {
-                continue;
-              }
-              «this.target.instanceType.name» «this.target.variableName» = («this.target.instanceType.name»)«getVariableNameForFindReference()»;
+                «this.target.instanceType.toCppType()» «this.target.variableName» = std::dynamic_pointer_cast<«this.target.instanceType.toQualifiedTypeName()»>(«getVariableNameForFindReference()»);
+                if («this.target.variableName» == nullptr) {
+                    continue;
+                }
             «ENDIF»
             «EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)»
-            «EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target)»
+            «EXPAND ReferenceConditionsForFindObjectDefinition FOREACH rule.referenceConditions.typeSelect(SingleReferenceCondition).select(e|!e.isCreate && e.source == this.target && e.source.instanceType.isObjectReference())»
             
             result = «this.target.variableName»;
             break;
         }
-        assertObjectFound("«this.referenceName»", "«this.target.instanceType.name»", result);
+        assertObjectFound("«this.referenceName»", "«this.target.instanceType.name»", result.get());
         return result;
     }
     
@@ -215,21 +220,25 @@
 
 «DEFINE AttributeConditionsForFindObjectDefinition FOR AttributeCondition»
     // attribute check: «instance.variableName»: «this.attributeName»
-    if («instance.variableName».«this.attributeName.getter()»() != «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
+    if («instance.variableName»«instance.accessor()»«this.attributeName.getter()»() != «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
         continue;
     }
 «ENDDEFINE»
 
 «DEFINE ReferenceConditionsForFindObjectDefinition FOR SingleReferenceCondition»
     // reference check: «source.variableName»: «this.referenceName»
-    «IF this.isForbid»
-    if («source.variableName».«getter(this.referenceName)»() != null) {        
-    «ELSE»
-    «target.instanceType.name» «target.variableName» = «source.variableName».«getter(this.referenceName)»();
-    if («target.variableName» == null) {
-    «ENDIF»
+    «IF this.isForbid-»
+    if («source.variableName»«accessor()»«getter(this.referenceName)»() != nullptr) {
         continue;
     }
+    «ELSE-»
+    «target.instanceType.toCppType()» «target.variableName» = «source.variableName»«accessor()»«getter(this.referenceName)»();
+        «IF target.instanceType.isObjectReference()-»
+        if («target.variableName» == nullptr) {
+            continue;
+        }
+        «ENDIF-»
+    «ENDIF-»
     
     «LET (Rule)this.eContainer AS rule»
     «EXPAND AttributeConditionsForFindObjectDefinition FOREACH rule.attributeConditions.select(e|!e.isCreate && e.instance == this.target)»
@@ -262,6 +271,6 @@
 «DEFINE ConstraintDefinition FOR Constraint»
     «documentation.toComment()»
     if ((«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
-        throw new CommandConstraintException("«constraintToViolationString()»");
+        throw CommandConstraintException("«constraintToViolationString()»");
     }
 «ENDDEFINE»

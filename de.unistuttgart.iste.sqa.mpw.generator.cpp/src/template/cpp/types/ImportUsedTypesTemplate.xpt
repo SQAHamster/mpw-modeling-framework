@@ -1,5 +1,6 @@
 «IMPORT ecore»
 «IMPORT commandBehavior»
+«IMPORT queryBehavior»
 
 «EXTENSION template::cpp::GeneratorExtensions»
 
@@ -105,5 +106,6 @@
 «DEFINE CommandUsedTypeIncludeDefinitions FOR Transformation»
     «EXPAND SingleImportDefinition FOREACH mainUnit.parameters.collect(p|p.type)
                                                               .union(this.eAllContents.typeSelect(InstanceCondition).collect(c|c.instanceType))
+                                                              .union(this.eAllContents.typeSelect(Statement).collect(s|s.type))
                                                               .reject(t|t.isDataType())»
 «ENDDEFINE»

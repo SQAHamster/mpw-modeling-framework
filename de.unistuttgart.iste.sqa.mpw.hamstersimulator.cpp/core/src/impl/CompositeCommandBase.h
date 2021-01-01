@@ -20,6 +20,7 @@ namespace commands {
   protected:
 
     void executeSetProperty(std::shared_ptr<Entity> entity, std::string propertyName, Any oldValue, Any newValue);
+    void executeSetProperty(std::shared_ptr<Entity> entity, std::string propertyName, std::shared_ptr<Entity> oldValue, std::shared_ptr<Entity> newValue);
 
     /// \brief special variant to set a value, which can be used for value-types
     /// \note \param oldValue and \param newValue are created as copied raw pointers of unmanaged memory on the heap
@@ -29,6 +30,11 @@ namespace commands {
         command.handleLifeCycleOfValues([](ValueReference reference) {
             delete reinterpret_cast<T*>(reference);
         });
+    }
+
+    template<typename T>
+    void executeSetEnumProperty(std::shared_ptr<Entity> entity, std::string propertyName, T oldValue, T newValue) {
+        internalExecuteSetProperty(entity, propertyName, static_cast<int>(oldValue), static_cast<int>(newValue));
     }
 
     void executeAddReference(std::shared_ptr<Entity> entity, std::string propertyName, std::shared_ptr<Entity> entityToAdd);

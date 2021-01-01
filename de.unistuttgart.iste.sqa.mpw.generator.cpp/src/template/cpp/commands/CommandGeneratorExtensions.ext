@@ -46,7 +46,10 @@ toLogMessage(Transformation this):
 isActorCommand(Transformation this):
     targetClass.eAllSuperTypes.exists(t|t.name == "Actor");
     
-commandSetter() : "executeSetProperty";
+commandSetter(EClassifier type) : 
+    if (type.isValueType()) then "executeSetValueProperty"
+    else if (type.isEnum()) then "executeSetEnumProperty"
+    else "executeSetProperty";
     
 commandAdder() : "executeAddReference";
     
@@ -57,3 +60,8 @@ toCppIncludeGuard(Transformation this) :
 
 toCppParameterIncludeGuard(Transformation this) :
     ("Commands" + this.name + "Parameters").toCppIncludeGuard();
+
+// called for Attribute Modifications
+toNewAttributeValueCppString(Modification this) :
+    if (attribute.attributeValue.type.isEnum()) then attribute.attributeValue.type.toCppType() + "::" + newAttributeValue 
+    else newAttributeValue;

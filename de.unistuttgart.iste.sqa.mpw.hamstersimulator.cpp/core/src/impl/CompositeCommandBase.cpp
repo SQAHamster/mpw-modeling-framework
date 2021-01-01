@@ -23,6 +23,11 @@ namespace commands {
     internalExecuteSetProperty(entity, propertyName, oldValue, newValue);
   }
 
+  void CompositeCommandBase::executeSetProperty(std::shared_ptr<Entity> entity, std::string propertyName,
+                                              std::shared_ptr<Entity> oldValue, std::shared_ptr<Entity> newValue) {
+    internalExecuteSetProperty(entity, propertyName, oldValue.get(), newValue.get());
+  }
+
   SetPropertyCommandImpl& CompositeCommandBase::internalExecuteSetProperty(std::shared_ptr<Entity> entity, std::string propertyName, Any oldValue, Any newValue) {
     auto command = std::make_shared<SetPropertyCommandImpl>();
     command->setEntity(entity);

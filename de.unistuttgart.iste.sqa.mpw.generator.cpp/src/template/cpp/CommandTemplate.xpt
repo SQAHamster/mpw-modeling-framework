@@ -18,7 +18,6 @@
     	«documentation.toCppDoc()»
 		class «name.toFirstUpper()»Command final : public CompositeCommandBase {
 		private:
-		«REM»
             «EXPAND template::cpp::commands::CommandParametersTemplate::ParameterFieldDefinitions FOR this»
 		
 		public:
@@ -31,13 +30,13 @@
 			void execute() override;
 		
             private:
+			«EXPAND template::cpp::commands::CommandUnitTemplate::UnitDeclaration FOR mainUnit»
 			«EXPAND template::cpp::commands::CommandUnitTemplate::UnitDeclaration FOREACH units.excluding(mainUnit)»
             «EXPAND template::cpp::QueriesTemplate::HelperStatementDeclaration FOREACH this.eAllContents
                                                                                      .typeSelect(Constraint)
                                                                                      .eAllContents
                                                                                      .typeSelect(StatementsExpression)
                                                                                      .select(e|e.needsHelperMethod)-»
-        «ENDREM»
         };
         
         }
@@ -47,15 +46,23 @@
     «ENDFILE»
     «FILE "generated/commands/" + name.toFirstUpper() + "Command.cpp"»#include "«name.toFirstUpper()»Command.h"
         #include "FrameworkAssert.h"
+        #include "CommandConstraintException.h"
+        #include "«targetClass.getConcreteName()».h"
+        «IF eAllContents.typeSelect(StatementsExpression).exists(e|e.needsHelperMethod)-»
+            #include "CollectionHelpers.hpp"
+        «ENDIF-»
+        
+        using namespace framework;
     
         namespace «getCommandNamespace()» {
         
-            «REM»«EXPAND template::cpp::commands::CommandUnitTemplate::UnitExpand FOREACH units»
-            «EXPAND template::cpp::QueriesTemplate::HelperStatementDefinition FOREACH this.eAllContents
+            «EXPAND template::cpp::commands::CommandUnitTemplate::UnitExpand FOR mainUnit»
+            «EXPAND template::cpp::commands::CommandUnitTemplate::UnitExpand FOREACH units.excluding(mainUnit)»
+            «EXPAND template::cpp::QueriesTemplate::HelperStatementDefinitionForClassName(name.toFirstUpper()+"Command") FOREACH this.eAllContents
                                                                                      .typeSelect(Constraint)
                                                                                      .eAllContents
                                                                                      .typeSelect(StatementsExpression)
-                                                                                     .select(e|e.needsHelperMethod)-»«ENDREM»
+                                                                                     .select(e|e.needsHelperMethod)-»
         }
         
     «ENDFILE»
