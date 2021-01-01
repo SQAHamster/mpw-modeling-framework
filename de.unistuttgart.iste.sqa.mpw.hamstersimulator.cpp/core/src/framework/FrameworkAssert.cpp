@@ -1,13 +1,14 @@
 #include "FrameworkAssert.h"
 
-#include <stdexcept>
+#include <string>
+#include "AssertionFailedException.h"
 
 namespace framework {
   void assertAttributeCondition(const std::string& condition, bool valid)
   {
     if (!valid) {
       std::string message = "Attribute condition is not valid: " + condition;
-      throw std::exception(message.c_str());
+      throw AssertionFailedException(message.c_str());
     }
   }
 
@@ -15,7 +16,7 @@ namespace framework {
   {
     if (instance == nullptr) {
       std::string message = "Instance must not be null: " + instanceName;
-      throw std::exception(message.c_str());
+      throw AssertionFailedException(message.c_str());
     }
   }
 
@@ -24,7 +25,7 @@ namespace framework {
   {
     if (instance == nullptr) {
       std::string message = "Object of type '" + objectTypeName + "' for reference '" + referenceName + "' not found";
-      throw std::exception(message.c_str());
+      throw AssertionFailedException(message.c_str());
     }
   }
 }

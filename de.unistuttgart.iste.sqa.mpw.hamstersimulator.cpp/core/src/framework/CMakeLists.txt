@@ -14,4 +14,8 @@ set(FRAMEWORK_SRCS
     "core/src/framework/Any.h"
     "core/src/framework/ReflectivePropertyObject.h"
     "core/src/framework/CollectionHelpers.hpp"
+    "core/src/framework/CommandConstraintException.h"
+    "core/src/framework/AssertionFailedException.h"
+    "core/src/framework/FrameworkAssert.h"
+    "core/src/framework/FrameworkAssert.cpp"
     PARENT_SCOPE)
