@@ -55,6 +55,7 @@ mapping Input::OldValueExpression::toOldExpression() : QueryModel::OldExpression
     inner := object QueryModel::StatementsExpression {
         statements += object QueryModel::VariableUsageStatement {
             variableReference := variableExpression;
+            type := variableExpression.type;
         };
         type := variableExpression.type;
     };

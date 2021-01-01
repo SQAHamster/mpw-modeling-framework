@@ -64,6 +64,15 @@ helper createStatementsExpression(statement: Statement) : StatementsExpression {
 }
 
 helper createStatementsExpression(inputStatements: List(Statement)) : StatementsExpression {
+    var previous: Statement := null;
+    
+    inputStatements->forEach (s) {
+    	if (previous != null) {
+    		s.previous := previous;
+    	};
+    	previous := s;
+    };
+    
     return object StatementsExpression {
         statements := inputStatements;
         type := inputStatements->last().type;

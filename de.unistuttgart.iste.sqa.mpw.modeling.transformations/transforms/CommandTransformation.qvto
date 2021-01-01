@@ -3,6 +3,7 @@ import queries.QueryParserLibrary;
 import types.AnnotationHelpers;
 import types.EmfHelpers;
 import util.BasicHelpers;
+import util.ExpressionHelperLibrary;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
@@ -213,14 +214,16 @@ mapping Henshin::Attribute::toVariableAssignment() : CommandModel::VariableAssig
     when { self.isVariableAssignment(); } {
     variableName := self.value;
     debugValueString := self.node.resolveone(CommandModel::InstanceCondition).variableName + "." + self.type.name;
-    value := object StatementsExpression {
-        statements += object ParameterUsageStatement { // TODO refactor to semantically better match the string-based variable usage
+    value := createStatementsExpression( List{
+        object ParameterUsageStatement { // TODO refactor to semantically better match the string-based variable usage
             parameterName := self.node.resolveone(CommandModel::InstanceCondition).variableName;
-    	};
-    	statements += object FeatureStatement {
+            type := self.node.type;
+    	},
+    	object FeatureStatement {
             feature := self.type;
-        };
-    };
+            type := feature.eType;
+        }
+    });
 }
 
 query Henshin::Attribute::isVariableAssignment() : Boolean {
@@ -376,14 +379,16 @@ helper CommandModel::AttributeCondition::toAndExpressionForAccumulator(acc : Exp
 }
 
 mapping CommandModel::AttributeCondition::toCompareExpression() : QueryModel::CompareExpression {
-    lhs := object QueryModel::StatementsExpression {
-    	statements += object SelfStatement {
+    lhs := createStatementsExpression( List{
+    	object SelfStatement {
     		selfAlias := "self";
-    	};
-    	statements += object FeatureStatement {
-    		feature := self.instance.instanceType.getEStructuralFeature(self.attributeName); 
-    	};
-    };
+    		type := self.instance.instanceType;
+    	},
+    	object FeatureStatement {
+    		feature := self.instance.instanceType.getEStructuralFeature(self.attributeName);
+    		type := feature.eType; 
+    	}
+    });
     rhs := self.attributeValue.deepclone();
 }
 
