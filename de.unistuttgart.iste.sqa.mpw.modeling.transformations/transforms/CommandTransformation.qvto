@@ -102,7 +102,7 @@ mapping Henshin::Rule::toRule() : CommandModel::Rule {
   
   referenceConditions := result.sortReferences();
   
-  thisInstance.variableName := "thisInstance";
+  thisInstance.variableName := "self";
 }
 
 query Henshin::Rule::getDeleteStarNodes() : Set(Node) {
@@ -378,7 +378,7 @@ helper CommandModel::AttributeCondition::toAndExpressionForAccumulator(acc : Exp
 mapping CommandModel::AttributeCondition::toCompareExpression() : QueryModel::CompareExpression {
     lhs := object QueryModel::StatementsExpression {
     	statements += object SelfStatement {
-    		selfAlias := "thisInstance";
+    		selfAlias := "self";
     	};
     	statements += object FeatureStatement {
     		feature := self.instance.instanceType.getEStructuralFeature(self.attributeName); 

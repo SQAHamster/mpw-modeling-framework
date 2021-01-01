@@ -18,7 +18,7 @@
     	«REM»TODO JML«constraints.toJml()»«ENDREM-»
     	«documentation.toJavaDoc()»
 		public class «name.toFirstUpper()»Command extends CompositeCommandBase {
-			private final «targetClass.getConcreteName()» thisInstance;
+			private final «targetClass.getConcreteName()» self;
             «IF isActorCommand()-»
             private final GameLog gameLog;
             «ENDIF-»
@@ -29,7 +29,7 @@
 			«ENDIF»
 		
 			public «name.toFirstUpper()»Command(«name.toFirstUpper()»CommandParameters parameters) {
-				this.thisInstance = parameters.self;
+				this.self = parameters.self;
 	            «IF isActorCommand()-»
 	            this.gameLog = parameters.gameLog;
 	            «ENDIF-»

@@ -67,7 +67,7 @@ query Input::Statement::determineSelfAlias() : String {
     if (self.parentElement().oclIsTypeOf(Input::Query)) {
         return "this";
     } else {
-        return "thisInstance";
+        return "self";
     };
 }
 
