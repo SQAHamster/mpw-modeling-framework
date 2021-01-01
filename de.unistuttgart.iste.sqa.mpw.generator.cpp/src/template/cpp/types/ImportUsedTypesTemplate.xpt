@@ -19,7 +19,8 @@
         eOperations.exists(o|o.isPropertyGetter())-»
 	#include "ObservableProperties.h"
     «ENDIF-»
-	«IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection())-»
+	«IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection()) || 
+	    eOperations.exists(o|o.isPropertyGetter())-»
 	#include "ObservableListProperties.h"
 	«ENDIF-»
     «EXPAND SingleImportDefinition FOREACH eSuperTypes
