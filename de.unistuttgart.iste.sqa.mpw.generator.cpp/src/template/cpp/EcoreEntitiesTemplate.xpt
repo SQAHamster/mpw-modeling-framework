@@ -51,7 +51,7 @@
       «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDeclaration FOR this»
       «EXPAND template::cpp::properties::PropertyTemplate::StaticSharedFromThisDefinition FOR this»
       «EXPAND template::cpp::QueriesTemplate::QueryDeclarations FOR this»
-      «EXPAND template::cpp::commands::CommandCallsTemplate::CommandDefinitions FOR this»
+      «EXPAND template::cpp::commands::CommandCallsTemplate::CommandDeclarations FOR this»
       «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDeclarations FOR this»
       «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDeclarations FOR this»
       «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDeclarations FOR this»
@@ -113,6 +113,7 @@
         «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDefinition FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::DestructorDefinition FOR this»
         «EXPAND template::cpp::QueriesTemplate::QueryDefinitions FOR this»
+        «EXPAND template::cpp::commands::CommandCallsTemplate::CommandDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
@@ -236,7 +237,7 @@
     «getterType.toCppType()» «getterOperationName»() noexcept«IF override» override«ENDIF»;
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class)  FOR EAnnotation»«ENDDEFINE»
+«DEFINE GenerationAnnotationDefinition(EClass class) FOR EAnnotation»«ENDDEFINE»
 
 «DEFINE GenerationAnnotationDefinition(EClass class) FOR GetPropertyAnnotation»
     «getterType.toCppType()» «class.name»::«getterOperationName»() noexcept {

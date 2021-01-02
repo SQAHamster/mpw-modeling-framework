@@ -22,7 +22,7 @@
 
 «DEFINE ParameterFieldDefinitions FOR Transformation-»
     std::shared_ptr<«targetClass.ePackage.name»::«targetClass.getConcreteName()»> self;
-    mpw::CommandStack& commandStack;
+    commands::CommandStack& commandStack;
     «IF isActorCommand()-»
     mpw::GameLog& gameLog;
     «ENDIF-»
@@ -33,7 +33,7 @@
 
 «DEFINE ConstructorParameterDefinitions FOR Transformation-»
     std::shared_ptr<«targetClass.ePackage.name»::«targetClass.getConcreteName()»> self,
-    mpw::CommandStack& commandStack «IF isActorCommand()-», mpw::GameLog& gameLog«ENDIF-»
+    commands::CommandStack& commandStack «IF isActorCommand()-», mpw::GameLog& gameLog«ENDIF-»
     «FOREACH mainUnit.parameters AS p-»
     ,«p.toCppType()» «p.name-»
     «ENDFOREACH-»

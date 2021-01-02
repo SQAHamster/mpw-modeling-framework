@@ -2,9 +2,18 @@
 
 «EXTENSION template::cpp::GeneratorExtensions»
 
+«DEFINE CommandDeclarations FOR EClass»
+	  «FOREACH eAllOperations.select(o|o.isCommand()) AS o»
+	  void «o.name»(commands::«o.name.toFirstUpper()»CommandParameters& parameters) override;
+      «ENDFOREACH»
+«ENDDEFINE»
+
 «DEFINE CommandDefinitions FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isCommand()) AS o»
-	  void «o.name»(/*«o.name.toFirstUpper()»CommandParameters parameters*/) override {
+	  void «name»::«o.name»(commands::«o.name.toFirstUpper()»CommandParameters& parameters) {
+          parameters.self = this->shared_from_this();
+          auto command = std::make_shared<commands::«o.name.toFirstUpper()»Command>(parameters);
+          parameters.commandStack.execute(command);
 	  }
       «ENDFOREACH»
 «ENDDEFINE»

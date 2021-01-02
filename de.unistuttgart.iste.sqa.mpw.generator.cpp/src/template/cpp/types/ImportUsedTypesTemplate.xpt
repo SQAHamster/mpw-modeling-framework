@@ -32,7 +32,12 @@
         .union(eStructuralFeatures.collect(f|f.eType).select(t|t.isEnum() || t.isValueType()))
         .union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten().select(t|t.isEnum() || t.isValueType()))
 		.reject(t|t.isDataType())
-		.reject(t|t.isStereotype())»
+		.reject(t|t.isStereotype())
+		.collect(t|t.name)
+		.toSet()»
+    «EXPAND CommandParametersImportDefinition FOREACH (abstract ? eOperations : eAllOperations)
+        .select(o|o.isCommand())
+        .collect(o|o.getCommandForOperation())»
 «ENDDEFINE»
 
 «DEFINE SourceImportDefinitions FOR EClass»
@@ -40,6 +45,9 @@
     
     «IF eAllOperations.exists(o|o.isQuery())-»
     #include "CollectionHelpers.hpp"
+    «ENDIF-»
+    «IF eAllOperations.exists(o|o.isCommand())-»
+    #include "CommandStack.h"
     «ENDIF-»
     
     «EXPAND SingleImportDefinition FOREACH eStructuralFeatures
@@ -53,6 +61,9 @@
         .reject(t|t.isValueType())
 		.reject(t|t.isBuiltInType())
 		.reject(t|t.isStereotype())»
+    «EXPAND CommandImportDefinition FOREACH eAllOperations
+        .select(o|o.isCommand())
+        .collect(o|o.getCommandForOperation())»
 «ENDDEFINE»
 
 «DEFINE ForwardDeclarations FOR EClass»
@@ -86,6 +97,18 @@
     #include "«name».h"
 «ENDDEFINE»
 
+«DEFINE SingleImportDefinition FOR String-»
+    #include "«this».h"
+«ENDDEFINE»
+
+«DEFINE CommandParametersImportDefinition FOR Transformation-»
+    #include "commands/«name.toFirstUpper()»CommandParameters.h"
+«ENDDEFINE»
+
+«DEFINE CommandImportDefinition FOR Transformation-»
+    #include "commands/«name.toFirstUpper()»Command.h"
+«ENDDEFINE»
+
 «DEFINE SingleForwardDeclarationDefinition FOR EClassifier-»
     namespace «ePackage.name» { class «name»; }
 «ENDDEFINE»
@@ -99,12 +122,14 @@
     namespace «targetClass.ePackage.name» {
         class «targetClass.getConcreteName()»;
     }
-    namespace mpw {
+    namespace commands {
         class CommandStack;
-        «IF isActorCommand()-»
-        class GameLog;
-        «ENDIF-»
     }
+    «IF isActorCommand()-»
+    namespace mpw {
+        class GameLog;
+    }
+    «ENDIF-»
     «EXPAND SingleForwardDeclarationDefinition FOREACH mainUnit.parameters.collect(p|p.type)
                                                               .select(t|t.isEntity())»
 «ENDDEFINE»
