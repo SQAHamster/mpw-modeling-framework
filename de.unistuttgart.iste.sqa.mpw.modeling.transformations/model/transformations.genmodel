@@ -174,7 +174,7 @@
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//VariableObjectConstructionAnnotation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VariableObjectConstructionAnnotation/variableName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VariableObjectConstructionAnnotation/constructorTypeName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//VariableObjectConstructionAnnotation/constructorType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//VariableObjectConstructionAnnotation/parameterInputVariableExpressions"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GenerationAnnotations.ecore#//VariableDefinitionAnnotation">

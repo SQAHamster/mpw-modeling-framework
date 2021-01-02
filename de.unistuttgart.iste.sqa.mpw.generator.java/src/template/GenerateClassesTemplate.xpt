@@ -98,7 +98,7 @@
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR VariableObjectConstructionAnnotation-»
-    var «variableName» = new «constructorTypeName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
+    var «variableName» = new «constructorType.name»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR VariableDefinitionAnnotation-»

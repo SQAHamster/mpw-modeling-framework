@@ -139,7 +139,7 @@ mapping EOperation::cloneSimplifiedBuilderOperation() : EOperation {
     	variableName := "location";
     	parameterInputVariableExpressions += createPathExpression("locationX", intType);
     	parameterInputVariableExpressions += createPathExpression("locationY", intType);
-    	constructorTypeName := "Location";
+    	constructorType := findClassifierForName("Location");
     };
     
     eAnnotations += self.eAnnotations.deepclone();
