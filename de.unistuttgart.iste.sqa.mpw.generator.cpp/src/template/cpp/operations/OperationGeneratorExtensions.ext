@@ -1,8 +1,8 @@
 import ecore;
+import generationAnnotations;
 
 extension template::cpp::types::EmfGeneratorExtensions;
 extension template::cpp::queries::QueryGeneratorExtensions;
-// extension template::cpp::properties::PropertyGeneratorExtensions;
 extension util::Extensions;
 
 /*
@@ -48,3 +48,8 @@ isQuery(EOperation this) : isMarkedWith("query");
 
 private isMarkedWith(EOperation this, String key) :
     eAnnotations.exists(a|a.source == key || a.details.exists(d|d.key == key));
+    
+toOptionalDereferencingStar(ReturnAnnotation this) :
+    let operation = (EOperation)eContainer :
+    if (operation.isMarkedWith("fluent")) then "*"
+    else "";

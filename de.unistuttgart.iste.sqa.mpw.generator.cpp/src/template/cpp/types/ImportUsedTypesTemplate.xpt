@@ -54,13 +54,15 @@
 		.collect(e|e.eType)
 		.union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())
 		.union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
-		.toSet()
-		.reject(t|t == this)
+		.union(eAllContents.typeSelect(Statement).collect(s|s.type))
+		.reject(t|t.name == this.name)
 		.reject(t|t.isDataType())
 		.reject(t|t.isEnum())
         .reject(t|t.isValueType())
 		.reject(t|t.isBuiltInType())
-		.reject(t|t.isStereotype())»
+		.reject(t|t.isStereotype())
+        .collect(t|t.name)
+        .toSet()»
     «EXPAND CommandImportDefinition FOREACH eAllOperations
         .select(o|o.isCommand())
         .collect(o|o.getCommandForOperation())»
@@ -88,9 +90,10 @@
         .add(this)
         .union(eOperations.collect(o|o.getUsedTypes()).flatten())
         .union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
-        .toSet()
         .reject(e|e == null)
-        .reject(t|t.isBuiltInType())»
+        .reject(t|t.isBuiltInType())
+        .collect(t|t.name)
+        .toSet()»
 «ENDDEFINE»
 
 «DEFINE SingleImportDefinition FOR EClassifier-»
@@ -138,5 +141,7 @@
     «EXPAND SingleImportDefinition FOREACH mainUnit.parameters.collect(p|p.type)
                                                               .union(this.eAllContents.typeSelect(InstanceCondition).collect(c|c.instanceType))
                                                               .union(this.eAllContents.typeSelect(Statement).collect(s|s.type))
-                                                              .reject(t|t.isDataType())»
+                                                              .reject(t|t.isDataType())
+														      .collect(t|t.name)
+														      .toSet()»
 «ENDDEFINE»

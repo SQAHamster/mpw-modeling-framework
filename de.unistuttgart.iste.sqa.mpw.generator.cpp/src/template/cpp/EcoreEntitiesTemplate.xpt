@@ -15,8 +15,6 @@
                                  .reject(c|c.interface)
                                  .reject(c|c.isValueType())
                                  .reject(c|c.isFacade())»
-    «EXPAND CppStubClass FOREACH this.eClassifiers.typeSelect(EClass)
-                                 .select(c|c.isFacade())»
     «EXPAND template::cpp::types::ValueTypeTemplate::ValueTypeTemplate FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.isValueType())»
     «EXPAND CppInterface FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.interface)»
     «EXPAND CppEnum FOREACH this.eClassifiers.typeSelect(EEnum)»
@@ -147,29 +145,6 @@
     «ENDIF»
 «ENDDEFINE»
 
-«REM»DUMMY«ENDREM»
-«DEFINE CppStubClass FOR EClass»
-    «FILE "generated/" + name + ".h"»
-    
-    #ifndef «this.toCppIncludeGuard()»
-    #define «this.toCppIncludeGuard()»
-    
-    namespace «this.ePackage.name» {
-    
-    class «this.name» {
-    
-    public:
-    
-      virtual ~«this.name»() = default;
-    };
-    
-    }
-    
-    #endif //«this.toCppIncludeGuard()»
-    
-    «ENDFILE»
-«ENDDEFINE»
-
 «DEFINE CppInterface FOR EClass»
     «FILE "generated/" + name + ".h"»
     
@@ -253,8 +228,7 @@ add_subdirectory(commands)
 set(GEN_SRCS ${GEN_SRCS}
     «FOREACH this.eClassifiers.typeSelect(EClass)
                               .reject(c|c.isDataType())
-                              .reject(c|c.interface)
-                              .reject(c|c.isFacade()) AS c-»
+                              .reject(c|c.interface) AS c-»
     "core/src/generated/«c.name».cpp"
     «ENDFOREACH-»
     «FOREACH this.eClassifiers.typeSelect(EClass)

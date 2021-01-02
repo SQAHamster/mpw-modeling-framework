@@ -30,7 +30,7 @@
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR NotExpression-»
-    !(«EXPAND ExpressionDefinition FOR inner-»)
+    !(«EXPAND ExpressionDefinition FOR inner-»)«REM»avoid newline«ENDREM-»
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR OldExpression-»
@@ -38,7 +38,7 @@
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR ImpliesExpression-»
-    («EXPAND ExpressionDefinition FOR lhs») ? («EXPAND ExpressionDefinition FOR rhs») : true
+    («EXPAND ExpressionDefinition FOR lhs») ? («EXPAND ExpressionDefinition FOR rhs») : true«REM»avoid newline«ENDREM-»
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR OrExpression-»
@@ -70,7 +70,7 @@
 «ENDDEFINE»
 
 «DEFINE CallHelperStatementMethod FOR StatementsExpression-»
-    «helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+    «helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)«REM»avoid newline«ENDREM-»
 «ENDDEFINE»
 
 «DEFINE HelperStatementDeclarations FOR List[StatementsExpression]»

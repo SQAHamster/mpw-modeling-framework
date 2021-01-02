@@ -57,6 +57,25 @@ Workflow {
         
     }
     
+    /* more generic generation which is based on many annotations on ecore objects, will also later make EcoreEntitiesTemplate mostly obsolete */
+    component = Generator {
+        globalVarDef = {
+            name = "module_package"
+            value = generatedProjectBasePackage
+        }
+        metaModel = mm_emf
+        expand = "template::cpp::GenerateClassesTemplate::main FOREACH generationEcoreModels"
+        outlet = {
+            path = simulatorTargetSrc
+            overwrite = true
+            postprocessor = formatter_cpp
+        }
+        resourceManager = ResourceManagerDefaultImpl {
+            fileEncoding = "UTF-8"
+        }
+        
+    }
+    
     /* generate commands */
     component = Generator {
         globalVarDef = {

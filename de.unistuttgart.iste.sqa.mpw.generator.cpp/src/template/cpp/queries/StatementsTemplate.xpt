@@ -5,13 +5,11 @@
 
 «DEFINE StatementsDefinitions FOR StatementsExpression-»
     «IF statements.size == 0»nullptr«ENDIF-»
-    
     «FOREACH statements.reverse() AS s-»
         «IF s.isFunctionStatement()-»
             «s.getFunctionStatementCall()-»
         «ENDIF-»
     «ENDFOREACH-»
-    
     «FOREACH statements AS s-»
         «IF s.previous != null && !s.isFunctionStatement()-»
             «IF s.isObjectReferenceAccess()-»->«ELSE».«ENDIF-»

@@ -87,6 +87,7 @@ operationToCppType(EOperation this) : elementToCppType();
 	
 private elementToCppType(ETypedElement this) :
     if (isMarkedWithAnnotation("constructor")) then "" 
+    else if (isMarkedWithAnnotation("fluent")) then this.eType.name + "&" 
     else if (this.eType == null) then "void" 
 	else if (this.upperBound == -1) then (
 	    if (EAttribute.isInstance(this) || this.eType.isBuiltInType()) then "std::list<" + this.toCppType() + ">"
@@ -101,7 +102,7 @@ featureToFieldInstantiation(EStructuralFeature this) :
     else "new " + this.eType.name + "()";
 
 toInitialization(InlineSimpleFieldInitializationAnnotation this) : "";
-    // TDOO "new " + field.eType.name + "(" + parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ") + ")";
+    // TODO "new " + field.eType.name + "(" + parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ") + ")";
 
 defaultValueOf(EStructuralFeature f) :
     if (f.eType.name == "EInt") then "0"
