@@ -61,14 +61,28 @@ mapping inout Ecore::EClass::transformToRoles() {
         readOnlyRole.eAnnotations += r.createRoleGetterDeclarationAnnotation("ReadOnly");
         gameRole.eAnnotations += r.createRoleGetterDeclarationAnnotation("Game");
         editorRole.eAnnotations += r.createRoleGetterDeclarationAnnotation("Editor");
+        
+        self.eAnnotations += r.createRoleGetterDefinitionAnnotation("ReadOnly");
+        self.eAnnotations += r.createRoleGetterDefinitionAnnotation("Game");
+        self.eAnnotations += r.createRoleGetterDefinitionAnnotation("Editor");
     };
 }
 
 query Ecore::EStructuralFeature::createRoleGetterDeclarationAnnotation(roleName: String) : EAnnotation {
     var baseName := self.eType.getAnnotationValue("baseName");
     return object GetPropertyDeclarationAnnotation {
-        fieldTypeName := roleName + baseName;
-        getterName := "get" + self.name.firstToUpper();
+        getterType := findClassForName(roleName + baseName);
+        getterOperationName := "get" + roleName + self.name.firstToUpper();
+    };
+}
+
+query Ecore::EStructuralFeature::createRoleGetterDefinitionAnnotation(roleName: String) : EAnnotation {
+    var baseName := self.eType.getAnnotationValue("baseName");
+    return object GetPropertyAnnotation {
+        override := true;
+        field := self;
+        getterType := findClassForName(roleName + baseName);
+        getterOperationName := "get" + roleName + self.name.firstToUpper();
     };
 }
 

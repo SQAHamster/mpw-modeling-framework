@@ -83,7 +83,7 @@
 
 «DEFINE GenerationAnnotation FOR GetPropertyAnnotation-»
     «getAnnotationValue("documentation").toJavaDoc()»
-    public «getterTypeName.toJavaType()» «getterOperationName»() {
+    public «getterType.name.toJavaType()» «getterOperationName»() {
         return this.«field.name»;
     }
     

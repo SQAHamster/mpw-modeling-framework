@@ -150,12 +150,13 @@
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//GetPropertyAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//GetPropertyAnnotation/field"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyAnnotation/getterTypeName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//GetPropertyAnnotation/getterType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyAnnotation/getterOperationName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyAnnotation/override"/>
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation/fieldTypeName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation/getterName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation/getterType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//GetPropertyDeclarationAnnotation/getterOperationName"/>
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//MethodCallAnnotation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//MethodCallAnnotation/variableName"/>

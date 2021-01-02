@@ -45,7 +45,7 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
     
     self.eAnnotations += object GetPropertyAnnotation {
         field := self.getEStructuralFeature("game");
-        getterTypeName := findInstanceOfMetaClass("MiniProgrammingWorld").name;
+        getterType := findInstanceOfMetaClass("MiniProgrammingWorld");
         getterOperationName := "getGame";
         eAnnotations += toAnnotation("documentation", "Gets the game associated to this " + baseName + " object.");
     };
@@ -58,7 +58,7 @@ mapping EReference::toFacadeActorFieldReference(): EReference {
 
 mapping EReference::toGetPropertyAnnotation(): GetPropertyAnnotation {
     field := self.resolveoneIn(EReference::toFacadeActorFieldReference);
-    getterTypeName := field.eType.name;
+    getterType := field.eType;
     getterOperationName := "get" + field.name.firstToUpper();
 }
 

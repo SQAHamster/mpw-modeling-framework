@@ -80,15 +80,16 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GetPropertyAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="getterTypeName" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="getterType" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="getterOperationName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="override" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GetPropertyDeclarationAnnotation" eSuperTypes="#//GenerationAnnotation">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldTypeName" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="getterName" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="getterType" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="getterOperationName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MethodCallAnnotation" eSuperTypes="#//GenerationAnnotation">

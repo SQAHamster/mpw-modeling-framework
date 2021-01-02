@@ -55,7 +55,7 @@ mapping EClass::createInternalGameRoleField() : EReference {
 helper EStructuralFeature::createInternalGameRoleGetterAnnotation() : GetPropertyAnnotation {
     return object GetPropertyAnnotation {
         field := self;
-        getterTypeName := "Game" + baseName;
+        getterType := findClassForName("Game" + baseName);
         getterOperationName := "getInternal" + baseName;
         eAnnotations += toAnnotation("documentation", "Get the internal game representation of the " + baseName + ".");
     };
@@ -64,7 +64,7 @@ helper EStructuralFeature::createInternalGameRoleGetterAnnotation() : GetPropert
 helper EStructuralFeature::createInternalEditorRoleGetterAnnotation() : GetPropertyAnnotation {
     return object GetPropertyAnnotation {
         field := self;
-        getterTypeName := "Editor" + baseName;
+        getterType := findClassForName("Editor" + baseName);
         getterOperationName := "getInternalEditor" + baseName;
         eAnnotations += toAnnotation("documentation", "Get the internal editor representation of the " + baseName + ".");
     };

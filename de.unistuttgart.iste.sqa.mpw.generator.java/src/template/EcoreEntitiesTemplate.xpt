@@ -37,6 +37,7 @@
       «FOREACH eOperations AS o»
       public abstract «o.operationToSignature()»;
       «ENDFOREACH»
+      «EXPAND GenerationAnnotation FOREACH eAnnotations-»
     }
     «ENDFILE»
     «IF needsImplSubclass()»
@@ -103,5 +104,13 @@
 «DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR GetPropertyDeclarationAnnotation»
-    «fieldTypeName» «getterName»();
+    «getterType.name» «getterOperationName»();
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR GetPropertyAnnotation»
+    «IF override»@Override
+    «ENDIF-»
+    public «getterType.name» «getterOperationName»() {
+        return «field.name»;
+    }
 «ENDDEFINE»
