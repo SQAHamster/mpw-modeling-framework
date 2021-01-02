@@ -48,7 +48,7 @@
         #include "FrameworkAssert.h"
         #include "CommandConstraintException.h"
         #include "«targetClass.getConcreteName()».h"
-        «IF eAllContents.typeSelect(StatementsExpression).exists(e|e.needsHelperMethod)-»
+        «IF eAllContents.typeSelect(CollectionMethodStatement).exists(s|s.isComplexMethodStatement())-»
             #include "CollectionHelpers.hpp"
         «ENDIF-»
         

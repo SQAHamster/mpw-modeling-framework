@@ -65,3 +65,10 @@ toCppParameterIncludeGuard(Transformation this) :
 toNewAttributeValueCppString(Modification this) :
     if (attribute.attributeValue.type.isEnum()) then attribute.attributeValue.type.toCppType() + "::" + newAttributeValue 
     else newAttributeValue;
+    
+isComplexMethodStatement(CollectionMethodStatement this) :
+    switch (methodType) {
+        case CollectionMethodType::AT: true
+        case CollectionMethodType::TYPE_SELECT: true
+        default: false
+    };
