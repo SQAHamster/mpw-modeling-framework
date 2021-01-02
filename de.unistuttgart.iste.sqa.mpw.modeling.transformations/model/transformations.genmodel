@@ -134,11 +134,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandParameterCreationAnnotation/parameterMappings"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//CommandParameterCreationAnnotation/parametersVariableName"/>
     </genClasses>
-    <genClasses ecoreClass="GenerationAnnotations.ecore#//CommandCreationAnnotation">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandCreationAnnotation/command"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//CommandCreationAnnotation/commandVariableName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//CommandCreationAnnotation/parametersVariableName"/>
-    </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//CommandCallAnnotation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//CommandCallAnnotation/command"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//CommandCallAnnotation/targetRoleVariableName"/>

@@ -42,10 +42,6 @@
 
 «DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE-»
 
-«DEFINE GenerationAnnotation FOR CommandCreationAnnotation-»
-    var «commandVariableName» = new «command.name.toFirstUpper()»Command(«parametersVariableName»);
-«ENDDEFINE»
-
 «DEFINE GenerationAnnotation FOR CommandParameterCreationAnnotation-»
     var «parametersVariableName» = new «command.name.toFirstUpper()»CommandParameters();
     «parametersVariableName».commandStack = game.getCommandStack();

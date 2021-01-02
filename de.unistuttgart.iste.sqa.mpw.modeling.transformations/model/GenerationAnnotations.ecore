@@ -55,15 +55,6 @@
         lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="parameters"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CommandCreationAnnotation" eSuperTypes="#//GenerationAnnotation">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="command" lowerBound="1"
-        eType="ecore:EClass CommandBehaviors.ecore#//Transformation"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="commandVariableName" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="command"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parametersVariableName"
-        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        defaultValueLiteral="parameters"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CommandCallAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="command" lowerBound="1"
         eType="ecore:EClass CommandBehaviors.ecore#//Transformation"/>
