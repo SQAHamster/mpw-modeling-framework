@@ -82,7 +82,7 @@ query EClass::createInternalEditorExpression() : Expression {
     };
     var stageStatement := object FeatureStatement {
     	feature := gameStatement.type.getFeatureByName(self.getBaseName().firstToLower());
-    	type := feature.eType;
+    	type := findClassForName(self.getBaseName()); // the feature's type will be later changed to facade-stage type by GenerationClassesTransformation::useFacades
     };
     var getInternalEditorStatement := object GetPropertyStatement { 
         propertyGetterName := "internalEditor".getter() + self.getBaseName();
@@ -94,6 +94,7 @@ query EClass::createInternalEditorExpression() : Expression {
 mapping Transformation::toBuilderOperation(parentBuilderClass: EClass) : EOperation {
     name := self.name;
     eType := parentBuilderClass;
+    eAnnotations += "fluent".toMarkerAnnotation(); // mark that this is a fluent API
     
     eParameters := self.mainUnit.parameters->map toOperationParameter();
     eAnnotations += toAnnotation("documentation", self.documentation);
