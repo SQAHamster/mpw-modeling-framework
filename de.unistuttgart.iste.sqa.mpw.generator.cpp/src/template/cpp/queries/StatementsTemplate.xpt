@@ -13,13 +13,13 @@
     «ENDFOREACH-»
     
     «FOREACH statements AS s-»
-        «IF QueryStatement.isInstance(s.previous) && s.previous.isOptional-»
-            .value()«REM»TODO implement safe optional access«ENDREM-»
-        «ENDIF-»
         «IF s.previous != null && !s.isFunctionStatement()-»
             «IF s.isObjectReferenceAccess()-»->«ELSE».«ENDIF-»
         «ENDIF-»
         «EXPAND StatementDefinition FOR s-»
+        «IF CollectionMethodStatement.isInstance(s) && s.isOptional-»
+            .value()«REM»TODO implement safe optional access«ENDREM-»
+        «ENDIF-»
     «ENDFOREACH-»
 «ENDDEFINE»
 

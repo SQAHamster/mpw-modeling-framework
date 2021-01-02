@@ -194,7 +194,7 @@ mapping Input::StatementsExpression::toStatementExpression() : QueryModel::State
     statements += self.statements->map toStatement();
     type := statements->last().type;
     isCollection := statements->last().isCollection;
-    isOptional := statements->exists(s|s.isOptional);
+    isOptional := false; // TODO Queries currently do not allow optional returns, this requires an extension of QueryDSL, e.g. by '?' syntax
     
     needsHelperMethod := result.needsHelperMethod();
     if (needsHelperMethod) {
