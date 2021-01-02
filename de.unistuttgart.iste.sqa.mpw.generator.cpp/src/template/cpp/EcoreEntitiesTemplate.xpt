@@ -65,6 +65,7 @@
       «o.operationToVirtualSignature()» = 0;
       «ENDFOREACH-»
       
+      «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations-»
       «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodDeclarations FOR this»
 
     };
@@ -119,6 +120,7 @@
         // TODO Source Operation «o.operationToSourceSignature(name)» {}
         «ENDFOREACH»
         
+        «EXPAND GenerationAnnotationDefinition(this) FOREACH eAnnotations-»
         «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodSources FOR this»
     }
     «ENDFILE»
@@ -193,7 +195,7 @@
       «o.operationToObservableGetterSignature()» = 0;
       «ENDIF-»
       «ENDFOREACH»
-      «EXPAND GenerationAnnotation FOREACH eAnnotations»
+      «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations»
     };
     
     }
@@ -224,10 +226,22 @@
     «ENDFILE»
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE»
+«DEFINE GenerationAnnotationDeclaration FOR EAnnotation»«ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR GetPropertyDeclarationAnnotation»
-    // «fieldTypeName» «getterName»();
+«DEFINE GenerationAnnotationDeclaration FOR GetPropertyDeclarationAnnotation»
+    virtual «getterType.toCppType()» «getterOperationName»() noexcept = 0;
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotationDeclaration FOR GetPropertyAnnotation»
+    «getterType.toCppType()» «getterOperationName»() noexcept«IF override» override«ENDIF»;
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotationDefinition(EClass class)  FOR EAnnotation»«ENDDEFINE»
+
+«DEFINE GenerationAnnotationDefinition(EClass class) FOR GetPropertyAnnotation»
+    «getterType.toCppType()» «class.name»::«getterOperationName»() noexcept {
+        return this->«field.name»;
+    }
 «ENDDEFINE»
 
 «DEFINE CMakeLists FOR List[EPackage]»

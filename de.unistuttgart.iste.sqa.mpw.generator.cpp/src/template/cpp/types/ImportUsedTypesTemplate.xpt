@@ -1,6 +1,7 @@
 «IMPORT ecore»
 «IMPORT commandBehavior»
 «IMPORT queryBehavior»
+«IMPORT generationAnnotations»
 
 «EXTENSION template::cpp::GeneratorExtensions»
 
@@ -59,6 +60,8 @@
 		.collect(e|e.eType)
 		.union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())
 		.union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
+		.union(eAnnotations.typeSelect(GetPropertyAnnotation).collect(a|a.getterType))
+		.union(eAnnotations.typeSelect(GetPropertyDeclarationAnnotation).collect(a|a.getterType))
 		.toSet()
 		.reject(t|t == this)
 		.reject(t|t.isDataType())
