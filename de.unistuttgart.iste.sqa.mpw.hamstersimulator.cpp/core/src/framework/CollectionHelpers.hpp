@@ -2,6 +2,7 @@
 #define DE_UNISTUTTGART_ISTE_SQA_MPW_HAMSTERSIMULATOR_CPP_COLLECTION_HELPERS_H
 
 #include <list>
+#include <vector>
 #include <memory>
 #include <optional>
 
@@ -14,6 +15,14 @@ namespace collectionhelpers {
       return *iter;
     }
     return std::nullopt;
+  }
+
+  template<typename T>
+  std::optional<T> get_at(const std::vector<T>& list, size_t index) {
+      if (index >= 0 && index < list.size()) {
+          return list[index];
+      }
+      return std::nullopt;
   }
 
   template<typename TGT, typename SRC>
