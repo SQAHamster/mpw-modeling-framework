@@ -88,6 +88,7 @@ helper EClass::createConstructorWithParamsOperation(initCommand: EOperation) : E
     	    variableName := "this";
     		methodName := "init";
     		parameterInputVariableExpressions += eParameters->map createParameterExpression();
+    		closingStatement := true;
     	};
     	
     	eAnnotations += toAnnotation("documentation", "Create a new " + baseName + " object by initializing it with the relating init() method.");
@@ -166,6 +167,7 @@ helper EClass::createCallWriteAnnotation() : MethodCallAnnotation {
         variableName := "gameLog";
         methodName := "write";
         parameterInputVariableExpressions += createPathExpression("message", stringType);
+        closingStatement := true;
     };
 }
 

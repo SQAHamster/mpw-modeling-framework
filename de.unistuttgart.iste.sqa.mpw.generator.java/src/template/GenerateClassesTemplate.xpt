@@ -86,7 +86,7 @@
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR MethodCallAnnotation-»
-    «variableName».«methodName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
+    «variableName».«methodName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotation FOR ReturnAnnotation-»

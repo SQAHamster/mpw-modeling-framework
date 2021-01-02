@@ -90,6 +90,8 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameterInputVariableExpressions"
         upperBound="-1" eType="ecore:EClass QueryBehaviors.ecore#//Expression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="closingStatement" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExpressionAnnotation" eSuperTypes="#//GenerationAnnotation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"

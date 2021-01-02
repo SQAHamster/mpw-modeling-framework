@@ -157,6 +157,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//MethodCallAnnotation/variableName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//MethodCallAnnotation/methodName"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//MethodCallAnnotation/parameterInputVariableExpressions"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//MethodCallAnnotation/closingStatement"/>
     </genClasses>
     <genClasses ecoreClass="GenerationAnnotations.ecore#//ExpressionAnnotation">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//ExpressionAnnotation/expression"/>
