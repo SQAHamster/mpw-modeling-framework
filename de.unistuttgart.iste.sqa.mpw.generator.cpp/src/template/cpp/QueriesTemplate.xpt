@@ -5,14 +5,14 @@
 
 «DEFINE QueryDeclarations FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
-	  «q.toCppQueryReturnType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») override;
+	  «q.toCppQueryReturnType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») noexcept override;
       «EXPAND HelperStatementDeclarations FOR q.eAllContents.typeSelect(StatementsExpression).select(e|e.needsHelperMethod)-»
       «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE QueryDefinitions FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
-      «q.toCppQueryReturnType()» «name»::«q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») {
+      «q.toCppQueryReturnType()» «name»::«q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») noexcept {
 	      try {
   	          return «EXPAND ExpressionDefinition FOR q.mainExpression-»;
 	      } catch (...) {

@@ -13,6 +13,9 @@
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
     #include <list>
 	«ENDIF-»
+	«IF (abstract ? eOperations : eAllOperations).select(o|o.isQuery()).exists(o|o.getQueryForOperation().isOptional)-»
+    #include <optional>
+	«ENDIF-»
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isAny())-»
     #include "Any.h"
 	«ENDIF-»

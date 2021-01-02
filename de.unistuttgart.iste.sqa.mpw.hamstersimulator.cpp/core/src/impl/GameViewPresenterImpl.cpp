@@ -19,8 +19,8 @@ void GameViewPresenterImpl::textTyped(std::string text) {
 	throw std::runtime_error("not implemented");
 }
 
-std::shared_ptr<hamsterviewmodel::GameViewModel> GameViewPresenterImpl::getViewModel() {
-	throw std::runtime_error("not implemented");
+std::shared_ptr<hamsterviewmodel::GameViewModel> GameViewPresenterImpl::getViewModel() noexcept {
+	return inherited::getViewModel();
 }
 
 }

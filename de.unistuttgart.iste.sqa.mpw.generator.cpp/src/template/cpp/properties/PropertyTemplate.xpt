@@ -74,13 +74,13 @@
 
 «DEFINE GetPropertyValueDeclarations FOR EClass»
       «FOREACH eStructuralFeatures AS f»
-      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToCppType()» «f.name.getter()»() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToCppType()» «f.name.getter()»() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
       «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE GetPropertyValueDefinitions FOR EClass»
       «FOREACH eStructuralFeatures AS f»
-      «f.featureToCppType()» «name»::«f.name.getter()»() {
+      «f.featureToCppType()» «name»::«f.name.getter()»() noexcept {
         «IF f.isObservableProperty()-»
         return this->«f.name».get();
         «ELSE-»
@@ -92,16 +92,16 @@
 
 «DEFINE SetPropertyValueDeclarations FOR EClass»
     «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
-    virtual void «f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()»);
+    virtual void «f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept;
     «IF f.isCollection()-»
-    virtual void «f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()»);
+    virtual void «f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept;
     «ENDIF-»
     «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE SetPropertyValueDefinitions FOR EClass»
     «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
-    void «name»::«f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()») {
+    void «name»::«f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept {
          «IF f.isReference() && f.isCollection()-»
              «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f»
          «ELSEIF !f.isReference() && f.isCollection()-»
@@ -111,7 +111,7 @@
          «ENDIF-»
      }
      «IF f.isCollection()-»
-     void «name»::«f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()») {
+     void «name»::«f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept {
          «IF f.isReference()-»
              «EXPAND MultiReferenceRemoverForFeatureDefinition FOR (EReference)f»
          «ELSE-»
@@ -201,13 +201,13 @@
 
 «DEFINE GetPropertyDeclarations FOR EClass»
       «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
-      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»const «f.propertyGetterToObservableFieldType()»& «f.name»Property() «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»const «f.propertyGetterToObservableFieldType()»& «f.name»Property() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
       «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE GetPropertyDefinitions FOR EClass»
       «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
-      const «f.propertyGetterToObservableFieldType()»& «name»::«f.name»Property() {
+      const «f.propertyGetterToObservableFieldType()»& «name»::«f.name»Property() noexcept {
         return this->«f.name»;
       }
       «ENDFOREACH»
@@ -216,11 +216,11 @@
 «DEFINE VirtualBaseMethodDelegateDefinitions FOR EClass»
     «IF !abstract-»
 	    «FOREACH eAllStructuralFeatures.without(eStructuralFeatures).select(f|f.hasPropertyGetterOperation(this)) AS f»
-	    const «f.propertyGetterToObservableFieldType()»& «f.name»Property() override {
+	    const «f.propertyGetterToObservableFieldType()»& «f.name»Property() noexcept override {
 	        return inherited::«f.name»Property();
 	    }
 	    
-	    «f.featureToCppType()» «f.name.getter()»() override {
+	    «f.featureToCppType()» «f.name.getter()»() noexcept override {
 	        return inherited::«f.name.getter()»();
 	    }
 	    «ENDFOREACH»

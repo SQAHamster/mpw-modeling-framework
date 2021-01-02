@@ -85,6 +85,9 @@
     namespace «this.ePackage.name» {
     
     class «this.name»Impl : public «this.name» {
+    private:
+      using inherited = «this.name»;
+
     public:
       «EXPAND template::cpp::properties::PropertyTemplate::ImplConstructorDeclaration FOR this»
       «FOREACH this.getManualImplementedOperations() AS o»

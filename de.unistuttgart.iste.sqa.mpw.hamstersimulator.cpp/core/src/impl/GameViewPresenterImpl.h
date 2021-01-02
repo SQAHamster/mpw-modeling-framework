@@ -7,6 +7,9 @@
 namespace hamsterviewmodel {
 
 class GameViewPresenterImpl: public GameViewPresenter {
+private:
+	using inherited = GameViewPresenter;
+
 public:
 
 	GameViewPresenterImpl();
@@ -17,7 +20,7 @@ public:
 
 	void textTyped(std::string text) override;
 
-	std::shared_ptr<hamsterviewmodel::GameViewModel> getViewModel() override;
+	std::shared_ptr<hamsterviewmodel::GameViewModel> getViewModel() noexcept override;
 
 };
 
