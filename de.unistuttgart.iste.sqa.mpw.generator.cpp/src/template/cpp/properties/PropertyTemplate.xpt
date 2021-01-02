@@ -6,15 +6,9 @@
       «FOREACH eStructuralFeatures AS f»
       «IF f.isObservableProperty()»
       «f.featureToObservableFieldType()» «f.name»;
-      «ELSEIF f.changeable && f.eType.isDependency()»
-      «f.featureToCppType()» «f.name» { /* «f.featureToFieldInstantiation()» */ };
-      «ELSEIF f.derived || f.changeable»
+      «ELSE-»
       «f.featureToCppType()» «f.name»;
-      «ELSEIF f.isConstructorInjectedProperty()»
-      «f.featureToCppType()» «f.name»;
-      «ELSEIF !f.derived»
-      «f.featureToCppType()» «f.name»;
-      «ENDIF»
+      «ENDIF-»
       «ENDFOREACH»
 «ENDDEFINE»
 
@@ -35,8 +29,8 @@
 «ENDDEFINE»
 
 «DEFINE ConstructorDefinition FOR EClass»
-      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
-      «LET injectedProperties.without(eStructuralFeatures) AS injectedForParentProperties»
+      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties-»
+      «LET injectedProperties.without(eStructuralFeatures) AS injectedForParentProperties-»
       «name»::«name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
       «IF injectedForParentProperties.size > 0-»
       : («FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
@@ -47,9 +41,22 @@
       «FOREACH eAllStructuralFeatures.select(f|f.isStageField()) AS f-»
       «"stage".setter()»(«f.name»);
       «ENDFOREACH-»
+      «FOREACH eStructuralFeatures.select(f|f.needsConstructorInstantiation()) AS f SEPARATOR ", "-»
+          // this->«f.name» = «EXPAND FeatureFieldInstantiation FOR f»
+      «ENDFOREACH-»
       }
-      «ENDLET»
-      «ENDLET»
+      «ENDLET-»
+      «ENDLET-»
+«ENDDEFINE»
+
+«DEFINE FeatureFieldInstantiation FOR EStructuralFeature-»
+    «IF hasInitializationAnnotation()-»
+        «LET getInitializationAnnotation() AS annotation-»
+        std::make_shared<«annotation.field.eType.toQualifiedTypeName()»>(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH annotation.parameterInputVariableExpressions SEPARATOR ", "»)
+        «ENDLET-»
+    «ELSE-»
+        «featureToFieldInstantiation()»
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE ImplConstructorDeclaration FOR EClass-»

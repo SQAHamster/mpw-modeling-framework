@@ -52,6 +52,9 @@ isObjectReference(EClassifier this) :
 	
 isConstructorInjectedProperty(EStructuralFeature this) :
     !this.changeable && !this.isContainment() && !this.derived;
+    
+needsConstructorInstantiation(EStructuralFeature this) :
+    eType.isDependency() || hasInitializationAnnotation();
 
 // e.g. Territory is a concrete references for derviced "stage" reference.
 isStageField(EStructuralFeature this) :
@@ -68,9 +71,13 @@ toCppType(String this, String metaTypeName, EPackage thisPackage) :
     else if (this == "EBoolean") then "bool"
     else if (this == "EString") then "std::string"
     else if (this.isAnyTypeName()) then "Any"
-    else if (this.isValueType() || metaTypeName == "ecore::EEnum") then toQualifiedTypeName(this, thisPackage)
+    else if (this.isValueTypeClassName() || metaTypeName == "ecore::EEnum") then toQualifiedTypeName(this, thisPackage)
     else if (this == "Throwable") then "std::runtime_error"
     else "std::shared_ptr<" + toQualifiedTypeName(this, thisPackage) + ">";
+
+// TODO: resolve EClass to check stereotype
+isValueTypeClassName(String this) :
+   this == "Location";
 	
 isBuiltInType(EClassifier this) :
     isPrimitive() || this.name.isAnyTypeName();
@@ -94,15 +101,18 @@ private elementToCppType(ETypedElement this) :
 	    else "std::list<std::shared_ptr<" + this.eType.ePackage.name + "::" + this.eType.name + ">>" )
 	else this.toCppType();
 
+hasInitializationAnnotation(EStructuralFeature this) :
+    getInitializationAnnotation() != null;
+
+getInitializationAnnotation(EStructuralFeature this) :
+    this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first();
+
 featureToFieldInstantiation(EStructuralFeature this) :
-    if (this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).size > 0) then this.eAnnotations.typeSelect(InlineSimpleFieldInitializationAnnotation).first().toInitialization()
+    if (hasInitializationAnnotation()) then "ERROR: featureToFieldInstantiation() must not be called for InlineSimpleFieldInitializationAnnotation"
     else if (this.upperBound == -1) then "{}"
     else if (this.eType.isDependency()) then "{ std::make_shared<impl.Dummy" + this.eType.name + ">() }"
     else if (this.eType.needsImplSubclass()) then "new " + this.eType.name + "Impl()"
     else "new " + this.eType.name + "()";
-
-toInitialization(InlineSimpleFieldInitializationAnnotation this) : "";
-    // TODO "new " + field.eType.name + "(" + parameterInputVariablePropertyPaths.collect(path|path.toPropertyGetters()).toString(", ") + ")";
 
 defaultValueOf(EStructuralFeature f) :
     if (f.eType.name == "EInt") then "0"

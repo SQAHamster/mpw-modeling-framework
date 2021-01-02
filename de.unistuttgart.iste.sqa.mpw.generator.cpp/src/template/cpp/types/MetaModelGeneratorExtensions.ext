@@ -67,10 +67,6 @@ isDependency(EClassifier this) : hasStereotype("Dependency");
 isFacade(EClassifier this) : eAnnotations.exists(a|a.source == "facade");
 isEntity(EClassifier this) : EClass.isInstance(this) && ((EClass)this).eAllSuperTypes.exists(t|t.name == "Entity");
 
-// TODO: resolve EClass to check stereotype
-isValueType(String this) :
-   this == "Location";
-
 toCppIncludeGuard(EClassifier this) : toCppIncludeGuard(this.name);
 toCppImplIncludeGuard(EClassifier this) : toCppIncludeGuard(this.name + "Impl");
 
