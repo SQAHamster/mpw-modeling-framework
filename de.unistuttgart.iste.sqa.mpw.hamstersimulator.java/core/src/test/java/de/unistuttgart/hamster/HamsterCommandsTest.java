@@ -283,9 +283,12 @@ public class HamsterCommandsTest {
 	}
 
 	private void andGrainsInMouth(int count) {
-		var concreteHamster = (ConcreteHamster) this.sut.getInternalHamster();
+		var internalHamster = (ConcreteHamster) this.sut.getInternalHamster();
+		var stage = internalHamster.getStage();
 		for (int i = 0; i < count; i++) {
-			concreteHamster.addToGrains(new Grain());
+			var grain = new Grain();
+			stage.addToTileContents(grain);
+			internalHamster.addToGrains(grain);
 		}
 	}
 
@@ -323,7 +326,8 @@ public class HamsterCommandsTest {
 	}
 
 	private void assertGrainsInMouth(int expected) {
-		var actual = sut.getInternalHamster().getGrains().size();
+		var internalHamster = sut.getInternalHamster();
+		var actual = internalHamster.getGrains().size();
 		assertEquals(expected, actual);
 	}
 
@@ -339,12 +343,8 @@ public class HamsterCommandsTest {
 	}
 
 	private Tile getTileAt(int columnIndex, int rowIndex) {
-		var tileOptional = game.getTerritory().getInternalTerritory().getTiles().stream()
-				.filter(t -> t.getLocation().getColumn() == columnIndex &&
-						t.getLocation().getRow() == rowIndex)
-				.findFirst();
-		assert(tileOptional.isPresent());
-		return tileOptional.get();
+		var internalTerritory = game.getTerritory().getInternalTerritory();
+		return internalTerritory.getTileAt(Location.from(columnIndex, rowIndex));
 	}
 
 	//</editor-fold>

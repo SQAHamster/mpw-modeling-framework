@@ -18,33 +18,27 @@ public class GameStringifier {
 		territoryBuilder.initTerritory(width, height);
 
 		for (int y = 0; y < height; y++) {
-			String string = parts[y];
-
-			char[] chars = string.toCharArray();
-
-			for (int x = 0; x < width; x++) {
-				switch (chars[x]) {
-					case '>':
-					case '<':
-					case '^':
-					case 'v':
-						territoryBuilder.initDefaultHamster(x, y, DirectionTestHelper.toDirection(chars[x]), 0);
-						break;
-					case '*':
-						territoryBuilder.addGrainsToTile(x, y, 1);
-						break;
-					case 'M':
-						territoryBuilder.addWallToTile(x, y);
-						break;
-				}
-			}
-
+			handleLine(territoryBuilder, y, parts[y]);
 		}
 
 		return game;
 	}
-	
-	
+
+	private static void handleLine(TerritoryBuilder territoryBuilder, int y, String part) {
+		char[] chars = part.toCharArray();
+		for (int x = 0; x < part.length(); x++) {
+			handleCell(territoryBuilder, x, y, chars[x]);
+		}
+	}
+
+	private static void handleCell(TerritoryBuilder territoryBuilder, int x, int y, char cell) {
+		switch (cell) {
+			case '>', '<', '^', 'v' -> territoryBuilder.initDefaultHamster(x, y, DirectionTestHelper.toDirection(cell), 0);
+			case '*' -> territoryBuilder.addGrainsToTile(x, y, 1);
+			case 'M' -> territoryBuilder.addWallToTile(x, y);
+		}
+	}
+
 	public static String toString(HamsterGame game) {
 		var actual = new StringBuilder();
 
