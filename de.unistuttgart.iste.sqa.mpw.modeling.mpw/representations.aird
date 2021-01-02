@@ -25,7 +25,7 @@
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="model/stereotypes/ViewModel.ecore#/"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_in4rARxeEeuBToo0ySntrA" name="mpw class diagram" repPath="#_in210BxeEeuBToo0ySntrA" changeId="1285c8bb-64a7-4225-8a35-97dcf7da89aa">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_in4rARxeEeuBToo0ySntrA" name="mpw class diagram" repPath="#_in210BxeEeuBToo0ySntrA" changeId="ec5e0b21-9d65-4c3d-9104-40a805b6d470">
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="model/MiniProgrammingWorld.ecore#/"/>
       </ownedRepresentationDescriptors>
@@ -1633,16 +1633,16 @@
       <ownedElements xmi:type="diagram:DNodeListElement" uid="_3GohUB82EeudQsNRgy0q-A" name="column : EInt" tooltipText="">
         <target xmi:type="ecore:EAttribute" href="model/MiniProgrammingWorld.ecore#//Location/column"/>
         <semanticElements xmi:type="ecore:EAttribute" href="model/MiniProgrammingWorld.ecore#//Location/column"/>
-        <ownedStyle xmi:type="diagram:BundledImage" uid="_5alg9x82EeudQsNRgy0q-A" labelAlignment="LEFT">
-          <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']/@style"/>
+        <ownedStyle xmi:type="diagram:BundledImage" uid="_NHZwQUzeEeug5OPRFMAxtg" labelAlignment="LEFT" description="__21G0Df8Eeu0KvmSgTDkRg">
+          <labelFormat>bold</labelFormat>
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']"/>
       </ownedElements>
       <ownedElements xmi:type="diagram:DNodeListElement" uid="_4HlA8B82EeudQsNRgy0q-A" name="row : EInt" tooltipText="">
         <target xmi:type="ecore:EAttribute" href="model/MiniProgrammingWorld.ecore#//Location/row"/>
         <semanticElements xmi:type="ecore:EAttribute" href="model/MiniProgrammingWorld.ecore#//Location/row"/>
-        <ownedStyle xmi:type="diagram:BundledImage" uid="_4tFhwh82EeudQsNRgy0q-A" labelAlignment="LEFT">
-          <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']/@style"/>
+        <ownedStyle xmi:type="diagram:BundledImage" uid="_NHcMgUzeEeug5OPRFMAxtg" labelAlignment="LEFT" description="__21G0Df8Eeu0KvmSgTDkRg">
+          <labelFormat>bold</labelFormat>
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']"/>
       </ownedElements>
