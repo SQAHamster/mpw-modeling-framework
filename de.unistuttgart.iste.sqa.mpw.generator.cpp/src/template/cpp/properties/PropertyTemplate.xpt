@@ -71,7 +71,7 @@
       «FOREACH eAllStructuralFeatures.select(f|f.isStageField()) AS f-»
       «"stage".setter()»(«f.name»);
       «ENDFOREACH-»
-      «FOREACH eStructuralFeatures.select(f|f.needsConstructorInstantiation()) AS f SEPARATOR ", "-»
+      «FOREACH eStructuralFeatures.select(f|f.needsConstructorInstantiation()) AS f-»
           this->«f.name» = «EXPAND FeatureFieldInstantiation FOR f»;
       «ENDFOREACH-»
 «ENDDEFINE»

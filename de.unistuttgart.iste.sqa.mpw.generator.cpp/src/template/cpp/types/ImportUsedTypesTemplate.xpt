@@ -65,7 +65,14 @@
     «EXPAND CommandImportDefinition FOREACH eAllOperations
         .select(o|o.isCommand())
         .collect(o|o.getCommandForOperation())»
-    «EXPAND SingleImportDefinition FOREACH eReferences.select(r|r.eType.isDependency()).collect(r|"Dummy" + r.eType.name)»
+    «EXPAND SingleImportDefinition FOREACH eReferences
+        .select(r|r.needsConstructorInstantiation())
+        .select(r|r.eType.needsImplSubclass())
+        .reject(r|r.eType.isDependency())
+        .collect(r|r.eType.name + "Impl")»
+    «EXPAND SingleImportDefinition FOREACH eReferences
+        .select(r|r.eType.isDependency())
+        .collect(r|"Dummy" + r.eType.name)»
 «ENDDEFINE»
 
 «DEFINE ForwardDeclarations FOR EClass»

@@ -54,7 +54,8 @@ isConstructorInjectedProperty(EStructuralFeature this) :
     !this.changeable && !this.isContainment() && !this.derived;
     
 needsConstructorInstantiation(EStructuralFeature this) :
-    eType.isDependency() || hasInitializationAnnotation();
+    !isConstructorInjectedProperty() && !derived &&
+        (eType.isDependency() || hasInitializationAnnotation() || !isCollection() && isObjectReference() && !changeable);
 
 // e.g. Territory is a concrete references for derviced "stage" reference.
 isStageField(EStructuralFeature this) :
@@ -111,8 +112,8 @@ featureToFieldInstantiation(EStructuralFeature this) :
     if (hasInitializationAnnotation()) then "ERROR: featureToFieldInstantiation() must not be called for InlineSimpleFieldInitializationAnnotation"
     else if (this.upperBound == -1) then "{}"
     else if (this.eType.isDependency()) then "std::make_shared<" + eType.ePackage.name + "::Dummy" + this.eType.name + ">()"
-    else if (this.eType.needsImplSubclass()) then "new " + this.eType.name + "Impl()"
-    else "new " + this.eType.name + "()";
+    else if (this.eType.needsImplSubclass()) then "std::make_shared<" + this.eType.toQualifiedTypeName() + "Impl>()"
+    else "std::make_shared<" + this.eType.toQualifiedTypeName() + ">()";
 
 defaultValueOf(EStructuralFeature f) :
     if (f.eType.name == "EInt") then "0"
