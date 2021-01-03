@@ -22,7 +22,7 @@ static void handleLine(TerritoryBuilder& territoryBuilder, int y, const std::str
 static void handleCell(TerritoryBuilder& territoryBuilder, int x, int y, char cell);
 
 std::shared_ptr<hamster::HamsterGame> GameStringifier::createFromString(const std::string& map) {
-    auto game = std::make_shared<HamsterGame>();
+    auto game = HamsterGame::create();
 
     std::vector<std::string> parts = TestUtils::split(";", map);
     int height = static_cast<int>(parts.size());

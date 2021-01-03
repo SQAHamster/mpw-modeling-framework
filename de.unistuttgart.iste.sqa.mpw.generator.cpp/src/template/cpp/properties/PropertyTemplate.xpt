@@ -24,18 +24,48 @@
 
 «DEFINE ConstructorDeclaration FOR EClass»
       «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
-      «name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
+      «IF needsStaticFactoryConstructorMethod()-»
+          static std::shared_ptr<«name»> create(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
+          private:
+          «name»() = default;
+          void init(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
+          public:
+      «ELSE-»
+          «name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
+      «ENDIF-»
       «ENDLET»
 «ENDDEFINE»
 
 «DEFINE ConstructorDefinition FOR EClass»
       «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties-»
       «LET injectedProperties.without(eStructuralFeatures) AS injectedForParentProperties-»
-      «name»::«name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
-      «IF injectedForParentProperties.size > 0-»
-      : («FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
-      «ENDIF-» {
-      «FOREACH injectedProperties.without(injectedForParentProperties) AS f-»
+      «LET injectedProperties.without(injectedForParentProperties) AS injectedForThisProperties-»
+      «IF needsStaticFactoryConstructorMethod()-»
+	      std::shared_ptr<«name»> «name»::create(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH») {
+	          auto instance = std::shared_ptr<«name»>(new «name»);«REM»need raw new, since make_shared doesn't work with private constructor«ENDREM»
+	          instance->init(«FOREACH injectedProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
+	          return instance;
+	      }
+	      
+	      void «name»::init(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
+	      «IF injectedForParentProperties.size > 0-»
+	      inherited::init(«FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+	      «ENDIF-» {
+	      «EXPAND FieldInitializationDefinition(injectedForThisProperties) FOR this-»
+	      }
+      «ELSE-»
+	      «name»::«name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
+	      «IF injectedForParentProperties.size > 0-»
+	      : («FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+	      «ENDIF-» {
+	      «EXPAND FieldInitializationDefinition(injectedForThisProperties) FOR this-»
+	      }
+      «ENDIF-»
+      «ENDLET-»«ENDLET-»«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE FieldInitializationDefinition(Set[EStructuralFeature] injectedForThisProperties) FOR EClass»
+      «FOREACH injectedForThisProperties AS f-»
       this->«f.name» = «f.name»;
       «ENDFOREACH-»
       «FOREACH eAllStructuralFeatures.select(f|f.isStageField()) AS f-»
@@ -44,9 +74,6 @@
       «FOREACH eStructuralFeatures.select(f|f.needsConstructorInstantiation()) AS f SEPARATOR ", "-»
           this->«f.name» = «EXPAND FeatureFieldInstantiation FOR f»;
       «ENDFOREACH-»
-      }
-      «ENDLET-»
-      «ENDLET-»
 «ENDDEFINE»
 
 «DEFINE FeatureFieldInstantiation FOR EStructuralFeature-»

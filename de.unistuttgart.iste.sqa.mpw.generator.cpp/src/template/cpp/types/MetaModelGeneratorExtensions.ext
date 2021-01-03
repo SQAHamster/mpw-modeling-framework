@@ -64,6 +64,10 @@ isDependency(EClassifier this) : hasStereotype("Dependency");
 isFacade(EClassifier this) : eAnnotations.exists(a|a.source == "facade");
 isInheritedEntity(EClassifier this) : EClass.isInstance(this) && ((EClass)this).eAllSuperTypes.exists(t|t.name == "Entity");
 
+// a MiniProgrammingWorld has a complex lifecycle constructor, so it has to be solved by a static create method
+needsStaticFactoryConstructorMethod(EClass this) :
+    eAllSuperTypes.exists(t|t.name == "MiniProgrammingWorld");
+
 toCppIncludeGuard(EClassifier this) : toCppIncludeGuard(this.name);
 toCppImplIncludeGuard(EClassifier this) : toCppIncludeGuard(this.name + "Impl");
 toCppDummyIncludeGuard(EClassifier this) : toCppIncludeGuard("Dummy" + this.name);
