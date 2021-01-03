@@ -25,6 +25,9 @@
 
 «DEFINE StatementDefinition FOR SelfStatement-»
     «selfAlias-»
+    «IF previous == null && next == null-»
+        ->shared_from_this()«REM»for usages of single "this" statements, usually a shared_ptr variable is required, e.g. in field instantiations«ENDREM-»
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR ParameterUsageStatement-»

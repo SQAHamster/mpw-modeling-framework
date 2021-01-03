@@ -14,10 +14,10 @@
 
 «REM»Generates a convenience shared_from_this method which statically returns the "this" type«ENDREM»
 «DEFINE StaticSharedFromThisDefinition FOR EClass»
-      «IF isInheritedEntity()-»
+      «IF eSuperTypes.reject(t|t.interface).size > 0 || isInheritedEntity()-»
       /// \brief returns a shared_ptr of type «this.name» which shares ownership of *this
 	  std::shared_ptr<«this.name»> shared_from_this() {
-	    return std::dynamic_pointer_cast<«this.name»>(commands::Entity::shared_from_this());
+	    return std::dynamic_pointer_cast<«this.name»>(«getSharedFromThisParentReference()»::shared_from_this());
 	  }
       «ENDIF-»
 «ENDDEFINE»
@@ -42,7 +42,7 @@
       «"stage".setter()»(«f.name»);
       «ENDFOREACH-»
       «FOREACH eStructuralFeatures.select(f|f.needsConstructorInstantiation()) AS f SEPARATOR ", "-»
-          // this->«f.name» = «EXPAND FeatureFieldInstantiation FOR f»
+          this->«f.name» = «EXPAND FeatureFieldInstantiation FOR f»;
       «ENDFOREACH-»
       }
       «ENDLET-»

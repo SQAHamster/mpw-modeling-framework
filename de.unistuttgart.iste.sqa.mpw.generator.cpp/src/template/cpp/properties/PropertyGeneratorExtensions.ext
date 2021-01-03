@@ -40,3 +40,7 @@ resolveFieldValue(EStructuralFeature this) :
 isWeakPtr(EStructuralFeature this) :
     let reference = (EReference)this :
     isReference() && reference.upperBound == 1 && !reference.containment && !reference.hasSharedOwnership();
+
+getSharedFromThisParentReference(EClass this) :
+    if (eSuperTypes.reject(t|t.interface).size > 0) then "inherited"
+    else "commands::Entity";
