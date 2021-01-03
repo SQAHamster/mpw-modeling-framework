@@ -18,7 +18,7 @@ private referenceToSimpleFieldType(EReference this) :
         if (this.containment) then "std::list<std::shared_ptr<" + this.eType.toQualifiedTypeName() + ">>"
         else "std::list<std::weak_ptr<" + this.eType.toQualifiedTypeName() + ">>" )
     else (
-        if (this.containment || hasSharedOwnership()) then "std::shared_ptr<" + this.eType.toQualifiedTypeName() + ">"
+        if (this.containment || hasSharedOwnership() || eType.isDependency()) then "std::shared_ptr<" + this.eType.toQualifiedTypeName() + ">"
         else "std::weak_ptr<" + this.eType.toQualifiedTypeName() + ">" );
 
 // checks wheter the field needs a shared_ptr, since the lifecycle has to be protected

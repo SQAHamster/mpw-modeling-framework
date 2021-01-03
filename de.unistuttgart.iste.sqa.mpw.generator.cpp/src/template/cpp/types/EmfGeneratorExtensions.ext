@@ -110,7 +110,7 @@ getInitializationAnnotation(EStructuralFeature this) :
 featureToFieldInstantiation(EStructuralFeature this) :
     if (hasInitializationAnnotation()) then "ERROR: featureToFieldInstantiation() must not be called for InlineSimpleFieldInitializationAnnotation"
     else if (this.upperBound == -1) then "{}"
-    else if (this.eType.isDependency()) then "{ std::make_shared<impl.Dummy" + this.eType.name + ">() }"
+    else if (this.eType.isDependency()) then "std::make_shared<" + eType.ePackage.name + "::Dummy" + this.eType.name + ">()"
     else if (this.eType.needsImplSubclass()) then "new " + this.eType.name + "Impl()"
     else "new " + this.eType.name + "()";
 

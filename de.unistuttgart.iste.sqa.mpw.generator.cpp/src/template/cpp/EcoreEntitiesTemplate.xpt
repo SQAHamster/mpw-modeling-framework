@@ -179,6 +179,32 @@
     #endif //«this.toCppIncludeGuard()»
     
     «ENDFILE»
+
+    «IF isDependency()»
+    «FILE "generated/Dummy" + name + ".h"»
+    
+    #ifndef «this.toCppDummyIncludeGuard()»
+    #define «this.toCppDummyIncludeGuard()»
+    
+    #include "«name».h"
+    
+    namespace «this.ePackage.name» {
+    
+    class Dummy«name» : public «name» {
+    public:
+        «FOREACH this.eAllOperations AS o»
+            «o.operationToOverrideSignature()» {
+          throw std::runtime_error("not implemented");
+        }
+        «ENDFOREACH»
+    };
+    
+    }
+    
+    #endif //«this.toCppDummyIncludeGuard()»
+    
+    «ENDFILE»
+    «ENDIF»
 «ENDDEFINE»
 
 «DEFINE CppEnum FOR EEnum»
