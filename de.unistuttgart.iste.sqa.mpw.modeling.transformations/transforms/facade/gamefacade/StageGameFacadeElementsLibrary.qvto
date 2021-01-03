@@ -53,7 +53,8 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
 
 mapping EReference::toFacadeActorFieldReference(): EReference {
     name := self.name;
-    eType := self.eType.findFacadeForRoleType();    
+    eType := self.eType.findFacadeForRoleType();
+    containment := true;
 }
 
 mapping EReference::toGetPropertyAnnotation(): GetPropertyAnnotation {

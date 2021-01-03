@@ -36,12 +36,13 @@ abstract mapping inout EClass::createFields() {
     var internalEditorRoleField := object EReference {
         name := baseName.firstToLower();
         eType := findClassifierForName("Editor" + self.getBaseName());
+        eAnnotations += "sharedOwnership".toMarkerAnnotation(); // for C++: simplifies generation code since it is symmetric to Game-Facade
     };
     eStructuralFeatures += internalEditorRoleField;
     
     self.eStructuralFeatures += object EReference {
         name := "game";
-        eType := findInstanceOfMetaClass("MiniProgrammingWorld");	
+        eType := findInstanceOfMetaClass("MiniProgrammingWorld");
     };
 }
 
