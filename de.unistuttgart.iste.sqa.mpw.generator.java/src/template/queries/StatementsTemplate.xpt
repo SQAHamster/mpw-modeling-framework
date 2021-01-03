@@ -21,7 +21,11 @@
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR FeatureStatement-»
-    «feature.name.getter()»()
+    «IF directAccessible-»
+        «feature.name»
+    «ELSE-»
+        «feature.name.getter()»()
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR CollectionMethodStatement-»
