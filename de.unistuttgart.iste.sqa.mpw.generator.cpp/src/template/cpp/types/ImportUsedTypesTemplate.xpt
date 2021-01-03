@@ -134,7 +134,7 @@
     }
     «ENDIF-»
     «EXPAND SingleForwardDeclarationDefinition FOREACH mainUnit.parameters.collect(p|p.type)
-                                                              .select(t|t.isEntity())»
+                                                              .select(t|t.isInheritedEntity())»
 «ENDDEFINE»
 
 «DEFINE CommandUsedTypeIncludeDefinitions FOR Transformation»

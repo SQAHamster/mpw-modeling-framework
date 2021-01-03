@@ -33,11 +33,11 @@
     
     namespace «this.ePackage.name» {
     
-    class «name» {
+    class «name» «toInheritance()» {
         private:
 
         «FOREACH eStructuralFeatures AS f-»
-            «f.featureToCppType()» «f.name»;
+            «f.featureToSimpleFieldType()» «f.name»;
         «ENDFOREACH-»
         
         public:
@@ -91,9 +91,9 @@
 
 «DEFINE GenerationAnnotationDefinition(EClass class) FOR CommandParameterCreationAnnotation-»
     commands::«command.name.toFirstUpper()»CommandParameters «parametersVariableName»(
-    /*self*/ nullptr, *game->getCommandStack()
+    /*self*/ nullptr, *game.lock()->getCommandStack()
     «IF command.isActorCommand()-»
-    , *game->getGameLog()
+    , *game.lock()->getGameLog()
     «ENDIF-»
     «FOREACH parameterMappings AS mapping-»
          , «mapping.value-»
@@ -127,7 +127,7 @@
 
 «DEFINE GenerationAnnotationDefinition(EClass class) FOR GetPropertyAnnotation-»
     «getterType.toCppType()» «class.name»::«getterOperationName»() {
-        return this->«field.name»;
+        return this->«field.resolveFieldValue()»;
     }
     
 «ENDDEFINE»

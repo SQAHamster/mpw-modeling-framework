@@ -7,14 +7,14 @@
       «IF f.isObservableProperty()»
       «f.featureToObservableFieldType()» «f.name»;
       «ELSE-»
-      «f.featureToCppType()» «f.name»;
+      «f.featureToSimpleFieldType()» «f.name»;
       «ENDIF-»
       «ENDFOREACH»
 «ENDDEFINE»
 
 «REM»Generates a convenience shared_from_this method which statically returns the "this" type«ENDREM»
 «DEFINE StaticSharedFromThisDefinition FOR EClass»
-      «IF isEntity()-»
+      «IF isInheritedEntity()-»
       /// \brief returns a shared_ptr of type «this.name» which shares ownership of *this
 	  std::shared_ptr<«this.name»> shared_from_this() {
 	    return std::dynamic_pointer_cast<«this.name»>(commands::Entity::shared_from_this());
@@ -91,7 +91,7 @@
         «IF f.isObservableProperty()-»
         return this->«f.name».get();
         «ELSE-»
-        return this->«f.name»;
+        return this->«f.resolveFieldValue()»;
         «ENDIF-»
       }
       «ENDFOREACH»

@@ -157,7 +157,7 @@
     
     namespace «this.ePackage.name» {
     
-    class «this.name» «this.toInheritance()» «IF name == "Entity"»: public std::enable_shared_from_this<Entity>, public ReflectivePropertyObject«ENDIF» {
+    class «this.name» «this.toInheritance()» «IF name == "Entity"», public ReflectivePropertyObject«ENDIF» {
     
     public:
     
@@ -216,7 +216,7 @@
 
 «DEFINE GenerationAnnotationDefinition(EClass class) FOR GetPropertyAnnotation»
     «getterType.toCppType()» «class.name»::«getterOperationName»() noexcept {
-        return this->«field.name»;
+        return this->«field.resolveFieldValue()»;
     }
 «ENDDEFINE»
 

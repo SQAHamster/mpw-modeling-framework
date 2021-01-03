@@ -32,9 +32,6 @@ private isGenerated(EOperation this) :
 isViewModelType(EClassifier this) :
     EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewModel");
 
-isInheritedEntity(EClass this) :
-    eAllSuperTypes.exists(t|t.name == "Entity");
-    
 toInheritance(EClass this) :
     let filteredExtends = eSuperTypes.typeSelect(EClass)
         .reject(e|e.interface) :
@@ -44,7 +41,7 @@ toInheritance(EClass this) :
     if (filteredExtends.size > 0 && filteredInterfaces.size > 0) then ": public " + toQualifiedTypeName(filteredExtends.get(0)) + ", public virtual " + filteredInterfaces.collect(i|toQualifiedTypeName(i)).toString(", public virtual ")
     else if (filteredExtends.size > 0) then ": public " + toQualifiedTypeName(filteredExtends.get(0))
     else if (filteredInterfaces.size > 0) then ": public virtual " + filteredInterfaces.collect(i|toQualifiedTypeName(i)).toString(", public virtual ")
-    else "";
+    else ": public std::enable_shared_from_this<" + this.name + ">";
 
 toInheritedAlias(EClass this) :
     let baseClass = getBaseClass() :
@@ -65,7 +62,7 @@ toQualifiedTypeName(String this, EPackage package) :
 isValueType(EClassifier this) : hasStereotype("ValueType");
 isDependency(EClassifier this) : hasStereotype("Dependency");
 isFacade(EClassifier this) : eAnnotations.exists(a|a.source == "facade");
-isEntity(EClassifier this) : EClass.isInstance(this) && ((EClass)this).eAllSuperTypes.exists(t|t.name == "Entity");
+isInheritedEntity(EClassifier this) : EClass.isInstance(this) && ((EClass)this).eAllSuperTypes.exists(t|t.name == "Entity");
 
 toCppIncludeGuard(EClassifier this) : toCppIncludeGuard(this.name);
 toCppImplIncludeGuard(EClassifier this) : toCppIncludeGuard(this.name + "Impl");
