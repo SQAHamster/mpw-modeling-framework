@@ -77,6 +77,38 @@ public class PropertyTest {
 	}
 
 	@Test
+	public void givenGrain_whenSetTileAsCurrentTile_thenTileHasGrainAsContent() {
+		var grain = new Grain();
+		var tile = new Tile();
+		grain.setCurrentTile(tile);
+		assertEquals(grain, tile.getContents().get(0));
+	}
+
+	@Test
+	public void givenTwoTiles_andOneGrain_whenSetBothTilesAsCurrentTile_thenFirstTileIsEmpty_andSecondTileHasGrainAsContent() {
+		var grain = new Grain();
+		var tile1 = new Tile();
+		var tile2 = new Tile();
+		grain.setCurrentTile(tile1);
+		grain.setCurrentTile(tile2);
+		assertTrue(tile1.getContents().isEmpty());
+		assertEquals(grain, tile2.getContents().get(0));
+		assertEquals(tile2, grain.getCurrentTile());
+	}
+
+	@Test
+	public void givenTwoTiles_andOneGrain_whenAddGrainToFirstTile_andAddToSecondTile_thenFirstTileIsEmpty_andSecondTileHasGrainAsContent() {
+		var grain = new Grain();
+		var tile1 = new Tile();
+		var tile2 = new Tile();
+		tile1.addToContents(grain);
+		tile2.addToContents(grain);
+		assertTrue(tile1.getContents().isEmpty());
+		assertEquals(grain, tile2.getContents().get(0));
+		assertEquals(tile2, grain.getCurrentTile());
+	}
+
+	@Test
 	public void givenTile_whenAddGrainAsContent_andRemoveGrain_thenTileHasNoContents() {
 		var tile = new Tile();
 		var grain = new Grain();

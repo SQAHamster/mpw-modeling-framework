@@ -5,6 +5,8 @@
 «DEFINE ImportDefinitions FOR EClass»
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
     import java.util.List;
+    import java.util.Set;
+    import java.util.HashSet;
 	«ENDIF-»
     «IF eStructuralFeatures.exists(e|e.isCollection())-»
     import java.util.ArrayList;
