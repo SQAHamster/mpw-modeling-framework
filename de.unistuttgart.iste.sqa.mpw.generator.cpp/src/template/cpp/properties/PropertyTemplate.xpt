@@ -9,6 +9,10 @@
       «ELSE-»
       «f.featureToSimpleFieldType()» «f.name»;
       «ENDIF-»
+      «IF f.isCollection() && f.isReference() && !f.eType.isValueType()-»
+      /// \brief internal lookup for «f.name»
+      std::unordered_set<«f.eType.toQualifiedTypeName()»*> «f.name»Lookup;
+      «ENDIF-»
       «ENDFOREACH»
 «ENDDEFINE»
 
@@ -133,57 +137,49 @@
     «ENDFOREACH»
 «ENDDEFINE»
 
-«DEFINE SetPropertyValueDefinitions FOR EClass»
+«DEFINE SetPropertyValueDefinitions FOR EClass-»
     «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
     void «name»::«f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept {
-         «IF f.isReference() && f.isCollection()-»
-             «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f»
-         «ELSEIF !f.isReference() && f.isCollection()-»
-             «EXPAND SimpleAdderForFeatureDefinition FOR f»
-         «ELSE-»
-             «EXPAND SimpleSetterForFeatureDefinition FOR f-»
-         «ENDIF-»
+        «IF f.isCollection()-»
+            «IF f.isReference()-»
+                «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f-»
+            «ELSE-»
+                «EXPAND SimpleAdderForFeatureDefinition FOR f-»
+            «ENDIF-»
+        «ELSE-»
+            «EXPAND SimpleSetterForFeatureDefinition FOR f-»
+        «ENDIF-»
      }
      «IF f.isCollection()-»
      void «name»::«f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept {
          «IF f.isReference()-»
-             «EXPAND MultiReferenceRemoverForFeatureDefinition FOR (EReference)f»
+             «EXPAND MultiReferenceRemoverForFeatureDefinition FOR (EReference)f-»
          «ELSE-»
-             «EXPAND SimpleRemoverForFeatureDefinition FOR f»
+             «EXPAND SimpleRemoverForFeatureDefinition FOR f-»
          «ENDIF-»
      }
      «ENDIF-»
     «ENDFOREACH»
 «ENDDEFINE»
 
-«DEFINE MultiReferenceAdderForFeatureDefinition FOR EReference»
-    «IF eOpposite != null-»
-        if («modifierParameterName()»->«eOpposite.name.getter()»().get() != this) {
-    «ENDIF-»
-    
-    «IF isObservableProperty()-»
-    this->«name».add(«modifierParameterName()»);
-    «ELSE-»
-    this->«name».push_back(«modifierParameterName()»);
-    «ENDIF-»
-          
-    «IF eOpposite != null-»
+«DEFINE MultiReferenceAdderForFeatureDefinition FOR EReference-»
+    if (!this->«name»Lookup.contains(«modifierParameterName()».get())) {
+        «IF isObservableProperty()-»
+            this->«name».add(«modifierParameterName()»);
+        «ELSE-»
+            this->«name».push_back(«modifierParameterName()»);
+        «ENDIF-»
+        this->«name»Lookup.insert(«modifierParameterName()».get());
         «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
-        }
-    «ENDIF-»
+    }
 «ENDDEFINE»
 
-«DEFINE MultiReferenceRemoverForFeatureDefinition FOR EReference»
-    «IF eOpposite != null-»
-        if («modifierParameterName()»->«eOpposite.name.getter()»().get() == this) {
-    «ENDIF-»
-          
-    this->«name».remove(«modifierParameterName()»);
-          
-    «IF eOpposite != null-»
-            «modifierParameterName()»->«eOpposite.name.setter()»(nullptr);
-        }
-    «ENDIF-»
+«DEFINE MultiReferenceRemoverForFeatureDefinition FOR EReference-»
+    if (this->«name»Lookup.contains(«modifierParameterName()».get())) {
+        this->«name».remove(«modifierParameterName()»);
+        this->«name»Lookup.erase(«modifierParameterName()».get());
+        «EXPAND CallSetterForUnsetOppositeDefinition FOR (EReference)this-»
+    }
 «ENDDEFINE»
 
 «DEFINE SimpleSetterForFeatureDefinition FOR EStructuralFeature-»
@@ -197,21 +193,21 @@
         this->«name» = «name»;
     «ENDIF-»
     «IF isReference()-»
+        «EXPAND CallSetterForUnsetPreviousOppositeDefinition FOR (EReference)this-»
         «EXPAND CallSetterForOppositeDefinition FOR (EReference)this-»
-        «EXPAND CallSetterForUnsetOppositeDefinition FOR (EReference)this-»
         }
     «ENDIF-»
 «ENDDEFINE»
 
-«DEFINE SimpleAdderForFeatureDefinition FOR EStructuralFeature»
+«DEFINE SimpleAdderForFeatureDefinition FOR EStructuralFeature-»
     this->«name».add(«modifierParameterName()»);
 «ENDDEFINE»
 
-«DEFINE SimpleRemoverForFeatureDefinition FOR EStructuralFeature»
+«DEFINE SimpleRemoverForFeatureDefinition FOR EStructuralFeature-»
     this->«name».remove(«modifierParameterName()»);
 «ENDDEFINE»
 
-«DEFINE CallSetterForOppositeDefinition FOR EReference»
+«DEFINE CallSetterForOppositeDefinition FOR EReference-»
       «IF eOpposite != null-»
       if («modifierParameterName()» != nullptr) {
           auto thisPtr = this->shared_from_this();
@@ -220,17 +216,27 @@
       «ENDIF-»
 «ENDDEFINE»
 
-«DEFINE CallSetterForUnsetOppositeDefinition FOR EReference»
+«DEFINE CallSetterForUnsetOppositeDefinition FOR EReference-»
       «IF eOpposite != null-»
-      if («previousFieldName()» != nullptr) {
-          «IF eOpposite.isCollection()-»
-          auto thisPtr = this->shared_from_this();
-          «previousFieldName()»->«eOpposite.name.remover()»(thisPtr);
-          «ELSE-»
-          «previousFieldName()»->«eOpposite.name.setter()»(nullptr);
-          «ENDIF-»
+      if («modifierParameterName()» != nullptr && «modifierParameterName()»->«eOpposite.name.getter()»().get() == this) {
+          «modifierParameterName()»->«eOpposite.name.setter()»(nullptr);
       }
       «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE CallSetterForUnsetPreviousOppositeDefinition FOR EReference-»
+    «IF eOpposite != null-»
+        «IF eOpposite.isCollection()-»
+            if («previousFieldName()» != nullptr) {
+                auto thisPtr = this->shared_from_this();
+                «previousFieldName()»->«eOpposite.name.remover()»(thisPtr);
+            }
+        «ELSE-»
+            if («previousFieldName()» != nullptr && «previousFieldName()»->«eOpposite.name.getter()»().get() == this) {
+                «previousFieldName()»->«eOpposite.name.setter()»(nullptr);
+            }
+        «ENDIF-»
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE GetPropertyDeclarations FOR EClass»

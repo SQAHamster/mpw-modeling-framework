@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "Tile.h"
+#include "Grain.h"
 #include "ConcreteHamster.h"
 
 #include <memory>
@@ -124,5 +125,16 @@ TEST_F(CompositeCommandDummyTest, testPrimitiveCommands) {
     EXPECT_EQ(Direction::NORTH, hamster->getDirection());
     EXPECT_EQ(Location::from(3, 5), tile->getLocation());
     EXPECT_TRUE(territory->getTiles().empty());
+}
+
+TEST(PropertyTest, testProperties) {
+    auto grain = std::make_shared<Grain>();
+    auto tile1 = std::make_shared<Tile>();
+    auto tile2 = std::make_shared<Tile>();
+    grain->setCurrentTile(tile1);
+    grain->setCurrentTile(tile2);
+    EXPECT_TRUE(tile1->getContents().empty());
+    EXPECT_EQ(grain.get(), tile2->getContents().front().get());
+    EXPECT_EQ(tile2.get(), grain->getCurrentTile().get());
 }
 
