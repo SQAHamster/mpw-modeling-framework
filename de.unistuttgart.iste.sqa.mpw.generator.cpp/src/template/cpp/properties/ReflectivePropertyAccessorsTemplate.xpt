@@ -70,7 +70,7 @@ removeFromCollection(const std::string& propertyName, EntityReference reference)
 «DEFINE SetEntityReferenceProperty FOR EStructuralFeature»
     auto reference = std::get<EntityReference>(value);
     auto typedElement = dynamic_cast<«eType.name»*>(reinterpret_cast<commands::Entity*>(reference));
-    auto sharedPtr = typedElement->shared_from_this();
+    auto sharedPtr = typedElement != nullptr ? typedElement->shared_from_this() : nullptr;
     «name.setter()»(sharedPtr);
 «ENDDEFINE»
 
