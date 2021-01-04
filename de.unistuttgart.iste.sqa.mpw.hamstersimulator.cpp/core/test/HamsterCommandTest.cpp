@@ -267,7 +267,7 @@ TEST_F(HamsterCommandTest, givenHamsterWithCurrentTileIsNull_whenMove_ThenExcept
 
 //<editor-fold desc="Feature: gameLog">
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamster_whenExecuteAndCommand_thenGameLogIsAdded) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamster_whenExecuteAndCommand_thenGameLogIsAdded) { /* NOLINT */
     withTerritory(" *;");
 
     initNewHamster(locationOf(0, 0), Direction::EAST);

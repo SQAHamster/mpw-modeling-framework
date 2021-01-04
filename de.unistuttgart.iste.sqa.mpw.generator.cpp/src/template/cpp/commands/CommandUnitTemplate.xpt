@@ -24,7 +24,7 @@
         «EXPAND OldValueVariablesDefinition FOR this»
     «ENDIF-»
     «IF mainUnit && getParentTransformation().isActorCommand()-»
-        // gameLog.write("«getParentTransformation().toLogMessage()»");
+        gameLog.write("«getParentTransformation().toLogMessage()»");
     «ENDIF-»
     «EXPAND UnitExpandBody FOR this»
     «IF mainUnit-»
