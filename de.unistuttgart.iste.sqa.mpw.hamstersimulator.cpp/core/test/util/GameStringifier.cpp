@@ -28,11 +28,11 @@ std::shared_ptr<hamster::HamsterGame> GameStringifier::createFromString(const st
     int height = static_cast<int>(parts.size());
     int width = height > 0 ? static_cast<int>(parts[0].length()) : 0;
 
-    TerritoryBuilder territoryBuilder(game);
-    territoryBuilder.initTerritory(width, height);
+    auto territoryBuilder = std::make_shared<TerritoryBuilder>(game);
+    territoryBuilder->initTerritory(width, height);
 
     for (int y = 0; y < height; y++) {
-        handleLine(territoryBuilder, y, parts[y]);
+        handleLine(*territoryBuilder, y, parts[y]);
     }
 
     return game;

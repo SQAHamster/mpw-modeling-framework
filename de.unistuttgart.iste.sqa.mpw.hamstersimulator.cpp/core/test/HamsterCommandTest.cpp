@@ -52,7 +52,7 @@ public:
 
 //<editor-fold desc="Feature: move">
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterEast_whenMove_thenMovedToRight) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterEast_whenMove_thenMovedToRight) { /* NOLINT */
     withTerritory(
             "  M;"
             "> M;"
@@ -67,7 +67,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterEast_whenMove_thenMovedToRight) 
 }
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterNorth_whenMove_thenMovedToNorth) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterNorth_whenMove_thenMovedToNorth) { /* NOLINT */
     withTerritory(
             "  M;"
             "^ M;"
@@ -82,7 +82,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterNorth_whenMove_thenMovedToNorth)
 }
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterSouth_whenMove_thenMovedToSouth) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterSouth_whenMove_thenMovedToSouth) { /* NOLINT */
     withTerritory(
             "  M;"
             "v M;"
@@ -97,7 +97,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterSouth_whenMove_thenMovedToSouth)
 }
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterWest_whenMove_thenMovedToWest) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterWest_whenMove_thenMovedToWest) { /* NOLINT */
     withTerritory(
             "  M;"
             " <M;"
@@ -115,7 +115,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterWest_whenMove_thenMovedToWest) {
 //<editor-fold desc="Feature: pick/put grains">
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterWithGrainAvailable_whenPickGrain_thenPickedGrain) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterWithGrainAvailable_whenPickGrain_thenPickedGrain) { /* NOLINT */
     withTerritory(">;");
     andGrainOn(0, 0);
 
@@ -126,7 +126,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterWithGrainAvailable_whenPickGrain
 }
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterWithGrainInMouth_whenPutGrain_thenPutGrainOnTile) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterWithGrainInMouth_whenPutGrain_thenPutGrainOnTile) { /* NOLINT */
     withTerritory(">;");
     andGrainsInMouth(1);
 
@@ -137,7 +137,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterWithGrainInMouth_whenPutGrain_th
 }
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterWithNoGrainAvailable_whenPickGrain_ThenExceptionIsThrown) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterWithNoGrainAvailable_whenPickGrain_ThenExceptionIsThrown) { /* NOLINT */
     withTerritory(">;");
 
     TestUtils::assertThrows(typeid(CommandConstraintException), [&]() {
@@ -146,7 +146,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterWithNoGrainAvailable_whenPickGra
 }
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterWithEmptyMouth_whenPutGrain_ThenExceptionIsThrown) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterWithEmptyMouth_whenPutGrain_ThenExceptionIsThrown) { /* NOLINT */
     withTerritory(">;");
 
     TestUtils::assertThrows(typeid(CommandConstraintException), [&]() {
@@ -158,25 +158,25 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterWithEmptyMouth_whenPutGrain_Then
 
 //<editor-fold desc="Feature: turnLeft">
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterEast_whenTurnLeft_thenDirectionIsNorth) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterEast_whenTurnLeft_thenDirectionIsNorth) { /* NOLINT */
     withTerritory(">;");
     turnLeft();
     assertTerritory("^;");
 }
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterNorth_whenTurnLeft_thenDirectionIsWest) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterNorth_whenTurnLeft_thenDirectionIsWest) { /* NOLINT */
     withTerritory("^;");
     turnLeft();
     assertTerritory("<;");
 }
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterWest_whenTurnLeft_thenDirectionIsSouth) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterWest_whenTurnLeft_thenDirectionIsSouth) { /* NOLINT */
     withTerritory("<;");
     turnLeft();
     assertTerritory("v;");
 }
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterSouth_whenTurnLeft_thenDirectionIsEast) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterSouth_whenTurnLeft_thenDirectionIsEast) { /* NOLINT */
     withTerritory("v;");
     turnLeft();
     assertTerritory(">;");
@@ -185,7 +185,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterSouth_whenTurnLeft_thenDirection
 
 //<editor-fold desc="Feature: frontIsClear">
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterInAnyDirection_andFrontCellIsEmpty_whenCheckFrontIsClear_thenIsTrue) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterInAnyDirection_andFrontCellIsEmpty_whenCheckFrontIsClear_thenIsTrue) { /* NOLINT */
     withTerritory(" <;");
     assertFrontIsClear();
 
@@ -200,7 +200,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterInAnyDirection_andFrontCellIsEmp
 }
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterInAnyDirection_andFrontCellIsWall_whenCheckFrontIsNotClear_thenIsTrue) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterInAnyDirection_andFrontCellIsWall_whenCheckFrontIsNotClear_thenIsTrue) { /* NOLINT */
     withTerritory("M<;");
     assertFrontIsNotClear();
 
@@ -215,7 +215,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterInAnyDirection_andFrontCellIsWal
 }
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterInAnyDirection_andFrontCellIsGrain_whenCheckFrontIsClear_thenIsTrue) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterInAnyDirection_andFrontCellIsGrain_whenCheckFrontIsClear_thenIsTrue) { /* NOLINT */
     withTerritory("*<;");
     assertFrontIsClear();
 
@@ -245,7 +245,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterInAnyDirection_andFrontCellIsEnd
 }
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterBeforeWall_whenMove_ThenExceptionIsThrown) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterBeforeWall_whenMove_ThenExceptionIsThrown) { /* NOLINT */
     withTerritory("M<;");
 
     TestUtils::assertThrows(typeid(CommandConstraintException), [&]() {
@@ -254,7 +254,7 @@ TEST_F(HamsterCommandTest, DISABLED_givenHamsterBeforeWall_whenMove_ThenExceptio
 }
 
  // test of invariant "isInitialized"
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterWithCurrentTileIsNull_whenMove_ThenExceptionIsThrown) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterWithCurrentTileIsNull_whenMove_ThenExceptionIsThrown) { /* NOLINT */
     withTerritory(" <;");
     removeFromStage();
 
@@ -312,7 +312,9 @@ Location HamsterCommandTest::locationOf(int x, int y) {
 
 void HamsterCommandTest::andGrainOn(int columnIndex, int rowIndex) {
     auto tile = getTileAt(columnIndex, rowIndex);
-    tile->addToContents(std::make_shared<Grain>());
+    auto grain = std::make_shared<Grain>();
+    tile->getStage()->addToTileContents(grain);
+    tile->addToContents(grain);
 }
 
 void HamsterCommandTest::andGrainsInMouth(int count) {
