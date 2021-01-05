@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(de_unistuttgart_iste_sqa_mpw_hamstersimulator_cpp)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(core/src/generated)
 add_subdirectory(core/src/impl)

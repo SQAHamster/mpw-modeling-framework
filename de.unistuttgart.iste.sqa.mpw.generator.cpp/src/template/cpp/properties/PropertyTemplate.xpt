@@ -163,7 +163,7 @@
 «ENDDEFINE»
 
 «DEFINE MultiReferenceAdderForFeatureDefinition FOR EReference-»
-    if (!this->«name»Lookup.contains(«modifierParameterName()».get())) {
+    if (this->«name»Lookup.find(«modifierParameterName()».get()) == this->«name»Lookup.end()) {
         «IF isObservableProperty()-»
             this->«name».add(«modifierParameterName()»);
         «ELSE-»
@@ -175,7 +175,7 @@
 «ENDDEFINE»
 
 «DEFINE MultiReferenceRemoverForFeatureDefinition FOR EReference-»
-    if (this->«name»Lookup.contains(«modifierParameterName()».get())) {
+    if (this->«name»Lookup.find(«modifierParameterName()».get()) != this->«name»Lookup.end()) {
         this->«name».remove(«modifierParameterName()»);
         this->«name»Lookup.erase(«modifierParameterName()».get());
         «EXPAND CallSetterForUnsetOppositeDefinition FOR (EReference)this-»
