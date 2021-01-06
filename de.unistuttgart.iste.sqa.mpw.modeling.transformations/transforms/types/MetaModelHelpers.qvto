@@ -2,6 +2,7 @@ import types.AnnotationHelpers;
 import types.EmfHelpers;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
 
 /**
   *  Library with some convinience utilities in context of the MPW Meta-Models.
@@ -36,4 +37,10 @@ query EClassifier::getFeatureByName(name: String) : EStructuralFeature {
 
 query EClassifier::getOperationByName(name: String) : EOperation {
     return self.oclAsType(EClass).eAllOperations->any(o|o.name = name);
+}
+
+mapping inout TypedElement::copyTypeInfoFrom(source: TypedElement) {
+    type := source.type;
+    isCollection := source.isCollection;
+    isOptional := source.isOptional;
 }

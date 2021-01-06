@@ -1,5 +1,5 @@
 import queries.StatementTransformation;
-import queries.StatementHelperMethodLibrary;
+import queries.IntermediaryStatementConverterLibrary;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
@@ -195,9 +195,6 @@ mapping Input::StatementsExpression::toStatementExpression() : QueryModel::State
     type := statements->last().type;
     isCollection := statements->last().isCollection;
     isOptional := false; // TODO Queries currently do not allow optional returns, this requires an extension of QueryDSL, e.g. by '?' syntax
-    
-    needsHelperMethod := result.needsHelperMethod();
-    if (needsHelperMethod) {
-    	helperMethodName := result.getHelperMethodName();
-    }
+
+    result.map convertIntermediaryStatements();
 }

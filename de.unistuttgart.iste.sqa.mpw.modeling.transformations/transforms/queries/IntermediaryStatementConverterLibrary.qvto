@@ -1,0 +1,136 @@
+import types.MetaModelHelpers;
+import types.EmfHelpers;
+import queries.StatementHelperMethodLibrary;
+
+modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
+
+/**
+  * Library used to convert optional intermediate statements into a composition statement which indicates that the
+  * intermediary result shall be stored in a variable. For the generation phase this is used to check for an illegal 
+  * access of the current result for the next statement.
+  */
+library IntermediaryStatementConverterLibrary;
+
+property number: Integer = 0;
+property intermediaryResults: List(IntermediaryResultStatement);
+property collectedStatements: List(Statement);
+property lastResult: IntermediaryResultStatement;
+
+mapping inout StatementsExpression::convertIntermediaryStatements() {
+    resetIntermediaryStatementConverterLibraryProperties();
+    
+    self.map convertStatements();
+    self.map setHelperMethodResultFallbackValues();
+    self.map checkNeedsHelperMethod();
+}
+
+mapping inout StatementsExpression::convertStatements() {
+	self.map checkStatementsForIntermediaryResult();
+	self.map putRemainingCollectedStatementsInResultIfNecessary();
+}
+
+mapping inout StatementsExpression::checkStatementsForIntermediaryResult() {
+    self.statements->forEach (s) {
+        collectedStatements += s;
+        if (s.needsIntermediaryResult()) {
+            var nextResult := toIntermediaryResult();
+            collectedStatements := List{};
+            lastResult := nextResult;
+        };
+    };
+}
+
+mapping inout StatementsExpression::putRemainingCollectedStatementsInResultIfNecessary() {
+    if (not intermediaryResults->isEmpty()) {
+        if (not collectedStatements->isEmpty()) {
+            var nextResult := toIntermediaryResult();
+        };
+        self.statements := intermediaryResults;
+        self.map connectStatements();
+    };
+}
+
+query Statement::needsIntermediaryResult() : Boolean {
+    return self.isOptional and self.next <> null;
+}
+
+helper toIntermediaryResult() : IntermediaryResultStatement {
+    var nextResult := createIntermediaryResultStatement();
+    nextResult.map handleVariableUsageOfLastResult();
+    intermediaryResults += nextResult;
+    nextResult.previous := lastResult;
+    return nextResult;
+}
+
+helper createIntermediaryResultStatement() : IntermediaryResultStatement {
+	var resultStatement := object IntermediaryResultStatement {
+        variableName := nextNameForNumber();
+        debugName := variableName;
+    };
+    resultStatement.map createNestedStatementExpression();
+    resultStatement.map copyTypeInfoFrom(resultStatement.valueExpression);
+    return resultStatement;
+}
+
+mapping inout IntermediaryResultStatement::createNestedStatementExpression() {
+    var lastStatement := collectedStatements->last();
+    var expression := object StatementsExpression {
+        statements := collectedStatements;
+        lastStatement.next := null;
+    };
+    expression.map copyTypeInfoFrom(lastStatement);
+    valueExpression := expression;
+    internalStatementsExpression := expression; // derived helper reference with StatementsExpression type
+}
+
+query nextNameForNumber() : String {
+    var name := "result" + number.toString();
+    number := number + 1;
+    return name;
+}
+
+mapping inout IntermediaryResultStatement::handleVariableUsageOfLastResult() {
+    if (lastResult <> null) {
+        var variableUsage := object VariableUsageStatement {
+            variableReference := lastResult;
+            next := self.internalStatementsExpression.statements->first();
+        };
+        variableUsage.map copyTypeInfoFrom(lastResult);
+        self.internalStatementsExpression.statements := 
+            self.internalStatementsExpression.statements->insertAt(1, variableUsage);
+    };
+}
+
+mapping inout StatementsExpression::connectStatements() {
+    var lastStatement : Statement = null;
+    statements->forEach (s) {
+        s.previous := lastStatement;
+    	lastStatement := s;
+    }
+}
+
+mapping inout StatementsExpression::setHelperMethodResultFallbackValues() {
+    intermediaryResults->forEach (s) {
+        s.helperMethodResultFallbackValueLiteral := self.type.defaultValue.toString();
+        s.helperMethodResultType := self.type;
+    }
+}
+
+mapping inout StatementsExpression::checkNeedsHelperMethod() {
+    needsHelperMethod := self.needsHelperMethod();
+    if (needsHelperMethod) {
+        helperMethodName := self.getHelperMethodName();
+    }
+}
+
+/**
+ * Reset global properties.
+ * Note: intermediary classes are not allowed in libraries, hence global properties are used.
+ */
+helper resetIntermediaryStatementConverterLibraryProperties() {
+    intermediaryResults := List{};
+    collectedStatements := List{};
+    lastResult := null;
+    number := 0;
+}

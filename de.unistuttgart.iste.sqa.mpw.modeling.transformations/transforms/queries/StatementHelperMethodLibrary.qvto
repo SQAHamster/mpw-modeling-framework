@@ -9,10 +9,8 @@ modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
   */
 library StatementHelperMethodLibrary;
 
-// property usedHelperMethodNames: Set(String);
-
 query StatementsExpression::needsHelperMethod() : Boolean {
-    return self.statements->exists(s|s.hasNext() and s.isOptional);
+    return self.statements->exists(s|s.oclIsTypeOf(IntermediaryResultStatement));
 }
 
 query Statement::hasNext() : Boolean {
@@ -26,7 +24,9 @@ query StatementsExpression::getHelperMethodName() : String {
     	name := name + "_" + self.module().name;
     };
     
-    self.statements->forEach (s) {
+    self.statements[IntermediaryResultStatement]->collect(s|s.internalStatementsExpression.statements)
+                                                ->flatten()
+                                                ->forEach (s) {
     	switch {
     		case (s.oclIsTypeOf(ParameterUsageStatement)) {
     			name := name + "_" + s.oclAsType(ParameterUsageStatement).parameterName;

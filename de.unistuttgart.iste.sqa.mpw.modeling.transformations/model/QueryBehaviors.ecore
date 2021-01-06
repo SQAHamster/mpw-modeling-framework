@@ -103,6 +103,21 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="previous" eType="#//Statement"
         eOpposite="#//Statement/next"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntermediaryResultStatement" eSuperTypes="#//Statement #//VariableExpression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Special statement which is used to explicitly store the result of multiple statements in a intermediary variable. This is mainly used to safely check the intermediate result (e.g. if null) and then use it to perform the next statements on base of it."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="internalStatementsExpression"
+        lowerBound="1" eType="#//StatementsExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Derived by VariableExpression.valueExpression"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="helperMethodResultFallbackValueLiteral"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="helperMethodResultType"
+        lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SelfStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="selfAlias" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
