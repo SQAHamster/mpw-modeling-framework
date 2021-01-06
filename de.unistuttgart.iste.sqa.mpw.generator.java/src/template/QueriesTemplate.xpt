@@ -72,6 +72,8 @@
 
 «DEFINE HelperStatementDefinition FOR StatementsExpression»
       private «this.type.name.toJavaType()» «helperMethodName.toJavaConformName()»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH») {
-          return «EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-»;
+          «REM»Note: for helper methods intermediary statements are used, which generate the 'return' by themselves«ENDREM-»
+          «EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-»
       }
+
 «ENDDEFINE»

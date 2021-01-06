@@ -5,12 +5,24 @@
 
 «DEFINE StatementsDefinitions FOR StatementsExpression-»
     «IF statements.size == 0»null«ENDIF-»
-    «FOREACH statements AS s SEPARATOR "."-»
+    «FOREACH statements AS s-»
+        «IF s.previous != null && !IntermediaryResultStatement.isInstance(s)».«ENDIF-»
         «EXPAND StatementDefinition FOR s-»
     «ENDFOREACH-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR Statement»«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR IntermediaryResultStatement-»
+    «type.name.toJavaType()» «variableName» = «EXPAND StatementsDefinitions FOR internalStatementsExpression»;
+    «IF next == null-»
+        return «variableName»;
+    «ELSE-»
+        if («variableName» == null) {
+            return «helperMethodResultFallbackValueLiteral»;
+        }
+    «ENDIF-»
+«ENDDEFINE»
 
 «DEFINE StatementDefinition FOR SelfStatement-»
     «selfAlias»
