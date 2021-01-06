@@ -42,10 +42,16 @@ constraintToViolationString(queryBehavior::Constraint this) :
 toCppType(behaviorsbase::TypedElement element) :
     toCppType(element.type.name, element.type.metaType.name, element.type.ePackage);
 
-getDefaultValueLiteralString(Query query) :
-    if (query.isOptional) then "std::nullopt"
-    else if (query.type.isValueType()) then "{}"
-    else query.defaultValueLiteral.toCppLiteral();
+getDefaultValueLiteralString(Query query) : toDefaultValueLiteralString(query, query.defaultValueLiteral);
+    
+private toDefaultValueLiteralString(TypedElement element, String originalLiteral) :
+    if (element.isOptional) then "std::nullopt"
+    else if (element.type.isValueType()) then "{}"
+    else originalLiteral.toCppLiteral();
+    
+getDefaultValueLiteralString(IntermediaryResultStatement resultStatement) : 
+    if (resultStatement.helperMethodResultType.isValueType()) then "{}"
+    else resultStatement.helperMethodResultType.defaultValue.toString().toCppLiteral();
 
 List[Parameter] findParameterList(Expression this) :
     eContainer.findParameterListOfEObject();

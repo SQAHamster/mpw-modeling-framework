@@ -230,7 +230,7 @@ TEST_F(HamsterCommandTest, givenHamsterInAnyDirection_andFrontCellIsGrain_whenCh
 }
 
 
-TEST_F(HamsterCommandTest, DISABLED_givenHamsterInAnyDirection_andFrontCellIsEndOfMap_whenCheckFrontIsNotClear_thenIsTrue) { /* NOLINT */
+TEST_F(HamsterCommandTest, givenHamsterInAnyDirection_andFrontCellIsEndOfMap_whenCheckFrontIsNotClear_thenIsTrue) { /* NOLINT */
     withTerritory("<;");
     assertFrontIsNotClear();
 

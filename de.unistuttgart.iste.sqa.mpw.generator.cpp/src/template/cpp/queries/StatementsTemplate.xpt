@@ -11,7 +11,7 @@
         «ENDIF-»
     «ENDFOREACH-»
     «FOREACH statements AS s-»
-        «IF s.previous != null && !s.isFunctionStatement()-»
+        «IF s.previous != null && !s.isFunctionStatement() && !IntermediaryResultStatement.isInstance(s)-»
             «IF s.isObjectReferenceAccess()-»->«ELSE».«ENDIF-»
         «ENDIF-»
         «EXPAND StatementDefinition FOR s-»
@@ -22,6 +22,17 @@
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR Statement»«ENDDEFINE»
+
+«DEFINE StatementDefinition FOR IntermediaryResultStatement-»
+    «type.toCppType()» «variableName» = «EXPAND StatementsDefinitions FOR internalStatementsExpression»;
+    «IF next == null-»
+        return «variableName»;
+    «ELSE-»
+        if («variableName» == nullptr) {
+            return «getDefaultValueLiteralString()»;
+        }
+    «ENDIF-»
+«ENDDEFINE»
 
 «DEFINE StatementDefinition FOR SelfStatement-»
     «selfAlias-»
