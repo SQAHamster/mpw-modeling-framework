@@ -82,4 +82,16 @@
     <element xmi:type="henshin:Edge" href="addWallToTile.henshin#_CQEJ8DJpEeuu_uKvvP5GUQ"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_20Jq2TJpEeuu_uKvvP5GUQ" points="[5, 20, 0, 10]$[0, -10, -5, -20]"/>
   </edges>
+  <edges xmi:type="notation:Connector" xmi:id="_zNuEcFEaEeuLJbiulVkCVQ" type="4001" source="_2zotcDJpEeuu_uKvvP5GUQ" target="_2zpUjDJpEeuu_uKvvP5GUQ">
+    <children xmi:type="notation:DecorationNode" xmi:id="_zNuEc1EaEeuLJbiulVkCVQ" type="6001">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_zNuEdFEaEeuLJbiulVkCVQ" x="-6" y="15"/>
+    </children>
+    <children xmi:type="notation:DecorationNode" xmi:id="_zNuEdVEaEeuLJbiulVkCVQ" type="6002">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_zNuEdlEaEeuLJbiulVkCVQ" y="25"/>
+    </children>
+    <styles xmi:type="notation:FontStyle" xmi:id="_zNuEcVEaEeuLJbiulVkCVQ" fontName=".AppleSystemUIFont"/>
+    <element xmi:type="henshin:Edge" href="addWallToTile.henshin#_zNtdYFEaEeuLJbiulVkCVQ"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_zNuEclEaEeuLJbiulVkCVQ" points="[14, -7, -97, -76]$[111, -7, 0, -76]$[111, 49, 0, -20]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_zNv5oFEaEeuLJbiulVkCVQ" id="(0.7704918032786885,0.65)"/>
+  </edges>
 </notation:Diagram>

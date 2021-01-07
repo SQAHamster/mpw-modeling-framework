@@ -30,7 +30,7 @@
       </edges>
     </lhs>
     <rhs xmi:id="_FUGCWCZhEeuiY_E2amZoVQ" name="Rhs">
-      <nodes xmi:id="_FUGCWSZhEeuiY_E2amZoVQ" name="self" outgoing="_2nY2oTJoEeuu_uKvvP5GUQ">
+      <nodes xmi:id="_FUGCWSZhEeuiY_E2amZoVQ" name="self" outgoing="_2nY2oTJoEeuu_uKvvP5GUQ _wMGGgFEaEeuLJbiulVkCVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Territory"/>
       </nodes>
       <nodes xmi:id="_yh8rQTJoEeuu_uKvvP5GUQ" incoming="_5Bp5oTJoEeuu_uKvvP5GUQ">
@@ -45,7 +45,7 @@
       <nodes xmi:id="_1iaLkDJoEeuu_uKvvP5GUQ" incoming="_2nY2oTJoEeuu_uKvvP5GUQ" outgoing="_5Bp5oTJoEeuu_uKvvP5GUQ _CQEJ8DJpEeuu_uKvvP5GUQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile"/>
       </nodes>
-      <nodes xmi:id="_Au8VcDJpEeuu_uKvvP5GUQ" incoming="_CQEJ8DJpEeuu_uKvvP5GUQ">
+      <nodes xmi:id="_Au8VcDJpEeuu_uKvvP5GUQ" incoming="_CQEJ8DJpEeuu_uKvvP5GUQ _wMGGgFEaEeuLJbiulVkCVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Grain"/>
       </nodes>
       <edges xmi:id="_2nY2oTJoEeuu_uKvvP5GUQ" source="_FUGCWSZhEeuiY_E2amZoVQ" target="_1iaLkDJoEeuu_uKvvP5GUQ">
@@ -56,6 +56,9 @@
       </edges>
       <edges xmi:id="_CQEJ8DJpEeuu_uKvvP5GUQ" source="_1iaLkDJoEeuu_uKvvP5GUQ" target="_Au8VcDJpEeuu_uKvvP5GUQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile/contents"/>
+      </edges>
+      <edges xmi:id="_wMGGgFEaEeuLJbiulVkCVQ" source="_FUGCWSZhEeuiY_E2amZoVQ" target="_Au8VcDJpEeuu_uKvvP5GUQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Stage/tileContents"/>
       </edges>
     </rhs>
     <mappings xmi:id="_FUGCXyZhEeuiY_E2amZoVQ" origin="_FUGCUyZhEeuiY_E2amZoVQ" image="_FUGCWSZhEeuiY_E2amZoVQ"/>

@@ -1,6 +1,6 @@
 context Territory::addGrainsToTile(location:Location, amount:EInt)
 
-/** the amount of graints to add has to be greater than zero */
+/** the amount of grains to add has to be greater than zero */
 precondition: 
     amount > 0;
 

@@ -20,6 +20,9 @@ adder(String this) :
     
 remover(String this) :
     "removeFrom" + this.toFirstUpper();
+    
+clearer(String this) :
+    "clear" + this.toFirstUpper();
 
 adderOrSetter(EStructuralFeature this) :
     if (isCollection()) then name.adder() else name.setter();

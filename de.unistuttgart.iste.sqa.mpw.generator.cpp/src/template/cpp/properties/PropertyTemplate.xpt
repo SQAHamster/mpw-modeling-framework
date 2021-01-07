@@ -133,6 +133,7 @@
     virtual void «f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept;
     «IF f.isCollection()-»
     virtual void «f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept;
+    virtual void «f.name.clearer()»() noexcept;
     «ENDIF-»
     «ENDFOREACH»
 «ENDDEFINE»
@@ -157,6 +158,12 @@
          «ELSE-»
              «EXPAND SimpleRemoverForFeatureDefinition FOR f-»
          «ENDIF-»
+     }
+     
+     void «name»::«f.name.clearer()»() noexcept {
+         while (!this->«f.name».empty()) {
+	        «f.name.remover()»(this->«f.name».front());
+         }
      }
      «ENDIF-»
     «ENDFOREACH»
