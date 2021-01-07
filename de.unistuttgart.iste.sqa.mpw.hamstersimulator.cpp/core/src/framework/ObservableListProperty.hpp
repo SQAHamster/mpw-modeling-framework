@@ -33,6 +33,7 @@ public:
     virtual ~ObservableListProperty() = default;
 
     virtual void forEach(std::function<void(const T &)> consumer) const = 0;
+    [[nodiscard]] virtual bool empty() const = 0;
 
     void addOnAddedListener(std::function<void(const T &)> listener) {
         addedListeners.push_back(listener);

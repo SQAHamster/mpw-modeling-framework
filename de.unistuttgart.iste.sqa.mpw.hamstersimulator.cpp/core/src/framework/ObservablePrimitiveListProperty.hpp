@@ -35,6 +35,14 @@ public:
         std::for_each(elements.cbegin(), elements.cend(), consumer);
     }
 
+    const T& front() const {
+        return elements.front();
+    }
+
+    [[nodiscard]] bool empty() const override {
+        return elements.empty();
+    }
+
 };
 
 }

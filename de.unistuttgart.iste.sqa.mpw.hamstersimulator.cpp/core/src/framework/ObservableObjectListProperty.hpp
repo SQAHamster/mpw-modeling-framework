@@ -23,6 +23,16 @@ public:
     }
 
     virtual std::list<std::shared_ptr<T>> get() const = 0;
+    std::shared_ptr<T> front() const {
+        if (references.size() > 0) {
+            return references.front().get().shared_from_this();
+        }
+        return nullptr;
+    }
+
+    bool empty() const override {
+        return references.empty();
+    }
 
     void forEach(std::function<void(const T &)> consumer) const override {
         std::for_each(references.cbegin(), references.cend(), consumer);
