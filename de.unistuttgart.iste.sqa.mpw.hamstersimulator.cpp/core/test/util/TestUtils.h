@@ -16,6 +16,7 @@ public:
     static std::string join(const std::string& separator, const std::vector<std::string>& strings);
     static std::string join(const std::string& separator, const std::list<std::string>& strings);
     static std::vector<std::string> split(const std::string& separator, const std::string& string);
+    static std::string replaceAll(const std::string& input, const std::string& from, const std::string& to);
 
     static void assertThrows(const std::type_info& exceptionType, std::function<void()> lambda);
 

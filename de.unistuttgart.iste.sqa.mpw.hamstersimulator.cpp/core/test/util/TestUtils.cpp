@@ -3,6 +3,8 @@
 #include "CollectionHelpers.hpp"
 #include "gtest/gtest.h"
 
+#include <regex>
+
 namespace util {
 
 template<typename T>
@@ -46,6 +48,10 @@ std::vector<std::string> TestUtils::split(const std::string& separator, const st
         result.push_back(nextPart);
     }
     return result;
+}
+
+std::string TestUtils::replaceAll(const std::string& input, const std::string& from, const std::string& to) {
+    return std::regex_replace(input, std::regex(from), to);
 }
 
 }
