@@ -1,7 +1,17 @@
 import ecore;
 
 extension template::properties::ObservablePropertyGeneratorExtensions reexport;
+extension template::types::MetaModelGeneratorExtensions;
 
 /*
  * Extensions related to the generation of Properties and transitive property getters.
  */
+
+ compareEqualsPropertyVariables(EStructuralFeature this, String lhsName, String rhsName) :
+     if (this.eType.isValueType()) then "java.util.Objects.equals(" + lhsName + ", " + rhsName + ")"
+     else lhsName + " == " + rhsName;
+
+ compareNotEqualsPropertyVariables(EStructuralFeature this, String lhsName, String rhsName) :
+     if (this.eType.isValueType()) then "!java.util.Objects.equals(" + lhsName + ", " + rhsName + ")"
+     else lhsName + " != " + rhsName;
+ 

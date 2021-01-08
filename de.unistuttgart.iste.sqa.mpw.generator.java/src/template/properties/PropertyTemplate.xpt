@@ -124,7 +124,7 @@
 «DEFINE SimpleSetterForFeatureDefinition FOR EStructuralFeature-»
     «IF isReference()-»
         var «previousFieldName()» = this.«name.getter()»();
-        if («previousFieldName()» != «name») {
+        if («compareNotEqualsPropertyVariables(previousFieldName(), name)») {
     «ENDIF-»
     «IF isObservableProperty()-»
         this.«name».set(«name»);
