@@ -75,13 +75,12 @@ toCppType(String this, String metaTypeName, EPackage thisPackage) :
     else if (this == "EBoolean") then "bool"
     else if (this == "EString") then "std::string"
     else if (this.isAnyTypeName()) then "Any"
-    else if (this.isValueTypeClassName() || metaTypeName == "ecore::EEnum") then toQualifiedTypeName(this, thisPackage)
+    else if (this.isValueTypeClassName(thisPackage) || metaTypeName == "ecore::EEnum") then toQualifiedTypeName(this, thisPackage)
     else if (this == "Throwable") then "std::runtime_error"
     else "std::shared_ptr<" + toQualifiedTypeName(this, thisPackage) + ">";
 
-// TODO: resolve EClass to check stereotype
-isValueTypeClassName(String this) :
-   this == "Location";
+isValueTypeClassName(String this, EPackage thisPackage) :
+   thisPackage.getEClassifier(this).isValueType();
 	
 isBuiltInType(EClassifier this) :
     isPrimitive() || this.name.isAnyTypeName();
