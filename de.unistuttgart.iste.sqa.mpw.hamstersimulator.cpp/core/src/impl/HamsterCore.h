@@ -8,5 +8,7 @@
 #include "GameLog.h"
 #include "CommandStack.h"
 #include "CommandConstraintException.h"
+#include "GameHamster.h"
+#include "EditorHamster.h"
 
 #endif //DE_UNISTUTTGART_ISTE_SQA_MPW_HAMSTERSIMULATOR_CPP_HAMSTERCORE_H
