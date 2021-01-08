@@ -114,8 +114,7 @@
     <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//Stage">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/tiles"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/tileContents"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Stage/width"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Stage/height"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/territorySize"/>
     </genClasses>
     <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//MiniProgrammingWorld">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/stage"/>
@@ -144,6 +143,10 @@
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GameLog/write">
         <genParameters ecoreParameter="MiniProgrammingWorld.ecore#//GameLog/write/message"/>
       </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="MiniProgrammingWorld.ecore#//Size">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Size/columnCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Size/rowCount"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Viewmodel" disposableProviderFactory="true" ecorePackage="stereotypes/ViewModel.ecore#/">

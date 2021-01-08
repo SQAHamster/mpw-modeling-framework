@@ -6,4 +6,4 @@ precondition:
 
 /** size of territory is set */
 postcondition: 
-    self.width = columns and self.height = rows;
+    self.territorySize.columnCount = columns and self.territorySize.rowCount = rows;

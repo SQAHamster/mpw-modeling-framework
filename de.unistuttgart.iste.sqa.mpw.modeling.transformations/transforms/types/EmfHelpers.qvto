@@ -18,7 +18,7 @@ query String::setter() : String {
     return "set" + self.firstToUpper();
 }
 
-helper Element::root() : Element {
+query Element::root() : Element {
     var element := self;
     while (element.container() != null) {
     	element := element.container();

@@ -459,15 +459,21 @@
       </nodes>
     </lhs>
     <rhs xmi:id="_m9up0Tf9Eeu0KvmSgTDkRg" name="Rhs">
-      <nodes xmi:id="_uay4UDf9Eeu0KvmSgTDkRg" name="self">
+      <nodes xmi:id="_uay4UDf9Eeu0KvmSgTDkRg" name="self" outgoing="_GsECgFHWEeuLJbiulVkCVQ">
         <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/Hamster.ecore#//Territory"/>
-        <attributes xmi:id="_wbAckDf9Eeu0KvmSgTDkRg" value="columns">
-          <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Stage/width"/>
+      </nodes>
+      <nodes xmi:id="_8qB84FHVEeuLJbiulVkCVQ" incoming="_GsECgFHWEeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Size"/>
+        <attributes xmi:id="_O4xlQFHWEeuLJbiulVkCVQ" value="columns">
+          <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Size/columnCount"/>
         </attributes>
-        <attributes xmi:id="_1WZ_kDf9Eeu0KvmSgTDkRg" value="rows">
-          <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Stage/height"/>
+        <attributes xmi:id="_Pe-poFHWEeuLJbiulVkCVQ" value="rows">
+          <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Size/rowCount"/>
         </attributes>
       </nodes>
+      <edges xmi:id="_GsECgFHWEeuLJbiulVkCVQ" source="_uay4UDf9Eeu0KvmSgTDkRg" target="_8qB84FHVEeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Stage/territorySize"/>
+      </edges>
     </rhs>
     <mappings xmi:id="_uay4UTf9Eeu0KvmSgTDkRg" origin="_uaxqMDf9Eeu0KvmSgTDkRg" image="_uay4UDf9Eeu0KvmSgTDkRg"/>
   </units>

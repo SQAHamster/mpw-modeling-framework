@@ -200,7 +200,7 @@ query Input::Statement::parameterList() : Input::ParameterList {
     return null;
 }
 
-helper Input::Statement::parentElement() : Input::Element {
+query Input::Statement::parentElement() : Input::Element {
     var current := self.container();
     while (current != null and not current.oclIsKindOf(Input::Element)) {
         current := current.container();
