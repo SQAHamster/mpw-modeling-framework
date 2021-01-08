@@ -40,17 +40,27 @@
          }
         «ENDFOREACH-»
         
-        friend bool operator==(const Location& lhs, const Location& rhs);
+        friend bool operator==(const «name»& lhs, const «name»& rhs);
 
-        friend bool operator!=(const Location& lhs, const Location& rhs);
+        friend bool operator!=(const «name»& lhs, const «name»& rhs);
         
-        friend std::size_t hash_value(const Location& obj);
+        friend std::size_t hash_value(const «name»& obj);
         
-	    inline static «name» from(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToCppType()» «a.name»«ENDFOREACH») {
-	        return «name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.name»«ENDFOREACH»);
-	    }
+        inline static «name» from(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToCppType()» «a.name»«ENDFOREACH») {
+            return «name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.name»«ENDFOREACH»);
+        }
     };
     
+    }
+
+    namespace std
+    {
+    template<> struct
+    hash<«toQualifiedTypeName()»> {
+        std::size_t operator()(const «toQualifiedTypeName()»& object) const noexcept {
+            return hash_value(object);
+        }
+    };
     }
     
     #endif //«this.toCppIncludeGuard()»
@@ -71,7 +81,7 @@
             «ENDFOREACH-» 
         {}
         
-        bool operator==(const Location& lhs, const Location& rhs) {
+        bool operator==(const «name»& lhs, const «name»& rhs) {
             «FOREACH eAttributes AS a-»
                 if (lhs.«a.name» != rhs.«a.name») {
                     return false;
@@ -80,11 +90,11 @@
             return true;
         }
 
-        bool operator!=(const Location& lhs, const Location& rhs) {
+        bool operator!=(const «name»& lhs, const «name»& rhs) {
             return !(lhs == rhs);
         }
         
-        std::size_t hash_value(const Location& obj) {
+        std::size_t hash_value(const «name»& obj) {
             std::size_t prime = 31;
             std::size_t result = 1;
             «FOREACH eAttributes AS a-»
