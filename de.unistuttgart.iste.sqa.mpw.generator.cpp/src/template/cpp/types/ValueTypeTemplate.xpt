@@ -14,6 +14,7 @@
     #define «this.toCppIncludeGuard()»
     
     #include <cstddef>
+    #include <functional>
 
     namespace «this.ePackage.name» {
     
