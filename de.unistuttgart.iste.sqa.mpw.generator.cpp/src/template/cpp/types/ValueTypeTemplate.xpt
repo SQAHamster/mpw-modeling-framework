@@ -71,7 +71,7 @@
 «DEFINE ValueTypeTemplateSource FOR EClass»
     «FILE "generated/" + name + ".cpp"»#include "«name».h"
     
-    #include <memory>
+    #include <utility>
     
     namespace «this.ePackage.name» {
     
