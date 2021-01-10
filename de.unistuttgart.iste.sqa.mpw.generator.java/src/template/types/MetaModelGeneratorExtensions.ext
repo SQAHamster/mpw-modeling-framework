@@ -20,7 +20,7 @@ hasStereotype(EClassifier this, String stereotype) :
 
 needsImplSubclass(EClassifier this) :
     let eClass = (EClass)this :
-	EClass.isInstance(this) && !isViewModelType() && eClass.getManualImplementedOperations().size > 0 && !eClass.abstract;
+	EClass.isInstance(this) && eClass.getManualImplementedOperations().size > 0 && !eClass.abstract;
 
 getManualImplementedOperations(EClass this) :
     eAllOperations.reject(o|o.isGenerated());

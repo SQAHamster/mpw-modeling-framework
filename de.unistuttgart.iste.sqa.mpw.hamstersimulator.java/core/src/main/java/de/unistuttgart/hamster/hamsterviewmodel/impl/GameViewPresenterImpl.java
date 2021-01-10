@@ -29,4 +29,9 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 		throw new RuntimeException("not implemented");
 	}
 
+	@Override
+	public void bind() {
+		throw new RuntimeException("not implemented");
+	}
+
 }
