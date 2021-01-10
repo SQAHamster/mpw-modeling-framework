@@ -10,5 +10,6 @@
 #include "CommandConstraintException.h"
 #include "GameHamster.h"
 #include "EditorHamster.h"
+#include "TerritoryLoader.h"
 
 #endif //DE_UNISTUTTGART_ISTE_SQA_MPW_HAMSTERSIMULATOR_CPP_HAMSTERCORE_H
