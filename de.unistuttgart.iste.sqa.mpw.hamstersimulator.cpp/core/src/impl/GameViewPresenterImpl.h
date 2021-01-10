@@ -48,6 +48,8 @@ private:
     void refreshHamsterLayer(ViewModelCellLayer& layer, hamster::ReadOnlyHamster& hamster);
     static int getRotationForDirection(mpw::Direction direction);
 
+    void addLogEntry(const std::string& entry);
+
     static std::list<std::shared_ptr<hamster::ReadOnlyHamster>> getHamstersOfTile(const mpw::Tile& tile);
     static std::list<std::shared_ptr<hamster::Wall>> getWallsOfTile(const mpw::Tile& tile);
     static std::list<std::shared_ptr<hamster::Grain>> getGrainOfTile(const mpw::Tile& tile);

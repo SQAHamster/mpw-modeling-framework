@@ -2,6 +2,7 @@
 
 #include "Territory.h"
 #include "GameTerritory.h"
+#include "GameLog.h"
 
 #include "ViewModelCellLayer.h"
 
@@ -28,8 +29,13 @@ void GameViewPresenterImpl::bind() {
     tilesProperty.addOnRemovedListener([this](auto& tile) { removeTileNode(tile); });
     tilesProperty.forEach([this](auto& tile) { addTileNode(tile); });
 
-//    gameLog.logProperty().addListener(logChangedListener);
-//    this.gameLog.logProperty().forEach(entry -> addLogEntry(entry));
+    auto gameLog = game->getGameLog();
+    gameLog->logEntriesProperty().addOnAddedListener([this](const std::string& entry) {
+        addLogEntry(entry);
+    });
+    gameLog->logEntriesProperty().forEach([this](const std::string& entry) {
+        addLogEntry(entry);
+    });
 }
 
 void GameViewPresenterImpl::playClicked() {
@@ -153,6 +159,10 @@ int GameViewPresenterImpl::getRotationForDirection(mpw::Direction direction) {
             return 270;
     }
     throw std::runtime_error("Invalid direction!");
+}
+
+void GameViewPresenterImpl::addLogEntry(const std::string& entry) {
+    getViewModel()->addToLogEntries(entry);
 }
 
 }

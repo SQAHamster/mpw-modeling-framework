@@ -15,14 +15,14 @@ void HamsterViewTestBase::SetUp() {
 
 void HamsterViewTestBase::withTerritorium(const std::string& path) {
     game = HamsterGame::create();
-    TerritoryLoader::initializeFor(*game)->loadFromResourceFile(path);
+    TerritoryLoader::initializeFor(*game)->loadFromResourceFile("resources" + path);
     // game->startGame(false);
     // game->setSpeed(HamsterGame.NO_SPEED);
 
     auto territory = game->getTerritory();
     paule = territory->getDefaultHamster();
 
-    auto presenter = std::make_shared<GameViewPresenterImpl>(game);
+    presenter = std::make_shared<GameViewPresenterImpl>(game);
     presenter->bind();
     viewModel = presenter->getViewModel();
 

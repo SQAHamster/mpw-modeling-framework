@@ -7,6 +7,7 @@
 #include "GameViewModel.h"
 
 #include <unordered_map>
+#include <GameViewPresenter.h>
 
 class HamsterViewTestBase : public testing::Test {
 
@@ -29,6 +30,7 @@ private:
     int maxCharsPerCell = 4;
     static std::unordered_map<std::string, std::string> characterMap;
     std::shared_ptr<hamster::HamsterGame> game;
+    std::shared_ptr<hamsterviewmodel::GameViewPresenter> presenter;
 
 };
 
