@@ -46,6 +46,7 @@ toInheritance(EClass this) :
 isValueType(EClassifier this) : hasStereotype("ValueType");
 isDependency(EClassifier this) : hasStereotype("Dependency");
 isFacade(EClassifier this) : eAnnotations.exists(a|a.source == "facade");
+isSemaphore(EClassifier this) : name == "Semaphore";
 
 toJavaPackagePath(EPackage this) :
     this.toJavaPackageName().replaceAll("\\.", "/");

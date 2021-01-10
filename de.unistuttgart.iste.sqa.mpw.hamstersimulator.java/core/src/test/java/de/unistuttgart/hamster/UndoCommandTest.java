@@ -12,7 +12,7 @@ public class UndoCommandTest {
 	public void testUndo() {
 		HamsterGame game = GameStringifier.createFromString(" >*;" +
 															"   ;");
-		var commandStack = game.getCommandStack();
+		var commandStack = game.getGameCommandStack();
 		commandStack.getStack().clear(); // remove initial commands to test undoAll
 
 		var hamster = game.getTerritory().getDefaultHamster();

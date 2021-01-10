@@ -44,7 +44,7 @@
 
 «DEFINE GenerationAnnotation FOR CommandParameterCreationAnnotation-»
     var «parametersVariableName» = new «command.name.toFirstUpper()»CommandParameters();
-    «parametersVariableName».commandStack = game.getCommandStack();
+    «parametersVariableName».commandStack = game.get«command.roleName.toFirstUpper()»CommandStack();
     «IF command.isActorCommand()-»
     «parametersVariableName».gameLog = game.getGameLog();
     «ENDIF-»

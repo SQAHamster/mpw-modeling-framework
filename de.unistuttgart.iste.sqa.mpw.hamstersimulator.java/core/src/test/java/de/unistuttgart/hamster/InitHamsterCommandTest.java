@@ -43,7 +43,7 @@ public class InitHamsterCommandTest {
 
 		var sut = game.getTerritory().getDefaultHamster();
 		sut.init(game.getTerritory(), locationOf(0, 0), Direction.SOUTH, 2);
-		game.getCommandStack().undo();
+		game.getGameCommandStack().undo();
 
 		assertEquals(null, sut.getInternalHamster().getDirection());
 		assertEquals(0, sut.getInternalHamster().getGrains().size());

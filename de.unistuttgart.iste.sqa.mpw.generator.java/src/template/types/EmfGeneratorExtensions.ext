@@ -57,6 +57,7 @@ isContainment(EStructuralFeature this) :
 toJavaType(String this) :
 	if (this == "EInt") then "int"
 	else if (this == "EBoolean") then "boolean"
+	else if (this == "EDouble") then "double"
 	else if (this == "EString") then "String"
 	else if (this == "EObject") then "Object"
 	else this;
@@ -65,7 +66,7 @@ isBuiltInType(EClassifier this) :
     isPrimitive() || this.name == "Object";
 
 isPrimitive(EClassifier this) :
-    (this.name == "EInt" || this.name == "EBoolean" || this.name == "EString");
+    (this.name == "EInt" || this.name == "EBoolean" || this.name == "EDouble" || this.name == "EString");
 
 featureToSingleJavaType(EStructuralFeature this) : this.eType.name.toJavaType();
 featureToJavaType(EStructuralFeature this) : elementToJavaType();
@@ -93,6 +94,7 @@ featureToFieldInstantiation(EStructuralFeature this) :
 toUnboxedJavaTypeName(String this) :
 	if (this == "EInt") then "Integer"
 	else if (this == "EBoolean") then "Boolean"
+	else if (this == "EDouble") then "Double"
 	else if (this == "EString") then "String"
 	else if (this == "EObject") then "Object"
 	else this;

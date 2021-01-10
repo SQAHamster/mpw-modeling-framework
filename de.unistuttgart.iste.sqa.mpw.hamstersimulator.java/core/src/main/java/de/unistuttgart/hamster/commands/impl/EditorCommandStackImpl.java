@@ -1,11 +1,11 @@
 package de.unistuttgart.hamster.commands.impl;
 
 import de.unistuttgart.hamster.commands.Command;
-import de.unistuttgart.hamster.commands.CommandStack;
+import de.unistuttgart.hamster.commands.EditorCommandStack;
 
-public class CommandStackImpl extends CommandStack {
+public class EditorCommandStackImpl extends EditorCommandStack {
 
-	public CommandStackImpl() {
+	public EditorCommandStackImpl() {
 
 	}
 
@@ -43,4 +43,5 @@ public class CommandStackImpl extends CommandStack {
 	public void redoAll() {
 		throw new RuntimeException("not implemented");
 	}
+
 }
