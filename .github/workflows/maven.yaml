@@ -32,7 +32,7 @@ jobs:
         with:
           cmake-version: '3.17.x'
       - name: Build C++ Simulator
-        run: cmake -S $SIMULATOR_CPP_DIR -B $BUILD_DIR && cmake --build $BUILD_DIR && cd $BUILD_DIR && ctest
+        run: cmake -S $SIMULATOR_CPP_DIR -B $BUILD_DIR && cmake --build $BUILD_DIR && cd $BUILD_DIR && ctest --extra-verbose
         env:
           SIMULATOR_CPP_DIR: de.unistuttgart.iste.sqa.mpw.hamstersimulator.cpp
           BUILD_DIR: $SIMULATOR_CPP_DIR/build
