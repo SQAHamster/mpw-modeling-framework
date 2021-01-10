@@ -36,6 +36,7 @@ abstract mapping inout EClass::createFieldsBase() {
   */
 abstract mapping inout EClass::createElementsBase() {
     baseName := self.name;
+    self.eAnnotations += toAnnotation("role", "game");
     var concreteClass := self.getConcreteClass();
     
     self.eAnnotations += object ImportTypeAnnotation {

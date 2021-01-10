@@ -17,6 +17,7 @@ library StageBuilderLibrary;
 mapping EClass::createBuilderClass() : EClass
     when { self.getConcreteClass().eAllSuperTypes->exists(t|t.name = "Stage") } {
     name := self.getBaseName() + "Builder";
+    eAnnotations += toAnnotation("role", "editor");
     eAnnotations += "facade".toMarkerAnnotation();
     eAnnotations += toAnnotation("baseName", self.getBaseName());
     

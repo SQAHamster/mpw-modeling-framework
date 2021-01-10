@@ -39,7 +39,7 @@
       <eAnnotations source="sharedOwnership"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CommandStack">
+  <eClassifiers xsi:type="ecore:EClass" name="CommandStack" abstract="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Tracks the executed Commands which allow to undo and redo their behavior."/>
     </eAnnotations>
@@ -77,5 +77,19 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Represents a base type of any value. In java this is simply the type `java.lang.Object`. In C++ this may be an union of possible values: it can be a primitive value like integers, booleans or strings. Alternatively it can be a reference/pointer."/>
     </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Semaphore" instanceClassName="java.util.concurrent.Semaphore"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GameCommandStack" eSuperTypes="#//CommandStack">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="semaphore" lowerBound="1"
+        eType="#//Semaphore" changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//Mode" defaultValueLiteral="INITIALIZING"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EditorCommandStack" eSuperTypes="#//CommandStack"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="Mode">
+    <eLiterals name="RUNNING"/>
+    <eLiterals name="INITIALIZING" value="1"/>
+    <eLiterals name="STOPPED" value="2"/>
+    <eLiterals name="PAUSED" value="3"/>
   </eClassifiers>
 </ecore:EPackage>

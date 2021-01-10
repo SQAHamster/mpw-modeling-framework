@@ -37,12 +37,15 @@
   <eClassifiers xsi:type="ecore:EClass" name="MiniProgrammingWorld" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" lowerBound="1" eType="#//Stage"
         derived="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="commandStack" lowerBound="1"
-        eType="ecore:EClass Command.ecore#//CommandStack" changeable="false" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="editorCommandStack" lowerBound="1"
+        eType="ecore:EClass Command.ecore#//EditorCommandStack" changeable="false"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="gameLog" lowerBound="1"
         eType="#//GameLog" changeable="false" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="userInputInterface" lowerBound="1"
         eType="#//UserInputInterface"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gameCommandStack" lowerBound="1"
+        eType="ecore:EClass Command.ecore#//GameCommandStack" changeable="false" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="stereotypes/MpwStereotypes.ecore#//ValueType">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" lowerBound="1"
