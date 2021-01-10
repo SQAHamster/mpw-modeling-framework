@@ -6,10 +6,21 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Datastructure with Databinding capabilities which contains all relevant information to be displayed on the screen."/>
     </eAnnotations>
+    <eOperations name="getCellAt" eType="#//ViewModelCell">
+      <eAnnotations source="const"/>
+      <eParameters name="row" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eParameters name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="init">
+      <eParameters name="size" eType="ecore:EClass MiniProgrammingWorld.ecore#//Size"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="logEntries" unique="false"
         upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//ViewModelRow"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameViewInput" abstract="true" interface="true">
     <eOperations name="playClicked"/>
@@ -20,6 +31,7 @@
     <eOperations name="getViewModel" eType="#//GameViewModel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameViewPresenter" eSuperTypes="#//GameViewInput stereotypes/ViewModel.ecore#//Presenter">
+    <eOperations name="bind"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="viewModel" lowerBound="1"
         eType="#//GameViewModel" changeable="false" containment="true"/>
   </eClassifiers>

@@ -62,6 +62,15 @@
     <genClasses ecoreClass="HamsterViewModel.ecore#//GameViewModel">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HamsterViewModel.ecore#//GameViewModel/logEntries"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference HamsterViewModel.ecore#//GameViewModel/rows"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HamsterViewModel.ecore#//GameViewModel/width"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HamsterViewModel.ecore#//GameViewModel/height"/>
+      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewModel/getCellAt">
+        <genParameters ecoreParameter="HamsterViewModel.ecore#//GameViewModel/getCellAt/row"/>
+        <genParameters ecoreParameter="HamsterViewModel.ecore#//GameViewModel/getCellAt/column"/>
+      </genOperations>
+      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewModel/init">
+        <genParameters ecoreParameter="HamsterViewModel.ecore#//GameViewModel/init/size"/>
+      </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="HamsterViewModel.ecore#//GameViewInput">
       <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewInput/playClicked"/>
@@ -73,6 +82,7 @@
     </genClasses>
     <genClasses ecoreClass="HamsterViewModel.ecore#//GameViewPresenter">
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference HamsterViewModel.ecore#//GameViewPresenter/viewModel"/>
+      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewPresenter/bind"/>
     </genClasses>
     <genClasses ecoreClass="HamsterViewModel.ecore#//ViewModelCell">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference HamsterViewModel.ecore#//ViewModelCell/layers"/>

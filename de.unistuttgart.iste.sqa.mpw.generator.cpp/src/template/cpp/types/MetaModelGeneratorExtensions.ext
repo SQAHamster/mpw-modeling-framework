@@ -21,16 +21,13 @@ hasStereotype(EClassifier this, String stereotype) :
 
 needsImplSubclass(EClassifier this) :
     let eClass = (EClass)this :
-    EClass.isInstance(this) && !isViewModelType() && !isFacade() && eClass.getManualImplementedOperations().size > 0 && !eClass.abstract;
+    EClass.isInstance(this) && !isFacade() && eClass.getManualImplementedOperations().size > 0 && !eClass.abstract;
 
 getManualImplementedOperations(EClass this) :
     eAllOperations.reject(o|o.isGenerated());
 
 private isGenerated(EOperation this) :
     isCommand() || isQuery() || isPropertyGetter();
-
-isViewModelType(EClassifier this) :
-    EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewModel");
 
 toInheritance(EClass this) :
     let filteredExtends = eSuperTypes.typeSelect(EClass)
