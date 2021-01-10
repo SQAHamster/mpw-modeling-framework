@@ -59,6 +59,7 @@ toQualifiedTypeName(String this, EPackage package) :
 isValueType(EClassifier this) : hasStereotype("ValueType");
 isDependency(EClassifier this) : hasStereotype("Dependency");
 isFacade(EClassifier this) : eAnnotations.exists(a|a.source == "facade");
+isSemaphore(EClassifier this) : name == "Semaphore";
 isInheritedEntity(EClassifier this) : EClass.isInstance(this) && ((EClass)this).eAllSuperTypes.exists(t|t.name == "Entity");
 
 // a MiniProgrammingWorld has a complex lifecycle constructor, so it has to be solved by a static create method

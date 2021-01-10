@@ -48,7 +48,7 @@ TEST_F(InitHamsterCommandTest, testUndoInitHamster) { /* NOLINT */
 
     auto sut = game->getTerritory()->getDefaultHamster();
     sut->init(game->getTerritory(), locationOf(0, 0), Direction::SOUTH, 2);
-    game->getCommandStack()->undo();
+    game->getGameCommandStack()->undo();
 
     EXPECT_EQ(Direction::NORTH, sut->getInternalHamster()->getDirection());
     EXPECT_EQ(0, sut->getInternalHamster()->getGrains().size());

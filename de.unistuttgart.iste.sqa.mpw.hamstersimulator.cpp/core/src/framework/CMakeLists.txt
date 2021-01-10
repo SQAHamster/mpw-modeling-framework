@@ -12,6 +12,8 @@ set(FRAMEWORK_SRCS
     "core/src/framework/ObservablePrimitiveProperty.hpp"
     "core/src/framework/ObservableProperties.h"
     "core/src/framework/Any.h"
+    "core/src/framework/Semaphore.h"
+    "core/src/framework/Semaphore.cpp"
     "core/src/framework/ReflectivePropertyObject.h"
     "core/src/framework/CollectionHelpers.hpp"
     "core/src/framework/CommandConstraintException.h"

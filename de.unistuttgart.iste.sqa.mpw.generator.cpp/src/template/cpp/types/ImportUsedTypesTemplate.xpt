@@ -15,6 +15,9 @@
     #include <list>
     #include <unordered_set>
 	«ENDIF-»
+    «IF eStructuralFeatures.union(eOperations).exists(e|e.eType.isSemaphore())-»
+    #include "Semaphore.h"
+    «ENDIF-»
 	«IF (abstract ? eOperations : eAllOperations).select(o|o.isQuery()).exists(o|o.getQueryForOperation().isOptional)-»
     #include <optional>
 	«ENDIF-»
@@ -49,6 +52,9 @@
     «ENDIF-»
     «IF eAllOperations.exists(o|o.isCommand())-»
     #include "CommandStack.h"
+    «ENDIF-»
+    «IF eAllOperations.exists(o|o.eAnnotations.typeSelect(CommandParameterCreationAnnotation).size > 0)-»
+    #include "«getAnnotationValue("role").toFirstUpper()»CommandStack.h"
     «ENDIF-»
     «EXPAND SingleImportDefinition FOREACH eStructuralFeatures
 		.collect(e|e.eType)

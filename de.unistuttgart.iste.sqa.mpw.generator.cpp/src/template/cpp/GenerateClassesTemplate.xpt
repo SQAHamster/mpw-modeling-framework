@@ -91,7 +91,7 @@
 
 «DEFINE GenerationAnnotationDefinition(EClass class) FOR CommandParameterCreationAnnotation-»
     commands::«command.name.toFirstUpper()»CommandParameters «parametersVariableName»(
-    /*self*/ nullptr, *game.lock()->getCommandStack()
+    /*self*/ nullptr, *game.lock()->get«command.roleName.toFirstUpper()»CommandStack()
     «IF command.isActorCommand()-»
     , *game.lock()->getGameLog()
     «ENDIF-»
