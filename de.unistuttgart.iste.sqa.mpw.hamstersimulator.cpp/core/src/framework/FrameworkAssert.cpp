@@ -4,28 +4,25 @@
 #include "AssertionFailedException.h"
 
 namespace framework {
-  void assertAttributeCondition(const std::string& condition, bool valid)
-  {
-    if (!valid) {
-      std::string message = "Attribute condition is not valid: " + condition;
-      throw AssertionFailedException(message.c_str());
-    }
-  }
 
-  void assertInstanceNotNull(const std::string& instanceName, EntityReference instance)
-  {
-    if (instance == nullptr) {
-      std::string message = "Instance must not be null: " + instanceName;
-      throw AssertionFailedException(message.c_str());
+void assertCondition(bool condition, const std::string& message) {
+    if (!condition) {
+        throw AssertionFailedException(message);
     }
-  }
+}
 
-  void assertObjectFound(const std::string& referenceName, const std::string& objectTypeName,
-    EntityReference instance)
-  {
-    if (instance == nullptr) {
-      std::string message = "Object of type '" + objectTypeName + "' for reference '" + referenceName + "' not found";
-      throw AssertionFailedException(message.c_str());
-    }
-  }
+void assertAttributeCondition(const std::string& condition, bool valid) {
+    assertCondition(valid, "Attribute condition is not valid: " + condition);
+}
+
+void assertInstanceNotNull(const std::string& instanceName, EntityReference instance) {
+    assertCondition(instance != nullptr, "Instance must not be null: " + instanceName);
+}
+
+void assertObjectFound(const std::string& referenceName, const std::string& objectTypeName,
+                       EntityReference instance) {
+    assertCondition(instance != nullptr,
+                    "Object of type '" + objectTypeName + "' for reference '" + referenceName + "' not found");
+}
+
 }

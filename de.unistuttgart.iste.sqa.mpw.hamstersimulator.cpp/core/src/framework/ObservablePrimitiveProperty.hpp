@@ -4,21 +4,27 @@
 
 #include <vector>
 #include <functional>
+#include <map>
 
 namespace framework {
 
 template<typename T>
 class ObservablePrimitiveProperty {
+public:
+
+    using ListenerId = unsigned int;
+    using Listener = std::function<void(const T &, const T &)>;
 
 private:
 
     T value{};
 
-    std::vector<std::function<void(const T &, const T &)> > listeners;
+    mutable ListenerId nextId = 0;
+    mutable std::map<ListenerId, Listener > listeners;
 
     void notifyChanged(const T &oldValue, const T &newValue) const {
-        for (auto &l : listeners) {
-            l(oldValue, newValue);
+        for (auto&[id, listener] : listeners) {
+            listener(oldValue, newValue);
         }
     }
 
@@ -37,12 +43,13 @@ public:
         return this->value;
     }
 
-    void addListener(std::function<void(const T &, const T &)> listener) {
-        listeners.push_back(listener);
+    ListenerId addListener(Listener listener) const { // mark const to allow returning const property which allows modifying listeners
+        listeners[nextId] = listener;
+        return nextId++;
     }
 
-    void removeListener(std::function<void(const T &, const T &)> listener) {
-        listeners.erase(listener);
+    void removeListener(ListenerId id) const { // mark const to allow returning const property which allows modifying listeners
+        listeners.erase(id);
     }
 
 };

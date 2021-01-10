@@ -35,8 +35,8 @@ void TerritoryLoader::interpretLoadedTerritoryLines(const std::vector<std::strin
 }
 
 void TerritoryLoader::setSizeFromStrings(const std::vector<std::string>& lines) {
-    this->loadedTerritoryDimensions.setColumnCount(std::stoi(lines[1]));
-    this->loadedTerritoryDimensions.setRowCount(std::stoi(lines[0]));
+    this->loadedTerritoryDimensions.setColumnCount(std::stoi(lines[0]));
+    this->loadedTerritoryDimensions.setRowCount(std::stoi(lines[1]));
     this->territoryBuilder->initTerritory(this->loadedTerritoryDimensions.getColumnCount(), this->loadedTerritoryDimensions.getRowCount()); // todo allow size as parameter
 }
 
@@ -47,7 +47,7 @@ void TerritoryLoader::buildTiles(const std::vector<std::string>& lines) {
 
     for (int row = 0; row < this->loadedTerritoryDimensions.getRowCount(); row++) {
         for (int column = 0; column < this->loadedTerritoryDimensions.getColumnCount(); column++) {
-            Location currentLocation(row,column);
+            Location currentLocation(column, row);
             const char tileCode = lines[row][column];
             switch (tileCode) {
                 case ' ':
@@ -105,15 +105,14 @@ void TerritoryLoader::createWallAt(const Location& currentLocation) {
 std::vector<std::string> TerritoryLoader::readLinesFromTerritoryResourceFile(const std::string& territoryFileName) {
     std::ifstream in;
 
-    in.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-
-    try {
-        in.open(territoryFileName);
-    } catch (std::system_error& e) {
+    in.open(territoryFileName);
+    if (!in.is_open()) {
         throw std::runtime_error("Unable to load the territory from the filename: " + territoryFileName);
     }
-
     auto result = readLinesFromTerritoryInputStream(in);
+    if (in.bad()) {
+        throw std::runtime_error("Error while loading the territory from the filename: " + territoryFileName);
+    }
     in.close();
     return result;
 }

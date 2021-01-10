@@ -5,26 +5,35 @@
 #include <list>
 #include <functional>
 #include <memory>
+#include <map>
 
 namespace framework {
 
 template<typename T>
 class ObservableListProperty {
+public:
+
+    using ListenerId = unsigned int;
+    using Listener = std::function<void(const T&)>;
+
+private:
+
+    mutable ListenerId nextId = 0;
 
 protected:
 
-    std::vector<std::function<void(const T &)> > addedListeners;
-    std::vector<std::function<void(const T &)> > removedListeners;
+    mutable std::map<ListenerId, Listener > addedListeners;
+    mutable std::map<ListenerId, Listener > removedListeners;
 
     void notifyAdded(const T &element) const {
-        for (auto &l : addedListeners) {
-            l(element);
+        for (auto&[id, listener] : addedListeners) {
+            listener(element);
         }
     }
 
     void notifyRemoved(const T &element) const {
-        for (auto &l : removedListeners) {
-            l(element);
+        for (auto&[id, listener] : removedListeners) {
+            listener(element);
         }
     }
 
@@ -32,16 +41,27 @@ public:
 
     virtual ~ObservableListProperty() = default;
 
-    virtual void forEach(std::function<void(const T &)> consumer) const = 0;
+    virtual void forEach(std::function<void(const T&)> consumer) const = 0;
     [[nodiscard]] virtual bool empty() const = 0;
 
-    void addOnAddedListener(std::function<void(const T &)> listener) {
-        addedListeners.push_back(listener);
+    ListenerId addOnAddedListener(Listener listener) const { // mark const to allow returning const property which allows modifying listeners
+        addedListeners[nextId] = listener;
+        return nextId++;
     }
 
-    void removeOnAddedListener(std::function<void(const T &)> listener) {
-        addedListeners.erase(listener);
+    void removeOnAddedListener(ListenerId id) const { // mark const to allow returning const property which allows modifying listeners
+        addedListeners.erase(id);
     }
+
+    ListenerId addOnRemovedListener(Listener listener) const { // mark const to allow returning const property which allows modifying listeners
+        removedListeners[nextId] = listener;
+        return nextId++;
+    }
+
+    void removeOnRemovedListener(ListenerId id) const { // mark const to allow returning const property which allows modifying listeners
+        removedListeners.erase(id);
+    }
+
 };
 
 }

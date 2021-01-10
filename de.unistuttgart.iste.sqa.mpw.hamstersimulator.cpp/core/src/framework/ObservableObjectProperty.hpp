@@ -17,7 +17,7 @@ public:
 
 protected:
 
-    std::vector<std::function<void(OptionalObjectConstReference, const T&)> > listeners;
+    mutable std::vector<std::function<void(OptionalObjectConstReference, const T&)> > listeners;
 
     void notifyChanged(OptionalObjectConstReference oldElement, const T& newElement) const {
         for (auto &l : listeners) {
@@ -31,11 +31,11 @@ public:
     virtual OptionalObjectConstReference getReference() const = 0;
     virtual OptionalObjectReference getReference() = 0;
 
-    void addListener(std::function<void(OptionalObjectConstReference, const T&)> listener) {
+    void addListener(std::function<void(OptionalObjectConstReference, const T&)> listener) const { // mark const to allow returning const property which allows modifying listeners
         listeners.push_back(listener);
     }
 
-    void removeListener(std::function<void(OptionalObjectConstReference, const T&)> listener) {
+    void removeListener(std::function<void(OptionalObjectConstReference, const T&)> listener) const { // mark const to allow returning const property which allows modifying listeners
         listeners.erase(listener);
     }
 };
