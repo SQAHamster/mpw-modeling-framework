@@ -6,12 +6,38 @@
 
 namespace framework {
 
+/// \brief RAII based lock object
+class SemaphoreLock
+{
+private:
+
+    std::mutex& mutex;
+
+public:
+    SemaphoreLock(std::mutex& mutex)
+        : mutex(mutex)
+    {
+        mutex.lock();
+    }
+    ~SemaphoreLock()
+    {
+        mutex.unlock();
+    }
+};
+
 /// \brief Semaphore implementation which reuses same underlying mutex when copying the object.
 class Semaphore {
 
 public:
 
     Semaphore();
+
+    SemaphoreLock lock();
+
+    void aquire();
+    void release();
+
+    bool isLocked();
 
 private:
 

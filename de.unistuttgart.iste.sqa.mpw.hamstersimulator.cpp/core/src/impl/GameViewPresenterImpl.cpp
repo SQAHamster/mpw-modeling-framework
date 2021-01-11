@@ -3,6 +3,8 @@
 #include "Territory.h"
 #include "GameTerritory.h"
 #include "GameLog.h"
+#include "Semaphore.h"
+#include "GameCommandStack.h"
 
 #include "ViewModelCellLayer.h"
 
@@ -13,15 +15,22 @@
 using namespace mpw;
 using namespace hamster;
 using namespace collectionhelpers;
+using namespace framework;
 
 namespace hamsterviewmodel {
 
-GameViewPresenterImpl::GameViewPresenterImpl(std::shared_ptr<hamster::HamsterGame> game) : game(std::move(game)) {
+// TODO remove listeners on removement of relating objects
+
+GameViewPresenterImpl::GameViewPresenterImpl(std::shared_ptr<hamster::HamsterGame> game)
+    : inherited(Semaphore())
+    , game(std::move(game)) {
     const Size& size = this->game->getTerritory()->getTerritorySize();
     getViewModel()->init(size);
 }
 
 void GameViewPresenterImpl::bind() {
+    auto lock = getSemaphore().lock();
+
     ReadOnlyTerritory& territory = *game->getTerritory()->getInternalTerritory();
     auto& tilesProperty = territory.tilesProperty();
     
@@ -31,6 +40,7 @@ void GameViewPresenterImpl::bind() {
 
     auto gameLog = game->getGameLog();
     gameLog->logEntriesProperty().addOnAddedListener([this](const std::string& entry) {
+        auto lock = getSemaphore().lock();
         addLogEntry(entry);
     });
     gameLog->logEntriesProperty().forEach([this](const std::string& entry) {
@@ -39,11 +49,19 @@ void GameViewPresenterImpl::bind() {
 }
 
 void GameViewPresenterImpl::playClicked() {
-    throw std::runtime_error("not implemented");
+    game->getGameCommandStack()->resume();
 }
 
-void GameViewPresenterImpl::stopClicked() {
-    throw std::runtime_error("not implemented");
+void GameViewPresenterImpl::pauseClicked() {
+    game->getGameCommandStack()->pause();
+}
+
+void GameViewPresenterImpl::undoClicked() {
+    game->getGameCommandStack()->undo();
+}
+
+void GameViewPresenterImpl::redoClicked() {
+    game->getGameCommandStack()->redo();
 }
 
 void GameViewPresenterImpl::textTyped(std::string text) {
@@ -56,9 +74,11 @@ void GameViewPresenterImpl::addTileNode(const mpw::Tile& tile) {
 
     auto& contentsProperty = nonConstTile.contentsProperty();
     addedContentListenerIds[&tile] = contentsProperty.addOnAddedListener([this, &nonConstTile](const mpw::TileContent&) {
+        auto lock = getSemaphore().lock();
         setTileNodeAt(nonConstTile.getLocation(), nonConstTile);
     });
     removedContentListenerIds[&tile] = contentsProperty.addOnRemovedListener([this, &nonConstTile](const mpw::TileContent&) {
+        auto lock = getSemaphore().lock();
         setTileNodeAt(nonConstTile.getLocation(), nonConstTile);
     });
     setTileNodeAt(location, tile);
@@ -74,7 +94,6 @@ void GameViewPresenterImpl::removeTileNode(const mpw::Tile& tile) {
 
 void GameViewPresenterImpl::setTileNodeAt(const Location& location, const Tile& tile) {
     auto cell = getViewModel()->getCellAt(location.getRow(), location.getColumn());
-
     cell->clearLayers();
 
     configureWallImageView(*cell, tile);
@@ -89,6 +108,7 @@ void GameViewPresenterImpl::configureGrainImageView(ViewModelCell& cell, const T
     Tile& nonConstTile = const_cast<Tile&>(tile); // TODO const-correctness: adapt after migrate generator
     auto grainLayer = std::make_shared<ViewModelCellLayer>();
     refreshGrainLayer(*grainLayer, tile);
+
     cell.addToLayers(grainLayer);
 }
 
@@ -107,6 +127,7 @@ void GameViewPresenterImpl::configureWallImageView(ViewModelCell& cell, const Ti
     auto wallLayer = std::make_shared<ViewModelCellLayer>();
     wallLayer->setImageName("Wall32");
     refreshWallLayer(*wallLayer, tile);
+
     cell.addToLayers(wallLayer);
 }
 
@@ -117,9 +138,10 @@ void GameViewPresenterImpl::refreshWallLayer(ViewModelCellLayer& layer, const Ti
 void GameViewPresenterImpl::configureHamsterImageView(ViewModelCell& cell, const ReadOnlyHamster& hamster) {
     auto& nonConstHamster = const_cast<ReadOnlyHamster&>(hamster); // TODO const-correctness: adapt after migrate generator
     auto hamsterLayer = std::make_shared<ViewModelCellLayer>();
-    hamsterLayer->setImageName("Hamster24");
+    hamsterLayer->setImageName("Hamster32");
 
     changedHamsterDirectionListenerIds[&hamster] = nonConstHamster.directionProperty().addListener([this, &nonConstHamster, hamsterLayer](Direction oldValue, Direction newValue) {
+        auto lock = getSemaphore().lock();
         refreshHamsterLayer(*hamsterLayer, nonConstHamster);
     });
     refreshHamsterLayer(*hamsterLayer, nonConstHamster);
@@ -164,5 +186,6 @@ int GameViewPresenterImpl::getRotationForDirection(mpw::Direction direction) {
 void GameViewPresenterImpl::addLogEntry(const std::string& entry) {
     getViewModel()->addToLogEntries(entry);
 }
+
 
 }

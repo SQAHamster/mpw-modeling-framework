@@ -24,10 +24,11 @@ public:
     GameViewPresenterImpl(std::shared_ptr<hamster::HamsterGame> game);
 
     void playClicked() override;
+    void pauseClicked() override;
+    void undoClicked() override;
+    void redoClicked() override;
 
-	void stopClicked() override;
-
-	void textTyped(std::string text) override;
+    void textTyped(std::string text) override;
 
     void bind() override;
 
@@ -58,7 +59,6 @@ private:
 
     std::unordered_map<const mpw::Tile*, unsigned int> addedContentListenerIds;
     std::unordered_map<const mpw::Tile*, unsigned int> removedContentListenerIds;
-    // std::unordered_map<const mpw::TileContent*, unsigned int> changedContentListenerIds;
     std::unordered_map<const hamster::ReadOnlyHamster*, unsigned int> changedHamsterDirectionListenerIds;
 };
 
