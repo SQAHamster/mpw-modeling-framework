@@ -63,7 +63,7 @@ toJavaType(String this) :
 	else this;
 	
 isBuiltInType(EClassifier this) :
-    isPrimitive() || this.name == "Object";
+    isPrimitive() || this.name == "Object" || isSemaphore();
 
 isPrimitive(EClassifier this) :
     (this.name == "EInt" || this.name == "EBoolean" || this.name == "EDouble" || this.name == "EString");

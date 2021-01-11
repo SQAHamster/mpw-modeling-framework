@@ -80,6 +80,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Semaphore" instanceClassName="java.util.concurrent.Semaphore"/>
   <eClassifiers xsi:type="ecore:EClass" name="GameCommandStack" eSuperTypes="#//CommandStack">
+    <eOperations name="startGame"/>
+    <eOperations name="startGamePaused"/>
+    <eOperations name="pause"/>
+    <eOperations name="resume"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="semaphore" lowerBound="1"
         eType="#//Semaphore" changeable="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//Mode" defaultValueLiteral="INITIALIZING"/>

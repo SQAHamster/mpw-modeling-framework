@@ -24,7 +24,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameViewInput" abstract="true" interface="true">
     <eOperations name="playClicked"/>
-    <eOperations name="stopClicked"/>
+    <eOperations name="pauseClicked"/>
+    <eOperations name="undoClicked"/>
+    <eOperations name="redoClicked"/>
     <eOperations name="textTyped">
       <eParameters name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
@@ -34,6 +36,8 @@
     <eOperations name="bind"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="viewModel" lowerBound="1"
         eType="#//GameViewModel" changeable="false" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="semaphore" eType="ecore:EDataType Command.ecore#//Semaphore"
+        changeable="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ViewModelCell" eSuperTypes="stereotypes/ViewModel.ecore#//ViewModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="layers" upperBound="-1"
