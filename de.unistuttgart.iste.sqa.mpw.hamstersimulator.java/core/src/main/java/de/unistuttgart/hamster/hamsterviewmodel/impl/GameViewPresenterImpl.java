@@ -3,10 +3,12 @@ package de.unistuttgart.hamster.hamsterviewmodel.impl;
 import de.unistuttgart.hamster.hamsterviewmodel.GameViewModel;
 import de.unistuttgart.hamster.hamsterviewmodel.GameViewPresenter;
 
+import java.util.concurrent.Semaphore;
+
 public class GameViewPresenterImpl extends GameViewPresenter {
 
 	public GameViewPresenterImpl() {
-
+		super(new Semaphore(1, true));
 	}
 
 	@Override
@@ -15,7 +17,17 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 	}
 
 	@Override
-	public void stopClicked() {
+	public void pauseClicked() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
+	public void undoClicked() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
+	public void redoClicked() {
 		throw new RuntimeException("not implemented");
 	}
 

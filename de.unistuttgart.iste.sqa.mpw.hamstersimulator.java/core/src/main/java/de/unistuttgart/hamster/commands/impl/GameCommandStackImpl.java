@@ -12,9 +12,29 @@ public class GameCommandStackImpl extends GameCommandStack {
 	}
 
 	@Override
+	public void startGame() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
+	public void startGamePaused() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
 	public void execute(Command command) {
 		addToStack(command);
 		command.execute();
+	}
+
+	@Override
+	public void pause() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
+	public void resume() {
+		throw new RuntimeException("not implemented");
 	}
 
 	@Override
