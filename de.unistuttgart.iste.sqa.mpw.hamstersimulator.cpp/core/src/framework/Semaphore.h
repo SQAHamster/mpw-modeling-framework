@@ -2,6 +2,7 @@
 #define DE_UNISTUTTGART_ISTE_SQA_MPW_HAMSTERSIMULATOR_CPP_SEMAPHORE_H
 
 #include <mutex>
+#include <memory>
 
 namespace framework {
 
