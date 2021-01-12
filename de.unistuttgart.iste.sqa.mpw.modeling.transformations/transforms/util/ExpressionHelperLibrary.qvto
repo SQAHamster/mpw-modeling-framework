@@ -20,8 +20,8 @@ helper createPathExpression(element: ETypedElement, featureNames: List(String)) 
     var pathStatements: List(Statement);
     
     if (element.oclIsTypeOf(EParameter)) {
-        pathStatements += object ParameterUsageStatement {
-            parameterName := element.name;
+        pathStatements += object ElementByNameUsageStatement {
+            elementName := element.name;
             type := element.eType;
         };
     } else {
@@ -51,9 +51,9 @@ helper createPathExpression(element: ETypedElement) : Expression {
     return createPathExpression(element.name, element.eType);
 }
 
-helper createPathExpression(elementName: String, elementType: EClassifier) : Expression {
-    return createStatementsExpression(object ParameterUsageStatement {
-        parameterName := elementName;
+helper createPathExpression(elementInputName: String, elementType: EClassifier) : Expression {
+    return createStatementsExpression(object ElementByNameUsageStatement {
+        elementName := elementInputName;
         type := elementType;
     });
 }

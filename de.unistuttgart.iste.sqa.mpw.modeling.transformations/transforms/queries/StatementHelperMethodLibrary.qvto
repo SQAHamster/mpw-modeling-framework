@@ -28,8 +28,8 @@ query StatementsExpression::getHelperMethodName() : String {
                                                 ->flatten()
                                                 ->forEach (s) {
     	switch {
-    		case (s.oclIsTypeOf(ParameterUsageStatement)) {
-    			name := name + "_" + s.oclAsType(ParameterUsageStatement).parameterName;
+    		case (s.oclIsTypeOf(ElementByNameUsageStatement)) {
+    			name := name + "_" + s.oclAsType(ElementByNameUsageStatement).elementName;
     		};
             case (s.oclIsTypeOf(FeatureStatement)) {
                 name := name + "_" + s.oclAsType(FeatureStatement).feature.name;
@@ -46,8 +46,8 @@ query StatementsExpression::getHelperMethodName() : String {
             case (s.oclIsTypeOf(EnumLiteralStatement)) {
                 name := name + "_" + s.oclAsType(EnumLiteralStatement).enumLiteral.name;
             };
-            case (s.oclIsTypeOf(VariableUsageStatement)) {
-                name := name + "_" + s.oclAsType(VariableUsageStatement).variableReference.variableName;
+            case (s.oclIsTypeOf(VariableReferenceUsageStatement)) {
+                name := name + "_" + s.oclAsType(VariableReferenceUsageStatement).variableReference.variableName;
             };
     	};
     };

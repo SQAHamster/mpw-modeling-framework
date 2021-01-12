@@ -53,7 +53,7 @@ mapping Input::OldValueExpression::toOldExpression() : QueryModel::OldExpression
     var variableExpression := self.resolveone(QueryModel::VariableExpression);
     
     inner := object QueryModel::StatementsExpression {
-        statements += object QueryModel::VariableUsageStatement {
+        statements += object QueryModel::VariableReferenceUsageStatement {
             variableReference := variableExpression;
             type := variableExpression.type;
         };

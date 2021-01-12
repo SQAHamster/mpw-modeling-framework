@@ -132,8 +132,8 @@ mapping EParameter::stageFacadeParameterToGameVariable() : VariableDefinitionAnn
     
     var stageBaseName := self.eType.name;
     
-    var parameterStatement := object ParameterUsageStatement {
-        parameterName := self.name;
+    var parameterStatement := object ElementByNameUsageStatement {
+        elementName := self.name;
         type := self.eType;
     };
     var getInternalGameStatement := object GetPropertyStatement {

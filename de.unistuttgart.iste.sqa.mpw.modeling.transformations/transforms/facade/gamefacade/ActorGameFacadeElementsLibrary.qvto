@@ -96,8 +96,8 @@ helper EClass::createConstructorWithParamsOperation(initCommand: EOperation) : E
 }
 
 mapping EParameter::createParameterExpression() : StatementsExpression {
-    statements += object ParameterUsageStatement {
-        parameterName := self.name;
+    statements += object ElementByNameUsageStatement {
+        elementName := self.name;
         type := self.eType;
     };
     type := self.eType;

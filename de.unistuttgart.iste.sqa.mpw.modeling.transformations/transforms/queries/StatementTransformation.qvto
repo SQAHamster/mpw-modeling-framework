@@ -23,7 +23,7 @@ property currentExpressionTypeCollectionInfo: Dict(Input::Expression, ecore::EBo
 
 mapping Input::Statement::toStatement() : QueryModel::Statement
     disjuncts Input::Statement::toSelfStatement,
-              Input::Statement::toParameterUsageStatement,
+              Input::Statement::toElementByNameUsageStatement,
               Input::Statement::toQueryStatement,
               Input::Statement::toFeatureStatement,
               Input::Statement::toCollectionMethodStatement,
@@ -54,11 +54,11 @@ mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement merges I
     isOptional := false;
 }
 
-mapping Input::Statement::toParameterUsageStatement() : QueryModel::ParameterUsageStatement merges Input::Statement::toStatementBase
+mapping Input::Statement::toElementByNameUsageStatement() : QueryModel::ElementByNameUsageStatement merges Input::Statement::toStatementBase
     when { self.parameterList() != null and self.parameterList().parameters->exists(p|p.variableName = self.target) } {
     var parameter := self.parameterList().parameters->any(p|p.variableName = self.target);
     type := findClassifierForName(parameter.typeName);
-    parameterName := parameter.variableName;
+    elementName := parameter.variableName;
     isCollection := false;
     isOptional := false;
 }

@@ -92,7 +92,7 @@ query nextNameForNumber() : String {
 
 mapping inout IntermediaryResultStatement::handleVariableUsageOfLastResult() {
     if (lastResult <> null) {
-        var variableUsage := object VariableUsageStatement {
+        var variableUsage := object VariableReferenceUsageStatement {
             variableReference := lastResult;
             next := self.internalStatementsExpression.statements->first();
         };

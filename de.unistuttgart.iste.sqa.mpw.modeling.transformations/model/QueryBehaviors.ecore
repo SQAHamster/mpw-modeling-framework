@@ -122,8 +122,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="selfAlias" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ParameterUsageStatement" eSuperTypes="#//Statement">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterName" lowerBound="1"
+  <eClassifiers xsi:type="ecore:EClass" name="ElementByNameUsageStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FeatureStatement" eSuperTypes="#//Statement">
@@ -163,7 +163,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="enumLiteral" lowerBound="1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EEnumLiteral"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VariableUsageStatement" eSuperTypes="#//Statement">
+  <eClassifiers xsi:type="ecore:EClass" name="VariableReferenceUsageStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="variableReference" lowerBound="1"
         eType="#//VariableExpression"/>
   </eClassifiers>

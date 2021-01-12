@@ -215,8 +215,8 @@ mapping Henshin::Attribute::toVariableAssignment() : CommandModel::VariableAssig
     variableName := self.value;
     debugValueString := self.node.resolveone(CommandModel::InstanceCondition).variableName + "." + self.type.name;
     value := createStatementsExpression( List{
-        object ParameterUsageStatement { // TODO refactor to semantically better match the string-based variable usage
-            parameterName := self.node.resolveone(CommandModel::InstanceCondition).variableName;
+        object ElementByNameUsageStatement {
+            elementName := self.node.resolveone(CommandModel::InstanceCondition).variableName;
             type := self.node.type;
     	},
     	object FeatureStatement {

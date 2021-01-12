@@ -41,8 +41,8 @@
     «ENDIF-»
 «ENDDEFINE»
 
-«DEFINE StatementDefinition FOR ParameterUsageStatement-»
-    «parameterName-»
+«DEFINE StatementDefinition FOR ElementByNameUsageStatement-»
+    «elementName-»
 «ENDDEFINE»
 
 «DEFINE StatementDefinition FOR FeatureStatement-»
@@ -81,6 +81,6 @@
     «query.name»(«parameterNames.toString(", ")»)«REM»avoid newline«ENDREM-»
 «ENDDEFINE»
 
-«DEFINE StatementDefinition FOR VariableUsageStatement-»
+«DEFINE StatementDefinition FOR VariableReferenceUsageStatement-»
     «variableReference.variableName-»
 «ENDDEFINE»

@@ -78,8 +78,8 @@ abstract mapping inout EClass::createConstructor() {
 }
 
 query EClass::createInternalEditorExpression() : Expression {
-    var gameStatement := object ParameterUsageStatement {
-        parameterName := "game";
+    var gameStatement := object ElementByNameUsageStatement {
+        elementName := "game";
         type := findInstanceOfMetaClass("MiniProgrammingWorld");
     };
     var stageStatement := object FeatureStatement {
