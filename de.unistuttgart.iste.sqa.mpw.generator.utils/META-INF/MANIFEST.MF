@@ -20,4 +20,3 @@ Require-Bundle: org.apache.commons.logging,
  de.unistuttgart.iste.sqa.mpw.modeling.transformations;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-14
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.generator.utils
-Export-Package: components.generation
