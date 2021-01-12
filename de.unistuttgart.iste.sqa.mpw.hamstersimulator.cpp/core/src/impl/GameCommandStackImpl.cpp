@@ -47,10 +47,7 @@ void GameCommandStackImpl::pause() {
         throw std::runtime_error("pause() can only be called in modes INITIALIZING/RUNNING");
     }
     setMode(Mode::PAUSED);
-
-    asyncThread = std::thread([&]() {
-        getSemaphore().aquire();
-    });
+    getSemaphore().aquire();
 }
 
 void GameCommandStackImpl::resume() {
