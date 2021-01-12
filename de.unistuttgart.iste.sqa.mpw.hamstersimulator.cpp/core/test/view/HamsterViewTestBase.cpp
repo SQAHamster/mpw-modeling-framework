@@ -53,10 +53,10 @@ void HamsterViewTestBase::initCharMapping() {
     characterMap["11Corn32"] = "11*";
     characterMap["12Corn32"] = "12*";
     characterMap["12PlusCorn32"] = "12+";
-    characterMap["Hamster24"] = ">";
-    characterMap["Hamster24[90]"] = "v";
-    characterMap["Hamster24[180]"] = "<";
-    characterMap["Hamster24[270]"] = "^";
+    characterMap["Hamster32"] = ">";
+    characterMap["Hamster32[90]"] = "v";
+    characterMap["Hamster32[180]"] = "<";
+    characterMap["Hamster32[270]"] = "^";
     characterMap["Wall32"] = "####";
 }
 

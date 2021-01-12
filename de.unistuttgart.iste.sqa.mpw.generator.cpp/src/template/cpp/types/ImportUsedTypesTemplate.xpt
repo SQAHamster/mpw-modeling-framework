@@ -21,6 +21,9 @@
 	«IF (abstract ? eOperations : eAllOperations).select(o|o.isQuery()).exists(o|o.getQueryForOperation().isOptional)-»
     #include <optional>
 	«ENDIF-»
+    «IF eOperations.exists(o|o.getUsedTypes().exists(t|t.name == "Throwable"))-»
+    #include <stdexcept>
+    «ENDIF-»
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isAny())-»
     #include "Any.h"
 	«ENDIF-»
