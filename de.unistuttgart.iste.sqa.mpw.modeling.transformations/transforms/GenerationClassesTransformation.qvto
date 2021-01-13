@@ -36,6 +36,7 @@ mapping inout EPackage::transformPackage() {
     eClassifiers += self.eClassifiers[EClass][hasAnnotationValue("role", "editor")]->map createBuilderClass();
     
     self.eClassifiers[EClass][isInstanceOf("MiniProgrammingWorld")]->map useFacades();
+    findClassForName("MiniProgrammingWorld").map removeDerivedStageReference();
 }
 
 mapping EClass::toGameFacadeClass() : EClass {
@@ -58,3 +59,6 @@ mapping inout EClass::useFacades() {
     };
 }
 
+mapping inout EClass::removeDerivedStageReference() {
+    self.eStructuralFeatures := self.eStructuralFeatures->reject(f|f._derived and f.eType.name = "Stage");
+}

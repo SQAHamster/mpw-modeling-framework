@@ -75,16 +75,6 @@
       «FOREACH eStructuralFeatures.select(f|f.needsConstructorInstantiation()) AS f-»
           this->«f.name» = «EXPAND FeatureFieldInstantiation FOR f»;
       «ENDFOREACH-»
-      «EXPAND setDerivedStageFeature FOR this»
-«ENDDEFINE»
-
-«DEFINE setDerivedStageFeature FOR EClass»
-    «IF needsToSetDerivedSetFeature()-»
-        «LET findConcreteStageFeatureForMiniProgrammingWorld() AS concreteFeature»
-        «REM»Fix this: make an internal getter of Territory (maybe returning Stage) which returns the Concrete one to avoid cast«ENDREM-» 
-        «"stage".setter()»(std::dynamic_pointer_cast<Concrete«concreteFeature.eType.name»>(«concreteFeature.name»->getInternal«concreteFeature.eType.name»()));
-        «ENDLET»
-    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE FeatureFieldInstantiation FOR EStructuralFeature-»

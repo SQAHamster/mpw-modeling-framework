@@ -15,11 +15,3 @@ compareEqualsPropertyVariables(EStructuralFeature this, String lhsName, String r
 compareNotEqualsPropertyVariables(EStructuralFeature this, String lhsName, String rhsName) :
     if (this.eType.isValueType()) then "!java.util.Objects.equals(" + lhsName + ", " + rhsName + ")"
     else lhsName + " != " + rhsName;
-
-// for derived MiniProgrammingWorld classes set the derived stage feature
-needsToSetDerivedSetFeature(EClass this) :
-    this.isDerivedFrom("MiniProgrammingWorld");
-
-// find the concrete (facade) feature, e.g. Territory (which is based on ConcreteTerritory, which derives Stage)
-cached findConcreteStageFeatureForMiniProgrammingWorld(EClass this) :
-    this.eStructuralFeatures.selectFirst(f|f.eType.getAnnotationValue("metaTypeName") == "Stage");   

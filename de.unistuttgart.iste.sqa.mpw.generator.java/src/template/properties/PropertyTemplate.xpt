@@ -44,19 +44,9 @@
       «FOREACH injectedProperties.without(injectedForParentProperties) AS f»
       this.«f.name» = «f.name»;
       «ENDFOREACH»
-      «EXPAND setDerivedStageFeature FOR this»
       }
       «ENDLET»
       «ENDLET»
-«ENDDEFINE»
-
-«DEFINE setDerivedStageFeature FOR EClass»
-    «IF needsToSetDerivedSetFeature()-»
-        «LET findConcreteStageFeatureForMiniProgrammingWorld() AS concreteFeature»
-        «REM»Fix this: make an internal getter of Territory (maybe returning Stage) which returns the Concrete one to avoid cast«ENDREM-» 
-        «"stage".setter()»((Concrete«concreteFeature.eType.name»)«concreteFeature.name».getInternal«concreteFeature.eType.name»());
-        «ENDLET»
-    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE ImplConstructorDefinition FOR EClass»

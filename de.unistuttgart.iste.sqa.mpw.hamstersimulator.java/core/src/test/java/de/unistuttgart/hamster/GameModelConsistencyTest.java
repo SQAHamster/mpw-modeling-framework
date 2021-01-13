@@ -60,7 +60,6 @@ public class GameModelConsistencyTest {
 
 	private void assertIsConsistent() {
 		var stage = game.getTerritory().getInternalTerritory();
-		assertEquals(stage, game.getStage());
 		var tiles = stage.getTiles();
 		for (var tile : tiles) {
 			for (var content : tile.getContents()) {
