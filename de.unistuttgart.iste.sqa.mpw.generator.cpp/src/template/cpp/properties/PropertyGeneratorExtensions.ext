@@ -44,3 +44,11 @@ isWeakPtr(EStructuralFeature this) :
 getSharedFromThisParentReference(EClass this) :
     if (eSuperTypes.reject(t|t.interface).size > 0) then "inherited"
     else "commands::Entity";
+
+// for derived MiniProgrammingWorld classes set the derived stage feature
+needsToSetDerivedSetFeature(EClass this) :
+    this.isDerivedFrom("MiniProgrammingWorld");
+
+// find the concrete (facade) feature, e.g. Territory (which is based on ConcreteTerritory, which derives Stage)
+cached findConcreteStageFeatureForMiniProgrammingWorld(EClass this) :
+    this.eStructuralFeatures.selectFirst(f|f.eType.getAnnotationValue("metaTypeName") == "Stage");   

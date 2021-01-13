@@ -83,6 +83,9 @@
     «EXPAND SingleImportDefinition FOREACH eReferences
         .select(r|r.eType.isDependency())
         .collect(r|"Dummy" + r.eType.name)»
+    «IF needsToSetDerivedSetFeature()-»
+        #include "Concrete«findConcreteStageFeatureForMiniProgrammingWorld().eType.name».h"
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE ForwardDeclarations FOR EClass»

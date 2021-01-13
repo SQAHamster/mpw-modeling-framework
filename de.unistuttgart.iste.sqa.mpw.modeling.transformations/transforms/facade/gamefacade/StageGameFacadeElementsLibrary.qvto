@@ -35,6 +35,7 @@ mapping inout EClass::createStageGameFacadeElements() inherits EClass::createEle
     
     baseName := self.name;
     concreteClass := self.getConcreteClass();
+    eAnnotations += toAnnotation("metaTypeName", "Stage");
     
     var actorFields := concreteClass.getActorFields();
     eAnnotations += actorFields->map toGetPropertyAnnotation();

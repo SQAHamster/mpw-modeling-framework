@@ -59,8 +59,8 @@ public class GameModelConsistencyTest {
 	}
 
 	private void assertIsConsistent() {
-		// TODO: fix empty stage ref in game, var stage = game.getStage();
 		var stage = game.getTerritory().getInternalTerritory();
+		assertEquals(stage, game.getStage());
 		var tiles = stage.getTiles();
 		for (var tile : tiles) {
 			for (var content : tile.getContents()) {

@@ -47,9 +47,9 @@ isReference(EStructuralFeature this) :
 isConstructorInjectedProperty(EStructuralFeature this) :
     !this.changeable && !this.isContainment() && !this.derived;
 
-// e.g. Territory is a concrete references for derviced "stage" reference.
-isStageField(EStructuralFeature this) :
-    EClass.isInstance(this.eType) && ((EClass)this.eType).eSuperTypes.exists(t|t.name == "Stage");
+isDerivedFrom(EClassifier this, String superTypeName) :
+    let eClass = (EClass)this :
+    EClass.isInstance(this) && eClass.eAllSuperTypes.exists(t|t.name == superTypeName);
     
 isContainment(EStructuralFeature this) :
     EReference.isInstance(this) && ((EReference)this).containment;
