@@ -13,6 +13,7 @@
       <eAnnotations source="sharedOwnership"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SetPropertyCommand" eSuperTypes="#//PrimitiveCommand">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

@@ -10,14 +10,14 @@ RemoveEntityCommandImpl::RemoveEntityCommandImpl() {
 void RemoveEntityCommandImpl::execute() {
     auto entity = getEntity();
     EntityReference reference = getEntityToRemove().get();
-    entity->removeFromCollection(getPropertyName(), reference);
+    entity->removeFromCollection(getFeatureKey(), reference);
 }
 
 void RemoveEntityCommandImpl::undo() {
 
     auto entity = getEntity();
     EntityReference reference = getEntityToRemove().get();
-    entity->addToCollection(getPropertyName(), reference);
+    entity->addToCollection(getFeatureKey(), reference);
 }
 
 void RemoveEntityCommandImpl::redo() {

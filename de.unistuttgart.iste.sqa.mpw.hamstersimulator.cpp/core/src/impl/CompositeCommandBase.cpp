@@ -21,42 +21,42 @@ namespace commands {
     }
   }
 
-  void CompositeCommandBase::executeSetProperty(std::shared_ptr<Entity> entity, std::string propertyName, Any oldValue, Any newValue) {
-    internalExecuteSetProperty(entity, propertyName, oldValue, newValue);
+  void CompositeCommandBase::executeSetProperty(std::shared_ptr<Entity> entity, unsigned featureKey, Any oldValue, Any newValue) {
+    internalExecuteSetProperty(entity, featureKey, oldValue, newValue);
   }
 
-  void CompositeCommandBase::executeSetProperty(std::shared_ptr<Entity> entity, std::string propertyName,
+  void CompositeCommandBase::executeSetProperty(std::shared_ptr<Entity> entity, unsigned featureKey,
                                               std::shared_ptr<Entity> oldValue, std::shared_ptr<Entity> newValue) {
-    internalExecuteSetProperty(entity, propertyName, oldValue.get(), newValue.get());
+    internalExecuteSetProperty(entity, featureKey, oldValue.get(), newValue.get());
   }
 
-  SetPropertyCommandImpl& CompositeCommandBase::internalExecuteSetProperty(std::shared_ptr<Entity> entity, std::string propertyName, Any oldValue, Any newValue) {
+  SetPropertyCommandImpl& CompositeCommandBase::internalExecuteSetProperty(std::shared_ptr<Entity> entity, unsigned featureKey, Any oldValue, Any newValue) {
     auto command = std::make_shared<SetPropertyCommandImpl>();
     command->setEntity(entity);
     command->setOldValue(oldValue);
     command->setNewValue(newValue);
-    command->setPropertyName(propertyName);
+    command->setFeatureKey(featureKey);
 
     addToSubCommands(command);
     command->execute();
     return *command;
   }
 
-  void CompositeCommandBase::executeAddReference(std::shared_ptr<Entity> entity, std::string propertyName, std::shared_ptr<Entity> entityToAdd) {
+  void CompositeCommandBase::executeAddReference(std::shared_ptr<Entity> entity, unsigned featureKey, std::shared_ptr<Entity> entityToAdd) {
     auto command = std::make_shared<AddEntityCommandImpl>();
     command->setEntity(entity);
     command->setEntityToAdd(entityToAdd);
-    command->setPropertyName(propertyName);
+    command->setFeatureKey(featureKey);
 
     addToSubCommands(command);
     command->execute();
   }
 
-  void CompositeCommandBase::executeRemoveReference(std::shared_ptr<Entity> entity, std::string propertyName, std::shared_ptr<Entity> entityToRemove) {
+  void CompositeCommandBase::executeRemoveReference(std::shared_ptr<Entity> entity, unsigned featureKey, std::shared_ptr<Entity> entityToRemove) {
     auto command = std::make_shared<RemoveEntityCommandImpl>();
     command->setEntity(entity);
     command->setEntityToRemove(entityToRemove);
-    command->setPropertyName(propertyName);
+    command->setFeatureKey(featureKey);
 
     addToSubCommands(command);
     command->execute();

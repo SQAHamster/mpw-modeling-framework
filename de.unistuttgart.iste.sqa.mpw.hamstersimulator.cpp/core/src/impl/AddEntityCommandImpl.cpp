@@ -10,13 +10,13 @@ AddEntityCommandImpl::AddEntityCommandImpl() {
 void AddEntityCommandImpl::execute() {
     auto entity = getEntity();
     EntityReference reference = getEntityToAdd().get();
-    entity->addToCollection(getPropertyName(), reference);
+    entity->addToCollection(getFeatureKey(), reference);
 }
 
 void AddEntityCommandImpl::undo() {
     auto entity = getEntity();
     EntityReference reference = getEntityToAdd().get();
-    entity->removeFromCollection(getPropertyName(), reference);
+    entity->removeFromCollection(getFeatureKey(), reference);
 }
 
 void AddEntityCommandImpl::redo() {

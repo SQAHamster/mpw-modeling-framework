@@ -64,6 +64,7 @@
       «ENDFOREACH-»
       
       «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations-»
+      «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyKeyDefinitions FOR this»
       «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodDeclarations FOR this»
 
     };

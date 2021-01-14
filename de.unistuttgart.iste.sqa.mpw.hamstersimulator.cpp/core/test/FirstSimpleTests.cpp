@@ -30,7 +30,7 @@ TEST(ReflectionTest, testSettingLocationByReflection) {
 
     {
         auto location = Location::from(1, 2);
-        tile->setProperty("location", &location);
+        tile->setProperty(Tile::cFeatureKeyLocation, &location);
     }
 
     EXPECT_EQ(Location::from(1, 2), tile->getLocation());
@@ -82,17 +82,17 @@ TEST_F(CompositeCommandDummyTest, testPrimitiveCommands) {
     auto territory = std::make_shared<ConcreteTerritory>();
     auto tile = std::make_shared<Tile>();
 
-    executeSetProperty(hamster, "direction", (int)hamster->getDirection(), (int)Direction::WEST);
-    executeSetValueProperty(tile, "location", tile->getLocation(), Location::from(1, 2));
-    executeAddReference(territory, "tiles", tile);
+    executeSetProperty(hamster, Actor::cFeatureKeyDirection, (int)hamster->getDirection(), (int)Direction::WEST);
+    executeSetValueProperty(tile, Tile::cFeatureKeyLocation, tile->getLocation(), Location::from(1, 2));
+    executeAddReference(territory, Stage::cFeatureKeyTiles, tile);
 
     EXPECT_EQ(Direction::WEST, hamster->getDirection());
     EXPECT_EQ(Location::from(1, 2), tile->getLocation());
     EXPECT_EQ(territory->getTiles().front(), tile);
 
-    executeSetProperty(hamster, "direction", (int)hamster->getDirection(), (int)Direction::NORTH);
-    executeSetValueProperty(tile, "location", tile->getLocation(), Location::from(3, 5));
-    executeRemoveReference(territory, "tiles", tile);
+    executeSetProperty(hamster, Actor::cFeatureKeyDirection, (int)hamster->getDirection(), (int)Direction::NORTH);
+    executeSetValueProperty(tile, Tile::cFeatureKeyLocation, tile->getLocation(), Location::from(3, 5));
+    executeRemoveReference(territory, Stage::cFeatureKeyTiles, tile);
 
     EXPECT_EQ(Direction::NORTH, hamster->getDirection());
     EXPECT_EQ(Location::from(3, 5), tile->getLocation());

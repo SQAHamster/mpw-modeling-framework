@@ -12,9 +12,9 @@ public:
 
     virtual ~ReflectivePropertyObject() = default;
 
-    virtual void setProperty(const std::string& propertyName, Any value) = 0;
-    virtual void addToCollection(const std::string& propertyName, EntityReference reference) = 0;
-    virtual void removeFromCollection(const std::string& propertyName, EntityReference reference) = 0;
+    virtual void setProperty(unsigned featureKey, Any value) = 0;
+    virtual void addToCollection(unsigned featureKey, EntityReference reference) = 0;
+    virtual void removeFromCollection(unsigned featureKey, EntityReference reference) = 0;
 
 };
 

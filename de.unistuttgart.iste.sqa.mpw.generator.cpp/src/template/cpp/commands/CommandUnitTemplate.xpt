@@ -142,7 +142,7 @@
             «instance.variableName»«accessor()»«attributeName.setter()»(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
         «ELSE»
             // set value type field «instance.variableName».«attributeName» := «attributeValueLiteral»
-            «commandSetter(this.attributeValue.type)»(«instance.variableName», "«attributeName»", «instance.variableName»«accessor()»«attributeName.getter()»(), «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+            «commandSetter(this.attributeValue.type)»(«instance.variableName», «attributeName.toFeatureKeyAccess(instance.instanceType)», «instance.variableName»«accessor()»«attributeName.getter()»(), «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
         «ENDIF-»
     «ELSE»  
         // assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
@@ -157,9 +157,9 @@
     «IF this.reference != null»
     // remove reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
     «IF this.reference.metaType == SingleReferenceCondition»
-        «commandSetter(this.reference.source.instanceType)»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»(), nullptr);
+        «commandSetter(this.reference.source.instanceType)»(«this.reference.source.variableName», «this.reference.referenceName.toFeatureKeyAccess(reference.source.instanceType)», «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»(), nullptr);
     «ELSE»
-        «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
+        «commandRemover()»(«this.reference.source.variableName», «this.reference.referenceName.toFeatureKeyAccess(reference.source.instanceType)», «this.reference.target.variableName»);
     «ENDIF»
     «ENDIF»
 «ENDDEFINE»
@@ -168,7 +168,7 @@
     «IF this.reference.metaType == ClearReferenceCondition»
         // clear references: «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
         while («this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»().size() > 0) {
-            «commandRemover()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»().front());
+            «commandRemover()»(«this.reference.source.variableName», «this.reference.referenceName.toFeatureKeyAccess(reference.source.instanceType)», «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»().front());
         }
     «ENDIF»
 «ENDDEFINE»
@@ -180,16 +180,16 @@
     «IF this.reference != null»
     // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
     «IF this.reference.metaType == SingleReferenceCondition»
-        «commandSetter(this.reference.target.instanceType)»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
+        «commandSetter(this.reference.target.instanceType)»(«this.reference.source.variableName», «this.reference.referenceName.toFeatureKeyAccess(reference.source.instanceType)», «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
     «ELSE»
-        «commandAdder()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
+        «commandAdder()»(«this.reference.source.variableName», «this.reference.referenceName.toFeatureKeyAccess(reference.source.instanceType)», «this.reference.target.variableName»);
     «ENDIF»
     «ENDIF»
 «ENDDEFINE»
 
 «DEFINE AttributeModificationDefinition FOR Modification»
     // set attribute: «this.attribute.instance.variableName».«this.attribute.attributeName» := «this.newAttributeValue»
-    «commandSetter(this.attribute.attributeValue.type)»(«this.attribute.instance.variableName», "«this.attribute.attributeName»", «this.attribute.instance.variableName»«this.attribute.accessor()»«this.attribute.attributeName.getter()»(), «this.toNewAttributeValueCppString()»);
+    «commandSetter(this.attribute.attributeValue.type)»(«this.attribute.instance.variableName», «this.attribute.attributeName.toFeatureKeyAccess(attribute.instance.instanceType)», «this.attribute.instance.variableName»«this.attribute.accessor()»«this.attribute.attributeName.getter()»(), «this.toNewAttributeValueCppString()»);
 «ENDDEFINE»
 
 «DEFINE FindObjectDefinition FOR ManyReferenceCondition»

@@ -44,3 +44,13 @@ isWeakPtr(EStructuralFeature this) :
 getSharedFromThisParentReference(EClass this) :
     if (eSuperTypes.reject(t|t.interface).size > 0) then "inherited"
     else "basetypes::Entity";
+
+toFeatureKeyName(String this) :
+    "cFeatureKey" + toFirstUpper();
+
+toFeatureKeyAccess(String this, EClassifier basedOnClass) :
+    let eClass = (EClass)basedOnClass :
+    if (eClass != null && eClass.interface && eClass.isMarkedWithAnnotation("baseName")) 
+        // handle e.g. actor classes like Hamster, which interface roles might be used
+        then eClass.ePackage.name + "::Concrete" + eClass.getAnnotationValue("baseName") + "::" + toFeatureKeyName() 
+        else basedOnClass.toQualifiedTypeName() + "::" + toFeatureKeyName();

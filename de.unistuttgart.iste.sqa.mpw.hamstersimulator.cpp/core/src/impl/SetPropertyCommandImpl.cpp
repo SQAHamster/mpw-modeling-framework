@@ -9,12 +9,12 @@ SetPropertyCommandImpl::SetPropertyCommandImpl() {
 
 void SetPropertyCommandImpl::execute() {
     auto entity = getEntity();
-    entity->setProperty(getPropertyName(), getNewValue());
+    entity->setProperty(getFeatureKey(), getNewValue());
 }
 
 void SetPropertyCommandImpl::undo() {
     auto entity = getEntity();
-    entity->setProperty(getPropertyName(), getOldValue());
+    entity->setProperty(getFeatureKey(), getOldValue());
 }
 
 void SetPropertyCommandImpl::redo() {
