@@ -82,10 +82,6 @@ Workflow {
             name = "module_package"
             value = generatedProjectBasePackage
         }
-        globalVarDef = {
-            name = "queries"
-            value = "queries"
-        }
         metaModel = mm_emf
         expand = "template::cpp::CommandTemplate::main FOREACH commands"
         outlet = {
