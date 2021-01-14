@@ -43,4 +43,4 @@ isWeakPtr(EStructuralFeature this) :
 
 getSharedFromThisParentReference(EClass this) :
     if (eSuperTypes.reject(t|t.interface).size > 0) then "inherited"
-    else "commands::Entity";
+    else "basetypes::Entity";

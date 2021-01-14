@@ -50,15 +50,14 @@
     <genClasses image="false" ecoreClass="Command.ecore#//CompositeCommand">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Command.ecore#//CompositeCommand/subCommands"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="Command.ecore#//Entity"/>
     <genClasses ecoreClass="Command.ecore#//GameCommandStack">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//GameCommandStack/semaphore"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//GameCommandStack/mode"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//GameCommandStack/speed"/>
+      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/startGame"/>
+      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/startGamePaused"/>
       <genOperations ecoreOperation="Command.ecore#//GameCommandStack/pause"/>
       <genOperations ecoreOperation="Command.ecore#//GameCommandStack/resume"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/sstartGame"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/sstartGamePaused"/>
     </genClasses>
     <genClasses ecoreClass="Command.ecore#//EditorCommandStack"/>
   </genPackages>
@@ -124,5 +123,75 @@
   <genPackages prefix="Stereotypes" ecorePackage="stereotypes/MpwStereotypes.ecore#/">
     <genClasses image="false" ecoreClass="stereotypes/MpwStereotypes.ecore#//ValueType"/>
     <genClasses image="false" ecoreClass="stereotypes/MpwStereotypes.ecore#//Dependency"/>
+  </genPackages>
+  <genPackages prefix="Basetypes" ecorePackage="BaseTypes.ecore#/">
+    <genDataTypes ecoreDataType="BaseTypes.ecore#//Throwable"/>
+    <genDataTypes ecoreDataType="BaseTypes.ecore#//Semaphore"/>
+    <genDataTypes ecoreDataType="BaseTypes.ecore#//Object"/>
+    <genClasses image="false" ecoreClass="BaseTypes.ecore#//Entity"/>
+  </genPackages>
+  <genPackages prefix="Mpw" ecorePackage="MiniProgrammingWorld.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="MiniProgrammingWorld.ecore#//Direction">
+      <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Direction/NORTH"/>
+      <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Direction/SOUTH"/>
+      <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Direction/WEST"/>
+      <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Direction/EAST"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="MiniProgrammingWorld.ecore#//Throwable"/>
+    <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//Actor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Actor/direction"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//Prop"/>
+    <genClasses ecoreClass="MiniProgrammingWorld.ecore#//Tile">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/contents"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/location"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/south"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/north"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/east"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/west"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Tile/stage"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//TileContent">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//TileContent/currentTile"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//TileContent/stage"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//Stage">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/tiles"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/tileContents"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/territorySize"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//MiniProgrammingWorld">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/stage"/>
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/editorCommandStack"/>
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/gameLog"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/userInputInterface"/>
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/gameCommandStack"/>
+    </genClasses>
+    <genClasses ecoreClass="MiniProgrammingWorld.ecore#//Location">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Location/column"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Location/row"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//UserInputInterface">
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//UserInputInterface/readInteger">
+        <genParameters ecoreParameter="MiniProgrammingWorld.ecore#//UserInputInterface/readInteger/message"/>
+      </genOperations>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//UserInputInterface/readString">
+        <genParameters ecoreParameter="MiniProgrammingWorld.ecore#//UserInputInterface/readString/message"/>
+      </genOperations>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//UserInputInterface/confirmAlert">
+        <genParameters ecoreParameter="MiniProgrammingWorld.ecore#//UserInputInterface/confirmAlert/t"/>
+      </genOperations>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//UserInputInterface/abort"/>
+    </genClasses>
+    <genClasses ecoreClass="MiniProgrammingWorld.ecore#//GameLog">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//GameLog/logEntries"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GameLog/write">
+        <genParameters ecoreParameter="MiniProgrammingWorld.ecore#//GameLog/write/message"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="MiniProgrammingWorld.ecore#//Size">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Size/columnCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Size/rowCount"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

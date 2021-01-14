@@ -2,7 +2,7 @@ package de.unistuttgart.hamster.commands.impl;
 
 import de.unistuttgart.hamster.commands.Command;
 import de.unistuttgart.hamster.commands.CompositeCommand;
-import de.unistuttgart.hamster.commands.Entity;
+import de.unistuttgart.hamster.basetypes.Entity;
 
 public abstract class CompositeCommandBase extends CompositeCommand {
 

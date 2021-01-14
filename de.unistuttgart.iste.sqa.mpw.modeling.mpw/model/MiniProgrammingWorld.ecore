@@ -6,7 +6,7 @@
         eType="#//Direction"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Prop" abstract="true" eSuperTypes="#//TileContent"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Tile" eSuperTypes="Command.ecore#//Entity">
+  <eClassifiers xsi:type="ecore:EClass" name="Tile" eSuperTypes="BaseTypes.ecore#//Entity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
         eType="#//TileContent" eOpposite="#//TileContent/currentTile"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="location" lowerBound="1"
@@ -20,13 +20,13 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" eType="#//Stage"
         derived="true" eOpposite="#//Stage/tiles"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TileContent" abstract="true" eSuperTypes="Command.ecore#//Entity">
+  <eClassifiers xsi:type="ecore:EClass" name="TileContent" abstract="true" eSuperTypes="BaseTypes.ecore#//Entity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="currentTile" eType="#//Tile"
         eOpposite="#//Tile/contents"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" eType="#//Stage"
         eOpposite="#//Stage/tileContents"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Stage" abstract="true" eSuperTypes="Command.ecore#//Entity">
+  <eClassifiers xsi:type="ecore:EClass" name="Stage" abstract="true" eSuperTypes="BaseTypes.ecore#//Entity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="tiles" upperBound="-1"
         eType="#//Tile" containment="true" eOpposite="#//Tile/stage"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tileContents" upperBound="-1"

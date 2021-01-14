@@ -1,6 +1,6 @@
 package de.unistuttgart.hamster.commands.impl.utils;
 
-import de.unistuttgart.hamster.commands.Entity;
+import de.unistuttgart.hamster.basetypes.Entity;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

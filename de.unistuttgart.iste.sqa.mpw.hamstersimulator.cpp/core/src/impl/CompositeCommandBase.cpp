@@ -3,6 +3,8 @@
 #include "AddEntityCommandImpl.h"
 #include "RemoveEntityCommandImpl.h"
 
+using namespace basetypes;
+
 namespace commands {
   void CompositeCommandBase::undo() {
     auto subCommands = getSubCommands();

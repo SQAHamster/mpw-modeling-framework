@@ -69,7 +69,7 @@ removeFromCollection(const std::string& propertyName, EntityReference reference)
 
 «DEFINE SetEntityReferenceProperty FOR EStructuralFeature»
     auto reference = std::get<EntityReference>(value);
-    auto typedElement = dynamic_cast<«eType.name»*>(reinterpret_cast<commands::Entity*>(reference));
+    auto typedElement = dynamic_cast<«eType.name»*>(reinterpret_cast<basetypes::Entity*>(reference));
     auto sharedPtr = typedElement != nullptr ? typedElement->shared_from_this() : nullptr;
     «name.setter()»(sharedPtr);
 «ENDDEFINE»
@@ -110,7 +110,7 @@ removeFromCollection(const std::string& propertyName, EntityReference reference)
 «ENDDEFINE»
 
 «DEFINE AddEntityReference FOR EStructuralFeature»
-    auto typedElement = dynamic_cast<«eType.name»*>(reinterpret_cast<commands::Entity*>(reference));
+    auto typedElement = dynamic_cast<«eType.name»*>(reinterpret_cast<basetypes::Entity*>(reference));
     auto sharedPtr = typedElement->shared_from_this();
     «name.adder()»(sharedPtr);
 «ENDDEFINE»
@@ -146,7 +146,7 @@ removeFromCollection(const std::string& propertyName, EntityReference reference)
 «ENDDEFINE»
 
 «DEFINE RemoveEntityReference FOR EStructuralFeature»
-    auto typedElement = dynamic_cast<«eType.name»*>(reinterpret_cast<commands::Entity*>(reference));
+    auto typedElement = dynamic_cast<«eType.name»*>(reinterpret_cast<basetypes::Entity*>(reference));
     auto sharedPtr = typedElement->shared_from_this();
     «name.remover()»(sharedPtr);
 «ENDDEFINE»
