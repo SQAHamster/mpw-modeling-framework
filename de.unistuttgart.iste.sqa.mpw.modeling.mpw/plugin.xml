@@ -17,14 +17,6 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated mpw -->
       <package
-            uri="http://www.mpw.uni-stuttgart.de/hamster"
-            class="hamster.HamsterPackage"
-            genModel="model/mpw.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated mpw -->
-      <package
             uri="http://www.mpw.uni-stuttgart.de/hamsterviewmodel"
             class="hamsterviewmodel.HamsterviewmodelPackage"
             genModel="model/mpw.genmodel"/>

@@ -8,11 +8,10 @@ import org.eclipse.xpand.support.cdt.CppBeautifier
 import org.eclipse.xtend.expression.ResourceManagerDefaultImpl
 
 var rootPath = ".."
-var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
 
-var generatedProjectBasePackage  = "'de.unistuttgart.hamster'"
+var generatedProjectBasePackage  = "INHERIT"
+var targetSimulatorProject = "INHERIT"
 
-var targetSimulatorProject = "${moduleBaseName}.hamstersimulator.cpp"
 var targetCoreSimulatorProject = "${targetSimulatorProject}/core"
 
 var simulatorTargetSrc = "${rootPath}/${targetCoreSimulatorProject}/src"

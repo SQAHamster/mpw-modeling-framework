@@ -115,7 +115,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	private void addModelsToSlot(WorkflowContext context, List<String> modelNames) {
 		String baseUri = getBaseUri();
 		ResourceSet resourceSet = new ResourceSetImpl();
-		var models = new ArrayList<Object>();
+		var models = obtainTargetListForSlot(context);
 		
 		for (var modelName : modelNames) {
 			var uri = baseUri + modelName;
@@ -131,6 +131,15 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		}
 
 		context.set(getModelSlot(), models);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<Object> obtainTargetListForSlot(WorkflowContext context) {
+		Object slotContent = context.get(getModelSlot());
+		if (slotContent != null) {
+			return (List<Object>)slotContent;
+		}
+		return new ArrayList<Object>();
 	}
 	
 	private Stream<Path> listFiles(String directory) throws IOException {

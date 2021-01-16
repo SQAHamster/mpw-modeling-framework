@@ -1,0 +1,4 @@
+context Hamster::putGrain
+
+/** the hamster has to carry any grain */
+precondition: !self.mouthEmpty();

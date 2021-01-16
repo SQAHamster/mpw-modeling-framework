@@ -1,0 +1,4 @@
+context Territory
+
+/** Invariant which checks if the territory is initialized */
+invariant isInitialized: self.tiles->notEmpty();

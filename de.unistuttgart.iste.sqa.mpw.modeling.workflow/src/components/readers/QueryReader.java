@@ -16,7 +16,7 @@ import behaviorInputs.impl.InputsFactoryImpl;
 public class QueryReader extends MultiResourceReader {
 
 	public QueryReader() {
-		super(".query", "src");
+		super(".query", "src-queries");
 		new QueryDslStandaloneSetup().createInjectorAndDoEMFRegistration();
 	}
 	

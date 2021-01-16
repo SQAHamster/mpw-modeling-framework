@@ -1,0 +1,18 @@
+context Territory::addGrainsToTile(location:Location, amount:EInt)
+
+/** the amount of grains to add has to be equal or greater than zero */
+precondition: 
+    amount >= 0;
+
+/** location has to be on territory */
+precondition: 
+    self.isLocationInTerritory(location);
+
+/** the tile on the location has to be empty */
+precondition:
+    self.getTileAt(location).contents->typeSelect(Wall)->isEmpty();
+
+/** the given amount of grains has to be equal to the grains on the tile location */
+postcondition: 
+    self.getTileAt(location).contents->typeSelect(Grain)->size() = amount;
+    

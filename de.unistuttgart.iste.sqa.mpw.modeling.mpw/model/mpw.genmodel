@@ -21,6 +21,7 @@
     <genClasses image="false" ecoreClass="Command.ecore#//PrimitiveCommand">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Command.ecore#//PrimitiveCommand/entity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//PrimitiveCommand/propertyName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//PrimitiveCommand/featureKey"/>
     </genClasses>
     <genClasses ecoreClass="Command.ecore#//SetPropertyCommand">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//SetPropertyCommand/oldValue"/>
@@ -60,19 +61,6 @@
       <genOperations ecoreOperation="Command.ecore#//GameCommandStack/resume"/>
     </genClasses>
     <genClasses ecoreClass="Command.ecore#//EditorCommandStack"/>
-  </genPackages>
-  <genPackages prefix="Hamster" disposableProviderFactory="true" ecorePackage="Hamster.ecore#/">
-    <genClasses ecoreClass="Hamster.ecore#//Hamster">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Hamster.ecore#//Hamster/grains"/>
-    </genClasses>
-    <genClasses ecoreClass="Hamster.ecore#//Territory">
-      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference Hamster.ecore#//Territory/defaultHamster"/>
-    </genClasses>
-    <genClasses ecoreClass="Hamster.ecore#//Grain"/>
-    <genClasses ecoreClass="Hamster.ecore#//Wall"/>
-    <genClasses ecoreClass="Hamster.ecore#//HamsterGame">
-      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference Hamster.ecore#//HamsterGame/territory"/>
-    </genClasses>
   </genPackages>
   <genPackages prefix="Hamsterviewmodel" disposableProviderFactory="true" ecorePackage="HamsterViewModel.ecore#/">
     <genClasses ecoreClass="HamsterViewModel.ecore#//GameViewModel">

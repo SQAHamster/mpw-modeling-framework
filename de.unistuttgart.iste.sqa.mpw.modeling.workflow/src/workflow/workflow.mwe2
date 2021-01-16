@@ -7,14 +7,16 @@ import components.readers.*
 import components.writers.*
 import components.transformators.*
 
+var sourceProjectName = "default.project" // has to be set by calling workflow
+var generatedProjectBasePackage  = "'de.unistuttgart.sample'" // has to be set by calling workflow
+var targetSimulatorProjectBaseName = "sample" // has to be set by calling workflow
+
 var platformUriPrefix = "platform:/resource"
 var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
 var modelingModuleBaseName = "${moduleBaseName}.modeling"
 
 var rootPath = ".."
 var mpwModelProject  = "${modelingModuleBaseName}.mpw"
-var commandsModelProject  = "${modelingModuleBaseName}.commands"
-var queriesModelProject  = "${modelingModuleBaseName}.queries"
 var transformationsProject = "${modelingModuleBaseName}.transformations"
 
 var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/RoleTransformation.qvto"
@@ -37,23 +39,28 @@ Workflow {
 	/** instantiate metamodel */
 	bean = EmfRegistryMetaModel : mm_emf { }
 
-	/* load model and store it in slots */
+	/* load models and store in slot */
 	component = MultiEcoreReader {
 		rootPath = rootPath
 		projectName = mpwModelProject
 		excludeModel = "stereotypes/*"
 		modelSlot = "entityModels"
 	}
+    component = MultiEcoreReader {
+        rootPath = rootPath
+        projectName = sourceProjectName
+        modelSlot = "entityModels"
+    }
 	
 	component = QueryReader {
 		rootPath = rootPath
-		projectName = queriesModelProject
+		projectName = sourceProjectName
 		modelSlot = "queries"
 	}
 	
 	component = CommandReader {
 		rootPath = rootPath
-		projectName = commandsModelProject
+		projectName = sourceProjectName
 		modelSlot = "commands"
 	}
 	
@@ -117,6 +124,12 @@ Workflow {
 		emfAllChildrenSlot = "generationEcoreModels"
 	}
 	
-    component = @JavaGenerator auto-inject {}
-    component = @CppGenerator auto-inject {}
+    component = @JavaGenerator auto-inject {
+        generatedProjectBasePackage = generatedProjectBasePackage
+        targetSimulatorProject = "${targetSimulatorProjectBaseName}.java"
+    }
+    component = @CppGenerator auto-inject {
+        generatedProjectBasePackage = generatedProjectBasePackage
+        targetSimulatorProject = "${targetSimulatorProjectBaseName}.cpp"
+    }
 }
