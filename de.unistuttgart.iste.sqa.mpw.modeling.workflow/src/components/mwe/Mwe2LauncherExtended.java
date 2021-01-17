@@ -28,6 +28,7 @@ import com.google.inject.Injector;
  * It is used to allow that a mwe2 workflow is able to call another mwe2 workflow, which is not possible directly by Maven.
  * 
  * Note: with Tycho / maven-exec the classpath is not correctly set, so the normal Mwe2Launcher is "confused" and does not find other mwe2 files.
+ * Note: this class is not refactored for Clean Code style, since it is copied from the original and the symmetry shall be retained.
  * 
  * See: https://www.eclipse.org/forums/index.php/t/1084909/
  */

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,9 @@ class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
 	}
 	
 	private List<String> getAdditionalJars(String path) throws IOException {
+		if (!Files.isDirectory(Path.of(path))) {
+			return Arrays.asList(path);
+		}
         return Files.list(Path.of(path))
         		.map(p -> p.toAbsolutePath().toString())
         		.filter(p -> p.endsWith("jar"))
