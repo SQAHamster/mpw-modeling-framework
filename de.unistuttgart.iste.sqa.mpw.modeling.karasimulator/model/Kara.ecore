@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="kara" nsURI="http://www.mpw.uni-stuttgart.de/kara" nsPrefix="kara">
+  <eClassifiers xsi:type="ecore:EClass" name="Kara" eSuperTypes="../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="World" eSuperTypes="../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Stage">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="kara" lowerBound="1" eType="#//Kara"
+        changeable="false" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Leaf" eSuperTypes="../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Prop"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Mushroom" eSuperTypes="../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Prop"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Tree" eSuperTypes="../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Prop"/>
+  <eClassifiers xsi:type="ecore:EClass" name="KaraGame" eSuperTypes="../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//MiniProgrammingWorld">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="world" lowerBound="1" eType="#//World"
+        changeable="false" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

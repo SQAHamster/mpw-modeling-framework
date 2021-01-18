@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_MFrY0CZjEeuiY_E2amZoVQ" name="putLeaf" description="Drop a random grain object from the kara's mouth.">
+  <imports href="../../model/Kara.ecore#/"/>
+  <imports href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#/"/>
+  <units xsi:type="henshin:Rule" xmi:id="_hCUK0CZjEeuiY_E2amZoVQ" name="putLeaf">
+    <lhs xmi:id="_hCXOICZjEeuiY_E2amZoVQ" name="Lhs">
+      <nodes xmi:id="_kg6YoCZjEeuiY_E2amZoVQ" name="self" outgoing="_rkhlUCZjEeuiY_E2amZoVQ">
+        <type href="../../model/Kara.ecore#//Kara"/>
+      </nodes>
+      <nodes xmi:id="_ookxkCZjEeuiY_E2amZoVQ" name="position" incoming="_rkhlUCZjEeuiY_E2amZoVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile"/>
+      </nodes>
+      <nodes xmi:id="_teEg4CZjEeuiY_E2amZoVQ" name="leaf">
+        <type href="../../model/Kara.ecore#//Leaf"/>
+      </nodes>
+      <edges xmi:id="_rkhlUCZjEeuiY_E2amZoVQ" source="_kg6YoCZjEeuiY_E2amZoVQ" target="_ookxkCZjEeuiY_E2amZoVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//TileContent/currentTile"/>
+      </edges>
+    </lhs>
+    <rhs xmi:id="_hCXOISZjEeuiY_E2amZoVQ" name="Rhs">
+      <nodes xmi:id="_kg6YoSZjEeuiY_E2amZoVQ" name="self" outgoing="_rkhlUSZjEeuiY_E2amZoVQ">
+        <type href="../../model/Kara.ecore#//Kara"/>
+      </nodes>
+      <nodes xmi:id="_ookxkSZjEeuiY_E2amZoVQ" name="position" incoming="_rkhlUSZjEeuiY_E2amZoVQ" outgoing="_uyKmACZjEeuiY_E2amZoVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile"/>
+      </nodes>
+      <nodes xmi:id="_teGWECZjEeuiY_E2amZoVQ" name="leaf" incoming="_uyKmACZjEeuiY_E2amZoVQ">
+        <type href="../../model/Kara.ecore#//Leaf"/>
+      </nodes>
+      <edges xmi:id="_rkhlUSZjEeuiY_E2amZoVQ" source="_kg6YoSZjEeuiY_E2amZoVQ" target="_ookxkSZjEeuiY_E2amZoVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//TileContent/currentTile"/>
+      </edges>
+      <edges xmi:id="_uyKmACZjEeuiY_E2amZoVQ" source="_ookxkSZjEeuiY_E2amZoVQ" target="_teGWECZjEeuiY_E2amZoVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile/contents"/>
+      </edges>
+    </rhs>
+    <mappings xmi:id="_kg6YoiZjEeuiY_E2amZoVQ" origin="_kg6YoCZjEeuiY_E2amZoVQ" image="_kg6YoSZjEeuiY_E2amZoVQ"/>
+    <mappings xmi:id="_ookxkiZjEeuiY_E2amZoVQ" origin="_ookxkCZjEeuiY_E2amZoVQ" image="_ookxkSZjEeuiY_E2amZoVQ"/>
+    <mappings xmi:id="_teGWESZjEeuiY_E2amZoVQ" origin="_teEg4CZjEeuiY_E2amZoVQ" image="_teGWECZjEeuiY_E2amZoVQ"/>
+  </units>
+</henshin:Module>

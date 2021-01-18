@@ -1,0 +1,7 @@
+context Kara::removeLeaf
+
+/** there has to be a leaf available on the kara's tile */
+precondition: self.onLeaf();
+
+/** the kara must not be on any leaf */
+postcondition: !self.onLeaf();

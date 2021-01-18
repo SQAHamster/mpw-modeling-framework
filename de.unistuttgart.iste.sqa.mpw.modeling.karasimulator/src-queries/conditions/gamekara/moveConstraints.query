@@ -1,0 +1,4 @@
+context Kara::move
+
+/** Kara's front must not be blocked or outside world */
+precondition: !self.treeFront();
