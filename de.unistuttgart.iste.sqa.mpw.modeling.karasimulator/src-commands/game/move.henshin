@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_NOYy8CXXEeuHDMx4P4HuOA" name="move" description="Move the kara one step towards its looking direction.">
-  <imports href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#/"/>
   <imports href="../../model/Kara.ecore#/"/>
+  <imports href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#/"/>
   <units xsi:type="henshin:Rule" xmi:id="_CYLcYCXtEeuiY_E2amZoVQ" name="moveNorth">
     <lhs xmi:id="_CYnhQCXtEeuiY_E2amZoVQ" name="Lhs">
       <nodes xmi:id="_dOn6YCXtEeuiY_E2amZoVQ" name="self" outgoing="_9-lUACXuEeuiY_E2amZoVQ">
@@ -181,5 +181,83 @@
     <mappings xmi:id="_FUGCXyZhEeuiY_E2amZoVQ" origin="_FUGCUyZhEeuiY_E2amZoVQ" image="_FUGCWSZhEeuiY_E2amZoVQ"/>
     <mappings xmi:id="_FUGCYCZhEeuiY_E2amZoVQ" origin="_FUGCVCZhEeuiY_E2amZoVQ" image="_FUGCWiZhEeuiY_E2amZoVQ"/>
     <mappings xmi:id="_FUGCYSZhEeuiY_E2amZoVQ" origin="_FUGCVSZhEeuiY_E2amZoVQ" image="_FUGCWyZhEeuiY_E2amZoVQ"/>
+  </units>
+  <units xsi:type="henshin:SequentialUnit" xmi:id="_bTeXoFp3EeuLJbiulVkCVQ" name="move" subUnits="_O1BA8Fp5EeuLJbiulVkCVQ _rnWZUFp4EeuLJbiulVkCVQ"/>
+  <units xsi:type="henshin:PriorityUnit" xmi:id="_rnWZUFp4EeuLJbiulVkCVQ" name="moveKara" subUnits="_FUGCUSZhEeuiY_E2amZoVQ _CYLcYCXtEeuiY_E2amZoVQ _o4x4ICZgEeuiY_E2amZoVQ _p5lN8iZgEeuiY_E2amZoVQ"/>
+  <units xsi:type="henshin:PriorityUnit" xmi:id="_O1BA8Fp5EeuLJbiulVkCVQ" name="moveMushroom" subUnits="_fob60Fp5EeuLJbiulVkCVQ _KE3AcFqAEeuLJbiulVkCVQ"/>
+  <units xsi:type="henshin:Rule" xmi:id="_fob60Fp5EeuLJbiulVkCVQ" name="moveMushroomNorth">
+    <lhs xmi:id="_foe-IFp5EeuLJbiulVkCVQ" name="Lhs">
+      <nodes xmi:id="_63zPIFp5EeuLJbiulVkCVQ" name="self" outgoing="_fRDG0Fp_EeuLJbiulVkCVQ">
+        <type href="../../model/Kara.ecore#//Kara"/>
+        <attributes xmi:id="_ZuD_YFp_EeuLJbiulVkCVQ" value="&quot;NORTH&quot;">
+          <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor/direction"/>
+        </attributes>
+      </nodes>
+      <nodes xmi:id="_Okyk4Fp_EeuLJbiulVkCVQ" name="current" incoming="_fRDG0Fp_EeuLJbiulVkCVQ" outgoing="_qJvHoFp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile"/>
+      </nodes>
+      <nodes xmi:id="_Xm8h4Fp_EeuLJbiulVkCVQ" incoming="_uifQkFp_EeuLJbiulVkCVQ">
+        <type href="../../model/Kara.ecore#//Mushroom"/>
+      </nodes>
+      <nodes xmi:id="_mkvW4Fp_EeuLJbiulVkCVQ" name="front" incoming="_qJvHoFp_EeuLJbiulVkCVQ" outgoing="_uifQkFp_EeuLJbiulVkCVQ _7uxEoFp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile"/>
+      </nodes>
+      <nodes xmi:id="_2Y7oYFp_EeuLJbiulVkCVQ" name="behind" incoming="_7uxEoFp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile"/>
+      </nodes>
+      <edges xmi:id="_fRDG0Fp_EeuLJbiulVkCVQ" source="_63zPIFp5EeuLJbiulVkCVQ" target="_Okyk4Fp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//TileContent/currentTile"/>
+      </edges>
+      <edges xmi:id="_qJvHoFp_EeuLJbiulVkCVQ" source="_Okyk4Fp_EeuLJbiulVkCVQ" target="_mkvW4Fp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile/north"/>
+      </edges>
+      <edges xmi:id="_uifQkFp_EeuLJbiulVkCVQ" source="_mkvW4Fp_EeuLJbiulVkCVQ" target="_Xm8h4Fp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile/contents"/>
+      </edges>
+      <edges xmi:id="_7uxEoFp_EeuLJbiulVkCVQ" source="_mkvW4Fp_EeuLJbiulVkCVQ" target="_2Y7oYFp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile/north"/>
+      </edges>
+    </lhs>
+    <rhs xmi:id="_foe-IVp5EeuLJbiulVkCVQ" name="Rhs">
+      <nodes xmi:id="_630dQFp5EeuLJbiulVkCVQ" name="self" outgoing="_fRDG0Vp_EeuLJbiulVkCVQ">
+        <type href="../../model/Kara.ecore#//Kara"/>
+        <attributes xmi:id="_ZuD_YVp_EeuLJbiulVkCVQ" value="&quot;NORTH&quot;">
+          <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Actor/direction"/>
+        </attributes>
+      </nodes>
+      <nodes xmi:id="_Okyk4Vp_EeuLJbiulVkCVQ" name="current" incoming="_fRDG0Vp_EeuLJbiulVkCVQ" outgoing="_qJvHoVp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile"/>
+      </nodes>
+      <nodes xmi:id="_Xm8h4Vp_EeuLJbiulVkCVQ" outgoing="_-cFmgFp_EeuLJbiulVkCVQ">
+        <type href="../../model/Kara.ecore#//Mushroom"/>
+      </nodes>
+      <nodes xmi:id="_mkvW4Vp_EeuLJbiulVkCVQ" name="front" incoming="_qJvHoVp_EeuLJbiulVkCVQ" outgoing="_7uxEoVp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile"/>
+      </nodes>
+      <nodes xmi:id="_2Y7oYVp_EeuLJbiulVkCVQ" name="behind" incoming="_7uxEoVp_EeuLJbiulVkCVQ _-cFmgFp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile"/>
+      </nodes>
+      <edges xmi:id="_fRDG0Vp_EeuLJbiulVkCVQ" source="_630dQFp5EeuLJbiulVkCVQ" target="_Okyk4Vp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//TileContent/currentTile"/>
+      </edges>
+      <edges xmi:id="_qJvHoVp_EeuLJbiulVkCVQ" source="_Okyk4Vp_EeuLJbiulVkCVQ" target="_mkvW4Vp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile/north"/>
+      </edges>
+      <edges xmi:id="_7uxEoVp_EeuLJbiulVkCVQ" source="_mkvW4Vp_EeuLJbiulVkCVQ" target="_2Y7oYVp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Tile/north"/>
+      </edges>
+      <edges xmi:id="_-cFmgFp_EeuLJbiulVkCVQ" source="_Xm8h4Vp_EeuLJbiulVkCVQ" target="_2Y7oYVp_EeuLJbiulVkCVQ">
+        <type href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//TileContent/currentTile"/>
+      </edges>
+    </rhs>
+    <mappings xmi:id="_630dQVp5EeuLJbiulVkCVQ" origin="_63zPIFp5EeuLJbiulVkCVQ" image="_630dQFp5EeuLJbiulVkCVQ"/>
+    <mappings xmi:id="_OkzL8Fp_EeuLJbiulVkCVQ" origin="_Okyk4Fp_EeuLJbiulVkCVQ" image="_Okyk4Vp_EeuLJbiulVkCVQ"/>
+    <mappings xmi:id="_Xm8h4lp_EeuLJbiulVkCVQ" origin="_Xm8h4Fp_EeuLJbiulVkCVQ" image="_Xm8h4Vp_EeuLJbiulVkCVQ"/>
+    <mappings xmi:id="_mkvW4lp_EeuLJbiulVkCVQ" origin="_mkvW4Fp_EeuLJbiulVkCVQ" image="_mkvW4Vp_EeuLJbiulVkCVQ"/>
+    <mappings xmi:id="_2Y7oYlp_EeuLJbiulVkCVQ" origin="_2Y7oYFp_EeuLJbiulVkCVQ" image="_2Y7oYVp_EeuLJbiulVkCVQ"/>
+  </units>
+  <units xsi:type="henshin:Rule" xmi:id="_KE3AcFqAEeuLJbiulVkCVQ" name="dummy">
+    <lhs xmi:id="_KE4OkFqAEeuLJbiulVkCVQ" name="Lhs"/>
+    <rhs xmi:id="_KE4OkVqAEeuLJbiulVkCVQ" name="Rhs"/>
   </units>
 </henshin:Module>
