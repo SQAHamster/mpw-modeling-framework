@@ -4,57 +4,67 @@
 «EXTENSION template::GeneratorExtensions»
 
 «DEFINE UnitExpand FOR Unit»
-    «IF mainUnit»@Override«ENDIF-»
-    «getVisibility()» void «name»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
     «IF mainUnit-»
+    @Override
+    public void execute() {
         «EXPAND PreconditionsDefinition FOR this»
         «EXPAND OldValueVariablesDefinition FOR this»
-    «ENDIF-»
-    «IF mainUnit && getParentTransformation().isActorCommand()-»
-        gameLog.write("«getParentTransformation().toLogMessage()»");
-    «ENDIF-»
-    «EXPAND UnitExpandBody FOR this»
-    «IF mainUnit-»
+        
+	    «IF getParentTransformation().isActorCommand()-»
+	        gameLog.write("«getParentTransformation().toLogMessage()»");
+	    «ENDIF-»
+	    
+	    if (!internalMainRule()) {
+	        throw new RuntimeException("Transformation was not successfully executed: «getParentTransformation().name»");
+	    }
+        
         «EXPAND PostconditionsDefinition FOR this»
+    }
     «ENDIF-»
+    private boolean «IF mainUnit»internalMainRule«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
+        «EXPAND UnitExpandBody FOR this»
     }
     «EXPAND PostUnitExpand FOR this»
 «ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR Unit»«ENDDEFINE»
 
-«DEFINE UnitExpandBody FOR ConditionalUnit»
-    if«FOREACH conditions AS c SEPARATOR " else if "-»
-    («EXPAND template::QueriesTemplate::ExpressionDefinition FOR c.condition») {
-    «EXPAND UnitInvokeExpand FOR c.unit»
+«DEFINE UnitExpandBody FOR IfElseUnit»
+    if («EXPAND InvocationCall FOR ifInvocation») {
+        return «EXPAND InvocationCall FOR thenInvocation»;
+    }
+    return «EXPAND InvocationCall FOR elseInvocation»;
+«ENDDEFINE»
+
+«DEFINE UnitExpandBody FOR PriorityChainUnit»
+    if«FOREACH conditionalInvocations AS i SEPARATOR " else if "-»
+    («EXPAND InvocationCall FOR i») {
+        return true;
     }
     «ENDFOREACH»
+    return false;
 «ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR SequentialUnit»
-    «EXPAND UnitInvokeExpand FOR this»
+    «FOREACH targetInvocations AS i-»
+    if (!«EXPAND InvocationCall FOR i») {
+        return false;
+    }
+    «ENDFOREACH-»
+    return true;
 «ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR IteratedUnit»
-    «EXPAND UnitInvokeExpand FOR this»
-«ENDDEFINE»
-
-«DEFINE UnitInvokeExpand FOR Unit»«ENDDEFINE»
-
-«DEFINE UnitInvokeExpand FOR SequentialUnit»
-    «FOREACH targetInvocations AS i»
-    «i.targetMethodName»(«FOREACH i.mappedParameters AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
-    «ENDFOREACH»
-«ENDDEFINE»
-
-«DEFINE UnitInvokeExpand FOR IteratedUnit»
     for (int i = 0; i < («repeat»); i++) {
-        «targetInvocation.targetMethodName»(«FOREACH targetInvocation.mappedParameters AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
+        if (!«EXPAND InvocationCall FOR targetInvocation») {
+            return false;
+        }
     }
+    return true;
 «ENDDEFINE»
 
-«DEFINE UnitInvokeExpand FOR Rule»
-    «name»();
+«DEFINE InvocationCall FOR Invocation»
+    «targetMethodName»(«FOREACH mappedParameters AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
 «ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR Rule»
@@ -67,6 +77,7 @@
     «EXPAND ClearModificationDefinition FOREACH modifications.select(m|m.action == Action::CLEAR)»
     «EXPAND CreateModificationDefinition FOREACH modifications.select(m|m.action == Action::CREATE)»
     «EXPAND AttributeModificationDefinition FOREACH modifications.select(m|m.action == Action::MODIFY)»
+    return true;
 «ENDDEFINE»
 
 «DEFINE PostUnitExpand FOR Unit»«ENDDEFINE»
@@ -103,7 +114,9 @@
     «IF !this.isCreate && !this.isForbid»
         // new variable from reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
         «this.target.instanceType.name» «this.target.variableName» = «this.source.variableName».«getter(this.referenceName)»();
-        assertInstanceNotNull("«this.source.variableName».«this.referenceName»", «this.target.variableName»);
+        if («this.target.variableName» == null) {
+            return false;
+        }
     «ENDIF»
 «ENDDEFINE»
 
@@ -112,6 +125,9 @@
         // find new variable from many-reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
         «LET (Rule)this.eContainer AS rule»
         «this.target.instanceType.name» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.variableName»);
+        if («this.target.variableName» == null) {
+            return false;
+        }
         «ENDLET»
     «ENDIF»
 «ENDDEFINE»
@@ -131,7 +147,9 @@
         «ENDIF-»
     «ELSE»  
         // assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
-        assertAttributeCondition("«instance.variableName».«attributeName-» == «attributeValueLiteral»", «instance.variableName».«attributeName.getter()»() == «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+        if («instance.variableName».«attributeName.getter()»() != «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
+            return false;
+        }
     «ENDIF»
 «ENDDEFINE»
 
@@ -196,7 +214,6 @@
             result = «this.target.variableName»;
             break;
         }
-        assertObjectFound("«this.referenceName»", "«this.target.instanceType.name»", result);
         return result;
     }
     

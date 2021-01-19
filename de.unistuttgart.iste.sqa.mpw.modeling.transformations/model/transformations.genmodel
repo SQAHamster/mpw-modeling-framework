@@ -87,16 +87,17 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//IteratedUnit/repeat"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//IteratedUnit/targetInvocation"/>
     </genClasses>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//PriorityChainUnit">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//PriorityChainUnit/conditionalInvocations"/>
+    </genClasses>
+    <genClasses ecoreClass="CommandBehaviors.ecore#//IfElseUnit">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//IfElseUnit/ifInvocation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//IfElseUnit/thenInvocation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//IfElseUnit/elseInvocation"/>
+    </genClasses>
     <genClasses ecoreClass="CommandBehaviors.ecore#//Invocation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//Invocation/targetMethodName"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Invocation/mappedParameters"/>
-    </genClasses>
-    <genClasses ecoreClass="CommandBehaviors.ecore#//ConditionalUnit">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//ConditionalUnit/conditions"/>
-    </genClasses>
-    <genClasses ecoreClass="CommandBehaviors.ecore#//Condition">
-      <genFeatures createChild="false" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Condition/condition"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//Condition/unit"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="GenerationAnnotations" disposableProviderFactory="true" ecorePackage="GenerationAnnotations.ecore#/">
@@ -181,6 +182,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VariableDefinitionAnnotation/variableName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//VariableDefinitionAnnotation/variableTypeName"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GenerationAnnotations.ecore#//VariableDefinitionAnnotation/rhs"/>
+    </genClasses>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//FeatureGenerationAnnotation"/>
+    <genClasses ecoreClass="GenerationAnnotations.ecore#//PropertyKindAnnotation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GenerationAnnotations.ecore#//PropertyKindAnnotation/isObservable"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Query" disposableProviderFactory="true" ecorePackage="QueryBehaviors.ecore#/">

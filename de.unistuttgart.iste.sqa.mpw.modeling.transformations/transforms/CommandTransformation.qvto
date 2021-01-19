@@ -69,7 +69,9 @@ helper String::toRole() : String {
 mapping Henshin::Unit::toUnit() : CommandModel::Unit
 	disjuncts Henshin::Rule::toRule,
 	          Henshin::IteratedUnit::toIteratedUnit,
-	          Henshin::SequentialUnit::toSequentialUnit;
+	          Henshin::SequentialUnit::toSequentialUnit,
+              Henshin::ConditionalUnit::toIfElseUnit,
+              Henshin::PriorityUnit::toConditionalUnit;
 
 mapping Henshin::Rule::toRule() : CommandModel::Rule {
   number := 0;
@@ -139,6 +141,20 @@ mapping Henshin::SequentialUnit::toSequentialUnit() : CommandModel::SequentialUn
   name := self.name;
   parameters := self.parameters->map toParameter();
   targetInvocations := self.subUnits->map toInvocation(self);
+}
+
+mapping Henshin::ConditionalUnit::toIfElseUnit() : CommandModel::IfElseUnit {
+  name := self.name;
+  parameters := self.parameters->map toParameter();
+  ifInvocation := self._if.map toInvocation(self);
+  thenInvocation := self._then.map toInvocation(self);
+  elseInvocation := self._else.map toInvocation(self);
+}
+
+mapping Henshin::PriorityUnit::toConditionalUnit() : CommandModel::PriorityChainUnit {
+  name := self.name;
+  parameters := self.parameters->map toParameter();
+  conditionalInvocations := self.subUnits->map toInvocation(self);
 }
 
 mapping Henshin::Unit::toInvocation(parentUnit: Henshin::Unit) : CommandModel::Invocation {
@@ -344,17 +360,16 @@ mapping Henshin::Attribute::toAttributeModifications() : CommandModel::Modificat
 }
 
 helper createConditionalMainUnitForRules(inout m: CommandModel::Transformation) : CommandModel::Unit {
-  var mainUnit = object CommandModel::ConditionalUnit {
-  	name := m.name;
+  var mainUnit = object CommandModel::PriorityChainUnit {
+  	  name := m.name;
   };
   m.units += mainUnit;
-  mainUnit.conditions := m.units[CommandModel::Rule]->map toCondition();
+  mainUnit.conditionalInvocations := m.units[CommandModel::Rule]->map toParameterlessInvocation();
   return mainUnit;
 }
 
-mapping CommandModel::Rule::toCondition() : CommandModel::Condition {
-  unit := self;
-  condition := self.createAttributeConditionExpression();
+mapping CommandModel::Rule::toParameterlessInvocation() : CommandModel::Invocation {
+  targetMethodName := self.name;
 }
 
 helper CommandModel::Rule::createAttributeConditionExpression() : QueryModel::Expression {
