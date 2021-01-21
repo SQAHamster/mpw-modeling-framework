@@ -1,6 +1,6 @@
 context Kara
 /** Checks if a tree is at the right of the kara. */
-query treeLeft: 
+query treeRight: 
         ( self.direction = WEST  implies self.currentTile.north.contents->typeSelect(Tree)->notEmpty() )
     and ( self.direction = EAST  implies self.currentTile.south.contents->typeSelect(Tree)->notEmpty() )
     and ( self.direction = NORTH implies self.currentTile.east.contents->typeSelect(Tree)->notEmpty() )
