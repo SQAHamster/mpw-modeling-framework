@@ -19,7 +19,7 @@
 «DEFINE JavaClass FOR EClass-»
     «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
     
-    import de.unistuttgart.hamster.mpw.*;
+    import «getModulePackage()».mpw.*;
     «EXPAND ImportTypeGenerationAnnotation FOREACH eAnnotations.typeSelect(ImportTypeAnnotation)»
     
     public class «name» {

@@ -6,12 +6,12 @@
 «DEFINE main FOR Transformation»
     «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Command.java"»package «this.getCommandJavaPackageName()»;
     	
-    	import de.unistuttgart.hamster.framework.*;
-        import static de.unistuttgart.hamster.framework.FrameworkAssert.*;
+    	import «getModulePackage()».framework.*;
+        import static «getModulePackage()».framework.FrameworkAssert.*;
     	«EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
     	import «getModulePackage()».mpw.*;
     	import «getModulePackage()».commands.*;
-    	import de.unistuttgart.hamster.commands.impl.*;
+    	import «getModulePackage()».commands.impl.*;
     	import static «getModulePackage()».mpw.Direction.*;
     	import java.util.stream.Collectors;
     	
