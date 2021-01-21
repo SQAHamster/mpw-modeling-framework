@@ -113,23 +113,55 @@
 «DEFINE SingleReferenceDefinition FOR SingleReferenceCondition»
     «IF !this.isCreate && !this.isForbid»
         // new variable from reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
-        «this.target.instanceType.name» «this.target.variableName» = «this.source.variableName».«getter(this.referenceName)»();
-        if («this.target.variableName» == null) {
-            return false;
-        }
+        «IF useForExploring-»
+            «EXPAND ExploreSingleReferenceDefinition FOR this-»
+        «ELSE-»
+            «EXPAND CheckSingleReferenceDefinition FOR this-»
+        «ENDIF-»
     «ENDIF»
+«ENDDEFINE»
+
+«REM»Use a single reference to reach a new instance and store it as a variable«ENDREM»
+«DEFINE ExploreSingleReferenceDefinition FOR SingleReferenceCondition»
+    «this.target.instanceType.name» «this.target.variableName» = «this.source.variableName».«getter(this.referenceName)»();
+    if («this.target.variableName» == null) {
+        return false;
+    }
+«ENDDEFINE»
+
+«REM»Use a single reference only for checking an already reached instance«ENDREM»
+«DEFINE CheckSingleReferenceDefinition FOR SingleReferenceCondition»
+    if («this.target.variableName» != «this.source.variableName».«getter(this.referenceName)»()) {
+        return false;
+    }
 «ENDDEFINE»
 
 «DEFINE ManyReferenceDefinition FOR ManyReferenceCondition»
     «IF !this.isCreate»
         // find new variable from many-reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
         «LET (Rule)this.eContainer AS rule»
-        «this.target.instanceType.name» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.variableName»);
-        if («this.target.variableName» == null) {
-            return false;
-        }
+        «IF useForExploring-»
+            «EXPAND ExploreManyReferenceDefinition(rule) FOR this-»
+        «ELSE-»
+            «EXPAND CheckManyReferenceDefinition(rule) FOR this-»
+        «ENDIF-»
         «ENDLET»
     «ENDIF»
+«ENDDEFINE»
+
+«REM»Use a many reference to reach (find) a new instance and store it as a variable«ENDREM»
+«DEFINE ExploreManyReferenceDefinition(Rule rule) FOR ManyReferenceCondition»
+    «this.target.instanceType.name» «this.target.variableName» = «rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.variableName»);
+    if («this.target.variableName» == null) {
+        return false;
+    }
+«ENDDEFINE»
+
+«REM»Use a many reference only for checking an already reached instance, if it is contained in the collection«ENDREM»
+«DEFINE CheckManyReferenceDefinition(Rule rule) FOR ManyReferenceCondition»
+    if (!«source.variableName».«getter(this.referenceName)»().contains(«this.target.variableName»)) {
+        return false;
+    }
 «ENDDEFINE»
 
 «DEFINE VariableAssignmentDefinition FOR VariableAssignment»

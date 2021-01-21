@@ -58,6 +58,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//ReferenceCondition/referenceName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//ReferenceCondition/isCreate"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference CommandBehaviors.ecore#//ReferenceCondition/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//ReferenceCondition/useForExploring"/>
     </genClasses>
     <genClasses ecoreClass="CommandBehaviors.ecore#//SingleReferenceCondition">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute CommandBehaviors.ecore#//SingleReferenceCondition/isForbid"/>

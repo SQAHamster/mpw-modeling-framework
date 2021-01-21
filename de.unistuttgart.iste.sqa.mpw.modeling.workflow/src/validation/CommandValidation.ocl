@@ -6,7 +6,7 @@ context Module
 
 -- all rules need a "self" instance
 def: allRules : Sequence(Rule) = units->select(oclIsTypeOf(Rule))->collect(oclAsType(Rule))
-inv allRulesHaveThis: allRules ->forAll(lhs.nodes->exists(n|n.name = 'self'))
+inv allRulesHaveSelf: allRules ->forAll(lhs.nodes->exists(n|n.name = 'self'))
 
 -- if there is no single main unit, each rule has to be distinguishable by attribute conditions on this
 def: noSingleMainUnit : Boolean = (units->size() > 1 and units->forAll(oclIsTypeOf(Rule)))

@@ -75,6 +75,12 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isCreate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useForExploring" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This flag indicates if this reference is used to find the target object in the lhs graph. This is especially used if multiple paths are possible to reach an object."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SingleReferenceCondition" eSuperTypes="#//ReferenceCondition">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isForbid" lowerBound="1"

@@ -79,6 +79,7 @@ mapping Input::Statement::toQueryStatement() : QueryModel::QueryStatement merges
     type := _query.type;
     parameterNames := self.methodCall.parameters;
     isOptional := _query.isOptional;
+    debugName := _query.name;
 }
 
 mapping Input::Statement::toFeatureStatement() : QueryModel::FeatureStatement merges Input::Statement::toStatementBase

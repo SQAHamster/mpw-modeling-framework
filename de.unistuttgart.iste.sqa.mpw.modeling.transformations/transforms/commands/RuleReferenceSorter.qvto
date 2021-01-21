@@ -30,6 +30,7 @@ helper CommandModel::Rule::sortReferences(): OrderedSet(ReferenceCondition) {
 		remainingReferences->forEach(r) {
 			if (reachableInstances->includes(r.source) and not reachableInstances->includes(r.target)) {
 				reachableInstances += r.target;
+				r.useForExploring := true;
 			} endif;
 			
 			if (reachableInstances->includes(r.source) and reachableInstances->includes(r.target)) {

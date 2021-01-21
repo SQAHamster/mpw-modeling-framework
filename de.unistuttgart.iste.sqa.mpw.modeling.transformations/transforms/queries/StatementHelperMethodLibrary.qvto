@@ -2,6 +2,7 @@ import types.EmfHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
+modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
 /**
@@ -9,19 +10,20 @@ modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
   */
 library StatementHelperMethodLibrary;
 
-query StatementsExpression::needsHelperMethod() : Boolean {
+query QueryModel::StatementsExpression::needsHelperMethod() : Boolean {
     return self.statements->exists(s|s.oclIsTypeOf(IntermediaryResultStatement));
 }
 
-query Statement::hasNext() : Boolean {
+query QueryModel::Statement::hasNext() : Boolean {
     return self.next != null;
 }
 
-query StatementsExpression::getHelperMethodName() : String {
+query QueryModel::StatementsExpression::getHelperMethodName() : String {
     var name := "helper";
     
-    if (self.module() <> null) {
-    	name := name + "_" + self.module().name;
+    var parentElementName := self.parentElement().name;
+    if (not parentElementName.oclIsInvalid() and parentElementName <> null) {
+    	name := name + "_" + self.parentElement().name.firstToUpper();
     };
     
     self.statements[IntermediaryResultStatement]->collect(s|s.internalStatementsExpression.statements)
@@ -51,9 +53,20 @@ query StatementsExpression::getHelperMethodName() : String {
             };
     	};
     };
+    
+    assert(name != null);
     return name;
 }
 
-query QueryModel::StatementsExpression::module() : QueryModel::Module {
-    return self.root().oclAsType(QueryModel::Module);
+query QueryModel::StatementsExpression::parentElement() : Input::Element {
+    var inputStatementExpression := self.invresolveone(Input::StatementsExpression);
+    return inputStatementExpression.parentElement();
+}
+
+query Input::StatementsExpression::parentElement() : Input::Element {
+    var current := self.container();
+    while (current != null and not current.oclIsKindOf(Input::Element)) {
+        current := current.container();
+    };
+    return current.oclAsType(Input::Element);
 }
