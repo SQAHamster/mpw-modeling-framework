@@ -1,4 +1,4 @@
 context World
 /** For a given location, return the internal tile object. */
 internal query getTileAt(location: Location): 
-    self.tiles->at(location.row * self.territorySize.columnCount + location.column);
+    self.tiles->at(location.row * self.stageSize.columnCount + location.column);

@@ -31,7 +31,7 @@
         eType="#//Tile" containment="true" eOpposite="#//Tile/stage"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tileContents" upperBound="-1"
         eType="#//TileContent" containment="true" eOpposite="#//TileContent/stage"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="territorySize" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stageSize" lowerBound="1"
         eType="#//Size" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MiniProgrammingWorld" abstract="true">

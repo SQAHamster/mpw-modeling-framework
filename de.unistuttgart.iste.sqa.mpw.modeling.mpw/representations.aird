@@ -22,7 +22,7 @@
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="model/stereotypes/ViewModel.ecore#/"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_in4rARxeEeuBToo0ySntrA" name="mpw class diagram" repPath="#_in210BxeEeuBToo0ySntrA" changeId="737d3979-97da-46cf-b431-09fa1876ceaf">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_in4rARxeEeuBToo0ySntrA" name="mpw class diagram" repPath="#_in210BxeEeuBToo0ySntrA" changeId="373e5cfb-8d98-4399-8dfc-cd1c7f32937f">
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="model/MiniProgrammingWorld.ecore#/"/>
       </ownedRepresentationDescriptors>
@@ -1248,9 +1248,9 @@
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']"/>
       </ownedElements>
     </ownedDiagramElements>
-    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_zjtuEFHUEeuLJbiulVkCVQ" name="[1..1] territorySize" sourceNode="_RYysUBxfEeuBToo0ySntrA" targetNode="_cHyPIFHUEeuLJbiulVkCVQ">
-      <target xmi:type="ecore:EReference" href="model/MiniProgrammingWorld.ecore#//Stage/territorySize"/>
-      <semanticElements xmi:type="ecore:EReference" href="model/MiniProgrammingWorld.ecore#//Stage/territorySize"/>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_zjtuEFHUEeuLJbiulVkCVQ" name="[1..1] stageSize" sourceNode="_RYysUBxfEeuBToo0ySntrA" targetNode="_cHyPIFHUEeuLJbiulVkCVQ">
+      <target xmi:type="ecore:EReference" href="model/MiniProgrammingWorld.ecore#//Stage/stageSize"/>
+      <semanticElements xmi:type="ecore:EReference" href="model/MiniProgrammingWorld.ecore#//Stage/stageSize"/>
       <ownedStyle xmi:type="diagram:EdgeStyle" uid="_6TWAFlHaEeuLJbiulVkCVQ" description="_Uw8S6B0uEeuBToo0ySntrA" sourceArrow="FillDiamond" routingStyle="manhattan" strokeColor="0,0,0">
         <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_6TWAGFHaEeuLJbiulVkCVQ" showIcon="false">
           <labelFormat>bold</labelFormat>

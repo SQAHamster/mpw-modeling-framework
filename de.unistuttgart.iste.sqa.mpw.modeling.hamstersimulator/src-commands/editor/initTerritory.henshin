@@ -472,7 +472,7 @@
         </attributes>
       </nodes>
       <edges xmi:id="_GsECgFHWEeuLJbiulVkCVQ" source="_uay4UDf9Eeu0KvmSgTDkRg" target="_8qB84FHVEeuLJbiulVkCVQ">
-        <type href="platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Stage/territorySize"/>
+        <type href="platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#//Stage/stageSize"/>
       </edges>
     </rhs>
     <mappings xmi:id="_uay4UTf9Eeu0KvmSgTDkRg" origin="_uaxqMDf9Eeu0KvmSgTDkRg" image="_uay4UDf9Eeu0KvmSgTDkRg"/>

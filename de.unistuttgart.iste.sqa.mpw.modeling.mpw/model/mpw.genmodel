@@ -140,7 +140,7 @@
     <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//Stage">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/tiles"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/tileContents"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/territorySize"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//Stage/stageSize"/>
     </genClasses>
     <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//MiniProgrammingWorld">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/stage"/>

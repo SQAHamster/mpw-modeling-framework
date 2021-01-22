@@ -6,4 +6,4 @@ precondition:
 
 /** size of territory is set */
 postcondition: 
-    self.territorySize.columnCount = columns and self.territorySize.rowCount = rows;
+    self.stageSize.columnCount = columns and self.stageSize.rowCount = rows;
