@@ -1,7 +1,7 @@
-package de.unistuttgart.hamster.hamsterviewmodel.impl;
+package de.unistuttgart.hamster.viewmodel.impl;
 
-import de.unistuttgart.hamster.hamsterviewmodel.ViewModelCell;
-import de.unistuttgart.hamster.hamsterviewmodel.GameViewModel;
+import de.unistuttgart.hamster.viewmodel.ViewModelCell;
+import de.unistuttgart.hamster.viewmodel.GameViewModel;
 import de.unistuttgart.hamster.mpw.Size;
 
 public class GameViewModelImpl extends GameViewModel {

@@ -10,7 +10,7 @@ public:
 
 	GameLogImpl();
 
-	void write(std::string message) override;
+    void write(std::shared_ptr<mpw::Actor> actor, std::string message) override;
 
 };
 

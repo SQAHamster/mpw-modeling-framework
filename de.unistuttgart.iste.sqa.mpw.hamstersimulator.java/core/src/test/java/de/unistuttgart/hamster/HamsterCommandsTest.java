@@ -9,9 +9,13 @@ import de.unistuttgart.hamster.framework.CommandConstraintException;
 import de.unistuttgart.hamster.hamster.*;
 import de.unistuttgart.hamster.mpw.Direction;
 import de.unistuttgart.hamster.mpw.Location;
+import de.unistuttgart.hamster.mpw.LogEntry;
 import de.unistuttgart.hamster.mpw.Tile;
 import de.unistuttgart.hamster.util.GameStringifier;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class HamsterCommandsTest {
 	private HamsterGame game;
@@ -337,9 +341,15 @@ public class HamsterCommandsTest {
 	}
 
 	private void assertGameLog(String...expectedStrings) {
-		String actual = String.join("|", game.getGameLog().getLogEntries());
+		String actual = String.join("|", getLogMessages());
 		String expected = String.join("|", expectedStrings);
 		assertEquals(expected, actual);
+	}
+
+	private Collection<String> getLogMessages() {
+		return game.getGameLog().getLogEntries().stream()
+				.map(LogEntry::getMessage)
+				.collect(Collectors.toList());
 	}
 
 	private Tile getTileAt(int columnIndex, int rowIndex) {

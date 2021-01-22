@@ -10,10 +10,11 @@
 #include "Wall.h"
 #include "Grain.h"
 #include "ReadOnlyHamster.h"
+#include "LogEntry.h"
 
 #include <unordered_map>
 
-namespace hamsterviewmodel {
+namespace viewmodel {
 
 class GameViewPresenterImpl: public GameViewPresenter {
 private:
@@ -49,7 +50,7 @@ private:
     void refreshHamsterLayer(ViewModelCellLayer& layer, hamster::ReadOnlyHamster& hamster);
     static int getRotationForDirection(mpw::Direction direction);
 
-    void addLogEntry(const std::string& entry);
+    void addLogEntry(const mpw::LogEntry& entry);
 
     static std::list<std::shared_ptr<hamster::ReadOnlyHamster>> getHamstersOfTile(const mpw::Tile& tile);
     static std::list<std::shared_ptr<hamster::Wall>> getWallsOfTile(const mpw::Tile& tile);

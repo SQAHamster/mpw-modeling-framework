@@ -168,6 +168,7 @@ helper EClass::createCallWriteAnnotation() : MethodCallAnnotation {
 	return object MethodCallAnnotation {
         variableName := "gameLog";
         methodName := "write";
+        parameterInputVariableExpressions += createPathExpression("internal" + baseName, concreteClass);
         parameterInputVariableExpressions += createPathExpression("message", stringType);
         closingStatement := true;
     };

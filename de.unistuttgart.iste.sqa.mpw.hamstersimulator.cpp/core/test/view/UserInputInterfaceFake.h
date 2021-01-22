@@ -6,7 +6,7 @@
 #include <queue>
 #include <vector>
 
-namespace hamsterviewmodel {
+namespace viewmodel {
 
 class UserInputInterfaceFake final : public mpw::UserInputInterface {
 public:

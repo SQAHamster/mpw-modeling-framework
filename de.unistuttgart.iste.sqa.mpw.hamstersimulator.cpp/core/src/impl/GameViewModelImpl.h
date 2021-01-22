@@ -4,7 +4,7 @@
 #include "ViewModelCell.h"
 #include "GameViewModel.h"
 
-namespace hamsterviewmodel {
+namespace viewmodel {
 
 class GameViewModelImpl: public GameViewModel {
 private:
@@ -16,7 +16,7 @@ public:
 
     void init(mpw::Size size) override;
 
-    std::shared_ptr<hamsterviewmodel::ViewModelCell> getCellAt(int row,
+    std::shared_ptr<viewmodel::ViewModelCell> getCellAt(int row,
 			int column) override;
 
 };

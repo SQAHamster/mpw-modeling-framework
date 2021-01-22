@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-namespace hamsterviewmodel {
+namespace viewmodel {
 
 ViewModelStringifier::ViewModelStringifier(
         const std::unordered_map<std::string, std::string>& imageCharsMapping, int maxCharsPerCell)

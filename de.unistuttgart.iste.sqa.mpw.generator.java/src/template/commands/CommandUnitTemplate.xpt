@@ -11,7 +11,7 @@
         «EXPAND OldValueVariablesDefinition FOR this»
         
 	    «IF getParentTransformation().isActorCommand()-»
-	        gameLog.write("«getParentTransformation().toLogMessage()»");
+	        gameLog.write(self, "«getParentTransformation().toLogMessage()»");
 	    «ENDIF-»
 	    
 	    if (!internalMainRule()) {

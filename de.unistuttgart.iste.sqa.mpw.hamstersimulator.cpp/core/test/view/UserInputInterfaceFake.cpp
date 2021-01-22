@@ -4,7 +4,7 @@
 
 using namespace framework;
 
-namespace hamsterviewmodel {
+namespace viewmodel {
 
 int UserInputInterfaceFake::readInteger(std::string message) {
     assertCondition(!stubbedUserInputQueue.empty(), "please put an integer into user-input-queue");

@@ -67,18 +67,18 @@
       <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="confirmAlert">
-      <eParameters name="t" eType="#//Throwable"/>
+      <eParameters name="t" eType="ecore:EDataType BaseTypes.ecore#//Throwable"/>
     </eOperations>
     <eOperations name="abort"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameLog">
     <eOperations name="write">
+      <eParameters name="actor" eType="#//Actor"/>
       <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="logEntries" upperBound="-1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="logEntries" upperBound="-1"
+        eType="#//LogEntry" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="Throwable" instanceClassName="java.lang.Throwable"/>
   <eClassifiers xsi:type="ecore:EClass" name="Size" eSuperTypes="stereotypes/MpwStereotypes.ecore#//ValueType">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnCount" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
@@ -92,5 +92,10 @@
         <details key="documentation" value="Number of (max.) rows in this size object."/>
       </eAnnotations>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LogEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actor" eType="#//Actor"/>
   </eClassifiers>
 </ecore:EPackage>

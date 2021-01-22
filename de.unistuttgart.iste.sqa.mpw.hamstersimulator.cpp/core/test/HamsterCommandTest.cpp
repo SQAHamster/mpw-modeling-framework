@@ -8,6 +8,7 @@
 #include "GameTerritory.h"
 #include "Stage.h"
 #include "GameLog.h"
+#include "LogEntry.h"
 #include "CommandConstraintException.h"
 
 #include "util/GameStringifier.h"
@@ -371,8 +372,16 @@ void HamsterCommandTest::assertGrainsOnTerritory(const std::string& expected) {
     EXPECT_EQ(expected, actual);
 }
 
+static std::vector<std::string> toMessages(GameLog& log) {
+    std::vector<std::string> result;
+    for (auto& entry : log.getLogEntries()) {
+        result.push_back(entry->getMessage());
+    }
+    return result;
+}
+
 void HamsterCommandTest::assertGameLog(const std::vector<std::string>& expectedStrings) {
-    std::string actual = TestUtils::join("|", game->getGameLog()->getLogEntries());
+    std::string actual = TestUtils::join("|", toMessages(*game->getGameLog()));
     std::string expected = TestUtils::join("|", expectedStrings);
     EXPECT_EQ(expected, actual);
 }

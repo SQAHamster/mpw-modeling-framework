@@ -17,7 +17,7 @@ using namespace hamster;
 using namespace collectionhelpers;
 using namespace framework;
 
-namespace hamsterviewmodel {
+namespace viewmodel {
 
 // TODO remove listeners on removement of relating objects
 
@@ -39,11 +39,11 @@ void GameViewPresenterImpl::bind() {
     tilesProperty.forEach([this](auto& tile) { addTileNode(tile); });
 
     auto gameLog = game->getGameLog();
-    gameLog->logEntriesProperty().addOnAddedListener([this](const std::string& entry) {
+    gameLog->logEntriesProperty().addOnAddedListener([this](const LogEntry& entry) {
         auto lock = getSemaphore().lock();
         addLogEntry(entry);
     });
-    gameLog->logEntriesProperty().forEach([this](const std::string& entry) {
+    gameLog->logEntriesProperty().forEach([this](const LogEntry& entry) {
         addLogEntry(entry);
     });
 }
@@ -183,8 +183,8 @@ int GameViewPresenterImpl::getRotationForDirection(mpw::Direction direction) {
     throw std::runtime_error("Invalid direction!");
 }
 
-void GameViewPresenterImpl::addLogEntry(const std::string& entry) {
-    getViewModel()->addToLogEntries(entry);
+void GameViewPresenterImpl::addLogEntry(const LogEntry& entry) {
+    getViewModel()->addToLogEntries(const_cast<LogEntry&>(entry).getMessage()); // TODO const correctness
 }
 
 

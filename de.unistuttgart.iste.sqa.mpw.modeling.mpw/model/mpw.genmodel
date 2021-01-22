@@ -4,11 +4,8 @@
     modelPluginID="de.unistuttgart.iste.sqa.mpw.modeling.mpw" modelName="Mpw" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
     operationReflection="true" importOrganizing="true">
-  <foreignModel>Command.ecore</foreignModel>
-  <foreignModel>Hamster.ecore</foreignModel>
-  <foreignModel>HamsterViewModel.ecore</foreignModel>
-  <foreignModel>MiniProgrammingWorld.ecore</foreignModel>
-  <foreignModel>stereotypes/ViewModel.ecore</foreignModel>
+  <foreignModel>stereotypes/MpwStereotypes.ecore</foreignModel>
+  <foreignModel>stereotypes/ViewModelStereotypes.ecore</foreignModel>
   <genPackages prefix="Command" disposableProviderFactory="true" ecorePackage="Command.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Command.ecore#//Mode">
       <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/RUNNING"/>
@@ -16,8 +13,6 @@
       <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/STOPPED"/>
       <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/PAUSED"/>
     </genEnums>
-    <genDataTypes ecoreDataType="Command.ecore#//Object"/>
-    <genDataTypes ecoreDataType="Command.ecore#//Semaphore"/>
     <genClasses image="false" ecoreClass="Command.ecore#//PrimitiveCommand">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Command.ecore#//PrimitiveCommand/entity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//PrimitiveCommand/propertyName"/>
@@ -62,51 +57,51 @@
     </genClasses>
     <genClasses ecoreClass="Command.ecore#//EditorCommandStack"/>
   </genPackages>
-  <genPackages prefix="Hamsterviewmodel" disposableProviderFactory="true" ecorePackage="HamsterViewModel.ecore#/">
-    <genClasses ecoreClass="HamsterViewModel.ecore#//GameViewModel">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HamsterViewModel.ecore#//GameViewModel/logEntries"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference HamsterViewModel.ecore#//GameViewModel/rows"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HamsterViewModel.ecore#//GameViewModel/width"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HamsterViewModel.ecore#//GameViewModel/height"/>
-      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewModel/getCellAt">
-        <genParameters ecoreParameter="HamsterViewModel.ecore#//GameViewModel/getCellAt/row"/>
-        <genParameters ecoreParameter="HamsterViewModel.ecore#//GameViewModel/getCellAt/column"/>
+  <genPackages prefix="Viewmodel" disposableProviderFactory="true" ecorePackage="ViewModel.ecore#/">
+    <genClasses ecoreClass="ViewModel.ecore#//GameViewModel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/logEntries"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ViewModel.ecore#//GameViewModel/rows"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/width"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/height"/>
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewModel/getCellAt">
+        <genParameters ecoreParameter="ViewModel.ecore#//GameViewModel/getCellAt/row"/>
+        <genParameters ecoreParameter="ViewModel.ecore#//GameViewModel/getCellAt/column"/>
       </genOperations>
-      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewModel/init">
-        <genParameters ecoreParameter="HamsterViewModel.ecore#//GameViewModel/init/size"/>
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewModel/init">
+        <genParameters ecoreParameter="ViewModel.ecore#//GameViewModel/init/size"/>
       </genOperations>
     </genClasses>
-    <genClasses image="false" ecoreClass="HamsterViewModel.ecore#//GameViewInput">
-      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewInput/playClicked"/>
-      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewInput/pauseClicked"/>
-      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewInput/undoClicked"/>
-      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewInput/redoClicked"/>
-      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewInput/textTyped">
-        <genParameters ecoreParameter="HamsterViewModel.ecore#//GameViewInput/textTyped/text"/>
+    <genClasses image="false" ecoreClass="ViewModel.ecore#//GameViewInput">
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/playClicked"/>
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/pauseClicked"/>
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/undoClicked"/>
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/redoClicked"/>
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/textTyped">
+        <genParameters ecoreParameter="ViewModel.ecore#//GameViewInput/textTyped/text"/>
       </genOperations>
-      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewInput/getViewModel"/>
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/getViewModel"/>
     </genClasses>
-    <genClasses ecoreClass="HamsterViewModel.ecore#//GameViewPresenter">
-      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference HamsterViewModel.ecore#//GameViewPresenter/viewModel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HamsterViewModel.ecore#//GameViewPresenter/semaphore"/>
-      <genOperations ecoreOperation="HamsterViewModel.ecore#//GameViewPresenter/bind"/>
+    <genClasses ecoreClass="ViewModel.ecore#//GameViewPresenter">
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference ViewModel.ecore#//GameViewPresenter/viewModel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewPresenter/semaphore"/>
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewPresenter/bind"/>
     </genClasses>
-    <genClasses ecoreClass="HamsterViewModel.ecore#//ViewModelCell">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference HamsterViewModel.ecore#//ViewModelCell/layers"/>
+    <genClasses ecoreClass="ViewModel.ecore#//ViewModelCell">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ViewModel.ecore#//ViewModelCell/layers"/>
     </genClasses>
-    <genClasses ecoreClass="HamsterViewModel.ecore#//ViewModelRow">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference HamsterViewModel.ecore#//ViewModelRow/cells"/>
+    <genClasses ecoreClass="ViewModel.ecore#//ViewModelRow">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ViewModel.ecore#//ViewModelRow/cells"/>
     </genClasses>
-    <genClasses ecoreClass="HamsterViewModel.ecore#//ViewModelCellLayer">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HamsterViewModel.ecore#//ViewModelCellLayer/imageName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HamsterViewModel.ecore#//ViewModelCellLayer/rotation"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute HamsterViewModel.ecore#//ViewModelCellLayer/visible"/>
+    <genClasses ecoreClass="ViewModel.ecore#//ViewModelCellLayer">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//ViewModelCellLayer/imageName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//ViewModelCellLayer/rotation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//ViewModelCellLayer/visible"/>
     </genClasses>
   </genPackages>
-  <genPackages prefix="Viewmodel" disposableProviderFactory="true" ecorePackage="stereotypes/ViewModel.ecore#/">
-    <genClasses image="false" ecoreClass="stereotypes/ViewModel.ecore#//Presenter"/>
-    <genClasses image="false" ecoreClass="stereotypes/ViewModel.ecore#//ViewModel"/>
-    <genClasses image="false" ecoreClass="stereotypes/ViewModel.ecore#//ViewStereotype"/>
+  <genPackages prefix="Viewmodelstereotypes" disposableProviderFactory="true" ecorePackage="stereotypes/ViewModelStereotypes.ecore#/">
+    <genClasses image="false" ecoreClass="stereotypes/ViewModelStereotypes.ecore#//Presenter"/>
+    <genClasses image="false" ecoreClass="stereotypes/ViewModelStereotypes.ecore#//ViewModel"/>
+    <genClasses image="false" ecoreClass="stereotypes/ViewModelStereotypes.ecore#//ViewStereotype"/>
   </genPackages>
   <genPackages prefix="Stereotypes" ecorePackage="stereotypes/MpwStereotypes.ecore#/">
     <genClasses image="false" ecoreClass="stereotypes/MpwStereotypes.ecore#//ValueType"/>
@@ -125,7 +120,6 @@
       <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Direction/WEST"/>
       <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Direction/EAST"/>
     </genEnums>
-    <genDataTypes ecoreDataType="MiniProgrammingWorld.ecore#//Throwable"/>
     <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//Actor">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Actor/direction"/>
     </genClasses>
@@ -172,14 +166,19 @@
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//UserInputInterface/abort"/>
     </genClasses>
     <genClasses ecoreClass="MiniProgrammingWorld.ecore#//GameLog">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//GameLog/logEntries"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//GameLog/logEntries"/>
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GameLog/write">
+        <genParameters ecoreParameter="MiniProgrammingWorld.ecore#//GameLog/write/actor"/>
         <genParameters ecoreParameter="MiniProgrammingWorld.ecore#//GameLog/write/message"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="MiniProgrammingWorld.ecore#//Size">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Size/columnCount"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Size/rowCount"/>
+    </genClasses>
+    <genClasses ecoreClass="MiniProgrammingWorld.ecore#//LogEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//LogEntry/message"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//LogEntry/actor"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

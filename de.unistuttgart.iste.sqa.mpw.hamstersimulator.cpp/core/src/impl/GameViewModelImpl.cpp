@@ -4,11 +4,11 @@
 
 #include "ViewModelRow.h"
 
-namespace hamsterviewmodel {
+namespace viewmodel {
 
 GameViewModelImpl::GameViewModelImpl() = default;
 
-std::shared_ptr<hamsterviewmodel::ViewModelCell> GameViewModelImpl::getCellAt(
+std::shared_ptr<viewmodel::ViewModelCell> GameViewModelImpl::getCellAt(
 		int rowIndex, int columnIndex) {
     auto row = collectionhelpers::get_at(getRows(), rowIndex);
     auto cell = collectionhelpers::get_at(row->get()->getCells(), columnIndex);

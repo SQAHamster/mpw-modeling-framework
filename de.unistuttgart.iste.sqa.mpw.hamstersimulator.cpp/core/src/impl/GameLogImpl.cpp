@@ -1,5 +1,6 @@
 #include "GameLogImpl.h"
 
+#include "LogEntry.h"
 #include <stdexcept>
 
 namespace mpw {
@@ -7,8 +8,11 @@ namespace mpw {
 GameLogImpl::GameLogImpl() {
 }
 
-void GameLogImpl::write(std::string message) {
-	addToLogEntries(message);
+void GameLogImpl::write(std::shared_ptr<mpw::Actor> actor, std::string message) {
+    auto entry = std::make_shared<LogEntry>();
+    entry->setActor(actor);
+    entry->setMessage(message);
+	addToLogEntries(entry);
 }
 
 }

@@ -12,7 +12,7 @@ isStereotype(EClassifier this) :
     this.isInStereotypePackage();
     
 private isInStereotypePackage(EClassifier this) :
-    ePackage.nsPrefix == "viewmodel" || ePackage.nsPrefix == "stereotypes";
+    ePackage.nsPrefix == "viewmodelstereotypes" || ePackage.nsPrefix == "stereotypes";
 
 hasStereotype(EClassifier this, String stereotype) :
     let eClass = (EClass)this :

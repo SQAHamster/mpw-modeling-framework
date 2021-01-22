@@ -19,8 +19,8 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A primitive command which sets a generic value (Object) to a property."/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldValue" eType="#//Object"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValue" eType="#//Object"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldValue" eType="ecore:EDataType BaseTypes.ecore#//Object"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValue" eType="ecore:EDataType BaseTypes.ecore#//Object"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AddEntityCommand" eSuperTypes="#//PrimitiveCommand">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -69,19 +69,13 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="subCommands" upperBound="-1"
         eType="#//Command" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceTypeName="objectType">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Represents a base type of any value. In java this is simply the type `java.lang.Object`. In C++ this may be an union of possible values: it can be a primitive value like integers, booleans or strings. Alternatively it can be a reference/pointer."/>
-    </eAnnotations>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="Semaphore" instanceClassName="java.util.concurrent.Semaphore"/>
   <eClassifiers xsi:type="ecore:EClass" name="GameCommandStack" eSuperTypes="#//CommandStack">
     <eOperations name="startGame"/>
     <eOperations name="startGamePaused"/>
     <eOperations name="pause"/>
     <eOperations name="resume"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="semaphore" lowerBound="1"
-        eType="#//Semaphore" changeable="false"/>
+        eType="ecore:EDataType BaseTypes.ecore#//Semaphore" changeable="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//Mode" defaultValueLiteral="INITIALIZING"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>

@@ -5,7 +5,7 @@
 #include "ViewModelStringifier.h"
 
 using namespace hamster;
-using namespace hamsterviewmodel;
+using namespace viewmodel;
 
 std::unordered_map<std::string, std::string> HamsterViewTestBase::characterMap;
 

@@ -21,7 +21,7 @@ protected:
     void assertLog(const std::string& expected);
 
     std::shared_ptr<hamster::Hamster> paule;
-    std::shared_ptr<hamsterviewmodel::GameViewModel> viewModel;
+    std::shared_ptr<viewmodel::GameViewModel> viewModel;
 
 private:
 
@@ -30,7 +30,7 @@ private:
     int maxCharsPerCell = 4;
     static std::unordered_map<std::string, std::string> characterMap;
     std::shared_ptr<hamster::HamsterGame> game;
-    std::shared_ptr<hamsterviewmodel::GameViewPresenter> presenter;
+    std::shared_ptr<viewmodel::GameViewPresenter> presenter;
 
 };
 
