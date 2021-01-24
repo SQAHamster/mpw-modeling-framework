@@ -34,7 +34,7 @@ public:
 
     SemaphoreLock lock();
 
-    void aquire();
+    void acquire();
     void release();
 
     bool isLocked();

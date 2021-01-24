@@ -11,7 +11,7 @@ SemaphoreLock Semaphore::lock() {
     return SemaphoreLock(*mutex);
 }
 
-void Semaphore::aquire() {
+void Semaphore::acquire() {
     mutex->lock();
 }
 

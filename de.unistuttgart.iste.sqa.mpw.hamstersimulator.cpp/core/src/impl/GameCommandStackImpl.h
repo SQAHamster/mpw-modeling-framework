@@ -13,7 +13,7 @@ class GameCommandStackImpl: public GameCommandStack {
 private:
 	using inherited = GameCommandStack;
 
-    std::thread asyncThread; // used to call aquire in pause async
+    std::thread asyncThread; // used to call acquire in pause async
     std::stack<std::shared_ptr<Command>> undoneCommands;
     bool delayEnabled = true;
 

@@ -52,7 +52,7 @@ void GameCommandStackImpl::pauseGame() {
         throw std::runtime_error("pause() can only be called in modes INITIALIZING/RUNNING");
     }
     setMode(Mode::PAUSED);
-    getSemaphore().aquire();
+    getSemaphore().acquire();
 }
 
 void GameCommandStackImpl::resumeGame() {
