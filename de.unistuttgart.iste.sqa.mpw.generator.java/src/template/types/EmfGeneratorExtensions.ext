@@ -100,9 +100,11 @@ toUnboxedJavaTypeName(String this) :
 	else this;
 	
 defaultValueOf(EStructuralFeature f) :
-    if (f.eType.name == "EInt") then "0"
+    if (f.defaultValueLiteral != null && f.eType.isEnum()) then f.eType.name + "." + f.defaultValueLiteral
+    else if (f.defaultValueLiteral != null) then f.defaultValueLiteral
+    else if (f.eType.name == "EInt") then "0"
 	else if (f.eType.name == "EBoolean") then "false"
-	else if (f.defaultValueLiteral != null) then f.defaultValueLiteral
+	else if (f.eType.name == "EDouble") then "0.0"
 	else null;
     
 List[EClassifier] getUsedTypes(EOperation this) :
@@ -123,3 +125,5 @@ isMarkedWithAnnotation(EModelElement this, String key) :
 
 getAnnotationValue(EModelElement this, String key) : 
     eAnnotations.selectFirst(a|a.source == key).details.selectFirst(d|d.key == key).value;
+    
+isEnum(EClassifier this) : EEnum.isInstance(this);

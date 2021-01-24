@@ -75,6 +75,13 @@
       «FOREACH eStructuralFeatures.select(f|f.needsConstructorInstantiation()) AS f-»
           this->«f.name» = «EXPAND FeatureFieldInstantiation FOR f»;
       «ENDFOREACH-»
+      «FOREACH eStructuralFeatures.select(f|!f.isObjectReference() && f.defaultValueLiteral != null) AS f-»
+          «IF f.isObservableProperty()-»
+              this->«f.name».set(«f.toDefaultValueCppLiteral()»);
+          «ELSE-»
+              this->«f.name» = «f.toDefaultValueCppLiteral()»;
+          «ENDIF-»
+      «ENDFOREACH-»
 «ENDDEFINE»
 
 «DEFINE FeatureFieldInstantiation FOR EStructuralFeature-»

@@ -28,7 +28,7 @@ featureToObservableFieldInstantiation(EStructuralFeature this) :
     
 	if (this.upperBound == -1) then "new ReadOnlyListWrapper<>(this, \"" + this.name + "\", FXCollections.observableArrayList())"
 	else if (this.eType.isBuiltInType()) then "new ReadOnly" + this.eType.name.toUnboxedJavaTypeName() + "Wrapper(this, \"" + this.name + "\"" + defaultValuePart + ")"
-	else "new ReadOnlyObjectWrapper<>(this, \"" + this.name + "\")";
+	else "new ReadOnlyObjectWrapper<>(this, \"" + this.name + "\"" + defaultValuePart + ")";
 
 operationToObservableGetterSignature(EOperation this) :
     elementToObservableReadonlyType() + " " + name + "Property()";
