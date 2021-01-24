@@ -1,5 +1,6 @@
 import facade.GameFacadeElementsLibrary;
 import facade.StageBuilderLibrary;
+import facade.MpwFacadeLibrary;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
@@ -35,8 +36,7 @@ mapping inout EPackage::transformPackage() {
     
     eClassifiers += self.eClassifiers[EClass][hasAnnotationValue("role", "editor")]->map createBuilderClass();
     
-    self.eClassifiers[EClass][isInstanceOf("MiniProgrammingWorld")]->map useFacades();
-    findClassForName("MiniProgrammingWorld").map removeDerivedStageReference();
+    self.eClassifiers[EClass][isInstanceOf("MiniProgrammingWorld")]->map transformMpwClass();
 }
 
 mapping EClass::toGameFacadeClass() : EClass {
@@ -45,20 +45,3 @@ mapping EClass::toGameFacadeClass() : EClass {
     eAnnotations += "facade".toMarkerAnnotation();
 }
 
-// MiniProgrammingWorld classes have to use facade classes
-mapping inout EClass::useFacades() {
-    eReferences->forEach(f) {
-    	if (f.eType.isMarkedWithAnnotation("role")) {
-    	    var baseName := f.eType.getAnnotationValue("baseName");
-    		f.eType := findClassForName(baseName);
-    		f.eAnnotations += object InlineSimpleFieldInitializationAnnotation {
-    			field := f;
-    			parameterInputVariableExpressions += createSelfExpression("this", self);
-    		};
-    	}
-    };
-}
-
-mapping inout EClass::removeDerivedStageReference() {
-    self.eStructuralFeatures := self.eStructuralFeatures->reject(f|f._derived and f.eType.name = "Stage");
-}

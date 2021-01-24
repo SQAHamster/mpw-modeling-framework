@@ -1,0 +1,88 @@
+import facade.gamefacade.GameFacadeElementsBaseLibrary;
+import util.BasicHelpers;
+
+modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
+modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
+modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation/annotations';
+
+/**
+  *  Library used for the GenerationClassesTransformation which adds operations to the MPW class.
+  *
+  *  Most of operations are simple delegates to the underlying GameCommandStack.
+  */
+library StageBuilderLibrary;
+
+mapping inout EClass::transformMpwClass()
+    when { self.eAllSuperTypes->exists(t|t.name = "MiniProgrammingWorld") } {
+    // eAnnotations += "facade".toMarkerAnnotation();
+    
+    self->map createGameCommandStackDelegateOperation("startGame");
+    self->map createGameCommandStackDelegateOperation("startGamePaused");
+    self->map createGameCommandStackDelegateOperation("reset");
+    self->map createGameCommandStackDelegateOperation("hardReset");
+    self->map createGameCommandStackDelegateOperation("stopGame");
+    self->map createGameCommandStackDelegateOperation("pauseGame");
+    self->map createGameCommandStackDelegateOperation("resumeGame");
+    self->map createConfirmAlertDelegateOperation();
+
+    self->map useFacades();
+    findClassForName("MiniProgrammingWorld").map removeDerivedStageReference();
+}
+
+abstract mapping inout EClass::createGameCommandStackDelegateOperation(operationName: String) {
+    self.map createMemberDelegateOperation("gameCommandStack", operationName);
+}
+
+abstract mapping inout EClass::createConfirmAlertDelegateOperation() {
+    self.map createMemberDelegateOperation("userInputInterface", "confirmAlert");
+}
+
+abstract mapping inout EClass::createMemberDelegateOperation(memberName: String, operationName: String) {
+    var gameCommandStackReference := eAllReferences->any(r|r.name = memberName);
+    var operation := gameCommandStackReference.eType.getOperationByName(operationName).deepclone();
+    operation.eAnnotations += gameCommandStackReference.createMemberVariableAnnotation();
+    operation.eAnnotations += gameCommandStackReference.createCallMethodAnnotation(operationName);
+    eOperations += operation;
+}
+
+helper EReference::createMemberVariableAnnotation() : VariableDefinitionAnnotation {
+    return object VariableDefinitionAnnotation {
+        variableName := self.name;
+        variableTypeName := self.eType.name;
+        rhs := object ExpressionAnnotation {
+            expression := createStatementsExpression(object GetPropertyStatement {
+                propertyGetterName := "get" + self.name.firstToUpper();
+                type := self.eType;
+            })
+        };
+    };
+}
+
+helper EReference::createCallMethodAnnotation(operationName: String) : MethodCallAnnotation {
+    var operation := self.eType.getOperationByName(operationName);
+    return object MethodCallAnnotation {
+        variableName := self.name;
+        methodName := operationName;
+        closingStatement := true;
+        parameterInputVariableExpressions := operation.eParameters->collect(p|createPathExpression(p));
+    };
+}
+
+// MiniProgrammingWorld classes have to use facade classes
+mapping inout EClass::useFacades() {
+    eReferences->forEach(f) {
+        if (f.eType.isMarkedWithAnnotation("role")) {
+            var baseName := f.eType.getAnnotationValue("baseName");
+            f.eType := findClassForName(baseName);
+            f.eAnnotations += object InlineSimpleFieldInitializationAnnotation {
+                field := f;
+                parameterInputVariableExpressions += createSelfExpression("this", self);
+            };
+        }
+    };
+}
+
+mapping inout EClass::removeDerivedStageReference() {
+    self.eStructuralFeatures := self.eStructuralFeatures->reject(f|f._derived and f.eType.name = "Stage");
+}
