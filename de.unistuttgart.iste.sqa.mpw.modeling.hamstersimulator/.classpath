@@ -11,6 +11,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/de.unistuttgart.iste.sqa.mpw.modeling.mpw"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
