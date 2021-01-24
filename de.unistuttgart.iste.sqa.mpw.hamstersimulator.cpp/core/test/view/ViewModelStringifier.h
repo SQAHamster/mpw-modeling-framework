@@ -5,6 +5,7 @@
 #include "ViewModelRow.h"
 #include "ViewModelCell.h"
 #include "ViewModelCellLayer.h"
+#include "ViewModelLogEntry.h"
 
 #include <unordered_map>
 

@@ -28,12 +28,12 @@ public class GameCommandStackImpl extends GameCommandStack {
 	}
 
 	@Override
-	public void pause() {
+	public void pauseGame() {
 		throw new RuntimeException("not implemented");
 	}
 
 	@Override
-	public void resume() {
+	public void resumeGame() {
 		throw new RuntimeException("not implemented");
 	}
 
@@ -66,4 +66,33 @@ public class GameCommandStackImpl extends GameCommandStack {
 		throw new RuntimeException("not implemented");
 	}
 
+	@Override
+	public void stopGame() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
+	public void reset() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
+	public void hardReset() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
+	public void abortOrStopGame() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
+	public void enableDelay() {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
+	public void disableDelay() {
+		throw new RuntimeException("not implemented");
+	}
 }

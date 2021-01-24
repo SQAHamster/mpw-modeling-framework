@@ -29,6 +29,8 @@ public:
     void undoClicked() override;
     void redoClicked() override;
 
+    void close() override;
+
     void textTyped(std::string text) override;
 
     void bind() override;

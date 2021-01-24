@@ -12,24 +12,29 @@ GameCommandStackImpl::GameCommandStackImpl()
 }
 
 void GameCommandStackImpl::startGame() {
+    if (getMode() != Mode::INITIALIZING) {
+        throw std::runtime_error("startGame() can only be called in mode INITIALIZING");
+    }
     setMode(Mode::RUNNING);
 }
 
 void GameCommandStackImpl::startGamePaused() {
-    pause();
+    if (getMode() != Mode::INITIALIZING) {
+        throw std::runtime_error("startGame() can only be called in mode INITIALIZING");
+    }
+    pauseGame();
 }
 
 void GameCommandStackImpl::execute(std::shared_ptr<commands::Command> command) {
+    if (getMode() != Mode::PAUSED && getMode() != Mode::RUNNING) {
+        throw std::runtime_error("execute() can only be called in modes PAUSED/RUNNING");
+    }
+
     auto lock = getSemaphore().lock();
 
     addToStack(command);
     command->execute();
     delay();
-
-    try {
-    } catch(...) {
-    }
-
 }
 
 void GameCommandStackImpl::delay() {
@@ -42,7 +47,7 @@ void GameCommandStackImpl::delay() {
     std::this_thread::sleep_for(std::chrono::milliseconds(delayTimeInMillis));
 }
 
-void GameCommandStackImpl::pause() {
+void GameCommandStackImpl::pauseGame() {
     if (getMode() != Mode::INITIALIZING && getMode() != Mode::RUNNING) {
         throw std::runtime_error("pause() can only be called in modes INITIALIZING/RUNNING");
     }
@@ -50,9 +55,9 @@ void GameCommandStackImpl::pause() {
     getSemaphore().aquire();
 }
 
-void GameCommandStackImpl::resume() {
+void GameCommandStackImpl::resumeGame() {
     if (getMode() != Mode::PAUSED) {
-        throw std::runtime_error("pause() can only be called in modes RUNNING");
+        throw std::runtime_error("pause() can only be called in mode RUNNING");
     }
     setMode(Mode::RUNNING);
     getSemaphore().release();
@@ -67,10 +72,17 @@ void GameCommandStackImpl::undo() {
     auto command = stack.back();
     removeFromStack(command);
     command->undo();
+    undoneCommands.push(command);
 }
 
 void GameCommandStackImpl::redo() {
-    throw std::runtime_error("not implemented");
+    if (undoneCommands.empty()) {
+        throw std::runtime_error("cannot redo with no undone commands");
+    }
+    auto undoneCommand = undoneCommands.top();
+    undoneCommands.pop();
+    undoneCommand->execute();
+    addToStack(undoneCommand);
 }
 
 void GameCommandStackImpl::undoAll() {
@@ -80,7 +92,55 @@ void GameCommandStackImpl::undoAll() {
 }
 
 void GameCommandStackImpl::redoAll() {
-    throw std::runtime_error("not implemented");
+    while (!undoneCommands.empty()) {
+        redo();
+    }
+}
+
+void GameCommandStackImpl::stopGame() {
+    setMode(Mode::STOPPED);
+    if (getSemaphore().isLocked()) {
+        getSemaphore().release();
+    }
+}
+
+void GameCommandStackImpl::abortOrStopGame() {
+    Mode mode = getMode();
+    if ((mode == Mode::STOPPED) || (mode == Mode::INITIALIZING)) {
+        setMode(Mode::STOPPED);
+    } else {
+        setMode(Mode::ABORTED);
+    }
+    if (getSemaphore().isLocked()) {
+        getSemaphore().release();
+    }
+}
+
+void GameCommandStackImpl::reset() {
+    if (getMode() != Mode::INITIALIZING) {
+        throw std::runtime_error("soft reset is not possible during initialization");
+    }
+
+    Mode currentMode = getMode();
+    if (currentMode == Mode::RUNNING) {
+        pauseGame();
+    }
+    undoAll();
+}
+
+void GameCommandStackImpl::hardReset() {
+    clearStack();
+    undoneCommands = {};
+    stopGame();
+    setMode(Mode::INITIALIZING);
+}
+
+void GameCommandStackImpl::enableDelay() {
+    delayEnabled = true;
+}
+
+void GameCommandStackImpl::disableDelay() {
+    delayEnabled = false;
 }
 
 }

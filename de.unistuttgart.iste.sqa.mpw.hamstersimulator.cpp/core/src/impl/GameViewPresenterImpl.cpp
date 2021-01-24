@@ -7,6 +7,7 @@
 #include "GameCommandStack.h"
 
 #include "ViewModelCellLayer.h"
+#include "ViewModelLogEntry.h"
 
 #include "CollectionHelpers.hpp"
 #include <stdexcept>
@@ -49,11 +50,11 @@ void GameViewPresenterImpl::bind() {
 }
 
 void GameViewPresenterImpl::playClicked() {
-    game->getGameCommandStack()->resume();
+    game->getGameCommandStack()->resumeGame();
 }
 
 void GameViewPresenterImpl::pauseClicked() {
-    game->getGameCommandStack()->pause();
+    game->getGameCommandStack()->pauseGame();
 }
 
 void GameViewPresenterImpl::undoClicked() {
@@ -62,6 +63,10 @@ void GameViewPresenterImpl::undoClicked() {
 
 void GameViewPresenterImpl::redoClicked() {
     game->getGameCommandStack()->redo();
+}
+
+void GameViewPresenterImpl::close() {
+    game->getGameCommandStack()->abortOrStopGame();
 }
 
 void GameViewPresenterImpl::textTyped(std::string text) {
@@ -184,7 +189,11 @@ int GameViewPresenterImpl::getRotationForDirection(mpw::Direction direction) {
 }
 
 void GameViewPresenterImpl::addLogEntry(const LogEntry& entry) {
-    getViewModel()->addToLogEntries(const_cast<LogEntry&>(entry).getMessage()); // TODO const correctness
+    auto& nonConstEntry = const_cast<LogEntry&>(entry); // TODO const correctness
+    auto viewModelEntry = std::make_shared<ViewModelLogEntry>();
+    viewModelEntry->setMessage(nonConstEntry.getMessage());
+    viewModelEntry->setColor(Color::BLACK);
+    getViewModel()->addToLogEntries(viewModelEntry);
 }
 
 

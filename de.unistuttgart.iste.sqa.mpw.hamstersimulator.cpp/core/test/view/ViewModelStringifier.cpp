@@ -16,7 +16,7 @@ ViewModelStringifier::ViewModelStringifier(
 std::string ViewModelStringifier::territoryToExpectationString(const GameViewModel& viewModel) {
     auto& nonConstViewModel = const_cast<GameViewModel&>(viewModel); // TODO const-correctness: adapt after migrate generator
     std::string actual;
-    int height = nonConstViewModel.getHeight();
+    int height = nonConstViewModel.getSize().getRowCount();
     for (int y = 0; y < height; y++) {
         std::string rowString = rowToString(viewModel, y);
         actual.append(rowString);
@@ -28,7 +28,7 @@ std::string ViewModelStringifier::territoryToExpectationString(const GameViewMod
 std::string ViewModelStringifier::rowToString(const GameViewModel& viewModel, int y) const {
     auto& nonConstViewModel = const_cast<GameViewModel&>(viewModel); // TODO const-correctness: adapt after migrate generator
     std::string result = "|";
-    int width = nonConstViewModel.getWidth();
+    int width = nonConstViewModel.getSize().getColumnCount();
     for (int x = 0; x < width; x++) {
         auto cell = nonConstViewModel.getCellAt(y, x);
         result.append(cellToString(*cell));
@@ -64,8 +64,9 @@ std::string ViewModelStringifier::cellToString(const ViewModelCell& cell) const 
 std::string ViewModelStringifier::logToString(const GameViewModel& viewModel) {
     auto& nonConstViewModel = const_cast<GameViewModel&>(viewModel); // TODO const-correctness: adapt after migrate generator
     std::string actual;
-    for (auto& entry : nonConstViewModel.getLogEntries()) {
-        actual.append(entry);
+    auto logEntries = nonConstViewModel.getLogEntries();
+    for (auto& entry : logEntries) {
+        actual.append(entry->getMessage());
         actual.append("\n");
     }
     return actual;
