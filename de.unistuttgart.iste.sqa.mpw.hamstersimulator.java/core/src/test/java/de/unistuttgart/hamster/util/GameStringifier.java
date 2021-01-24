@@ -21,6 +21,9 @@ public class GameStringifier {
 			handleLine(territoryBuilder, y, parts[y]);
 		}
 
+		game.startGame();
+		game.getGameCommandStack().disableDelay();
+
 		return game;
 	}
 

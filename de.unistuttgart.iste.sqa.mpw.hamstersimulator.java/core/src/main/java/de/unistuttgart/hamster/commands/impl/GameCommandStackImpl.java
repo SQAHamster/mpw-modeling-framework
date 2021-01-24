@@ -2,23 +2,27 @@ package de.unistuttgart.hamster.commands.impl;
 
 import de.unistuttgart.hamster.commands.Command;
 import de.unistuttgart.hamster.commands.GameCommandStack;
+import de.unistuttgart.hamster.commands.Mode;
 
 import java.util.concurrent.Semaphore;
 
 public class GameCommandStackImpl extends GameCommandStack {
+
+	private boolean delayEnabled = true;
 
 	public GameCommandStackImpl() {
 		super(new Semaphore(1, true));
 	}
 
 	@Override
-	public void startGame() {
-		throw new RuntimeException("not implemented");
+	public synchronized void startGame() {
+		setMode(Mode.RUNNING);
 	}
 
 	@Override
-	public void startGamePaused() {
-		throw new RuntimeException("not implemented");
+	public synchronized void startGamePaused() {
+		setMode(Mode.RUNNING);
+		// todo pause
 	}
 
 	@Override
@@ -87,12 +91,12 @@ public class GameCommandStackImpl extends GameCommandStack {
 	}
 
 	@Override
-	public void enableDelay() {
-		throw new RuntimeException("not implemented");
+	public synchronized void enableDelay() {
+		delayEnabled = true;
 	}
 
 	@Override
-	public void disableDelay() {
-		throw new RuntimeException("not implemented");
+	public synchronized void disableDelay() {
+		delayEnabled = false;
 	}
 }
