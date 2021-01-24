@@ -22,7 +22,7 @@ public class GameStringifier {
 		}
 
 		game.startGame();
-		game.getGameCommandStack().disableDelay();
+		game.getPerformance().setDelayEnabled(false);
 
 		return game;
 	}

@@ -4,7 +4,8 @@
 #include "GameTerritory.h"
 #include "GameLog.h"
 #include "Semaphore.h"
-#include "GameCommandStack.h"
+#include "CommandStack.h"
+#include "GamePerformance.h"
 
 #include "ViewModelCellLayer.h"
 #include "ViewModelLogEntry.h"
@@ -50,11 +51,11 @@ void GameViewPresenterImpl::bind() {
 }
 
 void GameViewPresenterImpl::playClicked() {
-    game->getGameCommandStack()->resumeGame();
+    game->getPerformance()->resumeGame();
 }
 
 void GameViewPresenterImpl::pauseClicked() {
-    game->getGameCommandStack()->pauseGame();
+    game->getPerformance()->pauseGame();
 }
 
 void GameViewPresenterImpl::undoClicked() {
@@ -66,7 +67,7 @@ void GameViewPresenterImpl::redoClicked() {
 }
 
 void GameViewPresenterImpl::close() {
-    game->getGameCommandStack()->abortOrStopGame();
+    game->getPerformance()->abortOrStopGame();
 }
 
 void GameViewPresenterImpl::textTyped(std::string text) {

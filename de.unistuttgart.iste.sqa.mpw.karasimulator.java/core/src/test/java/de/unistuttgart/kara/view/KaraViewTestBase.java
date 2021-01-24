@@ -34,7 +34,7 @@ public class KaraViewTestBase {
         WorldLoader.initializeFor(game).loadFromResourceFile(path);
 
         game.startGame();
-        game.getGameCommandStack().disableDelay();
+        game.getPerformance().setDelayEnabled(false);
 
         var world = game.getWorld();
         kara = world.getKara();

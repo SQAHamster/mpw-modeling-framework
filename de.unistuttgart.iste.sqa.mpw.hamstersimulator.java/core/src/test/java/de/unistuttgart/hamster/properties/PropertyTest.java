@@ -1,11 +1,10 @@
 package de.unistuttgart.hamster.properties;
 
-import de.unistuttgart.hamster.commands.impl.GameCommandStackImpl;
 import de.unistuttgart.hamster.hamster.ConcreteHamster;
 import de.unistuttgart.hamster.hamster.Grain;
 import de.unistuttgart.hamster.mpw.Direction;
 import de.unistuttgart.hamster.mpw.Tile;
-import org.junit.jupiter.api.Assertions;
+import de.unistuttgart.hamster.mpw.impl.GamePerformanceImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,9 +57,9 @@ public class PropertyTest {
 	}
 
 	@Test
-	public void givenGameStack_whenInitialize_thenSpeedIs4() {
-		var gameCommandStack = new GameCommandStackImpl();
-		assertEquals(4.0, gameCommandStack.getSpeed(), 0.001);
+	public void givenGamePerformance_whenInitialize_thenSpeedIs4() {
+		var performance = new GamePerformanceImpl();
+		assertEquals(4.0, performance.getSpeed(), 0.001);
 	}
 
 	//</editor-fold>

@@ -192,12 +192,12 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 
 	@Override
 	public void playClicked() {
-		game.getGameCommandStack().resumeGame();
+		game.getPerformance().resumeGame();
 	}
 
 	@Override
 	public void pauseClicked() {
-		game.getGameCommandStack().pauseGame();
+		game.getPerformance().pauseGame();
 	}
 
 	@Override
@@ -212,7 +212,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 
 	@Override
 	public void close() {
-		game.getGameCommandStack().abortOrStopGame();
+		game.getPerformance().abortOrStopGame();
 	}
 
 	@Override

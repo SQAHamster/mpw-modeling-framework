@@ -8,7 +8,7 @@
 #include "Hamster.h"
 #include "GameTerritory.h"
 #include "GameHamster.h"
-#include "GameCommandStack.h"
+#include "GamePerformance.h"
 
 #include "TerritoryBuilder.h"
 #include "DirectionTestHelper.h"
@@ -36,7 +36,7 @@ std::shared_ptr<hamster::HamsterGame> GameStringifier::createFromString(const st
         handleLine(*territoryBuilder, y, parts[y]);
     }
 
-    game->getGameCommandStack()->disableDelay();
+    game->getPerformance()->setDelayEnabled(false);
     game->startGame();
     return game;
 }

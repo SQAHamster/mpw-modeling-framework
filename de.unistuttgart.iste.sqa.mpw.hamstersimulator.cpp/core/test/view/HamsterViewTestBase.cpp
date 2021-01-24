@@ -17,7 +17,7 @@ void HamsterViewTestBase::withTerritorium(const std::string& path) {
     game = HamsterGame::create();
     TerritoryLoader::initializeFor(*game)->loadFromResourceFile("resources" + path);
 
-    game->getGameCommandStack()->disableDelay();
+    game->getPerformance()->setDelayEnabled(false);
     game->startGame();
 
     auto territory = game->getTerritory();
