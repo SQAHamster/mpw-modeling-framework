@@ -59,9 +59,12 @@
     
       virtual ~«this.name»() = «IF needsImplSubclass() || abstract»0«ELSE»default«ENDIF»;
         
-      «FOREACH eOperations AS o-»
+      «FOREACH operationsWithoutGenerationAnnotations() AS o-»
       «o.operationToVirtualSignature()» = 0;
       «ENDFOREACH-»
+      «FOREACH operationsWithGenerationAnnotations() AS o»
+      «o.operationToNonVirtualSignature()»;
+      «ENDFOREACH»
       
       «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations-»
       «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyKeyDefinitions FOR this»
@@ -116,8 +119,13 @@
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
         «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
-        «FOREACH eOperations AS o»
+        «FOREACH operationsWithoutGenerationAnnotations() AS o-»
         // TODO Source Operation «o.operationToSourceSignature(name)» {}
+        «ENDFOREACH-»
+        «FOREACH operationsWithGenerationAnnotations() AS o»
+            «o.operationToSourceSignature(name)» {
+                «EXPAND GenerationAnnotationOperationDefinition FOREACH o.eAnnotations-»
+            }
         «ENDFOREACH»
         
         «EXPAND GenerationAnnotationDefinition(this) FOREACH eAnnotations-»
@@ -245,6 +253,20 @@
     «getterType.toCppType()» «class.name»::«getterOperationName»() noexcept {
         return this->«field.resolveFieldValue()»;
     }
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotationOperationDefinition FOR EAnnotation»«ENDDEFINE-»
+
+«DEFINE GenerationAnnotationOperationDefinition FOR MethodCallAnnotation-»
+    «variableName»->«methodName»(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotationOperationDefinition FOR VariableDefinitionAnnotation-»
+    auto «variableName» = «EXPAND GenerationAnnotationOperationDefinition FOR rhs»;
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotationOperationDefinition FOR ExpressionAnnotation-»
+    «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR expression-»
 «ENDDEFINE»
 
 «DEFINE CMakeLists FOR List[EPackage]»

@@ -1,5 +1,6 @@
 import ecore;
 import behaviorsbase;
+import generationAnnotations;
 
 extension template::types::EmfGeneratorExtensions;
 extension template::commands::CommandGeneratorExtensions;
@@ -20,12 +21,20 @@ documentationToJavaDoc(EOperation this) :
 
 private effectiveOperationName(EOperation this) : 
     if (isPropertyGetter()) then name.getter() else name;
+    
+operationsWithGenerationAnnotations(EClass this) :
+    eOperations.select(o|o.hasGenerationAnnotations());
+
+operationsWithoutGenerationAnnotations(EClass this) :
+    eOperations.select(o|!o.hasGenerationAnnotations());
 
 hasPropertyGetterOperation(EStructuralFeature this) :
     let class = (EClass)eContainer :
     class.eAllSuperTypes.exists(t|t.eOperations.exists(o|o.isPropertyGetter() && o.name == name));
     
 isPropertyGetter(EOperation this) : isMarkedWith("isPropertyGetter");
+
+hasGenerationAnnotations(EOperation this) : eAnnotations.typeSelect(GenerationAnnotation).size > 0;
     
 isCommand(EOperation this) : isMarkedWith("command");
     

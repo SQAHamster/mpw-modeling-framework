@@ -34,8 +34,13 @@
       «EXPAND template::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
       «EXPAND template::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
-      «FOREACH eOperations AS o»
+      «FOREACH operationsWithoutGenerationAnnotations() AS o-»
       public abstract «o.operationToSignature()»;
+      «ENDFOREACH-»
+      «FOREACH operationsWithGenerationAnnotations() AS o»
+      public «o.operationToSignature()» {
+          «EXPAND GenerationAnnotation FOREACH o.eAnnotations-»
+      }
       «ENDFOREACH»
       «EXPAND GenerationAnnotation FOREACH eAnnotations-»
     }
@@ -65,10 +70,10 @@
     
     public interface «this.name» «toInheritance()» {
       «FOREACH eOperations AS o»
-      «o.operationToSignature()»;
-      «IF o.isPropertyGetter()-»
-        «o.operationToObservableGetterSignature()»;
-      «ENDIF-»
+          «o.operationToSignature()»;
+          «IF o.isPropertyGetter()-»
+              «o.operationToObservableGetterSignature()»;
+          «ENDIF-»
       «ENDFOREACH»
       «EXPAND GenerationAnnotation FOREACH eAnnotations»
     }
@@ -113,4 +118,16 @@
     public «getterType.name» «getterOperationName»() {
         return «field.name»;
     }
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR MethodCallAnnotation-»
+    «variableName».«methodName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR VariableDefinitionAnnotation-»
+    var «variableName» = «EXPAND GenerationAnnotation FOR rhs»;
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotation FOR ExpressionAnnotation-»
+    «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression-»
 «ENDDEFINE»

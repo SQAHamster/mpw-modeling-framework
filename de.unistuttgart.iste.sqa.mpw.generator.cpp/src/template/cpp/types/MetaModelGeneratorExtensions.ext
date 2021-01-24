@@ -27,7 +27,7 @@ getManualImplementedOperations(EClass this) :
     eAllOperations.reject(o|o.isGenerated());
 
 private isGenerated(EOperation this) :
-    isCommand() || isQuery() || isPropertyGetter();
+    isCommand() || isQuery() || isPropertyGetter() || hasGenerationAnnotations();
 
 toInheritance(EClass this) :
     let filteredExtends = eSuperTypes.typeSelect(EClass)
