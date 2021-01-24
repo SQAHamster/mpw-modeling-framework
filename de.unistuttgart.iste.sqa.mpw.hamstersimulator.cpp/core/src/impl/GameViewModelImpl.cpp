@@ -22,6 +22,7 @@ void GameViewModelImpl::init(mpw::Size size) {
         addToRows(row);
         for (int columnIndex = 0; columnIndex < size.getColumnCount(); columnIndex++) {
             auto cell = std::make_shared<ViewModelCell>();
+            cell->setLocation(mpw::Location::from(columnIndex, rowIndex));
             row->addToCells(cell);
         }
     }

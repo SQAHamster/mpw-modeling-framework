@@ -10,6 +10,12 @@
 #include <GameViewPresenter.h>
 
 class HamsterViewTestBase : public testing::Test {
+private:
+
+    int maxCharsPerCell = 4;
+    static std::unordered_map<std::string, std::string> characterMap;
+    std::shared_ptr<hamster::HamsterGame> game;
+    std::shared_ptr<viewmodel::GameViewPresenter> presenter;
 
 protected:
 
@@ -26,11 +32,8 @@ protected:
 private:
 
     static void initCharMapping();
-
-    int maxCharsPerCell = 4;
-    static std::unordered_map<std::string, std::string> characterMap;
-    std::shared_ptr<hamster::HamsterGame> game;
-    std::shared_ptr<viewmodel::GameViewPresenter> presenter;
+    void assertLocationsAreSet();
+    void assertSizeIsConsistent();
 
 };
 

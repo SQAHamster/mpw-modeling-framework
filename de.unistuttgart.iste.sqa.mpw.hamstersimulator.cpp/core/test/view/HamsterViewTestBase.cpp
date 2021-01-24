@@ -32,6 +32,29 @@ void HamsterViewTestBase::withTerritorium(const std::string& path) {
 void HamsterViewTestBase::assertTerritory(const std::string& expected) {
     std::string actual = ViewModelStringifier(characterMap, maxCharsPerCell).territoryToExpectationString(*viewModel);
     EXPECT_EQ(expected, actual);
+    assertLocationsAreSet();
+    assertSizeIsConsistent();
+}
+
+void HamsterViewTestBase::assertLocationsAreSet() {
+    int rowIndex = 0;
+    for (const auto& row : viewModel->getRows()) {
+        int columnIndex = 0;
+        for (const auto& cell : row->getCells()) {
+            EXPECT_EQ(columnIndex, cell->getLocation().getColumn());
+            EXPECT_EQ(rowIndex, cell->getLocation().getRow());
+            columnIndex++;
+        }
+        rowIndex++;
+    }
+}
+
+void HamsterViewTestBase::assertSizeIsConsistent() {
+    auto rows = viewModel->getRows();
+    EXPECT_EQ(rows.size(), viewModel->getSize().getRowCount());
+    for (const auto& row : rows) {
+        EXPECT_EQ(row->getCells().size(), viewModel->getSize().getColumnCount());
+    }
 }
 
 void HamsterViewTestBase::assertLog(const std::string& expected) {
@@ -59,4 +82,3 @@ void HamsterViewTestBase::initCharMapping() {
     characterMap["Hamster32[270]"] = "^";
     characterMap["Wall32"] = "####";
 }
-
