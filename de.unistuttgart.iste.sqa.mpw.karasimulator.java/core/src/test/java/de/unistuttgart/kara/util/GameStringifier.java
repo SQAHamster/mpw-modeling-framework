@@ -21,6 +21,9 @@ public class GameStringifier {
 			handleLine(worldBuilder, y, parts[y]);
 		}
 
+		game.getGameCommandStack().disableDelay();
+		game.startGame();
+
 		return game;
 	}
 

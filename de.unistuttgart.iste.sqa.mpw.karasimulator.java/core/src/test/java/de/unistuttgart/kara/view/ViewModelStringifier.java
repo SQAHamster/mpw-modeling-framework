@@ -1,7 +1,8 @@
 package de.unistuttgart.kara.view;
 
-import de.unistuttgart.kara.hamsterviewmodel.GameViewModel;
-import de.unistuttgart.kara.hamsterviewmodel.ViewModelCell;
+import de.unistuttgart.kara.viewmodel.GameViewModel;
+import de.unistuttgart.kara.viewmodel.ViewModelCell;
+import de.unistuttgart.kara.viewmodel.ViewModelLogEntry;
 
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class ViewModelStringifier {
 
     public String territoryToExpectationString(GameViewModel viewModel) {
         StringBuilder actual = new StringBuilder();
-        var h = viewModel.getHeight();
+        var h = viewModel.getSize().getRowCount();
         for (int y = 0; y < h; y++) {
             var s = rowToString(viewModel, y);
             actual.append(s);
@@ -27,7 +28,7 @@ public class ViewModelStringifier {
 
     private String rowToString(GameViewModel viewModel, int y) {
         StringBuilder s = new StringBuilder("|");
-        var w = viewModel.getWidth();
+        var w = viewModel.getSize().getColumnCount();
         for (int x = 0; x < w; x++) {
             var cell = viewModel.getCellAt(y, x);
             s.append(cellToString(cell));
@@ -56,8 +57,8 @@ public class ViewModelStringifier {
 
     public static String logToString(GameViewModel viewModel) {
         StringBuilder actual = new StringBuilder();
-        for (String entry : viewModel.getLogEntries()) {
-            actual.append(entry);
+        for (ViewModelLogEntry entry : viewModel.getLogEntries()) {
+            actual.append(entry.getMessage());
             actual.append("\n");
         }
         return actual.toString();

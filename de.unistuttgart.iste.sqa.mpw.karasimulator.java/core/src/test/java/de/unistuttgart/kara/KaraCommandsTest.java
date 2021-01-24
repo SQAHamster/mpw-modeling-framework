@@ -3,10 +3,14 @@ package de.unistuttgart.kara;
 import de.unistuttgart.kara.framework.CommandConstraintException;
 import de.unistuttgart.kara.kara.*;
 import de.unistuttgart.kara.mpw.Location;
+import de.unistuttgart.kara.mpw.LogEntry;
 import de.unistuttgart.kara.mpw.Tile;
 import de.unistuttgart.kara.util.GameStringifier;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -455,9 +459,15 @@ public class KaraCommandsTest {
 	}
 
 	private void assertGameLog(String...expectedStrings) {
-		String actual = String.join("|", game.getGameLog().getLogEntries());
+		String actual = String.join("|", getLogMessages());
 		String expected = String.join("|", expectedStrings);
 		assertEquals(expected, actual);
+	}
+
+	private Collection<String> getLogMessages() {
+		return game.getGameLog().getLogEntries().stream()
+				.map(LogEntry::getMessage)
+				.collect(Collectors.toList());
 	}
 
 	private Tile getTileAt(int columnIndex, int rowIndex) {

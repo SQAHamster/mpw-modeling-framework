@@ -1,14 +1,17 @@
 package de.unistuttgart.kara.view;
 
 import de.unistuttgart.kara.WorldLoader;
-import de.unistuttgart.kara.hamsterviewmodel.GameViewModel;
-import de.unistuttgart.kara.hamsterviewmodel.impl.GameViewPresenterImpl;
+import de.unistuttgart.kara.viewmodel.GameViewModel;
+import de.unistuttgart.kara.viewmodel.ViewModelCell;
+import de.unistuttgart.kara.viewmodel.ViewModelRow;
+import de.unistuttgart.kara.viewmodel.impl.GameViewPresenterImpl;
 import de.unistuttgart.kara.kara.Kara;
 import de.unistuttgart.kara.kara.KaraGame;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,8 +33,8 @@ public class KaraViewTestBase {
         game = new KaraGame();
         WorldLoader.initializeFor(game).loadFromResourceFile(path);
 
-        // game.startGame(false);
-        // game.setSpeed(KaraGame.NO_SPEED);
+        game.startGame();
+        game.getGameCommandStack().disableDelay();
 
         var territory = game.getWorld();
         kara = territory.getKara();
@@ -47,6 +50,31 @@ public class KaraViewTestBase {
         var actual = new ViewModelStringifier(characterMap, maxCharsPerCell)
                 .territoryToExpectationString(viewModel);
         assertEquals(expected, actual);
+        assertLocationsAreSet();
+        assertSizeIsConsistent();
+    }
+
+    private void assertLocationsAreSet() {
+        List<ViewModelRow> rows = viewModel.getRows();
+        for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
+            ViewModelRow row = rows.get(rowIndex);
+            List<ViewModelCell> cells = row.getCells();
+            for (int columnIndex = 0; columnIndex < cells.size(); columnIndex++) {
+                ViewModelCell cell = cells.get(columnIndex);
+                assertEquals(columnIndex, cell.getLocation().getColumn());
+                assertEquals(rowIndex, cell.getLocation().getRow());
+            }
+
+        }
+
+    }
+
+    private void assertSizeIsConsistent() {
+        List<ViewModelRow> rows = viewModel.getRows();
+        assertEquals(rows.size(), viewModel.getSize().getRowCount());
+        for (ViewModelRow row : rows) {
+            assertEquals(row.getCells().size(), viewModel.getSize().getColumnCount());
+        }
     }
 
     protected void assertLog(String expected) {
@@ -55,13 +83,13 @@ public class KaraViewTestBase {
     }
 
     private static void initCharMapping() {
-        characterMap.put("Kara32", ">");
-        characterMap.put("Kara32[90]", "v");
-        characterMap.put("Kara32[180]", "<");
-        characterMap.put("Kara32[270]", "^");
-        characterMap.put("Leaf32", "*");
-        characterMap.put("Tree32", "##");
-        characterMap.put("Mushroom32", "@");
+        characterMap.put("Kara", ">");
+        characterMap.put("Kara[90]", "v");
+        characterMap.put("Kara[180]", "<");
+        characterMap.put("Kara[270]", "^");
+        characterMap.put("Leaf", "*");
+        characterMap.put("Tree", "##");
+        characterMap.put("Mushroom", "@");
     }
 
 }

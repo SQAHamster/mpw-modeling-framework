@@ -1,18 +1,19 @@
-package de.unistuttgart.kara.hamsterviewmodel.impl;
+package de.unistuttgart.kara.viewmodel.impl;
 
-import de.unistuttgart.kara.hamsterviewmodel.GameViewPresenter;
-import de.unistuttgart.kara.hamsterviewmodel.ViewModelCell;
-import de.unistuttgart.kara.hamsterviewmodel.ViewModelCellLayer;
+import de.unistuttgart.kara.viewmodel.*;
 import de.unistuttgart.kara.kara.*;
 import de.unistuttgart.kara.mpw.*;
-import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Semaphore;
 
 public class GameViewPresenterImpl extends GameViewPresenter {
 	private final KaraGame game;
+
+	private final Map<LogEntry, ViewModelLogEntry> logEntryMap = new HashMap<>();
 
 	public GameViewPresenterImpl(KaraGame game) {
 		super(new Semaphore(1, true));
@@ -39,9 +40,9 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 	 * Log Handling
 	 */
 
-	private final ListChangeListener<String> logChangedListener = new ListChangeListener<>() {
+	private final ListChangeListener<LogEntry> logChangedListener = new ListChangeListener<>() {
 		@Override
-		public void onChanged(final Change<? extends String> change) {
+		public void onChanged(final Change<? extends LogEntry> change) {
 			runBlocking(() -> {
 				while (change.next()) {
 					if (change.wasAdded()) {
@@ -55,12 +56,17 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 		}
 	};
 
-	private void addLogEntry(String entry) {
-		getViewModel().addToLogEntries(entry);
+	private void addLogEntry(LogEntry entry) {
+		var viewModelLogEntry = new ViewModelLogEntry();
+		viewModelLogEntry.setMessage(entry.getMessage());
+		viewModelLogEntry.setColor(Color.BLACK);
+		getViewModel().addToLogEntries(viewModelLogEntry);
+		logEntryMap.put(entry, viewModelLogEntry);
 	}
 
-	private void removeLogEntry(String entry) {
-		getViewModel().removeFromLogEntries(entry);
+	private void removeLogEntry(LogEntry entry) {
+		var viewModelLogEntry = logEntryMap.remove(entry);
+		getViewModel().removeFromLogEntries(viewModelLogEntry);
 	}
 
 	/**
@@ -118,7 +124,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 
 	private void configureTreeImageView(ViewModelCell cell, Tile tile) {
 		var layer = new ViewModelCellLayer();
-		layer.setImageName("Tree32");
+		layer.setImageName("Tree");
 		refreshTreeLayer(layer, tile);
 		cell.getLayers().add(layer);
 	}
@@ -129,7 +135,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 
 	private void configureLeafImageView(ViewModelCell cell, Tile tile) {
 		var layer = new ViewModelCellLayer();
-		layer.setImageName("Leaf32");
+		layer.setImageName("Leaf");
 		refreshLeafLayer(layer, tile);
 		cell.getLayers().add(layer);
 	}
@@ -140,7 +146,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 
 	private void configureMushroomImageView(ViewModelCell cell, Tile tile) {
 		var layer = new ViewModelCellLayer();
-		layer.setImageName("Mushroom32");
+		layer.setImageName("Mushroom");
 		refreshMushroomLayer(layer, tile);
 		cell.getLayers().add(layer);
 	}
@@ -151,7 +157,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 
 	private void configureKaraImageView(ViewModelCell cell, ReadOnlyKara kara) {
 		var layer = new ViewModelCellLayer();
-		layer.setImageName("Kara32");
+		layer.setImageName("Kara");
 
 		kara.directionProperty().addListener((v, c, l) -> {
 			runBlocking(() -> {
@@ -186,12 +192,12 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 
 	@Override
 	public void playClicked() {
-		game.getGameCommandStack().resume();
+		game.getGameCommandStack().resumeGame();
 	}
 
 	@Override
 	public void pauseClicked() {
-		game.getGameCommandStack().pause();
+		game.getGameCommandStack().pauseGame();
 	}
 
 	@Override
@@ -205,14 +211,19 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 	}
 
 	@Override
+	public void close() {
+		game.getGameCommandStack().abortOrStopGame();
+	}
+
+	@Override
 	public void textTyped(String text) {
 		throw new RuntimeException("not implemented");
 	}
 
-	private void runBlocking(Runnable r) {
+	private void runBlocking(Runnable runnable) {
 		try {
 			getSemaphore().acquire();
-			r.run();
+			runnable.run();
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		} finally {
