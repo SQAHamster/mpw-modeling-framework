@@ -57,7 +57,8 @@
     #include "CommandStack.h"
     «ENDIF-»
     «IF eAllOperations.exists(o|o.eAnnotations.typeSelect(CommandParameterCreationAnnotation).size > 0)-»
-    #include "«getAnnotationValue("role").toFirstUpper()»CommandStack.h"
+    #include "CommandStack.h"
+    #include "GamePerformance.h"
     «ENDIF-»
     «EXPAND SingleImportDefinition FOREACH eStructuralFeatures
 		.collect(e|e.eType)

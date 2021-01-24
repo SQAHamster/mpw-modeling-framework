@@ -38,14 +38,13 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" lowerBound="1" eType="#//Stage"
         derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="editorCommandStack" lowerBound="1"
-        eType="ecore:EClass Command.ecore#//EditorCommandStack" changeable="false"
-        containment="true"/>
+        eType="ecore:EClass Command.ecore#//CommandStack" changeable="false" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="performance" lowerBound="1"
+        eType="#//GamePerformance" changeable="false" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="gameLog" lowerBound="1"
         eType="#//GameLog" changeable="false" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="userInputInterface" lowerBound="1"
         eType="#//UserInputInterface"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="gameCommandStack" lowerBound="1"
-        eType="ecore:EClass Command.ecore#//GameCommandStack" changeable="false" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="stereotypes/MpwStereotypes.ecore#//ValueType">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" lowerBound="1"
@@ -97,5 +96,34 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="actor" eType="#//Actor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GamePerformance">
+    <eOperations name="startGame"/>
+    <eOperations name="startGamePaused"/>
+    <eOperations name="pauseGame"/>
+    <eOperations name="resumeGame"/>
+    <eOperations name="stopGame"/>
+    <eOperations name="reset"/>
+    <eOperations name="hardReset"/>
+    <eOperations name="abortOrStopGame"/>
+    <eOperations name="preExecuteGameCommand"/>
+    <eOperations name="delayControlFlow"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="semaphore" lowerBound="1"
+        eType="ecore:EDataType BaseTypes.ecore#//Semaphore" changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" lowerBound="1" eType="#//Mode"
+        defaultValueLiteral="INITIALIZING"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="4.0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delayEnabled" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gameCommandStack" lowerBound="1"
+        eType="ecore:EClass Command.ecore#//CommandStack" changeable="false" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Mode">
+    <eLiterals name="RUNNING"/>
+    <eLiterals name="INITIALIZING" value="1"/>
+    <eLiterals name="STOPPED" value="2"/>
+    <eLiterals name="PAUSED" value="3"/>
+    <eLiterals name="ABORTED" value="4"/>
   </eClassifiers>
 </ecore:EPackage>

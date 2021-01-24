@@ -31,7 +31,7 @@
 		    «REM»TODO JML«constraints.toJml()»«ENDREM-»
 		    «o.getAnnotationValue("documentation").toJavaDoc()»
             public «o.operationToJavaType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.name.toJavaType()» «p.name»«ENDFOREACH») {
-            «EXPAND GenerationAnnotation FOREACH o.eAnnotations-»
+            «EXPAND GenerationOperationAnnotation FOREACH o.eAnnotations-»
             }
             
         «ENDFOREACH»
@@ -42,7 +42,17 @@
 
 «DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE-»
 
-«DEFINE GenerationAnnotation FOR CommandParameterCreationAnnotation-»
+«DEFINE GenerationAnnotation FOR GetPropertyAnnotation-»
+    «getAnnotationValue("documentation").toJavaDoc()»
+    public «getterType.name.toJavaType()» «getterOperationName»() {
+        return this.«field.name»;
+    }
+    
+«ENDDEFINE»
+
+«DEFINE GenerationOperationAnnotation FOR EAnnotation»«ENDDEFINE»
+
+«DEFINE GenerationOperationAnnotation FOR CommandParameterCreationAnnotation-»
     var «parametersVariableName» = new «command.name.toFirstUpper()»CommandParameters();
     «parametersVariableName».commandStack = game.get«command.roleName.toFirstUpper()»CommandStack();
     «IF command.isActorCommand()-»
@@ -53,56 +63,60 @@
     «ENDFOREACH-»
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR CommandCallAnnotation-»
-    «targetRoleVariableName».«command.name»(«parametersVariableName»);
+«DEFINE GenerationOperationAnnotation FOR CommandCallAnnotation-»
+    «IF command.isActorCommand()-»
+    game.getPerformance().preExecuteGameCommand();
+    try {
+        «targetRoleVariableName».«command.name»(«parametersVariableName»);
+        game.getPerformance().delayControlFlow();
+    } catch (Exception e) {
+        // Stop the game to prevent execution of further commands!
+        game.getPerformance().setMode(Mode.STOPPED);
+        throw e;
+    }
+    «ELSE-»
+        «targetRoleVariableName».«command.name»(«parametersVariableName»);
+    «ENDIF-»
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR QueryCallAnnotation-»
+«DEFINE GenerationOperationAnnotation FOR QueryCallAnnotation-»
     return «internalRoleField.name».«query.name»(«query.parameters.collect(p|p.name).toString(", ")»); 
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR ParameterToFieldAssignmentAnnotation-»
-    this.«field.name» = «parameter.name» ;
+«DEFINE GenerationOperationAnnotation FOR ParameterToFieldAssignmentAnnotation-»
+    this.«field.name» = «parameter.name»;
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR ConstructorSimpleFieldInitializationAnnotation-»
+«DEFINE GenerationOperationAnnotation FOR ConstructorSimpleFieldInitializationAnnotation-»
     this.«field.name» = new «constructorTypeName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR ExpressionFieldAssignmentAnnotation-»
+«DEFINE GenerationOperationAnnotation FOR ExpressionFieldAssignmentAnnotation-»
     this.«field.name» = «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression»;
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR AddVariableToCollectionAnnotation-»
+«DEFINE GenerationOperationAnnotation FOR AddVariableToCollectionAnnotation-»
     «EXPAND template::QueriesTemplate::ExpressionDefinition FOR collectionExpression».add(«EXPAND template::QueriesTemplate::ExpressionDefinition FOR parameterExpression»);
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR GetPropertyAnnotation-»
-    «getAnnotationValue("documentation").toJavaDoc()»
-    public «getterType.name.toJavaType()» «getterOperationName»() {
-        return this.«field.name»;
-    }
-    
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotation FOR MethodCallAnnotation-»
+«DEFINE GenerationOperationAnnotation FOR MethodCallAnnotation-»
     «variableName».«methodName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR ReturnAnnotation-»
+«DEFINE GenerationOperationAnnotation FOR ReturnAnnotation-»
     return «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression»;
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR ExpressionAnnotation-»
+«DEFINE GenerationOperationAnnotation FOR ExpressionAnnotation-»
     «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression-»
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR VariableObjectConstructionAnnotation-»
+«DEFINE GenerationOperationAnnotation FOR VariableObjectConstructionAnnotation-»
     var «variableName» = new «constructorType.name»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotation FOR VariableDefinitionAnnotation-»
-    var «variableName» = «EXPAND GenerationAnnotation FOR rhs»;
+«DEFINE GenerationOperationAnnotation FOR VariableDefinitionAnnotation-»
+    var «variableName» = «EXPAND GenerationOperationAnnotation FOR rhs»;
 «ENDDEFINE»
 
 «DEFINE ImportTypeGenerationAnnotation FOR ImportTypeAnnotation-»

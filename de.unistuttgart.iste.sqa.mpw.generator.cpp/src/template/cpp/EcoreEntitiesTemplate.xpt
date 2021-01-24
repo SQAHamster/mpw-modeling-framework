@@ -124,7 +124,7 @@
         «ENDFOREACH-»
         «FOREACH operationsWithGenerationAnnotations() AS o»
             «o.operationToSourceSignature(name)» {
-                «EXPAND GenerationAnnotationOperationDefinition FOREACH o.eAnnotations-»
+                «EXPAND template::cpp::GenerateClassesTemplate::GenerationAnnotationOperationDefinition FOREACH o.eAnnotations-»
             }
         «ENDFOREACH»
         
@@ -253,20 +253,6 @@
     «getterType.toCppType()» «class.name»::«getterOperationName»() noexcept {
         return this->«field.resolveFieldValue()»;
     }
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotationOperationDefinition FOR EAnnotation»«ENDDEFINE-»
-
-«DEFINE GenerationAnnotationOperationDefinition FOR MethodCallAnnotation-»
-    «variableName»->«methodName»(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotationOperationDefinition FOR VariableDefinitionAnnotation-»
-    auto «variableName» = «EXPAND GenerationAnnotationOperationDefinition FOR rhs»;
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotationOperationDefinition FOR ExpressionAnnotation-»
-    «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR expression-»
 «ENDDEFINE»
 
 «DEFINE CMakeLists FOR List[EPackage]»

@@ -7,13 +7,6 @@
   <foreignModel>stereotypes/MpwStereotypes.ecore</foreignModel>
   <foreignModel>stereotypes/ViewModelStereotypes.ecore</foreignModel>
   <genPackages prefix="Command" disposableProviderFactory="true" ecorePackage="Command.ecore#/">
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Command.ecore#//Mode">
-      <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/RUNNING"/>
-      <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/INITIALIZING"/>
-      <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/STOPPED"/>
-      <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/PAUSED"/>
-      <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/ABORTED"/>
-    </genEnums>
     <genClasses image="false" ecoreClass="Command.ecore#//PrimitiveCommand">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Command.ecore#//PrimitiveCommand/entity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//PrimitiveCommand/propertyName"/>
@@ -30,7 +23,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Command.ecore#//RemoveEntityCommand/entityToRemove"/>
     </genClasses>
     <genClasses ecoreClass="Command.ecore#//CommandStack">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Command.ecore#//CommandStack/stack"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Command.ecore#//CommandStack/executedCommands"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Command.ecore#//CommandStack/undoneCommands"/>
       <genOperations ecoreOperation="Command.ecore#//CommandStack/execute">
         <genParameters ecoreParameter="Command.ecore#//CommandStack/execute/command"/>
       </genOperations>
@@ -47,22 +41,6 @@
     <genClasses image="false" ecoreClass="Command.ecore#//CompositeCommand">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Command.ecore#//CompositeCommand/subCommands"/>
     </genClasses>
-    <genClasses ecoreClass="Command.ecore#//GameCommandStack">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//GameCommandStack/semaphore"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//GameCommandStack/mode"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//GameCommandStack/speed"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/startGame"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/startGamePaused"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/pauseGame"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/resumeGame"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/stopGame"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/reset"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/hardReset"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/abortOrStopGame"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/enableDelay"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/disableDelay"/>
-    </genClasses>
-    <genClasses ecoreClass="Command.ecore#//EditorCommandStack"/>
   </genPackages>
   <genPackages prefix="Viewmodel" disposableProviderFactory="true" ecorePackage="ViewModel.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="ViewModel.ecore#//Color">
@@ -140,6 +118,13 @@
       <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Direction/WEST"/>
       <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Direction/EAST"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="MiniProgrammingWorld.ecore#//Mode">
+      <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Mode/RUNNING"/>
+      <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Mode/INITIALIZING"/>
+      <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Mode/STOPPED"/>
+      <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Mode/PAUSED"/>
+      <genEnumLiterals ecoreEnumLiteral="MiniProgrammingWorld.ecore#//Mode/ABORTED"/>
+    </genEnums>
     <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//Actor">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Actor/direction"/>
     </genClasses>
@@ -165,9 +150,9 @@
     <genClasses image="false" ecoreClass="MiniProgrammingWorld.ecore#//MiniProgrammingWorld">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/stage"/>
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/editorCommandStack"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/performance"/>
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/gameLog"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/userInputInterface"/>
-      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//MiniProgrammingWorld/gameCommandStack"/>
     </genClasses>
     <genClasses ecoreClass="MiniProgrammingWorld.ecore#//Location">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//Location/column"/>
@@ -199,6 +184,23 @@
     <genClasses ecoreClass="MiniProgrammingWorld.ecore#//LogEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//LogEntry/message"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//LogEntry/actor"/>
+    </genClasses>
+    <genClasses ecoreClass="MiniProgrammingWorld.ecore#//GamePerformance">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//GamePerformance/semaphore"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//GamePerformance/mode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//GamePerformance/speed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MiniProgrammingWorld.ecore#//GamePerformance/delayEnabled"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference MiniProgrammingWorld.ecore#//GamePerformance/gameCommandStack"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/startGame"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/startGamePaused"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/pauseGame"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/resumeGame"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/stopGame"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/reset"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/hardReset"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/abortOrStopGame"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/preExecuteGameCommand"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/delayControlFlow"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

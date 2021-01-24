@@ -64,7 +64,7 @@
     
         «FOREACH eOperations AS o-»
             «o.operationToCppType()» «name»::«o.name»(«FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.toCppType()» «p.name»«ENDFOREACH») {
-            «EXPAND GenerationAnnotationDefinition(this) FOREACH o.eAnnotations-»
+            «EXPAND GenerationAnnotationOperationDefinition FOREACH o.eAnnotations-»
             }
             
         «ENDFOREACH»
@@ -89,7 +89,16 @@
 «ENDREM»
 «DEFINE GenerationAnnotationDefinition(EClass class) FOR EAnnotation»«ENDDEFINE-»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR CommandParameterCreationAnnotation-»
+«DEFINE GenerationAnnotationDefinition(EClass class) FOR GetPropertyAnnotation-»
+    «getterType.toCppType()» «class.name»::«getterOperationName»() {
+        return this->«field.resolveFieldValue()»;
+    }
+    
+«ENDDEFINE»
+
+«DEFINE GenerationAnnotationOperationDefinition FOR EAnnotation»«ENDDEFINE»
+
+«DEFINE GenerationAnnotationOperationDefinition FOR CommandParameterCreationAnnotation-»
     commands::«command.name.toFirstUpper()»CommandParameters «parametersVariableName»(
     /*self*/ nullptr, *game.lock()->get«command.roleName.toFirstUpper()»CommandStack()
     «IF command.isActorCommand()-»
@@ -101,55 +110,60 @@
     );
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR CommandCallAnnotation-»
-    «targetRoleVariableName»->«command.name»(«parametersVariableName»);
+«DEFINE GenerationAnnotationOperationDefinition FOR CommandCallAnnotation-»
+    «IF command.isActorCommand()-»
+	    game.lock()->getPerformance()->preExecuteGameCommand();
+	    try {
+	        «targetRoleVariableName»->«command.name»(«parametersVariableName»);
+	        game.lock()->getPerformance()->delayControlFlow();
+	    } catch (std::exception& e) {
+	        // Stop the game to prevent execution of further commands!
+	        game.lock()->getPerformance()->setMode(mpw::Mode::STOPPED);
+	        throw; // rethrow
+	    }
+    «ELSE-»
+        «targetRoleVariableName»->«command.name»(«parametersVariableName»);
+    «ENDIF-»
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR QueryCallAnnotation-»
+«DEFINE GenerationAnnotationOperationDefinition FOR QueryCallAnnotation-»
     return «internalRoleField.name»->«query.name»(«query.parameters.collect(p|p.name).toString(", ")»); 
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR ParameterToFieldAssignmentAnnotation-»
+«DEFINE GenerationAnnotationOperationDefinition FOR ParameterToFieldAssignmentAnnotation-»
     this->«field.name» = «parameter.name»;
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR ConstructorSimpleFieldInitializationAnnotation-»
+«DEFINE GenerationAnnotationOperationDefinition FOR ConstructorSimpleFieldInitializationAnnotation-»
     this->«field.name» = std::make_shared<«constructorTypeName»>(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR ExpressionFieldAssignmentAnnotation-»
+«DEFINE GenerationAnnotationOperationDefinition FOR ExpressionFieldAssignmentAnnotation-»
     this->«field.name» = «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR expression»;
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR AddVariableToCollectionAnnotation-»
+«DEFINE GenerationAnnotationOperationDefinition FOR AddVariableToCollectionAnnotation-»
     «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR collectionExpression».push_back(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR parameterExpression»);
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR GetPropertyAnnotation-»
-    «getterType.toCppType()» «class.name»::«getterOperationName»() {
-        return this->«field.resolveFieldValue()»;
-    }
-    
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR MethodCallAnnotation-»
+«DEFINE GenerationAnnotationOperationDefinition FOR MethodCallAnnotation-»
     «variableName»->«methodName»(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR ReturnAnnotation-»
+«DEFINE GenerationAnnotationOperationDefinition FOR ReturnAnnotation-»
     return «toOptionalDereferencingStar()»«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR expression»;
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR ExpressionAnnotation-»
+«DEFINE GenerationAnnotationOperationDefinition FOR ExpressionAnnotation-»
     «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR expression-»
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR VariableObjectConstructionAnnotation-»
+«DEFINE GenerationAnnotationOperationDefinition FOR VariableObjectConstructionAnnotation-»
     «constructorType.toCppType()» «variableName»«IF !constructorType.isValueType()» = std::make_shared<«constructorType.toQualifiedTypeName()»>«ENDIF»(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR VariableDefinitionAnnotation-»
-    auto «variableName» = «EXPAND GenerationAnnotationDefinition(class) FOR rhs»;
+«DEFINE GenerationAnnotationOperationDefinition FOR VariableDefinitionAnnotation-»
+    auto «variableName» = «EXPAND GenerationAnnotationOperationDefinition FOR rhs»;
 «ENDDEFINE»
 
 «REM»NOT USED for C++«ENDREM»

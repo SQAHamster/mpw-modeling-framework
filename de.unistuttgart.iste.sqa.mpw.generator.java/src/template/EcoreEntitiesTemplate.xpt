@@ -39,7 +39,7 @@
       «ENDFOREACH-»
       «FOREACH operationsWithGenerationAnnotations() AS o»
       public «o.operationToSignature()» {
-          «EXPAND GenerationAnnotation FOREACH o.eAnnotations-»
+          «EXPAND template::GenerateClassesTemplate::GenerationOperationAnnotation FOREACH o.eAnnotations-»
       }
       «ENDFOREACH»
       «EXPAND GenerationAnnotation FOREACH eAnnotations-»
@@ -118,16 +118,4 @@
     public «getterType.name» «getterOperationName»() {
         return «field.name»;
     }
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotation FOR MethodCallAnnotation-»
-    «variableName».«methodName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotation FOR VariableDefinitionAnnotation-»
-    var «variableName» = «EXPAND GenerationAnnotation FOR rhs»;
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotation FOR ExpressionAnnotation-»
-    «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression-»
 «ENDDEFINE»
