@@ -12,6 +12,7 @@
       <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/INITIALIZING"/>
       <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/STOPPED"/>
       <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/PAUSED"/>
+      <genEnumLiterals ecoreEnumLiteral="Command.ecore#//Mode/ABORTED"/>
     </genEnums>
     <genClasses image="false" ecoreClass="Command.ecore#//PrimitiveCommand">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Command.ecore#//PrimitiveCommand/entity"/>
@@ -52,17 +53,31 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Command.ecore#//GameCommandStack/speed"/>
       <genOperations ecoreOperation="Command.ecore#//GameCommandStack/startGame"/>
       <genOperations ecoreOperation="Command.ecore#//GameCommandStack/startGamePaused"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/pause"/>
-      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/resume"/>
+      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/pauseGame"/>
+      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/resumeGame"/>
+      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/stopGame"/>
+      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/reset"/>
+      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/hardReset"/>
+      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/abortOrStopGame"/>
+      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/enableDelay"/>
+      <genOperations ecoreOperation="Command.ecore#//GameCommandStack/disableDelay"/>
     </genClasses>
     <genClasses ecoreClass="Command.ecore#//EditorCommandStack"/>
   </genPackages>
   <genPackages prefix="Viewmodel" disposableProviderFactory="true" ecorePackage="ViewModel.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="ViewModel.ecore#//Color">
+      <genEnumLiterals ecoreEnumLiteral="ViewModel.ecore#//Color/BLACK"/>
+      <genEnumLiterals ecoreEnumLiteral="ViewModel.ecore#//Color/BLUE"/>
+      <genEnumLiterals ecoreEnumLiteral="ViewModel.ecore#//Color/GREEN"/>
+      <genEnumLiterals ecoreEnumLiteral="ViewModel.ecore#//Color/YELLOW"/>
+      <genEnumLiterals ecoreEnumLiteral="ViewModel.ecore#//Color/PINK"/>
+      <genEnumLiterals ecoreEnumLiteral="ViewModel.ecore#//Color/MAGENTA"/>
+      <genEnumLiterals ecoreEnumLiteral="ViewModel.ecore#//Color/RED"/>
+    </genEnums>
     <genClasses ecoreClass="ViewModel.ecore#//GameViewModel">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/logEntries"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ViewModel.ecore#//GameViewModel/rows"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/width"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/height"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference ViewModel.ecore#//GameViewModel/logEntries"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ViewModel.ecore#//GameViewModel/size"/>
       <genOperations ecoreOperation="ViewModel.ecore#//GameViewModel/getCellAt">
         <genParameters ecoreParameter="ViewModel.ecore#//GameViewModel/getCellAt/row"/>
         <genParameters ecoreParameter="ViewModel.ecore#//GameViewModel/getCellAt/column"/>
@@ -79,7 +94,7 @@
       <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/textTyped">
         <genParameters ecoreParameter="ViewModel.ecore#//GameViewInput/textTyped/text"/>
       </genOperations>
-      <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/getViewModel"/>
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/close"/>
     </genClasses>
     <genClasses ecoreClass="ViewModel.ecore#//GameViewPresenter">
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference ViewModel.ecore#//GameViewPresenter/viewModel"/>
@@ -88,6 +103,7 @@
     </genClasses>
     <genClasses ecoreClass="ViewModel.ecore#//ViewModelCell">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ViewModel.ecore#//ViewModelCell/layers"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ViewModel.ecore#//ViewModelCell/location"/>
     </genClasses>
     <genClasses ecoreClass="ViewModel.ecore#//ViewModelRow">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ViewModel.ecore#//ViewModelRow/cells"/>
@@ -96,6 +112,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//ViewModelCellLayer/imageName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//ViewModelCellLayer/rotation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//ViewModelCellLayer/visible"/>
+    </genClasses>
+    <genClasses ecoreClass="ViewModel.ecore#//ViewModelLogEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//ViewModelLogEntry/message"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//ViewModelLogEntry/color"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Viewmodelstereotypes" disposableProviderFactory="true" ecorePackage="stereotypes/ViewModelStereotypes.ecore#/">

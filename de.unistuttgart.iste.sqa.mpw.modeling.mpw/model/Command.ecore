@@ -72,12 +72,19 @@
   <eClassifiers xsi:type="ecore:EClass" name="GameCommandStack" eSuperTypes="#//CommandStack">
     <eOperations name="startGame"/>
     <eOperations name="startGamePaused"/>
-    <eOperations name="pause"/>
-    <eOperations name="resume"/>
+    <eOperations name="pauseGame"/>
+    <eOperations name="resumeGame"/>
+    <eOperations name="stopGame"/>
+    <eOperations name="reset"/>
+    <eOperations name="hardReset"/>
+    <eOperations name="abortOrStopGame"/>
+    <eOperations name="enableDelay"/>
+    <eOperations name="disableDelay"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="semaphore" lowerBound="1"
         eType="ecore:EDataType BaseTypes.ecore#//Semaphore" changeable="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//Mode" defaultValueLiteral="INITIALIZING"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="4.0"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EditorCommandStack" eSuperTypes="#//CommandStack"/>
   <eClassifiers xsi:type="ecore:EEnum" name="Mode">
@@ -85,5 +92,6 @@
     <eLiterals name="INITIALIZING" value="1"/>
     <eLiterals name="STOPPED" value="2"/>
     <eLiterals name="PAUSED" value="3"/>
+    <eLiterals name="ABORTED" value="4"/>
   </eClassifiers>
 </ecore:EPackage>

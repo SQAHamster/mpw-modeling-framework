@@ -14,13 +14,12 @@
     <eOperations name="init">
       <eParameters name="size" eType="ecore:EClass MiniProgrammingWorld.ecore#//Size"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="logEntries" unique="false"
-        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//ViewModelRow"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="logEntries" upperBound="-1"
+        eType="#//ViewModelLogEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="size" lowerBound="1" eType="ecore:EClass MiniProgrammingWorld.ecore#//Size"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameViewInput" abstract="true" interface="true">
     <eOperations name="playClicked"/>
@@ -30,7 +29,7 @@
     <eOperations name="textTyped">
       <eParameters name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
-    <eOperations name="getViewModel" eType="#//GameViewModel"/>
+    <eOperations name="close"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameViewPresenter" eSuperTypes="#//GameViewInput stereotypes/ViewModelStereotypes.ecore#//Presenter">
     <eOperations name="bind"/>
@@ -42,6 +41,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="ViewModelCell" eSuperTypes="stereotypes/ViewModelStereotypes.ecore#//ViewModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="layers" upperBound="-1"
         eType="#//ViewModelCellLayer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" lowerBound="1"
+        eType="ecore:EClass MiniProgrammingWorld.ecore#//Location" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ViewModelRow" eSuperTypes="stereotypes/ViewModelStereotypes.ecore#//ViewModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="cells" upperBound="-1"
@@ -51,5 +52,18 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="imageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rotation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewModelLogEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="#//Color"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Color">
+    <eLiterals name="BLACK"/>
+    <eLiterals name="BLUE" value="1"/>
+    <eLiterals name="GREEN" value="2"/>
+    <eLiterals name="YELLOW" value="3"/>
+    <eLiterals name="PINK" value="4"/>
+    <eLiterals name="MAGENTA" value="5"/>
+    <eLiterals name="RED" value="6"/>
   </eClassifiers>
 </ecore:EPackage>
