@@ -36,8 +36,8 @@ public class KaraViewTestBase {
         game.startGame();
         game.getGameCommandStack().disableDelay();
 
-        var territory = game.getWorld();
-        kara = territory.getKara();
+        var world = game.getWorld();
+        kara = world.getKara();
 
         var presenter = new GameViewPresenterImpl(game);
         presenter.bind();
@@ -48,7 +48,7 @@ public class KaraViewTestBase {
 
     protected void assertWorld(String expected) {
         var actual = new ViewModelStringifier(characterMap, maxCharsPerCell)
-                .territoryToExpectationString(viewModel);
+                .worldToExpectationString(viewModel);
         assertEquals(expected, actual);
         assertLocationsAreSet();
         assertSizeIsConsistent();

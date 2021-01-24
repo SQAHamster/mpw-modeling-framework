@@ -15,7 +15,7 @@ public class ViewModelStringifier {
         this.maxCharsPerCell = maxCharsPerCell;
     }
 
-    public String territoryToExpectationString(GameViewModel viewModel) {
+    public String worldToExpectationString(GameViewModel viewModel) {
         StringBuilder actual = new StringBuilder();
         var h = viewModel.getSize().getRowCount();
         for (int y = 0; y < h; y++) {

@@ -46,10 +46,10 @@ public class GameStringifier {
 	public static String toString(KaraGame game) {
 		var actual = new StringBuilder();
 
-		var hamster = game.getWorld().getKara().getInternalKara();
+		var kara = game.getWorld().getKara().getInternalKara();
 		iterateTiles(game, currentTile -> {
-			if (hamster.getCurrentTile() == currentTile) {
-				actual.append(DirectionTestHelper.toDirection(hamster.getDirection()));
+			if (kara.getCurrentTile() == currentTile) {
+				actual.append(DirectionTestHelper.toDirection(kara.getDirection()));
 			} else if (currentTile.getContents().stream().anyMatch(Leaf.class::isInstance)) {
 				actual.append('*');
 			} else if (currentTile.getContents().stream().anyMatch(Tree.class::isInstance)) {

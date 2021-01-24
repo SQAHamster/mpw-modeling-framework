@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_NOYy8CXXEeuHDMx4P4HuOA" name="turnRight" description="Changes the looking direction 90 degrees to the left, e.g., when looking north the kara will look towards west afterwards.">
+<henshin:Module xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:henshin="http://www.eclipse.org/emf/2011/Henshin" xmi:id="_NOYy8CXXEeuHDMx4P4HuOA" name="turnRight" description="Changes the looking direction 90 degrees to the right, e.g., when looking north the kara will look towards east afterwards.">
   <imports href="../../../de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/MiniProgrammingWorld.ecore#/"/>
   <imports href="../../model/Kara.ecore#/"/>
   <units xsi:type="henshin:Rule" xmi:id="_CYLcYCXtEeuiY_E2amZoVQ" name="turnRightNorth">

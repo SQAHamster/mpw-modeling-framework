@@ -15,7 +15,5 @@ set(IMPL_GEN_SRCS ${IMPL_GEN_SRCS}
     "core/src/impl/GameViewModelImpl.cpp"
     "core/src/impl/GameViewPresenterImpl.h"
     "core/src/impl/GameViewPresenterImpl.cpp"
-    "core/src/impl/KaraGameImpl.h"
-    "core/src/impl/KaraGameImpl.cpp"
 )
     

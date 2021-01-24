@@ -30,14 +30,14 @@ public final class JavaFXUtil {
         }
     }
 
-    public static Image changeColor(final Image hamsterImage, final Color color) {
-        final int width = (int)hamsterImage.getWidth();
-        final int height = (int)hamsterImage.getHeight();
+    public static Image changeColor(final Image image, final Color color) {
+        final int width = (int)image.getWidth();
+        final int height = (int)image.getHeight();
         //Creating a writable image
         final WritableImage wImage = new WritableImage(width, height);
 
         //Reading color from the loaded image
-        final PixelReader pixelReader = hamsterImage.getPixelReader();
+        final PixelReader pixelReader = image.getPixelReader();
 
         //getting the pixel writer
         final PixelWriter writer = wImage.getPixelWriter();

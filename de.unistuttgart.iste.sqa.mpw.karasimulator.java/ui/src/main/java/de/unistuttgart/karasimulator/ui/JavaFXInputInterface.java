@@ -22,7 +22,7 @@ public class JavaFXInputInterface implements UserInputInterface {
             JavaFXUtil.blockingExecuteOnFXThread(() -> {
                 final TextInputDialog textInputDialog = new TextInputDialog(defaultValue);
                 currentDialog = Optional.of(textInputDialog);
-                textInputDialog.setTitle("Hamster needs input!");
+                textInputDialog.setTitle("Kara needs input!");
                 textInputDialog.setHeaderText(message);
 
                 final Button okButton = (Button) textInputDialog.getDialogPane().lookupButton(ButtonType.OK);

@@ -24,7 +24,7 @@ class GameStage extends Stage {
     }
 
     public void prepareStage() throws IOException {
-        this.setTitle("Hamster Simulator - Game Window");
+        this.setTitle("Kara Simulator - Game Window");
         final BorderPane root = (BorderPane) loadFromFXML();
         final Scene scene = new Scene(root, 700, 400);
         scene.getStylesheets().add("css/game.css");

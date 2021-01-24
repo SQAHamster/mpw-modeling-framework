@@ -19,7 +19,6 @@ public class GameCommandStackImpl extends GameCommandStack {
 
 	public GameCommandStackImpl() {
 		super(new Semaphore(1, true));
-		setMode(Mode.INITIALIZING);
 	}
 
 	@Override
@@ -55,7 +54,7 @@ public class GameCommandStackImpl extends GameCommandStack {
 				this.setMode(Mode.STOPPED);
 				throw new GameAbortedException("Stopped execution of command due to abort");
 			} else if (this.getMode() != Mode.RUNNING) {
-				throw new IllegalStateException("The game needs to be running to execute hamster commands");
+				throw new IllegalStateException("The game needs to be running to execute kara commands");
 			}
 			checkState(getMode() != Mode.STOPPED);
 			executeCommand(command);

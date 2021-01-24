@@ -22,7 +22,7 @@ public class JavaFXUI extends Application {
      @ requires true;
      @*/
     /**
-     * Displays the hamster game associated with the provided hamster game adapter in a new window
+     * Displays the kara game associated with the provided kara game adapter in a new window
      * This automatically starts the UI, adds the necessary input interface and opens the scene
      */
     public static void displayInNewGameWindow(final KaraGame game) {
@@ -74,9 +74,9 @@ public class JavaFXUI extends Application {
      @ ensures isStarted;
      @*/
     /**
-     * Opens a scene for the hamster game associated with hamsterGameViewModel
+     * Opens a scene for the kara game associated with karaGameViewModel
      * requires that the JavaFXUI is started
-     * @param gameViewModel the adapter for the hamster game to display
+     * @param gameViewModel the adapter for the kara game to display
      */
     public static void openSceneFor(final GameViewInput gameViewInput, final GameViewModel gameViewModel) {
         start();
