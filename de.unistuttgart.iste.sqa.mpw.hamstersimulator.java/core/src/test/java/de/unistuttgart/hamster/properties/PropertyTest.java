@@ -1,9 +1,11 @@
 package de.unistuttgart.hamster.properties;
 
+import de.unistuttgart.hamster.commands.impl.GameCommandStackImpl;
 import de.unistuttgart.hamster.hamster.ConcreteHamster;
 import de.unistuttgart.hamster.hamster.Grain;
 import de.unistuttgart.hamster.mpw.Direction;
 import de.unistuttgart.hamster.mpw.Tile;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,6 +55,12 @@ public class PropertyTest {
 		east.setWest(west);
 		east.setWest(null);
 		assertNull(west.getEast());
+	}
+
+	@Test
+	public void givenGameStack_whenInitialize_thenSpeedIs4() {
+		var gameCommandStack = new GameCommandStackImpl();
+		assertEquals(4.0, gameCommandStack.getSpeed(), 0.001);
 	}
 
 	//</editor-fold>

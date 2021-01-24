@@ -38,13 +38,11 @@ void GameCommandStackImpl::execute(std::shared_ptr<commands::Command> command) {
 }
 
 void GameCommandStackImpl::delay() {
-    double speed = getSpeed();
-    if (speed <= 0) {
-        return;
+    if (delayEnabled) {
+        double speed = getSpeed();
+        long delayTimeInMillis = static_cast<long>((11.0 - speed) / 5.0 * 400.0);
+        std::this_thread::sleep_for(std::chrono::milliseconds(delayTimeInMillis));
     }
-
-    long delayTimeInMillis = static_cast<long>((11.0 - speed) / 5.0 * 400.0);
-    std::this_thread::sleep_for(std::chrono::milliseconds(delayTimeInMillis));
 }
 
 void GameCommandStackImpl::pauseGame() {
