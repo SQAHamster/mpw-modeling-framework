@@ -20,12 +20,24 @@
         eType="#//ViewModelLogEntry" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="size" lowerBound="1" eType="ecore:EClass MiniProgrammingWorld.ecore#//Size"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="playButtonEnabled" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pauseButtonEnabled" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="undoButtonEnabled" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="redoButtonEnabled" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameViewInput" abstract="true" interface="true">
     <eOperations name="playClicked"/>
     <eOperations name="pauseClicked"/>
     <eOperations name="undoClicked"/>
     <eOperations name="redoClicked"/>
+    <eOperations name="speedChanged" lowerBound="1">
+      <eParameters name="speedValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
     <eOperations name="textTyped">
       <eParameters name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
