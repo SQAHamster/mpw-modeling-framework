@@ -9,8 +9,6 @@ import static de.unistuttgart.iste.rss.utils.Preconditions.checkState;
 
 public class CommandStackImpl extends CommandStack {
 
-	private final Stack<Command> undoneCommands = new Stack<>();
-
 	public CommandStackImpl() {
 		super();
 	}
@@ -29,15 +27,16 @@ public class CommandStackImpl extends CommandStack {
 
 		final Command undoneCommand = stack.remove(stack.size() - 1);
 		undoneCommand.undo();
-		undoneCommands.push(undoneCommand);
+		getUndoneCommands().add(undoneCommand);
 	}
 
 	@Override
 	public synchronized void redo() {
-		checkState(undoneCommands.size() > 0, "Cannot redo");
+		var undoStack = getUndoneCommands();
+		checkState(undoStack.size() > 0, "Cannot redo");
 
-		final Command undoneCommand = this.undoneCommands.pop();
-		undoneCommand.execute();
+		final Command undoneCommand = undoStack.remove(undoStack.size() - 1);
+		undoneCommand.redo();
 		getExecutedCommands().add(undoneCommand);
 	}
 
@@ -51,7 +50,8 @@ public class CommandStackImpl extends CommandStack {
 
 	@Override
 	public synchronized void redoAll() {
-		while (undoneCommands.size() > 0) {
+		var undoStack = getUndoneCommands();
+		while (undoStack.size() > 0) {
 			redo();
 		}
 	}

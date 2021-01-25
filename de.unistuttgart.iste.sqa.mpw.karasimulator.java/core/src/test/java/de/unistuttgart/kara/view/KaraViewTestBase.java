@@ -1,6 +1,7 @@
 package de.unistuttgart.kara.view;
 
 import de.unistuttgart.kara.WorldLoader;
+import de.unistuttgart.kara.viewmodel.GameViewInput;
 import de.unistuttgart.kara.viewmodel.GameViewModel;
 import de.unistuttgart.kara.viewmodel.ViewModelCell;
 import de.unistuttgart.kara.viewmodel.ViewModelRow;
@@ -22,6 +23,7 @@ public class KaraViewTestBase {
     private static Map<String, String> characterMap = new HashMap<>();
     private KaraGame game;
     protected Kara kara;
+    protected GameViewInput viewInput;
     protected GameViewModel viewModel;
 
     @BeforeAll
@@ -41,14 +43,38 @@ public class KaraViewTestBase {
 
         var presenter = new GameViewPresenterImpl(game);
         presenter.bind();
+        viewInput = presenter;
         viewModel = presenter.getViewModel();
 
         game.setUserInputInterface(new UserInputInterfaceFake());
     }
 
+    protected void clickPlay() {
+        viewInput.playClicked();
+    }
+
+    protected void clickPause() {
+        viewInput.pauseClicked();
+    }
+
+    protected void clickUndo() {
+        viewInput.undoClicked();
+    }
+
+    protected void clickRedo() {
+        viewInput.redoClicked();
+    }
+
     protected void assertWorld(String expected) {
         var actual = new ViewModelStringifier(characterMap, maxCharsPerCell)
                 .worldToExpectationString(viewModel);
+        assertEquals(expected, actual);
+        assertLocationsAreSet();
+        assertSizeIsConsistent();
+    }
+
+    protected void assertButtons(String expected) {
+        var actual = ViewModelStringifier.buttonBarToExpectationString(viewModel);
         assertEquals(expected, actual);
         assertLocationsAreSet();
         assertSizeIsConsistent();

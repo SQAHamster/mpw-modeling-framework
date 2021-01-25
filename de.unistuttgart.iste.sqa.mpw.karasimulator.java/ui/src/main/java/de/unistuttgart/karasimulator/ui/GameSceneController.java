@@ -72,11 +72,15 @@ public class GameSceneController {
         this.gameViewInput = gameViewInput;
         this.karaGrid.bindToViewModel(gameViewModel);
 
-        /*this.play.disableProperty().bind(gameViewInput.modeProperty().isNotEqualTo(Mode.PAUSED));
-        this.pause.disableProperty().bind(gameViewInput.modeProperty().isNotEqualTo(Mode.RUNNING));
-        this.undo.disableProperty().bind(this.gameViewInput.canUndoProperty().not());
-        this.redo.disableProperty().bind(this.gameViewInput.canRedoProperty().not());
-        this.speed.valueProperty().bindBidirectional(this.gameViewInput.speedProperty());*/
+        this.play.disableProperty().bind(gameViewModel.playButtonEnabledProperty().not());
+        this.pause.disableProperty().bind(gameViewModel.pauseButtonEnabledProperty().not());
+        this.undo.disableProperty().bind(gameViewModel.undoButtonEnabledProperty().not());
+        this.redo.disableProperty().bind(gameViewModel.redoButtonEnabledProperty().not());
+        this.speed.valueProperty().bindBidirectional(gameViewModel.speedProperty());
+        this.speed.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            gameViewInput.speedChanged(this.speed.getValue());
+        });
+
         this.log.setCellFactory(list -> new CellFormat());
         this.log.itemsProperty().bind(gameViewModel.logEntriesProperty());
         this.log.getItems().addListener((ListChangeListener<ViewModelLogEntry>) changeListener -> {

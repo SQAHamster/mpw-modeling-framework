@@ -1,14 +1,19 @@
 package de.unistuttgart.kara.viewmodel.impl;
 
+import de.unistuttgart.kara.commands.CommandStack;
 import de.unistuttgart.kara.viewmodel.*;
 import de.unistuttgart.kara.kara.*;
 import de.unistuttgart.kara.mpw.*;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ListChangeListener;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Semaphore;
+
+import static de.unistuttgart.iste.rss.utils.Preconditions.checkState;
 
 public class GameViewPresenterImpl extends GameViewPresenter {
 	private final KaraGame game;
@@ -25,15 +30,38 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 
 	@Override
 	public void bind() {
-		runBlocking(() -> {
-			var world = game.getWorld().getInternalWorld();
-			world.tilesProperty().addListener(tilesChangedListener);
-			world.tilesProperty().forEach(tile -> addTileNode(tile));
-
-			var gameLog = game.getGameLog();
-			gameLog.logEntriesProperty().addListener(logChangedListener);
-			gameLog.logEntriesProperty().forEach(entry -> addLogEntry(entry));
+		runLocked(() -> {
+			bindTiles();
+			bindGameLog();
+			bindButtons();
 		});
+	}
+
+	private void bindTiles() {
+		var world = game.getWorld().getInternalWorld();
+		var tilesProperty = world.tilesProperty();
+		tilesProperty.addListener(tilesChangedListener);
+		tilesProperty.forEach(tile -> addTileNode(tile));
+	}
+
+	private void bindGameLog() {
+		var gameLog = game.getGameLog();
+		var logEntriesProperty = gameLog.logEntriesProperty();
+		logEntriesProperty.addListener(logChangedListener);
+		logEntriesProperty.forEach(entry -> addLogEntry(entry));
+	}
+
+	private void bindButtons() {
+		var viewModel = getViewModel();
+		var modeProperty = game.getPerformance().modeProperty();
+		var gameCommandStack = game.getGameCommandStack();
+		var anyExecutedCommandsBinding = gameCommandStack.executedCommandsProperty().emptyProperty().not();
+		var anyUndoneCommandsBinding = gameCommandStack.undoneCommandsProperty().emptyProperty().not();
+
+		viewModel.playButtonEnabledProperty().bind(modeProperty.isEqualTo(Mode.PAUSED));
+		viewModel.pauseButtonEnabledProperty().bind(modeProperty.isEqualTo(Mode.RUNNING));
+		viewModel.undoButtonEnabledProperty().bind(anyExecutedCommandsBinding.and(modeProperty.isNotEqualTo(Mode.RUNNING)));
+		viewModel.redoButtonEnabledProperty().bind(anyUndoneCommandsBinding.and(modeProperty.isNotEqualTo(Mode.RUNNING)));
 	}
 
 	/**
@@ -43,7 +71,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 	private final ListChangeListener<LogEntry> logChangedListener = new ListChangeListener<>() {
 		@Override
 		public void onChanged(final Change<? extends LogEntry> change) {
-			runBlocking(() -> {
+			runLocked(() -> {
 				while (change.next()) {
 					if (change.wasAdded()) {
 						change.getAddedSubList().forEach(entry -> addLogEntry(entry));
@@ -69,6 +97,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 		getViewModel().removeFromLogEntries(viewModelLogEntry);
 	}
 
+
 	/**
 	 * Tile Handling
 	 */
@@ -76,7 +105,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 	private final ListChangeListener<Tile> tilesChangedListener = new ListChangeListener<Tile>() {
 		@Override
 		public void onChanged(final Change<? extends Tile> change) {
-			runBlocking(() -> {
+			runLocked(() -> {
 				while (change.next()) {
 					if (change.wasAdded()) {
 						change.getAddedSubList().forEach(tile -> addTileNode(tile));
@@ -92,7 +121,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 	private void addTileNode(final Tile tile) {
 		final Location location = tile.getLocation();
 		tile.contentsProperty().addListener((v, c, l) -> {
-			runBlocking(() -> {
+			runLocked(() -> {
 				setTileNodeAt(tile.getLocation(), tile);
 			});
 		});
@@ -160,7 +189,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 		layer.setImageName("Kara");
 
 		kara.directionProperty().addListener((v, c, l) -> {
-			runBlocking(() -> {
+			runLocked(() -> {
 				refreshKaraLayer(layer, kara);
 			});
 		});
@@ -211,6 +240,13 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 	}
 
 	@Override
+	public void speedChanged(double speedValue) {
+		checkState(speedValue >= 0 && speedValue <= 10,
+					"Provided speed is not in range [0, 10]");
+		game.getPerformance().setSpeed(speedValue);
+	}
+
+	@Override
 	public void close() {
 		game.getPerformance().abortOrStopGame();
 	}
@@ -220,7 +256,7 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 		throw new RuntimeException("not implemented");
 	}
 
-	private void runBlocking(Runnable runnable) {
+	private void runLocked(Runnable runnable) {
 		try {
 			getSemaphore().acquire();
 			runnable.run();

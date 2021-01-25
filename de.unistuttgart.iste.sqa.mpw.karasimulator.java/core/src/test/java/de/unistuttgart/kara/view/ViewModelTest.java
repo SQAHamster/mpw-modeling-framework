@@ -136,4 +136,34 @@ class ViewModelTest extends KaraViewTestBase {
                 "Hello\n");
     }
 
+
+    /*
+     * [button] means: button is enabled
+     * /button/ means: button is disabled
+     */
+    @Test
+    public void testButtonsForModes() throws IOException {
+        withWorld("/worlds/example01.ter");
+        assertButtons("/play/ [pause] /undo/ /redo/");
+        kara.move();
+        kara.turnRight();
+        assertButtons("/play/ [pause] /undo/ /redo/");
+        clickPause();
+        assertButtons("[play] /pause/ [undo] /redo/");
+        clickUndo();
+        assertButtons("[play] /pause/ [undo] [redo]");
+        clickUndo();
+        assertButtons("[play] /pause/ /undo/ [redo]");
+        clickRedo();
+        assertButtons("[play] /pause/ [undo] [redo]");
+        clickPlay();
+        assertButtons("/play/ [pause] /undo/ /redo/");
+        clickPause();
+        assertButtons("[play] /pause/ [undo] /redo/");
+        assertWorld(
+                "|##|##|##|##|##|\n" +
+                "|##|  |v |@ |##|\n" +
+                "|##|##|* |##|##|\n");
+    }
+
 }
