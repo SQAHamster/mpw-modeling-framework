@@ -175,11 +175,16 @@
 
 «DEFINE GetPropertyDefinitions FOR EClass»
 	  «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
+	  «REM»property getters are used for ReadOnlyInterfaces, hence return the readonly variant«ENDREM»
 	  «IF f.hasPropertyGetterOperation()-»
 	  @Override
-	  «ENDIF-»
 	  public «f.featureToObservableReadonlyType()» «f.name»Property() {
 	  	return this.«f.name».getReadOnlyProperty();
 	  }
+	  «ELSE-»
+      public «f.featureToObservableFieldType()» «f.name»Property() {
+        return this.«f.name»;
+      }
+	  «ENDIF-»
       «ENDFOREACH»
 «ENDDEFINE»
