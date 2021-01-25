@@ -28,6 +28,7 @@ public:
     void pauseClicked() override;
     void undoClicked() override;
     void redoClicked() override;
+    void speedChanged(double speedValue) override;
 
     void close() override;
 

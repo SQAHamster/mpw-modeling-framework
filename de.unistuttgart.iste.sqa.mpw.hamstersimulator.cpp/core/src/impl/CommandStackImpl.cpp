@@ -31,7 +31,7 @@ void CommandStackImpl::redo() {
     auto undoStack = getUndoneCommands();
     auto undoneCommand = undoStack.back();
     removeFromUndoneCommands(undoneCommand);
-    undoneCommand->execute();
+    undoneCommand->redo();
     addToExecutedCommands(undoneCommand);
 }
 

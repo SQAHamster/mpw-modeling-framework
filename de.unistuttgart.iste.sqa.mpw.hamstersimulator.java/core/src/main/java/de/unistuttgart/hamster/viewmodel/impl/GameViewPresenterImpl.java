@@ -38,6 +38,11 @@ public class GameViewPresenterImpl extends GameViewPresenter {
 	}
 
 	@Override
+	public void speedChanged(double speedValue) {
+		throw new RuntimeException("not implemented");
+	}
+
+	@Override
 	public void close() {
 		throw new RuntimeException("not implemented");
 	}

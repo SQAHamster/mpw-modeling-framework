@@ -197,5 +197,12 @@ void GameViewPresenterImpl::addLogEntry(const LogEntry& entry) {
     getViewModel()->addToLogEntries(viewModelEntry);
 }
 
+void GameViewPresenterImpl::speedChanged(double speedValue) {
+    if (!(speedValue >= 0 && speedValue <= 10)) {
+        throw std::runtime_error("Provided speed is not in range [0, 10]");
+    }
+    game->getPerformance()->setSpeed(speedValue);
+}
+
 
 }
