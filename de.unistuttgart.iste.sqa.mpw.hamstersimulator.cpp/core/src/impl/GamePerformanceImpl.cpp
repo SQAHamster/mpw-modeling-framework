@@ -37,6 +37,7 @@ void GamePerformanceImpl::resumeGame() {
     if (getMode() != Mode::PAUSED) {
         throw std::runtime_error("pause() can only be called in mode RUNNING");
     }
+    getGameCommandStack()->redoAll();
     setMode(Mode::RUNNING);
     getSemaphore().release();
 }

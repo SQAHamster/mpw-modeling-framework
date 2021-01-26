@@ -3,8 +3,6 @@ package de.unistuttgart.kara.commands.impl;
 import de.unistuttgart.kara.commands.CommandStack;
 import de.unistuttgart.kara.commands.Command;
 
-import java.util.Stack;
-
 import static de.unistuttgart.iste.rss.utils.Preconditions.checkState;
 
 public class CommandStackImpl extends CommandStack {

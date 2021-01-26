@@ -3,8 +3,6 @@ package de.unistuttgart.hamster.commands.impl;
 import de.unistuttgart.hamster.commands.CommandStack;
 import de.unistuttgart.hamster.commands.Command;
 
-import java.util.concurrent.Semaphore;
-
 public class CommandStackImpl extends CommandStack {
 
     public CommandStackImpl() {
