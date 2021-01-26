@@ -56,6 +56,11 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ViewModel.ecore#//GameViewModel/rows"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference ViewModel.ecore#//GameViewModel/logEntries"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ViewModel.ecore#//GameViewModel/size"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/playButtonEnabled"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/pauseButtonEnabled"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/undoButtonEnabled"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/redoButtonEnabled"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ViewModel.ecore#//GameViewModel/speed"/>
       <genOperations ecoreOperation="ViewModel.ecore#//GameViewModel/getCellAt">
         <genParameters ecoreParameter="ViewModel.ecore#//GameViewModel/getCellAt/row"/>
         <genParameters ecoreParameter="ViewModel.ecore#//GameViewModel/getCellAt/column"/>
@@ -69,6 +74,9 @@
       <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/pauseClicked"/>
       <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/undoClicked"/>
       <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/redoClicked"/>
+      <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/speedChanged">
+        <genParameters ecoreParameter="ViewModel.ecore#//GameViewInput/speedChanged/speedValue"/>
+      </genOperations>
       <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/textTyped">
         <genParameters ecoreParameter="ViewModel.ecore#//GameViewInput/textTyped/text"/>
       </genOperations>
@@ -196,7 +204,6 @@
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/pauseGame"/>
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/resumeGame"/>
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/stopGame"/>
-      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/reset"/>
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/hardReset"/>
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/abortOrStopGame"/>
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/preExecuteGameCommand"/>
