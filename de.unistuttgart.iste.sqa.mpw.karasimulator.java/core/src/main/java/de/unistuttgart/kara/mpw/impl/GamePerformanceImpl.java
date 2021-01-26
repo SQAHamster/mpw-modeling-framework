@@ -96,20 +96,6 @@ public class GamePerformanceImpl extends GamePerformance {
 		unblockForMode(Mode.RUNNING);
 	}
 
-
-
-	@Override
-	public synchronized void reset() {
-		checkState(getMode() != Mode.INITIALIZING,
-				"soft reset is not possible during initialization");
-
-		final Mode currentMode = getMode();
-		if (currentMode == Mode.RUNNING) {
-			pauseGame();
-		}
-		getGameCommandStack().undoAll();
-	}
-
 	@Override
 	public synchronized void hardReset() {
 		clearCommandStack();

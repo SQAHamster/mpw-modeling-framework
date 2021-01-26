@@ -103,7 +103,6 @@
     <eOperations name="pauseGame"/>
     <eOperations name="resumeGame"/>
     <eOperations name="stopGame"/>
-    <eOperations name="reset"/>
     <eOperations name="hardReset"/>
     <eOperations name="abortOrStopGame"/>
     <eOperations name="preExecuteGameCommand"/>
