@@ -60,18 +60,6 @@ void GamePerformanceImpl::abortOrStopGame() {
     }
 }
 
-void GamePerformanceImpl::reset() {
-    if (getMode() != Mode::INITIALIZING) {
-        throw std::runtime_error("soft reset is not possible during initialization");
-    }
-
-    Mode currentMode = getMode();
-    if (currentMode == Mode::RUNNING) {
-        pauseGame();
-    }
-    getGameCommandStack()->undoAll();
-}
-
 void GamePerformanceImpl::hardReset() {
     getGameCommandStack()->clearExecutedCommands();
     getGameCommandStack()->clearUndoneCommands();

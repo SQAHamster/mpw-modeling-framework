@@ -24,8 +24,8 @@ public:
 TEST_F(UndoCommandTest, testUndo) { /* NOLINT */
     std::shared_ptr<HamsterGame> game = GameStringifier::createFromString(" >*;"
                                                                           "   ;");
-    auto commandStack = game->getGameCommandStack();
-    commandStack->clearExecutedCommands(); // remove initial commands to test undoAll
+    game->hardReset();
+    game->startGame();
 
     auto hamster = game->getTerritory()->getDefaultHamster();
     hamster->move();
@@ -37,6 +37,7 @@ TEST_F(UndoCommandTest, testUndo) { /* NOLINT */
 
     hamster->move();
 
+    auto commandStack = game->getGameCommandStack();
     commandStack->undo();
     std::string actual = GameStringifier::toString(*game);
     EXPECT_EQ("  v;"

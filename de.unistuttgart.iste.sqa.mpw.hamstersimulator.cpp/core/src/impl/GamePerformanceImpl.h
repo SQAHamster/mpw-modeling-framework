@@ -24,8 +24,6 @@ public:
 
 	void stopGame() override;
 
-	void reset() override;
-
 	void hardReset() override;
 
 	void abortOrStopGame() override;

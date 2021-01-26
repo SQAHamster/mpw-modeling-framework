@@ -33,18 +33,28 @@ public class GamePerformanceImpl extends GamePerformance {
 	}
 
 	@Override
-	public void stopGame() {
-		throw new RuntimeException("not implemented");
+	public synchronized void stopGame() {
+		unblockForMode(Mode.STOPPED);
 	}
 
-	@Override
-	public void reset() {
-		throw new RuntimeException("not implemented");
+	private void unblockForMode(Mode mode) {
+		setMode(mode);
+		if (getSemaphore().availablePermits() == 0) {
+			getSemaphore().release();
+		}
 	}
 
 	@Override
 	public void hardReset() {
-		throw new RuntimeException("not implemented");
+		clearCommandStack();
+		this.stopGame();
+		setMode(Mode.INITIALIZING);
+	}
+
+	private void clearCommandStack() {
+		var gameCommandStack = getGameCommandStack();
+		gameCommandStack.getExecutedCommands().clear();
+		gameCommandStack.getUndoneCommands().clear();
 	}
 
 	@Override
