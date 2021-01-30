@@ -39,11 +39,11 @@ void HamsterViewTestBase::assertTerritory(const std::string& expected) {
 
 void HamsterViewTestBase::assertLocationsAreSet() {
     int rowIndex = 0;
-    for (const auto& row : viewModel->getRows()) {
+    for (auto& row : viewModel->getRows()) {
         int columnIndex = 0;
-        for (const auto& cell : row->getCells()) {
-            EXPECT_EQ(columnIndex, cell->getLocation().getColumn());
-            EXPECT_EQ(rowIndex, cell->getLocation().getRow());
+        for (auto& cell : row.getCells()) { // todo const-correctness
+            EXPECT_EQ(columnIndex, cell.getLocation().getColumn()); // todo const-correctness
+            EXPECT_EQ(rowIndex, cell.getLocation().getRow());
             columnIndex++;
         }
         rowIndex++;
@@ -51,10 +51,10 @@ void HamsterViewTestBase::assertLocationsAreSet() {
 }
 
 void HamsterViewTestBase::assertSizeIsConsistent() {
-    auto rows = viewModel->getRows();
+    auto& rows = viewModel->getRows();
     EXPECT_EQ(rows.size(), viewModel->getSize().getRowCount());
-    for (const auto& row : rows) {
-        EXPECT_EQ(row->getCells().size(), viewModel->getSize().getColumnCount());
+    for (auto& row : rows) {
+        EXPECT_EQ(row.getCells().size(), viewModel->getSize().getColumnCount()); // todo const-correctness
     }
 }
 

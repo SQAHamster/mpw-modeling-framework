@@ -41,7 +41,7 @@ std::string ViewModelStringifier::cellToString(const ViewModelCell& cell) const 
     auto& nonConstCell = const_cast<ViewModelCell&>(cell); // TODO const-correctness: adapt after migrate generator
     std::string result;
     for (const auto& layer : nonConstCell.getLayers()) {
-        auto& nonConstLayer = const_cast<ViewModelCellLayer&>(*layer);
+        auto& nonConstLayer = const_cast<ViewModelCellLayer&>(layer);
         if (nonConstLayer.getVisible()) {
             std::string key = nonConstLayer.getImageName();
             int rotation = nonConstLayer.getRotation();
@@ -64,9 +64,9 @@ std::string ViewModelStringifier::cellToString(const ViewModelCell& cell) const 
 std::string ViewModelStringifier::logToString(const GameViewModel& viewModel) {
     auto& nonConstViewModel = const_cast<GameViewModel&>(viewModel); // TODO const-correctness: adapt after migrate generator
     std::string actual;
-    auto logEntries = nonConstViewModel.getLogEntries();
+    auto& logEntries = nonConstViewModel.getLogEntries();
     for (auto& entry : logEntries) {
-        actual.append(entry->getMessage());
+        actual.append(entry.getMessage());
         actual.append("\n");
     }
     return actual;

@@ -13,7 +13,7 @@ void CommandStackImpl::execute(std::shared_ptr<commands::Command> command) {
 }
 
 void CommandStackImpl::undo() {
-    auto stack = getExecutedCommands();
+    auto& stack = getExecutedCommands();
     if (stack.empty()) {
         throw std::runtime_error("cannot undo with empty stack");
     }
@@ -28,7 +28,7 @@ void CommandStackImpl::redo() {
     if (getUndoneCommands().empty()) {
         throw std::runtime_error("cannot redo with no undone commands");
     }
-    auto undoStack = getUndoneCommands();
+    auto& undoStack = getUndoneCommands();
     auto undoneCommand = undoStack.back();
     removeFromUndoneCommands(undoneCommand);
     undoneCommand->redo();

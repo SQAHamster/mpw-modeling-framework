@@ -108,7 +108,7 @@ std::string GameStringifier::grainsOnTerritoryToString(const HamsterGame& game) 
 
 static void iterateTiles(const HamsterGame& game, const std::function<void(Tile&)>& lambda) {
     auto& nonConstGame = const_cast<HamsterGame&>(game); // TODO fix this const-correctness issue
-    auto tiles = nonConstGame.getTerritory()->getInternalTerritory()->getTiles();
+    auto& tiles = nonConstGame.getTerritory()->getInternalTerritory()->getTiles();
     auto upperLeftTile = collectionhelpers::get_at(tiles, 0).value();
     auto firstOfRowTile = upperLeftTile;
 

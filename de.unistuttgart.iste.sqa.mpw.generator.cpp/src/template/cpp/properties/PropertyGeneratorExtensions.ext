@@ -15,8 +15,8 @@ featureToSimpleFieldType(ETypedElement this) :
     
 private referenceToSimpleFieldType(EReference this) :
     if (this.upperBound == -1) then (
-        if (this.containment) then "std::list<std::shared_ptr<" + this.eType.toQualifiedTypeName() + ">>"
-        else "std::list<std::weak_ptr<" + this.eType.toQualifiedTypeName() + ">>" )
+        if (this.containment) then "framework::SimpleObjectContainmentListProperty<" + this.eType.toQualifiedTypeName() + ">"
+        else "framework::SimpleObjectReferenceListProperty<" + this.eType.toQualifiedTypeName() + ">" )
     else (
         if (this.containment || hasSharedOwnership() || eType.isDependency()) then "std::shared_ptr<" + this.eType.toQualifiedTypeName() + ">"
         else "std::weak_ptr<" + this.eType.toQualifiedTypeName() + ">" );

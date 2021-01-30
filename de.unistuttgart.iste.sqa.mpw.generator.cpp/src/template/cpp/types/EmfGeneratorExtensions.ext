@@ -103,7 +103,7 @@ private elementToCppType(ETypedElement this) :
     else if (this.eType == null) then "void" 
 	else if (this.upperBound == -1) then (
 	    if (EAttribute.isInstance(this) || this.eType.isBuiltInType()) then "std::list<" + this.toCppType() + ">"
-	    else "std::list<std::shared_ptr<" + this.eType.ePackage.name + "::" + this.eType.name + ">>" )
+	    else "framework::ObjectListView<" + this.eType.ePackage.name + "::" + this.eType.name + ">&" )
 	else this.toCppType();
 
 hasInitializationAnnotation(EStructuralFeature this) :

@@ -7,17 +7,16 @@ using namespace basetypes;
 
 namespace commands {
   void CompositeCommandBase::undo() {
-    auto subCommands = getSubCommands();
-    for (auto iter = subCommands.rbegin(); iter != subCommands.rend(); ++iter) {
-      auto& subCommand = *iter;
-      subCommand->undo();
-    }
+      auto& subCommands = getSubCommands();
+      for (auto iter = subCommands.rbegin(); iter != subCommands.rend(); ++iter) {
+          auto& subCommand = *iter;
+          subCommand.undo();
+      }
   }
 
   void CompositeCommandBase::redo() {
-    auto subCommands = getSubCommands();
-    for (auto& subCommand : subCommands) {
-      subCommand->redo();
+    for (auto& subCommand : getSubCommands()) {
+      subCommand.redo();
     }
   }
 

@@ -375,7 +375,7 @@ void HamsterCommandTest::assertGrainsOnTerritory(const std::string& expected) {
 static std::vector<std::string> toMessages(GameLog& log) {
     std::vector<std::string> result;
     for (auto& entry : log.getLogEntries()) {
-        result.push_back(entry->getMessage());
+        result.push_back(entry.getMessage());
     }
     return result;
 }

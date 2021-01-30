@@ -19,7 +19,28 @@ class UndoCommandTest : public testing::Test {
 public:
 };
 
-//<editor-fold desc="Feature: move">
+//<editor-fold desc="Feature: undo">
+
+TEST_F(UndoCommandTest, testUndo123) {
+    std::shared_ptr<HamsterGame> game = GameStringifier::createFromString(" >*;"
+                                                                          "   ;");
+    game->hardReset();
+    game->startGame();
+
+    auto hamster = game->getTerritory()->getDefaultHamster();
+    hamster->move();
+
+    std::string actual1 = GameStringifier::toString(*game);
+    EXPECT_EQ("  >;"
+              "   ;", actual1);
+
+    auto commandStack = game->getGameCommandStack();
+    commandStack->undo();
+
+    std::string actual = GameStringifier::toString(*game);
+    EXPECT_EQ(" >*;"
+              "   ;", actual);
+}
 
 TEST_F(UndoCommandTest, testUndo) { /* NOLINT */
     std::shared_ptr<HamsterGame> game = GameStringifier::createFromString(" >*;"

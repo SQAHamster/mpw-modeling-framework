@@ -48,3 +48,7 @@ featureToObservableFieldInstantiation(EStructuralFeature this) :
 operationToObservableGetterSignature(EOperation this) :
     "virtual const " + propertyGetterToObservableFieldType() + "& " + name + "Property()";
     
+featureToCppPropertyGetter(EStructuralFeature this) : 
+    if (this.isObjectReference() && this.isCollection()) then "framework::ObjectListView<" + this.eType.name + ">&"
+    else featureToCppType();
+    

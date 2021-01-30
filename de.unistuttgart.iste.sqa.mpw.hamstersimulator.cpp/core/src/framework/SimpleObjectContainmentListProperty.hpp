@@ -1,26 +1,27 @@
-#ifndef DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTCONTAINMENTLISTPROPERTY_H
-#define DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTCONTAINMENTLISTPROPERTY_H
+#ifndef DE_UNISTUTTGART_FRAMEWORK_SIMPLEOBJECTCONTAINMENTLISTPROPERTY_H
+#define DE_UNISTUTTGART_FRAMEWORK_SIMPLEOBJECTCONTAINMENTLISTPROPERTY_H
 
+#include <algorithm>
 #include <list>
-#include <functional>
 #include <memory>
-#include "ObservableObjectListProperty.hpp"
+#include <functional>
+#include "ObjectListView.hpp"
+#include "iterators/ObjectIterator.hpp"
 #include "iterators/SharedPointerListIterator.hpp"
 
 namespace framework {
 
 template<typename T>
-class ObservableObjectContainmentListProperty : public ObservableObjectListProperty<T> {
+class SimpleObjectContainmentListProperty final : public ObjectListView<T> {
     static constexpr bool useConstTrue = true;
     static constexpr bool useConstFalse = false;
 
-    using inherited = ObservableObjectListProperty<T>;
-    using iterator = typename inherited::iterator;
-    using const_iterator = typename inherited::const_iterator;
+    using iterator = ObjectIterator<T, useConstFalse>;
+    using const_iterator = ObjectIterator<T, useConstTrue>;
 
 private:
 
-    std::list<std::shared_ptr<T>> elements{};
+    std::list<std::shared_ptr<T>> elements;
 
 public:
 
@@ -28,22 +29,43 @@ public:
     using ListIteratorConst = SharedPointerListIterator<T, decltype(elements.cbegin()), useConstTrue>;
     using ListIteratorReverseNonConst = SharedPointerListIterator<T, decltype(elements.rbegin()), useConstFalse>;
 
-    const std::list<std::shared_ptr<T>>& getElements() const {
+    using size_type = size_t;
+
+    std::list<std::shared_ptr<T>>& get() {
+        return elements;
+    }
+    const std::list<std::shared_ptr<T>>& get() const {
         return elements;
     }
 
-    void add(std::shared_ptr<T> element) {
-        ObservableObjectListProperty<T>::references.push_back(*element);
+    bool empty() const override {
+        return elements.empty();
+    }
+
+    size_t size() const override {
+        return elements.size();
+    }
+
+    std::shared_ptr<T> front() override {
+        if (elements.empty()) {
+            return {};
+        }
+        return elements.front();
+    }
+
+    std::shared_ptr<T> back() override {
+        if (elements.empty()) {
+            return {};
+        }
+        return elements.back();
+    }
+
+    void push_back(std::shared_ptr<T> element) {
         elements.push_back(element);
-        ObservableListProperty<T>::notifyAdded(*element);
     }
 
     void remove(std::shared_ptr<T> element) {
-        ObservableObjectListProperty<T>::references.remove_if([element](auto& referenceWrapper) {
-            return &referenceWrapper.get() == element.get();
-        });
         elements.remove(element);
-        ObservableListProperty<T>::notifyRemoved(*element);
     }
 
     iterator begin() override {
@@ -69,8 +91,9 @@ public:
     iterator rend() override {
         return iterator(std::make_unique<ListIteratorReverseNonConst>(elements, elements.rend()));
     }
+
 };
 
 }
 
-#endif //DE_UNISTUTTGART_FRAMEWORK_OBSERVABLEOBJECTCONTAINMENTLISTPROPERTY_H
+#endif //DE_UNISTUTTGART_FRAMEWORK_SIMPLEOBJECTCONTAINMENTLISTPROPERTY_H

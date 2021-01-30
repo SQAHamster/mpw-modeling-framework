@@ -116,14 +116,14 @@
 
 «DEFINE GetPropertyValueDeclarations FOR EClass»
       «FOREACH eStructuralFeatures AS f»
-      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToCppType()» «f.name.getter()»() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToCppPropertyGetter()» «f.name.getter()»() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
       «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE GetPropertyValueDefinitions FOR EClass»
       «FOREACH eStructuralFeatures AS f»
-      «f.featureToCppType()» «name»::«f.name.getter()»() noexcept {
-        «IF f.isObservableProperty()-»
+      «f.featureToCppPropertyGetter()» «name»::«f.name.getter()»() noexcept {
+        «IF f.isObservableProperty() && !f.isCollection()-»
         return this->«f.name».get();
         «ELSE-»
         return this->«f.resolveFieldValue()»;

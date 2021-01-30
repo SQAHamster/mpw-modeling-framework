@@ -35,8 +35,16 @@
 	    eOperations.exists(o|o.isPropertyGetter())-»
 	#include "ObservableListProperties.h"
 	«ENDIF-»
+    «IF eStructuralFeatures.exists(f|!f.isObservableProperty() && f.isCollection()) || 
+        eOperations.exists(o|o.isPropertyGetter())-»
+    #include "SimpleListProperties.h"
+    «ENDIF-»
+    «IF eStructuralFeatures.exists(f|f.isCollection() && f.eType.isObjectReference())-»
+    #include "ObjectListView.hpp"
+    «ENDIF-»
     «EXPAND SingleImportDefinition FOREACH eSuperTypes
         .union(eStructuralFeatures.collect(f|f.eType).select(t|t.isEnum() || t.isValueType()))
+        .union(eStructuralFeatures.select(f|f.isObjectReference() && f.isCollection()).collect(f|f.eType))
         .union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten().select(t|t.isEnum() || t.isValueType()))
 		.reject(t|t.isDataType())
 		.reject(t|t.isStereotype())
@@ -65,6 +73,7 @@
 		.union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())
 		.union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
 		.union(eAllContents.typeSelect(Statement).collect(s|s.type))
+		.without(eStructuralFeatures.select(f|f.isObjectReference() && f.isCollection()).collect(f|f.eType))
 		.reject(t|t.name == this.name)
 		.reject(t|t.isDataType())
 		.reject(t|t.isEnum())
@@ -94,6 +103,7 @@
 		.union(eAnnotations.typeSelect(GetPropertyAnnotation).collect(a|a.getterType))
 		.union(eAnnotations.typeSelect(GetPropertyDeclarationAnnotation).collect(a|a.getterType))
 		.toSet()
+		.without(eStructuralFeatures.select(f|f.isObjectReference() && f.isCollection()).collect(f|f.eType))
 		.reject(t|t == this)
 		.reject(t|t.isDataType())
 		.reject(t|t.isEnum())

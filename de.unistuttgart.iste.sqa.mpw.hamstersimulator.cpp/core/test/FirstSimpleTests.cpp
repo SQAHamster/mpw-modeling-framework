@@ -69,10 +69,10 @@ public:
     void execute() override { }
 
     Command& at(size_t i) {
-        auto list = getSubCommands();
+        auto& list = getSubCommands();
         auto iter = list.begin();
         std::advance(iter, i);
-        return *(*iter);
+        return *iter;
     }
 };
 

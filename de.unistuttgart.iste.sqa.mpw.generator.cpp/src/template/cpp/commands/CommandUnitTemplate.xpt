@@ -213,7 +213,7 @@
     std::shared_ptr<«this.target.instanceType.toQualifiedTypeName()»> «rule.getParentTransformation().name.toFirstUpper()»Command::«rule.name.toFirstLower()»_find«this.target.variableName.toFirstUpper()»(«source.toFindParameterTypeName()» source) {
         «this.target.instanceType.toCppType()» result = nullptr;
         
-        for (auto& «getVariableNameForFindReference()» : source.«getter(this.referenceName)»()) {
+        for (auto& «getVariableNameForFindReference()» : source.«getter(this.referenceName)»().sharedPointerView()) {
             «IF isPolymorphic()»
                 «this.target.instanceType.toCppType()» «this.target.variableName» = std::dynamic_pointer_cast<«this.target.instanceType.toQualifiedTypeName()»>(«getVariableNameForFindReference()»);
                 if («this.target.variableName» == nullptr) {
