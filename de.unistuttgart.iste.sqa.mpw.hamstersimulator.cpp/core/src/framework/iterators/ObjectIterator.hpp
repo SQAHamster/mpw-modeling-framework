@@ -14,10 +14,10 @@ namespace framework {
 template<typename T, bool constType>
 class ObjectIterator {
 public:
-    using InternalObjectIterator = InternalObjectIterator<T, constType>;
+    using InternalIterator = InternalObjectIterator<T, constType>;
 
 private:
-    std::unique_ptr<InternalObjectIterator> internalIterator;
+    std::unique_ptr<InternalIterator> internalIterator;
 
 public:
 
@@ -25,12 +25,12 @@ public:
 
     using self_type = ObjectIterator;
     using value_type = ObjectReturnType;
-    using iterator_category = typename std::forward_iterator_tag;
+    typedef std::forward_iterator_tag iterator_category;
     using difference_type = int;
     using reference = ObjectReturnType&;
     using pointer = ObjectReturnType*;
 
-    explicit ObjectIterator(std::unique_ptr<InternalObjectIterator> innerListIterator)
+    explicit ObjectIterator(std::unique_ptr<InternalIterator> innerListIterator)
         : internalIterator(std::move(innerListIterator))
     {
     }

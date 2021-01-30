@@ -37,6 +37,9 @@ public:
     }
 
     ObjectReturnType* current() const override {
+        if (currentIterator == endIter()) {
+            return nullptr;
+        }
         return (*currentIterator).lock().get();
     }
     ObjectReturnType* next() override {
@@ -44,10 +47,6 @@ public:
         increaseUntilCurrentIsNotNull();
         return current();
     }
-
-/*    bool operator==(const InternalObjectIterator <T>& rhs) const override {
-        return currentIterator == rhs.currentIterator;
-    }*/
 
 private:
 
@@ -59,19 +58,19 @@ private:
     }
 
     template<typename iterator_type=iterator>
-    typename std::enable_if<std::is_same<iterator_type, typename ListType::iterator>::value, iterator_type>::type endIter() {
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::iterator>::value, iterator_type>::type endIter() const {
         return elements.end();
     }
     template<typename iterator_type=iterator>
-    typename std::enable_if<std::is_same<iterator_type, typename ListType::const_iterator>::value, iterator_type>::type endIter() {
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::const_iterator>::value, iterator_type>::type endIter() const {
         return elements.cend();
     }
     template<typename iterator_type=iterator>
-    typename std::enable_if<std::is_same<iterator_type, typename ListType::reverse_iterator>::value, iterator_type>::type endIter() {
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::reverse_iterator>::value, iterator_type>::type endIter() const {
         return elements.rend();
     }
     template<typename iterator_type=iterator>
-    typename std::enable_if<std::is_same<iterator_type, typename ListType::const_reverse_iterator>::value, iterator_type>::type endIter() {
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::const_reverse_iterator>::value, iterator_type>::type endIter() const {
         return elements.crend();
     }
 
