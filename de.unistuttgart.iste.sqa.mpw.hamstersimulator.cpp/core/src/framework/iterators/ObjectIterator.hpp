@@ -6,6 +6,7 @@
 #include <functional>
 #include <utility>
 #include <memory>
+#include <iterator>
 #include "InternalObjectIterator.hpp"
 
 namespace framework {

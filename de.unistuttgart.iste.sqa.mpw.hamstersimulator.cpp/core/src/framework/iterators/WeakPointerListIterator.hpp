@@ -3,6 +3,7 @@
 
 #include <list>
 #include <memory>
+#include <type_traits>
 #include "InternalObjectIterator.hpp"
 
 namespace framework {
