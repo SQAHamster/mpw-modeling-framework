@@ -8,10 +8,6 @@ import de.unistuttgart.kara.commands.impl.utils.CommandUtils;
  */
 public class RemoveEntityCommandImpl extends RemoveEntityCommand {
 
-	public RemoveEntityCommandImpl() {
-
-	}
-
 	@Override
 	public void execute() {
 		try {
@@ -19,7 +15,7 @@ public class RemoveEntityCommandImpl extends RemoveEntityCommand {
 			var method = CommandUtils.findRemoveMethod(entity, getPropertyName());
 			method.invoke(entity, getEntityToRemove());
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException("Error: could not execute RemoveEntityCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}
 
@@ -30,7 +26,7 @@ public class RemoveEntityCommandImpl extends RemoveEntityCommand {
 			var method = CommandUtils.findAddMethod(entity, getPropertyName());
 			method.invoke(entity, getEntityToRemove());
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException("Error: could not execute RemoveEntityCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}
 

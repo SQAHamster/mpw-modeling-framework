@@ -8,10 +8,6 @@ import de.unistuttgart.kara.mpw.Size;
 
 public class GameViewModelImpl extends GameViewModel {
 
-	public GameViewModelImpl() {
-
-	}
-
 	@Override
 	public ViewModelCell getCellAt(int row, int column) {
 		if (row >= 0 && row < getSize().getRowCount()

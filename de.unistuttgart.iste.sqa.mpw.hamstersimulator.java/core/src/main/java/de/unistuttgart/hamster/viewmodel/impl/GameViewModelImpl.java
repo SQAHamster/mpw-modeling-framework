@@ -6,10 +6,6 @@ import de.unistuttgart.hamster.mpw.Size;
 
 public class GameViewModelImpl extends GameViewModel {
 
-	public GameViewModelImpl() {
-
-	}
-
 	@Override
 	public ViewModelCell getCellAt(int row, int column) {
 		throw new RuntimeException("not implemented");

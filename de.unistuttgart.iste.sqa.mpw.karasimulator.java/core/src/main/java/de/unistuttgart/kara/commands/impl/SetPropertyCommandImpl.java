@@ -5,10 +5,6 @@ import de.unistuttgart.kara.commands.impl.utils.CommandUtils;
 
 public class SetPropertyCommandImpl extends SetPropertyCommand {
 
-	public SetPropertyCommandImpl() {
-
-	}
-
 	@Override
 	public void execute() {
 		try {
@@ -16,7 +12,7 @@ public class SetPropertyCommandImpl extends SetPropertyCommand {
 			var method = CommandUtils.findSetMethod(entity, getPropertyName());
 			method.invoke(getEntity(), getNewValue());
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException("Error: could not execute SetPropertyCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}
 
@@ -27,7 +23,7 @@ public class SetPropertyCommandImpl extends SetPropertyCommand {
 			var method = CommandUtils.findSetMethod(entity, getPropertyName());
 			method.invoke(getEntity(), getOldValue());
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException("Error: could not execute SetPropertyCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}
 

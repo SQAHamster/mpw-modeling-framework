@@ -6,10 +6,6 @@ import de.unistuttgart.kara.mpw.LogEntry;
 
 public class GameLogImpl extends GameLog {
 
-	public GameLogImpl() {
-		super();
-	}
-
 	@Override
 	public void write(Actor actor, String message) {
 		var logEntry = new LogEntry();

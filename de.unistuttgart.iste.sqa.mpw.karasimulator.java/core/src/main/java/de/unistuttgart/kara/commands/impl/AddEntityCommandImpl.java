@@ -5,10 +5,6 @@ import de.unistuttgart.kara.commands.impl.utils.CommandUtils;
 
 public class AddEntityCommandImpl extends AddEntityCommand {
 
-	public AddEntityCommandImpl() {
-
-	}
-
 	@Override
 	public void execute() {
 		try {
@@ -16,7 +12,7 @@ public class AddEntityCommandImpl extends AddEntityCommand {
 			var method = CommandUtils.findAddMethod(entity, getPropertyName());
 			method.invoke(entity, getEntityToAdd());
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException("Error: could not execute AddEntityCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}
 
@@ -27,7 +23,7 @@ public class AddEntityCommandImpl extends AddEntityCommand {
 			var method = CommandUtils.findRemoveMethod(entity, getPropertyName());
 			method.invoke(entity, getEntityToAdd());
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException("Error: could not execute AddEntityCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}
 

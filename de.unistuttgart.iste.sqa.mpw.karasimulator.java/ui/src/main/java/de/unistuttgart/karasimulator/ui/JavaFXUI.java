@@ -86,7 +86,7 @@ public class JavaFXUI extends Application {
                 stage = new GameStage(gameViewInput, gameViewModel);
                 stage.show();
             } catch (final IOException e) {
-                e.printStackTrace();
+                inputInterface.confirmAlert(e);
             }
         });
     }

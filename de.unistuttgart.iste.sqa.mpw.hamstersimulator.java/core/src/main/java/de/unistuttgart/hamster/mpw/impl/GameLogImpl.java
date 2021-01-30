@@ -6,10 +6,6 @@ import de.unistuttgart.hamster.mpw.LogEntry;
 
 public class GameLogImpl extends GameLog {
 
-	public GameLogImpl() {
-
-	}
-
 	@Override
 	public void write(Actor actor, String message) {
 		var logEntry = new LogEntry();
