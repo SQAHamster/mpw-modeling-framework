@@ -49,7 +49,6 @@ public:
     }
 
     iterator begin() override {
-        std::make_unique<ListIteratorNonConst>(elements, elements.begin());
         return iterator(std::make_unique<ListIteratorNonConst>(elements, elements.begin()));
     }
 

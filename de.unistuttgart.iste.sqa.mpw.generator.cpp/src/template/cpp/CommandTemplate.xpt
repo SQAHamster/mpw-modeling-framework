@@ -52,6 +52,7 @@
         «IF eAllContents.typeSelect(CollectionMethodStatement).exists(s|s.isComplexMethodStatement())-»
             #include "CollectionHelpers.hpp"
         «ENDIF-»
+        #include <stdexcept>
         
         using namespace framework;
     
