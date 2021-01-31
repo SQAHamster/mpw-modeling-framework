@@ -1,3 +1,0 @@
-context Kara
-/** Checks the kara's current tile for leaf. */
-query onLeaf: self.currentTile.contents->typeSelect(Leaf)->notEmpty();

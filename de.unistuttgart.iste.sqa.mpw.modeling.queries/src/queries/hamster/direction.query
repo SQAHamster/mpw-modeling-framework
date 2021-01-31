@@ -1,3 +1,0 @@
-context Hamster
-/** Get the current hamster looking direction. */
-query getDirection: self.direction;

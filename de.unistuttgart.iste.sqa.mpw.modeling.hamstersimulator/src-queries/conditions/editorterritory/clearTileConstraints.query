@@ -1,9 +1,0 @@
-context Territory::clearTile(location:Location)
-
-/** location has to be on territory */
-precondition: 
-    self.isLocationInTerritory(location);
-    
-/** the tile's contents have to be empty */
-postcondition:
-    self.getTileAt(location).contents->isEmpty();

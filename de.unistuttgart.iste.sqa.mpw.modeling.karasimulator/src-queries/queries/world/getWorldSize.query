@@ -1,3 +1,0 @@
-context World
-/** Return the size of the current world. From the size you can retrieve the number of rows and colums. */
-query getWorldSize: self.stageSize;

@@ -8,7 +8,6 @@
     
     <modules>
         <module>de.unistuttgart.iste.sqa.mpw.modeling.mpw</module>
-        <module>de.unistuttgart.iste.sqa.mpw.modeling.hamstersimulator</module>
         <module>de.unistuttgart.iste.sqa.mpw.modeling.querydsl</module>
         <module>de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ide</module>
         <module>de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui</module>

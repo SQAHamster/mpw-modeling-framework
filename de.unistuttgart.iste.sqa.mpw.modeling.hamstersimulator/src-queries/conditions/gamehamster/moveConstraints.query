@@ -1,4 +1,0 @@
-context Hamster::move
-
-/** Hamster front must not be blocked or outside territory */
-precondition: self.frontIsClear();

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -143,15 +144,20 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	}
 	
 	private Stream<Path> listFiles(String directory) throws IOException {
-		return Files.find(Path.of(directory), 
-				Integer.MAX_VALUE,
-		        (filePath, fileAttr) 
-		        -> fileAttr.isRegularFile()).sorted(new Comparator<Path>() {
-					@Override
-					public int compare(Path lhs, Path rhs) {
-						return lhs.toAbsolutePath().compareTo(rhs.toAbsolutePath());
-					}
-				});
+		final Path path = Path.of(directory);
+		if (Files.exists(path)) {
+			return Files.find(path, 
+					Integer.MAX_VALUE,
+			        (filePath, fileAttr) 
+			        -> fileAttr.isRegularFile()).sorted(new Comparator<Path>() {
+						@Override
+						public int compare(Path lhs, Path rhs) {
+							return lhs.toAbsolutePath().compareTo(rhs.toAbsolutePath());
+						}
+					});
+		}
+		final List<Path> emptyList = Collections.emptyList();
+		return emptyList.stream();
 	}
 	
 	private boolean isExcluded(String filePath) {

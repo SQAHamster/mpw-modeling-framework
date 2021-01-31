@@ -8,7 +8,7 @@ import components.writers.*
 import components.transformators.*
 
 var sourceProjectName = "default.project" // has to be set by calling workflow
-var generatedProjectBasePackage  = "'de.unistuttgart.sample'" // has to be set by calling workflow
+var generatedProjectBasePackage  = "de.unistuttgart.sample" // has to be set by calling workflow
 var targetSimulatorProjectBaseName = "sample" // has to be set by calling workflow
 
 var platformUriPrefix = "platform:/resource"
@@ -16,7 +16,6 @@ var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
 var modelingModuleBaseName = "${moduleBaseName}.modeling"
 
 var rootPath = ".."
-var mpwModelProject  = "${modelingModuleBaseName}.mpw"
 var transformationsProject = "${modelingModuleBaseName}.transformations"
 
 var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/RoleTransformation.qvto"
@@ -40,14 +39,9 @@ Workflow {
 	bean = EmfRegistryMetaModel : mm_emf { }
 
 	/* load models and store in slot */
-	component = MultiEcoreReader {
-		rootPath = rootPath
-		projectName = mpwModelProject
-		excludeModel = "stereotypes/*"
-		modelSlot = "entityModels"
-	}
     component = MultiEcoreReader {
         rootPath = rootPath
+        excludeModel = "stereotypes/*"
         projectName = sourceProjectName
         modelSlot = "entityModels"
     }

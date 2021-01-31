@@ -1,7 +1,0 @@
-context Hamster::pickGrain
-
-/** there have to be grains available on the hamster's tile */
-precondition: self.grainAvailable();
-
-/** the number of grains has to be increased by one */
-postcondition: self.grains->size() = old(self.grains->size()) + 1;

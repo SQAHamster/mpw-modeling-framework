@@ -1,7 +1,0 @@
-context Kara
-/** Checks if a mushroom is at the front of the kara. */
-query mushroomFront: 
-        ( self.direction = WEST  implies self.currentTile.west.contents->typeSelect(Mushroom)->notEmpty() )
-    and ( self.direction = EAST  implies self.currentTile.east.contents->typeSelect(Mushroom)->notEmpty() )
-    and ( self.direction = NORTH implies self.currentTile.north.contents->typeSelect(Mushroom)->notEmpty() )
-    and ( self.direction = SOUTH implies self.currentTile.south.contents->typeSelect(Mushroom)->notEmpty() );

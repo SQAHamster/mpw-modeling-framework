@@ -1,3 +1,0 @@
-context Hamster
-/** Checks whether the hamster's mouth is empty or whether it has grains in its mouth. */
-query mouthEmpty: self.grains->isEmpty();

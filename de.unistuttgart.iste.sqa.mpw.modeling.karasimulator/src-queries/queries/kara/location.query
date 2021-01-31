@@ -1,3 +1,0 @@
-context Kara
-/** Get the current kara's location. */
-query getLocation: self.currentTile.location;

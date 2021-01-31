@@ -1,0 +1,11 @@
+module modeling.MpwFrameworkWorkflow
+
+var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
+
+Workflow {
+    component = @modeling.Workflow auto-inject {
+        sourceProjectName = "${moduleBaseName}.modeling.mpw"
+        generatedProjectBasePackage = "'${moduleBaseName}.framework'"
+        targetSimulatorProjectBaseName = "${moduleBaseName}.framework"
+    }
+}
