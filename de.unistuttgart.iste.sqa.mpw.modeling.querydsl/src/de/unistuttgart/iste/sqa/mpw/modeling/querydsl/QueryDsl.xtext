@@ -123,6 +123,6 @@ Direction:
 
 terminal DOCUMENTATION : '/**' -> '*/' ;
 @Override 
-terminal ML_COMMENT : '/*' (!'*') -> '*/' ;
+terminal ML_COMMENT : ('/*' !'*') -> '*/' ;
 @Override 
 terminal SL_COMMENT : '//' !('\n'|'\r')* ('\r'? '\n')? ;
