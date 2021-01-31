@@ -145,21 +145,21 @@
 «ENDDEFINE»
 
 «DEFINE VariableAssignmentDefinition FOR VariableAssignment»
-    «variableName» = «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR value»;
+    «variableName» = «EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR value»;
 «ENDDEFINE»
 
 «DEFINE AttributeDefinition FOR AttributeCondition»
     «IF this.isCreate»
         «IF instance.instanceType.isValueType()-»
             // set attribute condition «instance.variableName».«attributeName» := «attributeValueLiteral»
-            «instance.variableName»«accessor()»«attributeName.setter()»(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+            «instance.variableName»«accessor()»«attributeName.setter()»(«EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR attributeValue»);
         «ELSE»
             // set value type field «instance.variableName».«attributeName» := «attributeValueLiteral»
-            «commandSetter(this.attributeValue.type)»(«instance.variableName», «attributeName.toFeatureKeyAccess(instance.instanceType)», «instance.variableName»«accessor()»«attributeName.getter()»(), «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+            «commandSetter(this.attributeValue.type)»(«instance.variableName», «attributeName.toFeatureKeyAccess(instance.instanceType)», «instance.variableName»«accessor()»«attributeName.getter()»(), «EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR attributeValue»);
         «ENDIF-»
     «ELSE»  
         // assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
-        if («instance.variableName»«instance.accessor()»«attributeName.getter()»() != «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
+        if («instance.variableName»«instance.accessor()»«attributeName.getter()»() != «EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR attributeValue») {
             return false;
         }
     «ENDIF»
@@ -234,7 +234,7 @@
 
 «DEFINE AttributeConditionsForFindObjectDefinition FOR AttributeCondition»
     // attribute check: «instance.variableName»: «this.attributeName»
-    if («instance.variableName»«instance.accessor()»«this.attributeName.getter()»() != «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
+    if («instance.variableName»«instance.accessor()»«this.attributeName.getter()»() != «EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR attributeValue») {
         continue;
     }
 «ENDDEFINE»
@@ -271,7 +271,7 @@
 
 «DEFINE OldValueVariablesDefinition FOR Unit»
     «LET (Transformation)this.eContainer AS transformation-»
-    «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH transformation.constraints.typeSelect(Postcondition).collect(c|c.oldValueVariableExpressions).flatten()-»
+    «EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOREACH transformation.constraints.typeSelect(Postcondition).collect(c|c.oldValueVariableExpressions).flatten()-»
     «ENDLET-»
 «ENDDEFINE»
 
@@ -284,7 +284,7 @@
 
 «DEFINE ConstraintDefinition FOR Constraint»
     «documentation.toComment()»
-    if ((«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
+    if ((«EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
         throw CommandConstraintException("«constraintToViolationString()»");
     }
 «ENDDEFINE»

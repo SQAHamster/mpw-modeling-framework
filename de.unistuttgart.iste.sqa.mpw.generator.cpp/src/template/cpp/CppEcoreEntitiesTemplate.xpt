@@ -15,7 +15,7 @@
                                  .reject(c|c.interface)
                                  .reject(c|c.isValueType())
                                  .reject(c|c.isFacade())»
-    «EXPAND template::cpp::types::ValueTypeTemplate::ValueTypeTemplate FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.isValueType())»
+    «EXPAND template::cpp::types::CppValueTypeTemplate::ValueTypeTemplate FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.isValueType())»
     «EXPAND CppInterface FOREACH this.eClassifiers.typeSelect(EClass).select(c|c.interface)»
     «EXPAND CppEnum FOREACH this.eClassifiers.typeSelect(EEnum)»
 «ENDDEFINE»
@@ -31,9 +31,9 @@
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
     
-    «EXPAND template::cpp::types::ImportUsedTypesTemplate::HeaderImportDefinitions FOR this»
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::HeaderImportDefinitions FOR this»
     
-    «EXPAND template::cpp::types::ImportUsedTypesTemplate::ForwardDeclarations FOR this»
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::ForwardDeclarations FOR this»
     
     namespace «this.ePackage.name» {
     
@@ -43,17 +43,17 @@
     
       «this.toInheritedAlias()-»
     
-      «EXPAND template::cpp::properties::PropertyTemplate::PropertyDefinitions FOR this»
+      «EXPAND template::cpp::properties::CppPropertyTemplate::PropertyDefinitions FOR this»
       
     public:
-      «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDeclaration FOR this»
-      «EXPAND template::cpp::properties::PropertyTemplate::StaticSharedFromThisDefinition FOR this»
-      «EXPAND template::cpp::QueriesTemplate::QueryDeclarations FOR this»
-      «EXPAND template::cpp::commands::CommandCallsTemplate::CommandDeclarations FOR this»
-      «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDeclarations FOR this»
-      «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDeclarations FOR this»
-      «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDeclarations FOR this»
-      «EXPAND template::cpp::properties::PropertyTemplate::VirtualBaseMethodDelegateDefinitions FOR this»
+      «EXPAND template::cpp::properties::CppPropertyTemplate::ConstructorDeclaration FOR this»
+      «EXPAND template::cpp::properties::CppPropertyTemplate::StaticSharedFromThisDefinition FOR this»
+      «EXPAND template::cpp::CppQueriesTemplate::QueryDeclarations FOR this»
+      «EXPAND template::cpp::commands::CppCommandCallsTemplate::CommandDeclarations FOR this»
+      «EXPAND template::cpp::properties::CppPropertyTemplate::GetPropertyDeclarations FOR this»
+      «EXPAND template::cpp::properties::CppPropertyTemplate::GetPropertyValueDeclarations FOR this»
+      «EXPAND template::cpp::properties::CppPropertyTemplate::SetPropertyValueDeclarations FOR this»
+      «EXPAND template::cpp::properties::CppPropertyTemplate::VirtualBaseMethodDelegateDefinitions FOR this»
       
     public:
     
@@ -67,8 +67,8 @@
       «ENDFOREACH»
       
       «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations-»
-      «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyKeyDefinitions FOR this»
-      «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodDeclarations FOR this»
+      «EXPAND template::cpp::properties::CppReflectivePropertyAccessorsTemplate::ReflectivePropertyKeyDefinitions FOR this»
+      «EXPAND template::cpp::properties::CppReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodDeclarations FOR this»
 
     };
     
@@ -83,7 +83,7 @@
     #ifndef «this.toCppImplIncludeGuard()»
     #define «this.toCppImplIncludeGuard()»
     
-    «EXPAND template::cpp::types::ImportUsedTypesTemplate::ImplImportDefinitions FOR this»
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::ImplImportDefinitions FOR this»
     
     namespace «this.ePackage.name» {
     
@@ -92,7 +92,7 @@
       using inherited = «this.name»;
 
     public:
-      «EXPAND template::cpp::properties::PropertyTemplate::ImplConstructorDeclaration FOR this»
+      «EXPAND template::cpp::properties::CppPropertyTemplate::ImplConstructorDeclaration FOR this»
       «FOREACH this.getManualImplementedOperations() AS o»
       «o.operationToOverrideSignature()»;
       «ENDFOREACH»
@@ -108,28 +108,28 @@
 «DEFINE CppClassSource FOR EClass»
     «FILE "generated/" + name + ".cpp"»#include "«name».h"
     
-    «EXPAND template::cpp::types::ImportUsedTypesTemplate::SourceImportDefinitions FOR this»
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::SourceImportDefinitions FOR this»
     
     namespace «this.ePackage.name» {
     
-        «EXPAND template::cpp::properties::PropertyTemplate::ConstructorDefinition FOR this»
-        «EXPAND template::cpp::properties::PropertyTemplate::DestructorDefinition FOR this»
-        «EXPAND template::cpp::QueriesTemplate::QueryDefinitions FOR this»
-        «EXPAND template::cpp::commands::CommandCallsTemplate::CommandDefinitions FOR this»
-        «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyDefinitions FOR this»
-        «EXPAND template::cpp::properties::PropertyTemplate::GetPropertyValueDefinitions FOR this»
-        «EXPAND template::cpp::properties::PropertyTemplate::SetPropertyValueDefinitions FOR this»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::ConstructorDefinition FOR this»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::DestructorDefinition FOR this»
+        «EXPAND template::cpp::CppQueriesTemplate::QueryDefinitions FOR this»
+        «EXPAND template::cpp::commands::CppCommandCallsTemplate::CommandDefinitions FOR this»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::GetPropertyDefinitions FOR this»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::GetPropertyValueDefinitions FOR this»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::SetPropertyValueDefinitions FOR this»
         «FOREACH operationsWithoutGenerationAnnotations() AS o-»
         // TODO Source Operation «o.operationToSourceSignature(name)» {}
         «ENDFOREACH-»
         «FOREACH operationsWithGenerationAnnotations() AS o»
             «o.operationToSourceSignature(name)» {
-                «EXPAND template::cpp::GenerateClassesTemplate::GenerationAnnotationOperationDefinition FOREACH o.eAnnotations-»
+                «EXPAND template::cpp::CppGenerateClassesTemplate::GenerationAnnotationOperationDefinition FOREACH o.eAnnotations-»
             }
         «ENDFOREACH»
         
         «EXPAND GenerationAnnotationDefinition(this) FOREACH eAnnotations-»
-        «EXPAND template::cpp::properties::ReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodSources FOR this»
+        «EXPAND template::cpp::properties::CppReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodSources FOR this»
     }
     «ENDFILE»
     
@@ -140,7 +140,7 @@
       
     namespace «this.ePackage.name» {
       
-    «EXPAND template::cpp::properties::PropertyTemplate::ImplConstructorDefinition FOR this»
+    «EXPAND template::cpp::properties::CppPropertyTemplate::ImplConstructorDefinition FOR this»
     
     «FOREACH this.getManualImplementedOperations() AS o»
     «o.operationToSourceSignature(name + "Impl")» {
@@ -160,9 +160,9 @@
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
     
-    «EXPAND template::cpp::types::ImportUsedTypesTemplate::HeaderImportDefinitions FOR this»
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::HeaderImportDefinitions FOR this»
     
-    «EXPAND template::cpp::types::ImportUsedTypesTemplate::ForwardDeclarations FOR this»
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::ForwardDeclarations FOR this»
     
     namespace «this.ePackage.name» {
     
@@ -172,7 +172,7 @@
     
       virtual ~«this.name»() = default;
       
-      «EXPAND template::cpp::properties::PropertyTemplate::StaticSharedFromThisDefinition FOR this»
+      «EXPAND template::cpp::properties::CppPropertyTemplate::StaticSharedFromThisDefinition FOR this»
         
       «FOREACH eOperations AS o»
       «o.operationToVirtualSignature()» = 0;

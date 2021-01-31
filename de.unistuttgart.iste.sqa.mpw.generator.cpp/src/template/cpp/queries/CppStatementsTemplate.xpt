@@ -64,7 +64,7 @@
         )«REM»avoid newline«ENDREM-»
     «ELSEIF methodType == CollectionMethodType::AT-»
         «LET (Expression)parameters.get(0) AS indexExpression-»
-        , «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR indexExpression»)«REM»avoid newline«ENDREM-»
+        , «EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR indexExpression»)«REM»avoid newline«ENDREM-»
         «ENDLET-»
     «ENDIF-»
 «ENDDEFINE»

@@ -65,7 +65,7 @@
     «IF needsHelperMethod-»
         «EXPAND CallHelperStatementMethod FOR this-»
     «ELSE-»
-        «EXPAND template::cpp::queries::StatementsTemplate::StatementsDefinitions FOR this-»
+        «EXPAND template::cpp::queries::CppStatementsTemplate::StatementsDefinitions FOR this-»
     «ENDIF-»
 «ENDDEFINE»
 
@@ -90,6 +90,6 @@
 «DEFINE HelperStatementDefinitionForClassName(String className) FOR StatementsExpression»
       «this.toCppType()» «className»::«helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») {
           «REM»Note: for helper methods intermediary statements are used, which generate the 'return' by themselves«ENDREM-»
-          «EXPAND template::cpp::queries::StatementsTemplate::StatementsDefinitions FOR this-»
+          «EXPAND template::cpp::queries::CppStatementsTemplate::StatementsDefinitions FOR this-»
       }
 «ENDDEFINE»

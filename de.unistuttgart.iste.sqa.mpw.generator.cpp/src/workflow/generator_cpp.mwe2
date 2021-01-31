@@ -44,7 +44,7 @@ Workflow {
             value = generatedProjectBasePackage
         }
         metaModel = mm_emf
-        expand = "template::cpp::EcoreEntitiesTemplate::main FOR entityModels"
+        expand = "template::cpp::CppEcoreEntitiesTemplate::main FOR entityModels"
         outlet = {
             path = simulatorTargetSrc
             overwrite = false // avoid that Impl classes are overwritten
@@ -63,7 +63,7 @@ Workflow {
             value = generatedProjectBasePackage
         }
         metaModel = mm_emf
-        expand = "template::cpp::GenerateClassesTemplate::main FOREACH generationEcoreModels"
+        expand = "template::cpp::CppGenerateClassesTemplate::main FOREACH generationEcoreModels"
         outlet = {
             path = simulatorTargetSrc
             overwrite = true
@@ -82,7 +82,7 @@ Workflow {
             value = generatedProjectBasePackage
         }
         metaModel = mm_emf
-        expand = "template::cpp::CommandTemplate::main FOREACH commands"
+        expand = "template::cpp::CppCommandTemplate::main FOREACH commands"
         outlet = {
             path = simulatorTargetSrc
             postprocessor = formatter_cpp
@@ -95,7 +95,7 @@ Workflow {
     /* generate CMakeLists.txt */
     component = Generator {
         metaModel = mm_emf
-        expand = "template::cpp::EcoreEntitiesTemplate::CMakeLists FOR entityModels"
+        expand = "template::cpp::CppEcoreEntitiesTemplate::CMakeLists FOR entityModels"
         outlet = {
             path = simulatorTargetSrc
             overwrite = true
@@ -107,7 +107,7 @@ Workflow {
     }
     component = Generator {
         metaModel = mm_emf
-        expand = "template::cpp::CommandTemplate::CMakeLists FOR commands"
+        expand = "template::cpp::CppCommandTemplate::CMakeLists FOR commands"
         outlet = {
             path = simulatorTargetSrc
             overwrite = true

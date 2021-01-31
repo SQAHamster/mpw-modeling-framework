@@ -4,7 +4,7 @@
 «EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE CommandParametersClassDefinition FOR Transformation»
-        «EXPAND template::cpp::types::ImportUsedTypesTemplate::CommandParameterIncludeDefinitions FOR this»
+        «EXPAND template::cpp::types::CppImportUsedTypesTemplate::CommandParameterIncludeDefinitions FOR this»
         
         namespace «getCommandNamespace()» {
         

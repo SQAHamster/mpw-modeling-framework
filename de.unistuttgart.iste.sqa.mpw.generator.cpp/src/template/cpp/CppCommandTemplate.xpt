@@ -11,28 +11,28 @@
         
         #include "CompositeCommandBase.h"
         #include "«name.toFirstUpper()»CommandParameters.h"
-        «EXPAND template::cpp::types::ImportUsedTypesTemplate::CommandUsedTypeIncludeDefinitions FOR this»
+        «EXPAND template::cpp::types::CppImportUsedTypesTemplate::CommandUsedTypeIncludeDefinitions FOR this»
     	
     	namespace «getCommandNamespace()» {
     	
     	«documentation.toCppDoc()»
 		class «name.toFirstUpper()»Command final : public CompositeCommandBase {
 		private:
-            «EXPAND template::cpp::commands::CommandParametersTemplate::ParameterFieldDefinitions FOR this»
+            «EXPAND template::cpp::commands::CppCommandParametersTemplate::ParameterFieldDefinitions FOR this»
 		
 		public:
 		
 			«name.toFirstUpper()»Command(«name.toFirstUpper()»CommandParameters parameters)
-			«EXPAND template::cpp::commands::CommandParametersTemplate::ConstructorParameterInitializationDefinitions("parameters.") FOR this»
+			«EXPAND template::cpp::commands::CppCommandParametersTemplate::ConstructorParameterInitializationDefinitions("parameters.") FOR this»
             {
 			}
 			
 			void execute() override;
 		
             private:
-			«EXPAND template::cpp::commands::CommandUnitTemplate::UnitDeclaration FOR mainUnit»
-			«EXPAND template::cpp::commands::CommandUnitTemplate::UnitDeclaration FOREACH units.excluding(mainUnit)»
-            «EXPAND template::cpp::QueriesTemplate::HelperStatementDeclaration FOREACH this.eAllContents
+			«EXPAND template::cpp::commands::CppCommandUnitTemplate::UnitDeclaration FOR mainUnit»
+			«EXPAND template::cpp::commands::CppCommandUnitTemplate::UnitDeclaration FOREACH units.excluding(mainUnit)»
+            «EXPAND template::cpp::CppQueriesTemplate::HelperStatementDeclaration FOREACH this.eAllContents
                                                                                      .typeSelect(Constraint)
                                                                                      .eAllContents
                                                                                      .typeSelect(StatementsExpression)
@@ -58,9 +58,9 @@
     
         namespace «getCommandNamespace()» {
         
-            «EXPAND template::cpp::commands::CommandUnitTemplate::UnitExpand FOR mainUnit»
-            «EXPAND template::cpp::commands::CommandUnitTemplate::UnitExpand FOREACH units.excluding(mainUnit)»
-            «EXPAND template::cpp::QueriesTemplate::HelperStatementDefinitionForClassName(name.toFirstUpper()+"Command") FOREACH this.eAllContents
+            «EXPAND template::cpp::commands::CppCommandUnitTemplate::UnitExpand FOR mainUnit»
+            «EXPAND template::cpp::commands::CppCommandUnitTemplate::UnitExpand FOREACH units.excluding(mainUnit)»
+            «EXPAND template::cpp::CppQueriesTemplate::HelperStatementDefinitionForClassName(name.toFirstUpper()+"Command") FOREACH this.eAllContents
                                                                                      .typeSelect(Constraint)
                                                                                      .eAllContents
                                                                                      .typeSelect(StatementsExpression)
@@ -73,7 +73,7 @@
 	    #ifndef «this.toCppParameterIncludeGuard()»
 	    #define «this.toCppParameterIncludeGuard()»
 	    
-	    «EXPAND template::cpp::commands::CommandParametersTemplate::CommandParametersClassDefinition FOR this»
+	    «EXPAND template::cpp::commands::CppCommandParametersTemplate::CommandParametersClassDefinition FOR this»
         
         #endif //«this.toCppParameterIncludeGuard()»
 

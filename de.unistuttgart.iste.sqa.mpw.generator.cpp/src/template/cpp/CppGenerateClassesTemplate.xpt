@@ -27,9 +27,9 @@
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
     
-    «EXPAND template::cpp::types::ImportUsedTypesTemplate::HeaderImportDefinitions FOR this»
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::HeaderImportDefinitions FOR this»
     
-    «EXPAND template::cpp::types::ImportUsedTypesTemplate::ForwardDeclarations FOR this»
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::ForwardDeclarations FOR this»
     
     namespace «this.ePackage.name» {
     
@@ -58,7 +58,7 @@
 «DEFINE CppClassSource FOR EClass-»
     «FILE "generated/" + name + ".cpp"»#include "«name».h"
     
-    «EXPAND template::cpp::types::ImportUsedTypesTemplate::SourceImportDefinitions FOR this»
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::SourceImportDefinitions FOR this»
     
     namespace «this.ePackage.name» {
     
@@ -135,31 +135,31 @@
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotationOperationDefinition FOR ConstructorSimpleFieldInitializationAnnotation-»
-    this->«field.name» = std::make_shared<«constructorTypeName»>(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
+    this->«field.name» = std::make_shared<«constructorTypeName»>(«EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotationOperationDefinition FOR ExpressionFieldAssignmentAnnotation-»
-    this->«field.name» = «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR expression»;
+    this->«field.name» = «EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR expression»;
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotationOperationDefinition FOR AddVariableToCollectionAnnotation-»
-    «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR collectionExpression».push_back(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR parameterExpression»);
+    «EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR collectionExpression».push_back(«EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR parameterExpression»);
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotationOperationDefinition FOR MethodCallAnnotation-»
-    «variableName»->«methodName»(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
+    «variableName»->«methodName»(«EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotationOperationDefinition FOR ReturnAnnotation-»
-    return «toOptionalDereferencingStar()»«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR expression»;
+    return «toOptionalDereferencingStar()»«EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR expression»;
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotationOperationDefinition FOR ExpressionAnnotation-»
-    «EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOR expression-»
+    «EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOR expression-»
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotationOperationDefinition FOR VariableObjectConstructionAnnotation-»
-    «constructorType.toCppType()» «variableName»«IF !constructorType.isValueType()» = std::make_shared<«constructorType.toQualifiedTypeName()»>«ENDIF»(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
+    «constructorType.toCppType()» «variableName»«IF !constructorType.isValueType()» = std::make_shared<«constructorType.toQualifiedTypeName()»>«ENDIF»(«EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotationOperationDefinition FOR VariableDefinitionAnnotation-»

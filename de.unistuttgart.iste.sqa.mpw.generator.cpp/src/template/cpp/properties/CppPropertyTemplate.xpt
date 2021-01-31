@@ -87,7 +87,7 @@
 «DEFINE FeatureFieldInstantiation FOR EStructuralFeature-»
     «IF hasInitializationAnnotation()-»
         «LET getInitializationAnnotation() AS annotation-»
-        std::make_shared<«annotation.field.eType.toQualifiedTypeName()»>(«EXPAND template::cpp::QueriesTemplate::ExpressionDefinition FOREACH annotation.parameterInputVariableExpressions SEPARATOR ", "»)
+        std::make_shared<«annotation.field.eType.toQualifiedTypeName()»>(«EXPAND template::cpp::CppQueriesTemplate::ExpressionDefinition FOREACH annotation.parameterInputVariableExpressions SEPARATOR ", "»)
         «ENDLET-»
     «ELSE-»
         «featureToFieldInstantiation()»
