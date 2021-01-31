@@ -1,0 +1,36 @@
+import commandBehavior;
+import queryBehavior;
+import ecore;
+
+extension mpw::generator::xtend::commands::CommandGeneratorExtensions reexport;
+
+extension template::java::types::JavaEmfGeneratorExtensions;
+extension mpw::generator::xtend::util::GlobalsGeneratorExtensions;
+
+/*
+ * Extensions related to the generation of commands (Java).
+ */
+
+getCommandJavaPackagePath(Transformation this) :
+  this.getCommandJavaPackageName().replaceAll("\\.", "/");
+
+getCommandJavaPackageName(Transformation this) :
+  getModulePackage() + ".commands." + targetClass.name.toLowerCase();
+
+getVisibility(Unit this) : 
+  if (name == "execute") then "public" else "private";
+  
+// override from general CommandGeneratorExtensions
+commandSetter() : "executeSetProperty";
+
+toJml(List[Constraint] this) : 
+    if (size > 0) then 
+    "/*@\n" +
+    collect(c|"@ " + c.toJmlKeyword() + " " + c.name + "\n").toString("") +
+    "@*/"
+    else "";
+    
+private toJmlKeyword(Constraint this) :
+    if (Precondition.isInstance(this)) then "requires"
+    else if (Postcondition.isInstance(this)) then "ensures"
+    else "invariant";

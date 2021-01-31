@@ -1,4 +1,4 @@
-package template.queries;
+package template.java.queries;
 
 import com.google.common.base.CaseFormat;
 

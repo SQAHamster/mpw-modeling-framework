@@ -1,0 +1,15 @@
+import ecore;
+
+/*
+ * Top-level extension file which reexports all other extension files (Java).
+ */
+
+extension mpw::generator::xtend::BasicLanguageExtensions reexport;
+extension mpw::generator::xtend::util::GlobalsGeneratorExtensions reexport;
+extension template::java::types::JavaEmfGeneratorExtensions reexport;
+extension template::java::types::JavaMetaModelGeneratorExtensions reexport;
+extension template::java::properties::JavaPropertyGeneratorExtensions reexport;
+extension template::java::properties::JavaObservablePropertyGeneratorExtensions reexport;
+extension template::java::operations::JavaOperationGeneratorExtensions reexport;
+extension template::java::commands::JavaCommandGeneratorExtensions reexport;
+extension template::java::queries::JavaQueryGeneratorExtensions reexport;

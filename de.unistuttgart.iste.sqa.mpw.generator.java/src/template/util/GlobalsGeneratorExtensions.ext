@@ -1,9 +1,0 @@
-import ecore;
-import commandBehavior;
-import queryBehavior;
-
-/*
- * Extensions to obtain global variables.
- */
-
-String getModulePackage() : GLOBALVAR module_package;

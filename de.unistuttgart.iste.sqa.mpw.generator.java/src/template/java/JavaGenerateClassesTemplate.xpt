@@ -3,7 +3,7 @@
 «IMPORT queryBehavior»
 «IMPORT generationAnnotations»
 
-«EXTENSION template::GeneratorExtensions»
+«EXTENSION template::java::JavaGeneratorExtensions»
 
 «REM»
   Generates classes based on GenerationAnnotations.
@@ -88,31 +88,31 @@
 «ENDDEFINE»
 
 «DEFINE GenerationOperationAnnotation FOR ConstructorSimpleFieldInitializationAnnotation-»
-    this.«field.name» = new «constructorTypeName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
+    this.«field.name» = new «constructorTypeName»(«EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
 «DEFINE GenerationOperationAnnotation FOR ExpressionFieldAssignmentAnnotation-»
-    this.«field.name» = «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression»;
+    this.«field.name» = «EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR expression»;
 «ENDDEFINE»
 
 «DEFINE GenerationOperationAnnotation FOR AddVariableToCollectionAnnotation-»
-    «EXPAND template::QueriesTemplate::ExpressionDefinition FOR collectionExpression».add(«EXPAND template::QueriesTemplate::ExpressionDefinition FOR parameterExpression»);
+    «EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR collectionExpression».add(«EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR parameterExpression»);
 «ENDDEFINE»
 
 «DEFINE GenerationOperationAnnotation FOR MethodCallAnnotation-»
-    «variableName».«methodName»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
+    «variableName».«methodName»(«EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»)«IF closingStatement»;«ENDIF-»
 «ENDDEFINE»
 
 «DEFINE GenerationOperationAnnotation FOR ReturnAnnotation-»
-    return «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression»;
+    return «EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR expression»;
 «ENDDEFINE»
 
 «DEFINE GenerationOperationAnnotation FOR ExpressionAnnotation-»
-    «EXPAND template::QueriesTemplate::ExpressionDefinition FOR expression-»
+    «EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR expression-»
 «ENDDEFINE»
 
 «DEFINE GenerationOperationAnnotation FOR VariableObjectConstructionAnnotation-»
-    var «variableName» = new «constructorType.name»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
+    var «variableName» = new «constructorType.name»(«EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOREACH parameterInputVariableExpressions SEPARATOR ", "»);
 «ENDDEFINE»
 
 «DEFINE GenerationOperationAnnotation FOR VariableDefinitionAnnotation-»

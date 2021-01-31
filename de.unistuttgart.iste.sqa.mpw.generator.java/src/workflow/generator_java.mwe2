@@ -44,7 +44,7 @@ Workflow {
 			value = generatedProjectBasePackage
 		}
 		metaModel = mm_emf
-		expand = "template::EcoreEntitiesTemplate::main FOR entityModels"
+		expand = "template::java::JavaEcoreEntitiesTemplate::main FOR entityModels"
 		outlet = {
 			path = simulatorTargetSrc
 			overwrite = false
@@ -64,7 +64,7 @@ Workflow {
             value = generatedProjectBasePackage
         }
         metaModel = mm_emf
-        expand = "template::GenerateClassesTemplate::main FOREACH generationEcoreModels"
+        expand = "template::java::JavaGenerateClassesTemplate::main FOREACH generationEcoreModels"
         outlet = {
             path = simulatorTargetSrc
             overwrite = false // avoid that Impl classes are overwritten
@@ -84,7 +84,7 @@ Workflow {
 			value = generatedProjectBasePackage
 		}
 		metaModel = mm_emf
-		expand = "template::CommandTemplate::main FOREACH commands"
+		expand = "template::java::JavaCommandTemplate::main FOREACH commands"
 		outlet = {
 			path = simulatorTargetSrcGenerated
 			postprocessor = formatter_java

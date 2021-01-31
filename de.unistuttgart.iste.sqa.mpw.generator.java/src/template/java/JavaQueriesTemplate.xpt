@@ -1,7 +1,7 @@
 «IMPORT ecore»
 «IMPORT queryBehavior»
 
-«EXTENSION template::GeneratorExtensions»
+«EXTENSION template::java::JavaGeneratorExtensions»
 
 «DEFINE QueryDefinitions FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q-»
@@ -62,7 +62,7 @@
     «IF needsHelperMethod-»
         «EXPAND CallHelperStatementMethod FOR this-»
     «ELSE-»
-        «EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-»
+        «EXPAND template::java::queries::JavaStatementsTemplate::StatementsDefinitions FOR this-»
     «ENDIF-»
 «ENDDEFINE»
 
@@ -73,7 +73,7 @@
 «DEFINE HelperStatementDefinition FOR StatementsExpression»
       private «this.type.name.toJavaType()» «helperMethodName.toJavaConformName()»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH») {
           «REM»Note: for helper methods intermediary statements are used, which generate the 'return' by themselves«ENDREM-»
-          «EXPAND template::queries::StatementsTemplate::StatementsDefinitions FOR this-»
+          «EXPAND template::java::queries::JavaStatementsTemplate::StatementsDefinitions FOR this-»
       }
 
 «ENDDEFINE»

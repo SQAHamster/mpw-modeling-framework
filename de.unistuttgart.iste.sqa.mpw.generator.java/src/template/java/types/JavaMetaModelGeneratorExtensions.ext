@@ -1,0 +1,29 @@
+import ecore;
+
+extension mpw::generator::xtend::types::MetaModelGeneratorExtensions reexport;
+
+extension template::java::operations::JavaOperationGeneratorExtensions;
+extension mpw::generator::xtend::util::GlobalsGeneratorExtensions;
+
+/*
+ * Extensions related to the MPW Metamodel types (Java).
+ */
+
+
+toInheritance(EClass this) :
+    let filteredExtends = eSuperTypes.typeSelect(EClass)
+    	.reject(e|e.interface) :
+    let filteredInterfaces = eSuperTypes.typeSelect(EClass)
+        .reject(e|e.isStereotype())
+    	.select(e|e.interface) :
+    if (filteredExtends.size > 0 && filteredInterfaces.size > 0) then "extends " + filteredExtends.get(0).name + " implements " + filteredInterfaces.collect(i|i.name).toString(", ")
+    else if (filteredExtends.size > 0) then "extends " + filteredExtends.get(0).name
+    else if (interface && filteredInterfaces.size > 0) then "extends " + filteredInterfaces.collect(i|i.name).toString(", ")
+    else if (filteredInterfaces.size > 0) then "implements " + filteredInterfaces.collect(i|i.name).toString(", ")
+    else "";
+    
+toJavaPackagePath(EPackage this) :
+    this.toJavaPackageName().replaceAll("\\.", "/");
+
+toJavaPackageName(EPackage this) :
+    getModulePackage() + "." + this.name;

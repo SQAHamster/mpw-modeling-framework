@@ -1,7 +1,7 @@
 «IMPORT commandBehavior»
 «IMPORT queryBehavior»
 
-«EXTENSION template::GeneratorExtensions»
+«EXTENSION template::java::JavaGeneratorExtensions»
 
 «DEFINE UnitExpand FOR Unit»
     «IF mainUnit-»
@@ -165,21 +165,21 @@
 «ENDDEFINE»
 
 «DEFINE VariableAssignmentDefinition FOR VariableAssignment»
-    «variableName» = «EXPAND template::QueriesTemplate::ExpressionDefinition FOR value»;
+    «variableName» = «EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR value»;
 «ENDDEFINE»
 
 «DEFINE AttributeDefinition FOR AttributeCondition»
     «IF this.isCreate»
         «IF instance.instanceType.isValueType()-»
             // set attribute condition «instance.variableName».«attributeName» := «attributeValueLiteral»
-            «instance.variableName».«attributeName.setter()»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+            «instance.variableName».«attributeName.setter()»(«EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR attributeValue»);
         «ELSE»
             // set value type field «instance.variableName».«attributeName» := «attributeValueLiteral»
-            «commandSetter()»(«instance.variableName», "«attributeName»", «instance.variableName».«attributeName.getter()»(), «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue»);
+            «commandSetter()»(«instance.variableName», "«attributeName»", «instance.variableName».«attributeName.getter()»(), «EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR attributeValue»);
         «ENDIF-»
     «ELSE»  
         // assert condition: «instance.variableName».«attributeName» == «attributeValueLiteral»
-        if («instance.variableName».«attributeName.getter()»() != «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
+        if («instance.variableName».«attributeName.getter()»() != «EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR attributeValue») {
             return false;
         }
     «ENDIF»
@@ -254,7 +254,7 @@
 
 «DEFINE AttributeConditionsForFindObjectDefinition FOR AttributeCondition»
     // attribute check: «instance.variableName»: «this.attributeName»
-    if («instance.variableName».«this.attributeName.getter()»() != «EXPAND template::QueriesTemplate::ExpressionDefinition FOR attributeValue») {
+    if («instance.variableName».«this.attributeName.getter()»() != «EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR attributeValue») {
         continue;
     }
 «ENDDEFINE»
@@ -287,7 +287,7 @@
 
 «DEFINE OldValueVariablesDefinition FOR Unit»
     «LET (Transformation)this.eContainer AS transformation-»
-    «EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH transformation.constraints.typeSelect(Postcondition).collect(c|c.oldValueVariableExpressions).flatten()-»
+    «EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOREACH transformation.constraints.typeSelect(Postcondition).collect(c|c.oldValueVariableExpressions).flatten()-»
     «ENDLET-»
 «ENDDEFINE»
 
@@ -300,7 +300,7 @@
 
 «DEFINE ConstraintDefinition FOR Constraint»
     «documentation.toComment()»
-    if ((«EXPAND template::QueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
+    if ((«EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR this.mainExpression-») == false) {
         throw new CommandConstraintException("«constraintToViolationString()»");
     }
 «ENDDEFINE»

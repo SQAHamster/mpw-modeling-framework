@@ -1,0 +1,25 @@
+import ecore;
+import behaviorsbase;
+import generationAnnotations;
+
+extension mpw::generator::xtend::operations::OperationGeneratorExtensions reexport;
+
+extension template::java::types::JavaEmfGeneratorExtensions;
+extension template::java::commands::JavaCommandGeneratorExtensions;
+extension template::java::properties::JavaPropertyGeneratorExtensions;
+extension mpw::generator::xtend::BasicLanguageExtensions;
+
+/*
+ * Extensions related to EOperations (Java).
+ */
+
+operationToSignature(EOperation this) :
+    let parameters = if (isCommand()) then name.toFirstUpper() + "CommandParameters parameters" else eParameters.collect(e|e.eType.name.toJavaType() + " " + e.name).joinToString(", ") :
+    documentationToJavaDoc() + operationToJavaType() + " " + effectiveOperationName() + "(" + parameters + ")";
+
+documentationToJavaDoc(EOperation this) :
+    let documentationDetail = eAnnotations.collect(a|a.details.selectFirst(d|d.key == "documentation")).selectFirst(d|d != null) :
+    if (documentationDetail != null) then documentationDetail.value.toJavaDoc() else "";
+
+private effectiveOperationName(EOperation this) : 
+    if (isPropertyGetter()) then name.getter() else name;

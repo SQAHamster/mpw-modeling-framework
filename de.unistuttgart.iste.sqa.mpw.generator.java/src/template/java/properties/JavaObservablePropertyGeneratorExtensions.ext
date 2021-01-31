@@ -1,15 +1,14 @@
 import ecore;
 
-extension template::types::EmfGeneratorExtensions;
-extension template::types::MetaModelGeneratorExtensions;
+extension mpw::generator::xtend::properties::ObservablePropertyGeneratorExtensions reexport;
+
+extension template::java::types::JavaEmfGeneratorExtensions;
+extension template::java::types::JavaMetaModelGeneratorExtensions;
 
 /*
- * Extensions related to EStructuralFeatures which shall be generated as observable properties.
+ * Extensions related to EStructuralFeatures which shall be generated as observable properties (Java).
  */
 
-isObservableProperty(EStructuralFeature this) :
-    this.changeable && !this.derived && !this.eType.isDependency() && this.eContainingClass.eAllSuperTypes.notExists(t|t.name == "Command");
-    
 featureToObservableFieldType(EStructuralFeature this) :
 	if (this.upperBound == -1) then "ReadOnlyListWrapper<" + this.eType.name.toUnboxedJavaTypeName() + ">"
 	else if (this.eType.isBuiltInType()) then "ReadOnly" + this.eType.name.toUnboxedJavaTypeName() + "Wrapper"

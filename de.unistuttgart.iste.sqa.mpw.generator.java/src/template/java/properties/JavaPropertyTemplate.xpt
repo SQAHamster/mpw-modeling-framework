@@ -1,6 +1,6 @@
 «IMPORT ecore»
 
-«EXTENSION template::GeneratorExtensions»
+«EXTENSION template::java::JavaGeneratorExtensions»
 
 «DEFINE PropertyDefinitions FOR EClass»
 	  «FOREACH eStructuralFeatures AS f»
@@ -27,7 +27,7 @@
 «DEFINE InlineFeatureFieldInstantiation FOR EStructuralFeature-»
     «IF hasInitializationAnnotation()-»
         «LET getInitializationAnnotation() AS annotation-»
-        new «annotation.field.eType.name»(«EXPAND template::QueriesTemplate::ExpressionDefinition FOREACH annotation.parameterInputVariableExpressions SEPARATOR ", "»)
+        new «annotation.field.eType.name»(«EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOREACH annotation.parameterInputVariableExpressions SEPARATOR ", "»)
         «ENDLET-»
     «ELSE-»
         «featureToFieldInstantiation()»

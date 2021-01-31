@@ -64,10 +64,10 @@ isContainment(EStructuralFeature this) :
     EReference.isInstance(this) && ((EReference)this).containment;
         
 isValueTypeClassName(String this, EPackage thisPackage) :
-   thisPackage.getEClassifier(this).isValueType();
+    thisPackage.getEClassifier(this).isValueType();
 	
 isBuiltInType(EClassifier this) :
-    isPrimitive() || this.name.isAnyTypeName() || this.name == "Throwable";
+    isPrimitive() || this.name == "Object" || isSemaphore() || this.name == "Throwable";
 
 isPrimitive(EClassifier this) :
     (this.name == "EInt" || this.name == "EBoolean" || this.name == "EDouble" || this.name == "EString");

@@ -2,7 +2,7 @@ import ecore;
 
 extension mpw::generator::xtend::operations::OperationGeneratorExtensions;
 extension mpw::generator::xtend::util::GlobalsGeneratorExtensions;
-extension mpw::generator::xtend::Extensions;
+extension mpw::generator::xtend::BasicLanguageExtensions;
 
 /*
  * Extensions related to the MPW Metamodel types (General).
@@ -38,3 +38,5 @@ isDependency(EClassifier this) : hasStereotype("Dependency");
 isFacade(EClassifier this) : eAnnotations.exists(a|a.source == "facade");
 isSemaphore(EClassifier this) : name == "Semaphore";
 isInheritedEntity(EClassifier this) : EClass.isInstance(this) && ((EClass)this).eAllSuperTypes.exists(t|t.name == "Entity");
+isViewModelType(EClassifier this) :
+    EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewModel");

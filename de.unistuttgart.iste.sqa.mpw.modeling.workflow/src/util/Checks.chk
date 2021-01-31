@@ -1,7 +1,7 @@
 import ecore;
 
 extension util::Extensions;
-extension template::GeneratorExtensions;
+extension mpw::generator::xtend::GeneratorExtensions;
 
 context EClass ERROR "Each class needs a name, starting with a uppercase letter":
     name != null && name.length > 0 && name.matches("[A-Z]\\w+");

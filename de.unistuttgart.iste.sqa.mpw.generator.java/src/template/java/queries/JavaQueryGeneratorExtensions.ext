@@ -1,0 +1,16 @@
+import ecore;
+import emf;
+import behaviorsbase;
+import queryBehavior;
+
+extension mpw::generator::xtend::queries::QueryGeneratorExtensions reexport;
+
+/*
+ * Extensions related to the generation of queries (Java).
+ */
+
+toOperatorCode(CompareOperator this) : toDefaultOperatorCode();
+toOperatorCode(CalculationOperator this) : toDefaultOperatorCode();
+
+String toJavaConformName(String this) :
+    JAVA template.java.queries.CamelCaseStringConverter.lowerUnderscoreToCamelCase(java.lang.String);

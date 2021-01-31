@@ -1,6 +1,6 @@
 «IMPORT ecore»
 
-«EXTENSION template::GeneratorExtensions»
+«EXTENSION template::java::JavaGeneratorExtensions»
 
 «DEFINE CommandDefinitions FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isCommand()) AS o»

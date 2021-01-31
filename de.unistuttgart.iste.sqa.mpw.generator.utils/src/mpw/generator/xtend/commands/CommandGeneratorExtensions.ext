@@ -18,6 +18,11 @@ Transformation getCommandForOperation(EOperation operation) :
 
 getConcreteName(EClass this) : "Concrete" + name;
 
+getConcreteTypeName(InstanceCondition this) :
+  let transformation = (Transformation)eRootContainer : 
+  if (transformation.targetClass.name == this.instanceType.name) then "Concrete" + this.instanceType.name
+  else this.instanceType.name;
+
 getVisibility(Unit this) : 
   if (name == "execute") then "public" else "private";
   

@@ -1,11 +1,12 @@
 import ecore;
 
-extension template::properties::ObservablePropertyGeneratorExtensions reexport;
-extension template::types::MetaModelGeneratorExtensions;
-extension template::types::EmfGeneratorExtensions;
+extension mpw::generator::xtend::properties::PropertyGeneratorExtensions reexport;
+
+extension template::java::types::JavaMetaModelGeneratorExtensions;
+extension template::java::types::JavaEmfGeneratorExtensions;
 
 /*
- * Extensions related to the generation of Properties and transitive property getters.
+ * Extensions related to the generation of Properties and transitive property getters (Java).
  */
 
 compareEqualsPropertyVariables(EStructuralFeature this, String lhsName, String rhsName) :

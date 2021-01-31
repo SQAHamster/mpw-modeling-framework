@@ -1,7 +1,7 @@
 «IMPORT ecore»
 «IMPORT queryBehavior»
 
-«EXTENSION template::GeneratorExtensions»
+«EXTENSION template::java::JavaGeneratorExtensions»
 
 «DEFINE StatementsDefinitions FOR StatementsExpression-»
     «IF statements.size == 0»null«ENDIF-»
@@ -53,7 +53,7 @@
         «ENDLET-»
     «ELSEIF methodType == CollectionMethodType::AT-»
         «LET (Expression)parameters.get(0) AS indexExpression-»
-        get(«EXPAND template::QueriesTemplate::ExpressionDefinition FOR indexExpression»)
+        get(«EXPAND template::java::JavaQueriesTemplate::ExpressionDefinition FOR indexExpression»)
         «ENDLET-»
     «ENDIF-»
 «ENDDEFINE»

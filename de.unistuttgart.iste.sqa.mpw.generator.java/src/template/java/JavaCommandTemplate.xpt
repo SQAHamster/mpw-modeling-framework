@@ -1,14 +1,14 @@
 «IMPORT commandBehavior»
 «IMPORT queryBehavior»
 
-«EXTENSION template::GeneratorExtensions»
+«EXTENSION template::java::JavaGeneratorExtensions»
 
 «DEFINE main FOR Transformation»
     «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Command.java"»package «this.getCommandJavaPackageName()»;
     	
     	import «getModulePackage()».framework.*;
         import static «getModulePackage()».framework.FrameworkAssert.*;
-    	«EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
+    	«EXPAND template::java::types::JavaImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
     	import «getModulePackage()».mpw.*;
     	import «getModulePackage()».commands.*;
     	import «getModulePackage()».commands.impl.*;
@@ -38,9 +38,9 @@
                 «ENDFOREACH-»
 			}
 		
-			«EXPAND template::commands::CommandUnitTemplate::UnitExpand FOR mainUnit»
-            «EXPAND template::commands::CommandUnitTemplate::UnitExpand FOREACH units.excluding(mainUnit)»
-            «EXPAND template::QueriesTemplate::HelperStatementDefinition FOREACH this.eAllContents
+			«EXPAND template::java::commands::JavaCommandUnitTemplate::UnitExpand FOR mainUnit»
+            «EXPAND template::java::commands::JavaCommandUnitTemplate::UnitExpand FOREACH units.excluding(mainUnit)»
+            «EXPAND template::java::JavaQueriesTemplate::HelperStatementDefinition FOREACH this.eAllContents
                                                                                      .typeSelect(Constraint)
                                                                                      .eAllContents
                                                                                      .typeSelect(StatementsExpression)
@@ -49,7 +49,7 @@
     «ENDFILE»
     «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "CommandParameters.java"»package «this.getCommandJavaPackageName()»;
         
-        «EXPAND template::types::ImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
+        «EXPAND template::java::types::JavaImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
         import «getModulePackage()».mpw.*;
         import «getModulePackage()».commands.*;
         

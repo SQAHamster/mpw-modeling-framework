@@ -4,7 +4,7 @@ import generationAnnotations;
 
 extension mpw::generator::xtend::types::EmfGeneratorExtensions;
 extension mpw::generator::xtend::queries::QueryGeneratorExtensions;
-extension mpw::generator::xtend::Extensions;
+extension mpw::generator::xtend::BasicLanguageExtensions;
 
 /*
  * Extensions related to EOperations (General).
