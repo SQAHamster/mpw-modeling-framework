@@ -1,33 +1,13 @@
 import ecore;
 
-extension template::cpp::operations::OperationGeneratorExtensions;
-extension template::cpp::util::GlobalsGeneratorExtensions;
-extension util::Extensions;
+extension mpw::generator::xtend::types::MetaModelGeneratorExtensions reexport;
+
+extension mpw::generator::xtend::util::GlobalsGeneratorExtensions;
 
 /*
- * Extensions related to the MPW Metamodel types.
- * Note: currently duplicated, later refactored into central place.
+ * Extensions related to the MPW Metamodel types (C++).
  */
 
-isStereotype(EClassifier this) :
-    this.isInStereotypePackage();
-    
-private isInStereotypePackage(EClassifier this) :
-    ePackage.nsPrefix == "viewmodelstereotypes" || ePackage.nsPrefix == "stereotypes";
-
-hasStereotype(EClassifier this, String stereotype) :
-    let eClass = (EClass)this :
-    EClass.isInstance(this) && eClass.eAllSuperTypes.exists(t|t.isStereotype() && t.name == stereotype);
-
-needsImplSubclass(EClassifier this) :
-    let eClass = (EClass)this :
-    EClass.isInstance(this) && !isFacade() && eClass.getManualImplementedOperations().size > 0 && !eClass.abstract;
-
-getManualImplementedOperations(EClass this) :
-    eAllOperations.reject(o|o.isGenerated());
-
-private isGenerated(EOperation this) :
-    isCommand() || isQuery() || isPropertyGetter() || hasGenerationAnnotations();
 
 toInheritance(EClass this) :
     let filteredExtends = eSuperTypes.typeSelect(EClass)
@@ -45,23 +25,12 @@ toInheritedAlias(EClass this) :
     if (baseClass != null) then "using inherited = " + baseClass.name + ";"
     else "";
 
-EClass getBaseClass(EClass this) :
-    let filteredSuperTypes = eSuperTypes.reject(e|e.interface) :
-    if (filteredSuperTypes.size > 0) then filteredSuperTypes.first()
-    else null;
-
 toQualifiedTypeName(EClassifier this) :
     this.ePackage.name + "::" + this.name;
 
 toQualifiedTypeName(String this, EPackage package) :
     package.name + "::" + this;
     
-isValueType(EClassifier this) : hasStereotype("ValueType");
-isDependency(EClassifier this) : hasStereotype("Dependency");
-isFacade(EClassifier this) : eAnnotations.exists(a|a.source == "facade");
-isSemaphore(EClassifier this) : name == "Semaphore";
-isInheritedEntity(EClassifier this) : EClass.isInstance(this) && ((EClass)this).eAllSuperTypes.exists(t|t.name == "Entity");
-
 // a MiniProgrammingWorld has a complex lifecycle constructor, so it has to be solved by a static create method
 needsStaticFactoryConstructorMethod(EClass this) :
     eAllSuperTypes.exists(t|t.name == "MiniProgrammingWorld");

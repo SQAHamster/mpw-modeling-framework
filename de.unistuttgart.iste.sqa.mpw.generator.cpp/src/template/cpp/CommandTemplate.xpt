@@ -1,7 +1,7 @@
 «IMPORT commandBehavior»
 «IMPORT queryBehavior»
 
-«EXTENSION template::cpp::GeneratorExtensions»
+«EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE main FOR Transformation»
     «FILE "generated/commands/" + name.toFirstUpper() + "Command.h"»

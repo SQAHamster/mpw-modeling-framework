@@ -1,7 +1,7 @@
 «IMPORT ecore»
 «IMPORT generationAnnotations»
 
-«EXTENSION template::cpp::GeneratorExtensions»
+«EXTENSION template::cpp::CppGeneratorExtensions»
 
 «REM»
   Generate entity ecore files.

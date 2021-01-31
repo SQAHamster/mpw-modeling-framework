@@ -1,0 +1,11 @@
+import ecore;
+
+extension mpw::generator::xtend::types::EmfGeneratorExtensions;
+extension mpw::generator::xtend::types::MetaModelGeneratorExtensions;
+
+/*
+ * Extensions related to EStructuralFeatures which shall be generated as observable properties (General).
+ */
+
+isObservableProperty(EStructuralFeature this) :
+    this.changeable && !this.derived && !this.eType.isDependency() && this.eContainingClass.eAllSuperTypes.notExists(t|t.name == "Command");

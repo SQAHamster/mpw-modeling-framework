@@ -2,13 +2,14 @@ import ecore;
 import generationAnnotations;
 import generationAnnotations;
 
-extension template::cpp::types::EmfGeneratorExtensions;
-extension template::cpp::queries::QueryGeneratorExtensions;
-extension util::Extensions;
+extension mpw::generator::xtend::operations::OperationGeneratorExtensions reexport;
+
+extension template::cpp::types::CppEmfGeneratorExtensions;
+extension template::cpp::queries::CppQueryGeneratorExtensions;
+extension mpw::generator::xtend::BasicLanguageExtensions;
 
 /*
- * Extensions related to EOperations.
- * Note: currently duplicated, later refactored into central place.
+ * Extensions related to EOperations (C++).
  */
 
 operationToVirtualSignature(EOperation this) : operationToSignatureWithOptionalVirtual(true);
@@ -38,29 +39,6 @@ documentationToCppDoc(EOperation this) :
 private effectiveOperationName(EOperation this) :
     if (isPropertyGetter()) then name.getter() else name;
 
-operationsWithGenerationAnnotations(EClass this) :
-    eOperations.select(o|o.hasGenerationAnnotations());
-
-operationsWithoutGenerationAnnotations(EClass this) :
-    eOperations.select(o|!o.hasGenerationAnnotations());
-
-hasPropertyGetterOperation(EStructuralFeature this) :
-    hasPropertyGetterOperation(this.eContainingClass);
-
-hasPropertyGetterOperation(EStructuralFeature this, EClass targetClass) :
-    targetClass.eAllSuperTypes.exists(t|t.eOperations.exists(o|o.isPropertyGetter() && o.name == name));
-    
-isPropertyGetter(EOperation this) : isMarkedWith("isPropertyGetter");
-
-hasGenerationAnnotations(EOperation this) : eAnnotations.typeSelect(GenerationAnnotation).size > 0;
-    
-isCommand(EOperation this) : isMarkedWith("command");
-    
-isQuery(EOperation this) : isMarkedWith("query");
-
-private isMarkedWith(EOperation this, String key) :
-    eAnnotations.exists(a|a.source == key || a.details.exists(d|d.key == key));
-    
 toOptionalDereferencingStar(ReturnAnnotation this) :
     let operation = (EOperation)eContainer :
     if (operation.isMarkedWith("fluent")) then "*"

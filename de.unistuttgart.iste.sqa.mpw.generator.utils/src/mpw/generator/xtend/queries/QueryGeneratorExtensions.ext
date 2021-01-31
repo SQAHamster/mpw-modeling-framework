@@ -1,0 +1,61 @@
+import ecore;
+import queryBehavior;
+import commandBehavior;
+import behaviorsbase;
+
+extension mpw::generator::xtend::types::EmfGeneratorExtensions;
+extension mpw::generator::xtend::types::MetaModelGeneratorExtensions;
+
+/*
+ * Extensions related to the generation of queries (General).
+ */
+
+toDefaultOperatorCode(CompareOperator this) :
+    switch (this) {
+       case CompareOperator::EQUAL: "=="
+       case CompareOperator::NOT_EQUAL: "!="
+       case CompareOperator::GREATER: ">"
+       case CompareOperator::SMALLER: "<"
+       case CompareOperator::GREATER_EQUAL: ">="
+       case CompareOperator::SMALLER_EQUAL: "<="
+       default: ""
+    };
+
+toDefaultOperatorCode(CalculationOperator this) :
+    switch (this) {
+       case CalculationOperator::PLUS: "+"
+       case CalculationOperator::MINUS: "-"
+       case CalculationOperator::MULTIPLY: "*"
+       case CalculationOperator::DIVIDE: "/"
+       default: ""
+    };
+
+Query getQueryForOperation(EOperation operation) : 
+    operation.eAnnotations.selectFirst(a|a.source == "query").contents.first();
+    
+constraintToViolationString(queryBehavior::Constraint this) :
+    let typeName = this.metaType.name.replaceAll("queryBehavior::", "") :
+    "Violation of " + typeName + 
+        (if (this.documentation != null) then ": " + documentation 
+        else "");
+
+List[Parameter] findParameterList(Expression this) :
+    eContainer.findParameterListOfEObject();
+
+private List[Parameter] findParameterListOfEObject(emf::EObject object) :
+    if (object == null) then null
+    else if (Query.isInstance(object)) then ((Query)object).parameters
+    else findParameterListOfEObject(object.eContainer);
+
+EClassifier findContextClass(Expression this) :
+    eContainer.findContextClassOfEObject();
+
+private EClassifier findContextClassOfEObject(emf::EObject object) :
+    if (object == null) then null
+    else if (ExpressionalElement.isInstance(object)) then ((ExpressionalElement)object).contextClass
+    else findContextClassOfEObject(object.eContainer);
+
+isObjectReferenceAccess(Statement statement) :
+    if (statement.previous.isCollection) then false
+    else if (statement.previous != null && statement.previous.type.isObjectReference()) then true
+    else false;

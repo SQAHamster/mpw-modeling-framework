@@ -1,6 +1,6 @@
 «IMPORT ecore»
 
-«EXTENSION template::cpp::GeneratorExtensions»
+«EXTENSION template::cpp::CppGeneratorExtensions»
 «EXTENSION org::eclipse::xtend::util::stdlib::counter»
 
 «REM»Template for reflective keys«ENDREM»

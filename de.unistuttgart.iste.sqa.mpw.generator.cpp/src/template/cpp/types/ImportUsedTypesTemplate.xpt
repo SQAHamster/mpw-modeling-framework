@@ -3,7 +3,7 @@
 «IMPORT queryBehavior»
 «IMPORT generationAnnotations»
 
-«EXTENSION template::cpp::GeneratorExtensions»
+«EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE HeaderImportDefinitions FOR EClass»
     #include <memory>

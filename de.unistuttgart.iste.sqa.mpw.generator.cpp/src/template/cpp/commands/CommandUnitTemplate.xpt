@@ -1,7 +1,7 @@
 «IMPORT commandBehavior»
 «IMPORT queryBehavior»
 
-«EXTENSION template::cpp::GeneratorExtensions»
+«EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE UnitDeclaration FOR Unit»
     bool «IF mainUnit»internalMainRule«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF»);

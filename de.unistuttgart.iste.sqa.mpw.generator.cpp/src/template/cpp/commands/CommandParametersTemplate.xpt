@@ -1,7 +1,7 @@
 «IMPORT commandBehavior»
 «IMPORT queryBehavior»
 
-«EXTENSION template::cpp::GeneratorExtensions»
+«EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE CommandParametersClassDefinition FOR Transformation»
         «EXPAND template::cpp::types::ImportUsedTypesTemplate::CommandParameterIncludeDefinitions FOR this»

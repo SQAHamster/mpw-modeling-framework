@@ -1,0 +1,47 @@
+import commandBehavior;
+import queryBehavior;
+import ecore;
+
+extension mpw::generator::xtend::types::MetaModelGeneratorExtensions;
+extension mpw::generator::xtend::types::EmfGeneratorExtensions;
+extension mpw::generator::xtend::util::GlobalsGeneratorExtensions;
+
+/*
+ * Extensions related to the generation of commands (Generic).
+ */
+
+getCommandNamespace(Transformation this) :
+    "commands";
+
+Transformation getCommandForOperation(EOperation operation) : 
+    operation.eAnnotations.selectFirst(a|a.source == "command").contents.first();
+
+getConcreteName(EClass this) : "Concrete" + name;
+
+getVisibility(Unit this) : 
+  if (name == "execute") then "public" else "private";
+  
+getVariableNameForFindReference(ManyReferenceCondition this) :
+  if (isPolymorphic()) then target.variableName + this.type.eType.name
+  else target.variableName;
+  
+isPolymorphic(ManyReferenceCondition this) :
+  this.type.eType.name != this.target.instanceType.name;
+  
+getParentTransformation(Unit this):
+    (Transformation)eContainer;
+  
+toLogMessage(Transformation this):
+    name.toFirstUpper().replaceAll("([a-z])([A-Z])", "$1 $2");
+  
+isActorCommand(Transformation this):
+    targetClass.eAllSuperTypes.exists(t|t.name == "Actor");
+    
+commandSetter(EClassifier type) : 
+    if (type.isValueType()) then "executeSetValueProperty"
+    else if (type.isEnum()) then "executeSetEnumProperty"
+    else "executeSetProperty";
+    
+commandAdder() : "executeAddReference";
+    
+commandRemover() : "executeRemoveReference";

@@ -1,0 +1,14 @@
+import ecore;
+
+/*
+ * Top-level extension file which reexports all other extension files (General).
+ */
+
+extension mpw::generator::xtend::BasicLanguageExtensions reexport;
+extension mpw::generator::xtend::types::EmfGeneratorExtensions reexport;
+extension mpw::generator::xtend::types::MetaModelGeneratorExtensions reexport;
+extension mpw::generator::xtend::properties::PropertyGeneratorExtensions reexport;
+extension mpw::generator::xtend::operations::OperationGeneratorExtensions reexport;
+extension mpw::generator::xtend::commands::CommandGeneratorExtensions reexport;
+extension mpw::generator::xtend::queries::QueryGeneratorExtensions reexport;
+extension mpw::generator::xtend::util::GlobalsGeneratorExtensions reexport;

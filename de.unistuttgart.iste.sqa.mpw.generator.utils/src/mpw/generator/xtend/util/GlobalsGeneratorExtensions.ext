@@ -4,7 +4,6 @@ import queryBehavior;
 
 /*
  * Extensions to obtain global variables.
- * Note: currently duplicated, later refactored into central place.
  */
 
 String getModulePackage() : GLOBALVAR module_package;

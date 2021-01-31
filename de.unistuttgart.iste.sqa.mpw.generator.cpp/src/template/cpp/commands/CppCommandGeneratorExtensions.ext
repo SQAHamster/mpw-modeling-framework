@@ -1,0 +1,41 @@
+import commandBehavior;
+import queryBehavior;
+import ecore;
+
+extension mpw::generator::xtend::commands::CommandGeneratorExtensions reexport;
+
+extension template::cpp::types::CppMetaModelGeneratorExtensions;
+extension template::cpp::types::CppEmfGeneratorExtensions;
+
+/*
+ * Extensions related to the generation of commands (C++).
+ */
+
+getQualifiedCommandCppName(Transformation this) :
+    getCommandNamespace() + "::" + targetClass.name.toLowerCase();
+
+toFindParameterTypeName(InstanceCondition this) :
+  let transformation = (Transformation)eRootContainer : 
+  if (transformation.targetClass.name == this.instanceType.name) then instanceType.ePackage.name + "::Concrete" + instanceType.name + "&"
+  else this.instanceType.toQualifiedTypeName() + "&";
+
+getVisibility(Unit this) : 
+  if (name == "execute") then "public" else "private";
+  
+toCppIncludeGuard(Transformation this) :
+    ("Commands" + this.name).toCppIncludeGuard();
+
+toCppParameterIncludeGuard(Transformation this) :
+    ("Commands" + this.name + "Parameters").toCppIncludeGuard();
+
+// called for Attribute Modifications
+toNewAttributeValueCppString(Modification this) :
+    if (attribute.attributeValue.type.isEnum()) then attribute.attributeValue.type.toCppType() + "::" + newAttributeValue 
+    else newAttributeValue;
+    
+isComplexMethodStatement(CollectionMethodStatement this) :
+    switch (methodType) {
+        case CollectionMethodType::AT: true
+        case CollectionMethodType::TYPE_SELECT: true
+        default: false
+    };

@@ -1,7 +1,0 @@
-import ecore;
-
-create List[String] GeneratedFiles() : (List[String]) {};
-
-addGeneratedSourceFile(String filePath) : GeneratedFiles().add(filePath) -> "";
-
-getGeneratedSourceFiles() : GeneratedFiles();

@@ -1,7 +1,7 @@
 «IMPORT ecore»
 «IMPORT queryBehavior»
 
-«EXTENSION template::cpp::GeneratorExtensions»
+«EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE QueryDeclarations FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»

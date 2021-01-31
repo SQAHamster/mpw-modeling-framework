@@ -1,0 +1,34 @@
+import ecore;
+import generationAnnotations;
+import generationAnnotations;
+
+extension mpw::generator::xtend::types::EmfGeneratorExtensions;
+extension mpw::generator::xtend::queries::QueryGeneratorExtensions;
+extension mpw::generator::xtend::Extensions;
+
+/*
+ * Extensions related to EOperations (General).
+ */
+
+operationsWithGenerationAnnotations(EClass this) :
+    eOperations.select(o|o.hasGenerationAnnotations());
+
+operationsWithoutGenerationAnnotations(EClass this) :
+    eOperations.select(o|!o.hasGenerationAnnotations());
+
+hasPropertyGetterOperation(EStructuralFeature this) :
+    hasPropertyGetterOperation(this.eContainingClass);
+
+hasPropertyGetterOperation(EStructuralFeature this, EClass targetClass) :
+    targetClass.eAllSuperTypes.exists(t|t.eOperations.exists(o|o.isPropertyGetter() && o.name == name));
+    
+isPropertyGetter(EOperation this) : isMarkedWith("isPropertyGetter");
+
+hasGenerationAnnotations(EOperation this) : eAnnotations.typeSelect(GenerationAnnotation).size > 0;
+    
+isCommand(EOperation this) : isMarkedWith("command");
+    
+isQuery(EOperation this) : isMarkedWith("query");
+
+isMarkedWith(EOperation this, String key) :
+    eAnnotations.exists(a|a.source == key || a.details.exists(d|d.key == key));

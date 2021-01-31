@@ -1,0 +1,75 @@
+import ecore;
+import behaviorsbase;
+import generationAnnotations;
+
+extension mpw::generator::xtend::types::EmfGeneratorExtensions reexport;
+
+extension template::cpp::types::CppMetaModelGeneratorExtensions;
+
+/*
+ * Extensions related to EMF Metamodel types (C++).
+ */
+
+modifierVisibility(EStructuralFeature this) :
+    if (derived) then "protected" else "public";
+    
+toCppType(ETypedElement this) : toCppType(this.eType.name, this.eType.metaType.name, this.eType.ePackage);
+toCppType(EClassifier this) : toCppType(name, metaType.name, ePackage);
+    
+toCppType(String this, String metaTypeName, EPackage thisPackage) :
+    if (this == "EInt") then "int"
+    else if (this == "EBoolean") then "bool"
+    else if (this == "EDouble") then "double"
+    else if (this == "EString") then "std::string"
+    else if (this.isAnyTypeName()) then "Any"
+    else if (this == "Semaphore") then "framework::Semaphore"
+    else if (this.isValueTypeClassName(thisPackage) || metaTypeName == "ecore::EEnum") then toQualifiedTypeName(this, thisPackage)
+    else if (this == "Throwable") then "std::runtime_error"
+    else "std::shared_ptr<" + toQualifiedTypeName(this, thisPackage) + ">";
+
+featureToSingleCppType(EStructuralFeature this) : this.toCppType();
+featureToCppType(EStructuralFeature this) : elementToCppType();
+operationToCppType(EOperation this) : elementToCppType();
+	
+private elementToCppType(ETypedElement this) :
+    if (isMarkedWithAnnotation("constructor")) then "" 
+    else if (isMarkedWithAnnotation("fluent")) then this.eType.name + "&" 
+    else if (this.eType == null) then "void" 
+	else if (this.upperBound == -1) then (
+	    if (EAttribute.isInstance(this) || this.eType.isBuiltInType()) then "std::list<" + this.toCppType() + ">"
+	    else "framework::ObjectListView<" + this.eType.ePackage.name + "::" + this.eType.name + ">&" )
+	else this.toCppType();
+
+featureToFieldInstantiation(EStructuralFeature this) :
+    if (hasInitializationAnnotation()) then "ERROR: featureToFieldInstantiation() must not be called for InlineSimpleFieldInitializationAnnotation"
+    else if (this.upperBound == -1) then "{}"
+    else if (this.eType.isDependency()) then "std::make_shared<" + eType.ePackage.name + "::Dummy" + this.eType.name + ">()"
+    else if (this.eType.needsImplSubclass()) then "std::make_shared<" + this.eType.toQualifiedTypeName() + "Impl>()"
+    else "std::make_shared<" + this.eType.toQualifiedTypeName() + ">()";
+
+defaultValueOf(EStructuralFeature f) :
+    if (f.eType.name == "EInt") then "0"
+	else if (f.eType.name == "EBoolean") then "false"
+	else if (f.eType.name == "EDouble") then "0.0"
+	else if (f.defaultValueLiteral != null) then f.defaultValueLiteral
+	else null;
+
+toCppDoc(String this) :
+    if (length > 0) then 
+        "/** " + this + " */"
+    else "";
+    
+toComment(String this) :
+    if (length > 0) then 
+        "/* " + this + " */"
+    else "";
+
+toCppLiteral(String this) :
+    if (this == "null") then "nullptr"
+    else this;
+
+toDefaultValueCppLiteral(EStructuralFeature this) :
+    if (defaultValueLiteral == null) then "nullptr"
+    else if (eType.isEnum()) then eType.toQualifiedTypeName() + "::" + defaultValueLiteral
+    else defaultValueLiteral.toCppLiteral();
+    

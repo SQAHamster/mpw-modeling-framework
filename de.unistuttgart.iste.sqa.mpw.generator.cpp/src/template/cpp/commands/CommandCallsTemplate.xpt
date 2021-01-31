@@ -1,6 +1,6 @@
 «IMPORT ecore»
 
-«EXTENSION template::cpp::GeneratorExtensions»
+«EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE CommandDeclarations FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isCommand()) AS o»

@@ -1,4 +1,7 @@
-	
+/*
+ * Basic extensions.
+ */
+ 	
 excluding(Collection this, Object obj) :
     reject(e|e == obj);
 

@@ -1,0 +1,14 @@
+import ecore;
+
+extension mpw::generator::xtend::properties::ObservablePropertyGeneratorExtensions reexport;
+extension mpw::generator::xtend::types::EmfGeneratorExtensions;
+extension mpw::generator::xtend::types::MetaModelGeneratorExtensions;
+
+/*
+ * Extensions related to the generation of Properties and transitive property getters (General).
+ */
+
+// checks whether the field needs a e.g. a shared_ptr in C++, since the lifecycle has to be protected
+// Note: used for commands
+hasSharedOwnership(EReference this) :
+    this.isMarkedWithAnnotation("sharedOwnership");

@@ -1,0 +1,15 @@
+import ecore;
+
+/*
+ * Top-level extension file which reexports all other extension files (C++).
+ */
+
+extension mpw::generator::xtend::BasicLanguageExtensions reexport;
+extension mpw::generator::xtend::util::GlobalsGeneratorExtensions reexport;
+extension template::cpp::types::CppEmfGeneratorExtensions reexport;
+extension template::cpp::types::CppMetaModelGeneratorExtensions reexport;
+extension template::cpp::properties::CppPropertyGeneratorExtensions reexport;
+extension template::cpp::properties::CppObservablePropertyGeneratorExtensions reexport;
+extension template::cpp::operations::CppOperationGeneratorExtensions reexport;
+extension template::cpp::commands::CppCommandGeneratorExtensions reexport;
+extension template::cpp::queries::CppQueryGeneratorExtensions reexport;

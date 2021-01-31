@@ -1,7 +1,7 @@
 «IMPORT ecore»
 «IMPORT queryBehavior»
 
-«EXTENSION template::cpp::GeneratorExtensions»
+«EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE StatementsDefinitions FOR StatementsExpression-»
     «IF statements.size == 0»nullptr«ENDIF-»

@@ -1,16 +1,14 @@
 import ecore;
 
-extension template::cpp::types::EmfGeneratorExtensions;
-extension template::cpp::types::MetaModelGeneratorExtensions;
+extension mpw::generator::xtend::properties::ObservablePropertyGeneratorExtensions reexport;
+
+extension template::cpp::types::CppEmfGeneratorExtensions;
+extension template::cpp::types::CppMetaModelGeneratorExtensions;
 
 /*
- * Extensions related to EStructuralFeatures which shall be generated as observable properties.
- * Note: currently duplicated, later refactored into central place.
+ * Extensions related to EStructuralFeatures which shall be generated as observable properties (C++).
  */
 
-isObservableProperty(EStructuralFeature this) :
-    this.changeable && !this.derived && !this.eType.isDependency() && this.eContainingClass.eAllSuperTypes.notExists(t|t.name == "Command");
-    
 featureToObservableFieldType(ETypedElement this) :
     if (EReference.isInstance(this) && !this.eType.isValueType()) then ((EReference)this).referenceToObservableFieldType()
 	else ((EAttribute)this).attributeToObservableFieldType();
