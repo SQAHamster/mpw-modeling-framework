@@ -164,4 +164,12 @@
 		</plugins>
 	</reporting>
 
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub Fumapps Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/Fumapps/mpw-modeling-framework</url>
+		</repository>
+	</distributionManagement>
+
 </project>
