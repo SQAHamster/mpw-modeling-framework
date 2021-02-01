@@ -1,11 +1,11 @@
-package properties;
+package de.unistuttgart.iste.sqa.mpw.framework.properties;
 
 import de.unistuttgart.iste.sqa.mpw.framework.mpw.Direction;
 import de.unistuttgart.iste.sqa.mpw.framework.mpw.Tile;
 import de.unistuttgart.iste.sqa.mpw.framework.mpw.impl.GamePerformanceImpl;
 import org.junit.jupiter.api.Test;
-import properties.testdoubles.ActorFake;
-import properties.testdoubles.PropFake;
+import de.unistuttgart.iste.sqa.mpw.framework.properties.testdoubles.ActorFake;
+import de.unistuttgart.iste.sqa.mpw.framework.properties.testdoubles.PropFake;
 
 import static org.junit.jupiter.api.Assertions.*;
 

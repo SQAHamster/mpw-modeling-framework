@@ -1,4 +1,4 @@
-package mpw;
+package de.unistuttgart.iste.sqa.mpw.framework;
 
 import de.unistuttgart.iste.sqa.mpw.framework.mpw.Location;
 import org.junit.jupiter.api.Test;
@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LocationTest {
+public class LocationTest {
     @Test
     public void givenLocation0x0_whenCheckEqualsTo0x0_thenIsTrue() {
         var sut = Location.from(0, 0);
