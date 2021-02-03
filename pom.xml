@@ -8,6 +8,8 @@
     
     <modules>
         <module>de.unistuttgart.iste.sqa.mpw.modeling.mpw</module>
+        <module>de.unistuttgart.iste.sqa.mpw.modeling.framework</module>
+        <module>de.unistuttgart.iste.sqa.mpw.modeling.workflow</module>
         <module>de.unistuttgart.iste.sqa.mpw.modeling.querydsl</module>
         <module>de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ide</module>
         <module>de.unistuttgart.iste.sqa.mpw.modeling.querydsl.ui</module>
@@ -16,7 +18,6 @@
         <module>de.unistuttgart.iste.sqa.mpw.generator.java</module>
         <module>de.unistuttgart.iste.sqa.mpw.generator.cpp</module>
         <module>de.unistuttgart.iste.sqa.mpw.generator.utils</module>
-        <module>de.unistuttgart.iste.sqa.mpw.modeling.workflow</module>
         <module>de.unistuttgart.iste.sqa.mpw.update</module>
         <module>de.unistuttgart.iste.sqa.mpw.feature</module>
     </modules>

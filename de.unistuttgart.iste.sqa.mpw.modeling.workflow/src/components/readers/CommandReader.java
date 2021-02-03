@@ -60,7 +60,7 @@ public class CommandReader extends MultiResourceReader {
 	
 	private static EValidator createOclValidator(OCL ocl) {
 		CompleteOCLStandaloneSetup.doSetup();
-		var uri = "platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.workflow/src/validation/CommandValidation.ocl";
+		var uri = "platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.workflow/validation/CommandValidation.ocl";
 		return new CompleteOCLEObjectValidator(HenshinPackage.eINSTANCE, URI.createURI(uri), ocl.getEnvironmentFactory());
 	}
 

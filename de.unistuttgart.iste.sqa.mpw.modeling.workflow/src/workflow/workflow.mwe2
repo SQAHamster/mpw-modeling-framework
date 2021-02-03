@@ -18,10 +18,12 @@ var modelingModuleBaseName = "${moduleBaseName}.modeling"
 var rootPath = ".."
 var transformationsProject = "${modelingModuleBaseName}.transformations"
 
-var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/RoleTransformation.qvto"
-var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/CommandTransformation.qvto"
-var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/QueryTransformation.qvto"
-var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/transforms/GenerationClassesTransformation.qvto"
+var transformationIntermediateDirectory = ""
+
+var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/${transformationIntermediateDirectory}/RoleTransformation.qvto"
+var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/${transformationIntermediateDirectory}/CommandTransformation.qvto"
+var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/${transformationIntermediateDirectory}/QueryTransformation.qvto"
+var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/${transformationIntermediateDirectory}/GenerationClassesTransformation.qvto"
 
 Workflow {
 	/* set up EMF for standalone execution */
