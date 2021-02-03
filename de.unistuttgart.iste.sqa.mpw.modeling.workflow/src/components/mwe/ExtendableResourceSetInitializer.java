@@ -29,7 +29,7 @@ class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
         	return classPathEntries;
         }
         
-        var additionalArchivesPathParts = additionalArchivesPaths.split(";");
+        var additionalArchivesPathParts = getJarPaths(additionalArchivesPaths);
         for (String additionalArchivesPath : additionalArchivesPathParts) {
         	var jars = collectAdditionalJars(additionalArchivesPath.trim());
         	classPathEntries.addAll(jars);
@@ -37,6 +37,15 @@ class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
 
         return classPathEntries;
     }
+
+	private List<String> getJarPaths(String additionalArchivesPaths) {
+		final String[] paths = additionalArchivesPaths.split(";");
+		String includePattern = paramsMap.getParams().get("includeJarsWithName");
+        if (includePattern == null) {
+        	return Arrays.asList(paths);
+        }
+		return Arrays.asList(paths).stream().filter(path -> path.matches(includePattern)).collect(Collectors.toList());
+	}
 	
 	private List<String> collectAdditionalJars(String additionalArchivesPath) {
         var additionalEntries = new ArrayList<String>();
