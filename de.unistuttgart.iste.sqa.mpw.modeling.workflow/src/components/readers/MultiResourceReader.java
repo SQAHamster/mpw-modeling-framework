@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.mwe.core.WorkflowContext;
@@ -85,7 +86,8 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		log.info("searching " + getModelNameFromExtension() + " models for base URI: " + getBaseUri());
 		
-		String targetDirectory = EclipsePathHelper.toJavaCompatibleAbsoluteFilePath(rootPath) + "/" + projectName + "/" + projectSubPath;
+		final String projectDirectory = getProjectPath();
+		final String targetDirectory = EclipsePathHelper.toJavaCompatibleAbsoluteFilePath(projectDirectory) + "/" + projectSubPath;
 		try (var files = listFiles(targetDirectory)) {
 			
 			var modelNames = files.map(f -> f.toFile().getPath())
@@ -104,6 +106,16 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		} catch (IOException e) {
 			log.error("Failed to locate " + getModelNameFromExtension() + " files under: " + targetDirectory, e);
 		}
+	}
+
+	/*
+	 * Note: the project-name might be different to the sub-directory, where the project is placed.
+	 * Hence, the project-name will be resolved to the URI (which has to be a file-URI).
+	 */
+	private String getProjectPath() {
+		final String projectPath = EcorePlugin.getPlatformResourceMap().get(projectName).toFileString();
+		assert projectPath != null;
+		return projectPath;
 	}
 	
 	private static String substringAfter(String string, String match) {

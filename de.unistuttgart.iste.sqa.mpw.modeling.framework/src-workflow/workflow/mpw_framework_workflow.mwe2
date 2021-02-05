@@ -4,7 +4,7 @@ var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
 
 Workflow {
     component = @modeling.Workflow auto-inject {
-        sourceProjectName = "${moduleBaseName}.modeling.framework"
+        sourceProjectName = "${moduleBaseName}.modeling.mpw"
         generatedProjectBasePackage = "'${moduleBaseName}.framework'"
         targetSimulatorProjectBaseName = "${moduleBaseName}.framework"
         transformationIntermediateDirectory = "transforms" // inside mpw-workspace, the intermediate source-directory has to be regarded

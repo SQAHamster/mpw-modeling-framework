@@ -16,7 +16,7 @@ Workflow {
 	
 	component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {
 		genModel = "${platformUriPrefix}/${mpwModelProject}/model/mpw.genmodel"
-		srcPath = "${platformUriPrefix}/${mpwModelProject}/src-gen}"
+		srcPath = "${platformUriPrefix}/${mpwModelProject}/src-gen"
 	}
 	
 }
