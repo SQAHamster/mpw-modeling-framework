@@ -1,1 +1,0 @@
-mvn verify sonar:sonar -Dsonar.projectKey=MPW_JAVA -Dsonar.host.url=http://localhost:9000 -Dsonar.login=35354be5040f83b3c19c1c1ef274afbb4a805fc6

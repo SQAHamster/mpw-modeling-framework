@@ -1,0 +1,190 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>de.unistuttgart.iste.sqa.mpw.modeling</groupId>
+    <artifactId>mpw-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>MPW Parent</name>
+
+    <properties>
+        <maven.compiler.release>15</maven.compiler.release>
+        <tycho-version>2.2.0</tycho-version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <xtext.version>2.24.0</xtext.version>
+        <henshin.version>1.6.0</henshin.version>
+        <cdt.version>10.1</cdt.version>
+        <emf.mwe.launch.version>2.12.0</emf.mwe.launch.version>
+        <tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
+        
+        <!-- Skip the deployment here, submodules can override this property -->
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>eclipse</id>
+            <layout>p2</layout>
+            <url>https://download.eclipse.org/releases/2020-12/</url>
+        </repository>
+        <repository>
+            <id>Xtext Update Site</id>
+            <layout>p2</layout>
+            <url>https://download.eclipse.org/modeling/tmf/xtext/updates/releases/${xtext.version}/</url>
+        </repository>
+        <repository>
+            <id>Xpand Xtend Additional Support Update Site</id>
+            <layout>p2</layout>
+            <url>https://download.eclipse.org/modeling/m2t/xpand/updates/</url>
+        </repository>
+		<repository>
+			<id>Henshin Update Site</id>
+			<layout>p2</layout>
+			<url>https://download.eclipse.org/modeling/emft/henshin/updates/${henshin.version}/</url>
+		</repository>
+		<repository>
+			<id>CDT Update Site</id>
+			<layout>p2</layout>
+			<url>https://download.eclipse.org/tools/cdt/releases/${cdt.version}/</url>
+		</repository>
+    </repositories>
+
+    <build>
+        
+        <pluginManagement>
+            
+            <plugins>
+                
+                <!-- xtend-maven-plugin is in pluginManagement instead of in plugins 
+                    so that it doesn't run before the exec-maven-plugin's *.mwe2 gen; this way 
+                    we can list it after. -->
+                <plugin>
+                    <groupId>org.eclipse.xtend</groupId>
+                    <artifactId>xtend-maven-plugin</artifactId>
+                    <version>${xtext.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile</goal>
+                                <goal>xtend-install-debug-info</goal>
+                                <goal>testCompile</goal>
+                                <goal>xtend-test-install-debug-info</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                        <configuration>
+                            <outputDirectory>xtend-gen</outputDirectory>
+                            <testOutputDirectory>xtend-gen</testOutputDirectory>
+                        </configuration>
+                </plugin>
+            
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>2.5</version>
+                    <executions>
+                        <execution>
+                            <id>gen-clean</id>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                            <configuration>
+                                <filesets>
+                                    <fileset>
+                                        <directory>${basedir}/xtend-gen</directory>
+                                    </fileset>
+                                </filesets>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+            </plugins>
+            
+        </pluginManagement>
+
+        <plugins>
+        
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-packaging-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.eclipse.tycho.extras</groupId>
+                        <artifactId>tycho-buildtimestamp-jgit</artifactId>
+                        <version>${tycho-version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <timestampProvider>jgit</timestampProvider>
+                    <jgit.ignore>pom.xml</jgit.ignore>
+                    <jgit.dirtyWorkingTree>ignore</jgit.dirtyWorkingTree>
+                </configuration>
+            </plugin>
+            
+            <!-- Skip the install, since we do not need the artifacts in our local mvn repo -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-maven-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <extensions>true</extensions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>target-platform-configuration</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <target>
+                        <artifact>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>de.unistuttgart.iste.sqa.mpw.targetplatform</artifactId>
+                            <version>${project.version}</version>
+                        </artifact>
+                    </target>
+                    <executionEnvironment>JavaSE-15</executionEnvironment>
+                    <environments>
+                        <environment>
+                            <os>win32</os>
+                            <ws>win32</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                        <environment>
+                            <os>macosx</os>
+                            <ws>cocoa</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                    </environments>
+                </configuration>
+            </plugin>
+            
+        </plugins>
+
+    </build>
+
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-fumapps-mpw-modeling-framework</id>
+            <name>Fumapps-mpw-modeling-framework</name>
+            <url>https://api.bintray.com/maven/fumapps/mpw-modeling-framework/${project.artifactId}/;publish=1</url>
+        </repository>
+    </distributionManagement>
+
+</project>

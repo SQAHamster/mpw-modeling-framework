@@ -1,0 +1,14 @@
+module modeling.MpwFrameworkWorkflow
+
+var rootPath = "../.."
+var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
+
+Workflow {
+    component = @modeling.Workflow auto-inject {
+        rootPath = rootPath
+        sourceProjectName = "${moduleBaseName}.modeling.mpw"
+        generatedProjectBasePackage = "'${moduleBaseName}.framework'"
+        targetSimulatorProjectBaseName = "simulators/${moduleBaseName}.framework"
+        transformationIntermediateDirectory = "transforms" // inside mpw-workspace, the intermediate source-directory has to be regarded
+    }
+}

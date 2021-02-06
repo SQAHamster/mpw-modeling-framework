@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 14
+      - name: Set up JDK 15
         uses: actions/setup-java@v1
         with:
-          java-version: 14
+          java-version: 15
 
       # Run MDE Workflow
       - name: Process MDE workflow with Maven
@@ -24,7 +24,7 @@ jobs:
 
       # Build and test Java Framework
       - name: Build Java Framework
-        run: mvn -Dmaven.javadoc.skip=true -B install --file de.unistuttgart.iste.sqa.mpw.framework.java/pom.xml
+        run: mvn -Dmaven.javadoc.skip=true -B install --file simulators/de.unistuttgart.iste.sqa.mpw.framework.java/pom.xml
 
       # Build and test C++ Framework
       - name: Setup CMake
@@ -34,6 +34,6 @@ jobs:
       - name: Build C++ Framework
         run: cmake -S $PROJECT_CPP_DIR -B $BUILD_DIR && cmake --build $BUILD_DIR && cd $BUILD_DIR && ctest --extra-verbose
         env:
-          PROJECT_CPP_DIR: de.unistuttgart.iste.sqa.mpw.framework.cpp
-          BUILD_DIR: de.unistuttgart.iste.sqa.mpw.framework.cpp/build
+          PROJECT_CPP_DIR: simulators/de.unistuttgart.iste.sqa.mpw.framework.cpp
+          BUILD_DIR: simulators/de.unistuttgart.iste.sqa.mpw.framework.cpp/build
 
