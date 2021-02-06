@@ -1,9 +1,11 @@
 module modeling.MpwFrameworkWorkflow
 
+var rootPath = ".."
 var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
 
 Workflow {
     component = @modeling.Workflow auto-inject {
+        rootPath = rootPath
         sourceProjectName = "${moduleBaseName}.modeling.mpw"
         generatedProjectBasePackage = "'${moduleBaseName}.framework'"
         targetSimulatorProjectBaseName = "${moduleBaseName}.framework"

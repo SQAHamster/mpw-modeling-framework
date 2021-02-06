@@ -50,6 +50,8 @@
                     <arguments>
                         <argument>/${project.basedir}/src-workflow/workflow/mpw_framework_workflow.mwe2</argument>
                         <argument>-p</argument>
+                        <argument>rootPath=/${project.basedir}/..</argument>
+                        <argument>-p</argument>
                         <argument>includeJarsWithName=.*de.unistuttgart.*</argument>
                         <argument>-p</argument>
                         <argument>additionalArchivesPaths=${runtime.classpath}</argument>

@@ -125,10 +125,12 @@ Workflow {
 	}
 	
     component = @JavaGenerator auto-inject {
+        rootPath = rootPath
         generatedProjectBasePackage = generatedProjectBasePackage
         targetSimulatorProject = "${targetSimulatorProjectBaseName}.java"
     }
     component = @CppGenerator auto-inject {
+        rootPath = rootPath
         generatedProjectBasePackage = generatedProjectBasePackage
         targetSimulatorProject = "${targetSimulatorProjectBaseName}.cpp"
     }
