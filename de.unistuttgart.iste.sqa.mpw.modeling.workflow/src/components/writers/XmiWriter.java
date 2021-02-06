@@ -43,7 +43,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	private String directorySuffix = "";
 	
 	/** the project name in which the files are written */
-	private String projectName = "de.unistuttgart.iste.sqa.mpw.modeling.workflow";
+	private String projectName;
 
 	private String rootPath = "..";
 	
@@ -122,8 +122,9 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	 * @param context 
 	 */
 	private void replaceEcoreLinksToGeneratedOnes(WorkflowContext context, String resourceUri, String directoryName) throws IOException {
-		var filePath = EclipsePathHelper.toJavaCompatibleAbsoluteFilePath(rootPath) + URI.createURI(resourceUri).toPlatformString(true);
-		var path = Paths.get(filePath);
+		final String fileName = URI.createURI(resourceUri).lastSegment();
+		var filePathString = EclipsePathHelper.getMappedPlatformUriForProject(projectName).toFileString() + "/debugout/" + directoryName + "/" + fileName;
+		var path = Paths.get(filePathString);
 		var charset = StandardCharsets.UTF_8;
 
 		var content = new String(Files.readAllBytes(path), charset);

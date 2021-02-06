@@ -16,6 +16,7 @@ import org.eclipse.ocl.xtext.completeocl.CompleteOCLStandaloneSetup;
 import org.eclipse.ocl.xtext.completeocl.validation.CompleteOCLEObjectValidator;
 
 import behaviorInputs.impl.InputsFactoryImpl;
+import components.helpers.EclipsePathHelper;
 
 /**
  * MultiResourceReader Component used to read henshin commands recursively in a given file path.
@@ -60,8 +61,17 @@ public class CommandReader extends MultiResourceReader {
 	
 	private static EValidator createOclValidator(OCL ocl) {
 		CompleteOCLStandaloneSetup.doSetup();
-		var uri = "platform:/resource/de.unistuttgart.iste.sqa.mpw.modeling.workflow/validation/CommandValidation.ocl";
+		final String uri = getWorkflowProjectResourcePathPrefix() + "/validation/CommandValidation.ocl";
 		return new CompleteOCLEObjectValidator(HenshinPackage.eINSTANCE, URI.createURI(uri), ocl.getEnvironmentFactory());
+	}
+	
+	private static String getWorkflowProjectResourcePathPrefix() {
+		final String workflowProjectName = "de.unistuttgart.iste.sqa.mpw.modeling.workflow";
+		String uri = "platform:/resource/" + workflowProjectName;
+		if (EclipsePathHelper.isProjectInSameWorkspace(workflowProjectName)) {
+			uri += "/src";
+		}
+		return uri;
 	}
 
 }

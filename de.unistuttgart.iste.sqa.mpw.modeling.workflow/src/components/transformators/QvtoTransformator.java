@@ -108,7 +108,7 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 			
 			context.setLog(new QvtoLogger(getName(eObject), log));
 			
-			context.setConfigProperty("EntityModels", workflowContext.get("entityModels"));
+			context.setConfigProperty("EntityModels", MpwEntityModelsCollector.getAllRelevantMpwPackages(workflowContext));
 			context.setConfigProperty("Queries", workflowContext.get("queries"));
 			context.setConfigProperty("Commands", workflowContext.get("commands"));
 			if (eObject.eResource() != null) {
@@ -163,7 +163,6 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 		}
 		
 	}
-	
 	
 	private static String getName(EObject object) {
 		if (object instanceof ENamedElement) {
