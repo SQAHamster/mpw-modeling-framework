@@ -14,6 +14,10 @@ modeltype GenerationAnnotations uses 'http://www.mpw.uni-stuttgart.de/generation
 library StageBuilderLibrary;
 
 mapping inout EClass::transformMpwClass()
+    disjuncts EClass::transformConcreteMiniProgrammingWorldClass,
+              EClass::transformMiniProgrammingWorldClass {};
+
+mapping inout EClass::transformConcreteMiniProgrammingWorldClass()
     when { self.eAllSuperTypes->exists(t|t.name = "MiniProgrammingWorld") } {
     
     self->map createPerformanceDelegateOperation("startGame");
@@ -27,7 +31,11 @@ mapping inout EClass::transformMpwClass()
     self->map createGameCommandStackGetter();
 
     self->map useFacades();
-    findClassForName("MiniProgrammingWorld").map removeDerivedStageReference();
+}
+
+mapping inout EClass::transformMiniProgrammingWorldClass()
+    when { self.name = "MiniProgrammingWorld" } {
+    self.map removeDerivedStageReference();
 }
 
 abstract mapping inout EClass::createPerformanceDelegateOperation(operationName: String) {

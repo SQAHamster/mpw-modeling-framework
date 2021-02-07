@@ -6,29 +6,28 @@ import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.Color;
 import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.GameViewPresenter;
 import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.ViewModelCell;
 import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.ViewModelLogEntry;
+import javafx.beans.property.ReadOnlyListProperty;
 import javafx.collections.ListChangeListener;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
-import static de.unistuttgart.iste.sqa.mpw.framework.utils.Preconditions.checkState;
-
-public abstract class GameViewPresenterImpl extends GameViewPresenter {
+public abstract class GameViewPresenterBase extends GameViewPresenter {
 	private final MiniProgrammingWorld miniProgrammingWorld;
 
 	private final Map<LogEntry, ViewModelLogEntry> logEntryMap = new HashMap<>();
 
-	public GameViewPresenterImpl(MiniProgrammingWorld miniProgrammingWorld) {
+	public GameViewPresenterBase(MiniProgrammingWorld miniProgrammingWorld) {
 		super(new Semaphore(1, true));
 		this.miniProgrammingWorld = miniProgrammingWorld;
-
-		final Size size = this.miniProgrammingWorld.getStage().getStageSize();
-		getViewModel().init(size);
 	}
 
 	@Override
 	public void bind() {
+		final Size size = getStageSizeFromConcreteStage();
+		getViewModel().init(size);
+
 		runLocked(() -> {
 			bindTiles();
 			bindGameLog();
@@ -37,16 +36,23 @@ public abstract class GameViewPresenterImpl extends GameViewPresenter {
 		});
 	}
 
+	// needs to be implemented by derived presenter classes, since here
+	// no concrete Stage is available.
+	protected abstract Size getStageSizeFromConcreteStage();
+
 	protected void onBind() {
 		// can be overridden by subclasses
 	}
 
 	private void bindTiles() {
-		var stage = miniProgrammingWorld.getStage();
-		var tilesProperty = stage.tilesProperty();
+		var tilesProperty = getTilesPropertyFromConcreteStage();
 		tilesProperty.addListener(tilesChangedListener);
 		tilesProperty.forEach(this::addTileNode);
 	}
+
+	// needs to be implemented by derived presenter classes, since here
+	// no concrete Stage is available.
+	protected abstract ReadOnlyListProperty<Tile> getTilesPropertyFromConcreteStage();
 
 	private void bindGameLog() {
 		var gameLog = miniProgrammingWorld.getGameLog();
@@ -197,12 +203,7 @@ public abstract class GameViewPresenterImpl extends GameViewPresenter {
 		miniProgrammingWorld.getPerformance().abortOrStopGame();
 	}
 
-	@Override
-	public void textTyped(String text) {
-		throw new RuntimeException("not implemented");
-	}
-
-	private void runLocked(Runnable runnable) {
+	protected void runLocked(Runnable runnable) {
 		try {
 			getSemaphore().acquire();
 			runnable.run();

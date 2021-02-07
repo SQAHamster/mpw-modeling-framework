@@ -77,9 +77,6 @@
       <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/speedChanged">
         <genParameters ecoreParameter="ViewModel.ecore#//GameViewInput/speedChanged/speedValue"/>
       </genOperations>
-      <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/textTyped">
-        <genParameters ecoreParameter="ViewModel.ecore#//GameViewInput/textTyped/text"/>
-      </genOperations>
       <genOperations ecoreOperation="ViewModel.ecore#//GameViewInput/close"/>
     </genClasses>
     <genClasses ecoreClass="ViewModel.ecore#//GameViewPresenter">
