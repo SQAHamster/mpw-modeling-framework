@@ -1,4 +1,4 @@
-#include "GameViewPresenterImpl.h"
+#include "GameViewPresenterBase.h"
 
 #include "Stage.h"
 #include "GameLog.h"
@@ -20,14 +20,14 @@ namespace viewmodel {
 
 // TODO remove listeners on removement of relating objects
 
-GameViewPresenterImpl::GameViewPresenterImpl(std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld)
+GameViewPresenterBase::GameViewPresenterBase(std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld)
     : inherited(Semaphore())
     , miniProgrammingWorld(std::move(miniProgrammingWorld)) {
     const Size& size = this->miniProgrammingWorld->getStage()->getStageSize();
     GameViewPresenter::getViewModel()->init(size);
 }
 
-void GameViewPresenterImpl::bind() {
+void GameViewPresenterBase::bind() {
     auto lock = getSemaphore().lock();
 
     Stage& territory = *miniProgrammingWorld->getStage();
@@ -49,36 +49,36 @@ void GameViewPresenterImpl::bind() {
     onBind();
 }
 
-void GameViewPresenterImpl::onBind()
+void GameViewPresenterBase::onBind()
 {
   // can be overridden by subclasses
 }
 
-void GameViewPresenterImpl::playClicked() {
+void GameViewPresenterBase::playClicked() {
     miniProgrammingWorld->getPerformance()->resumeGame();
 }
 
-void GameViewPresenterImpl::pauseClicked() {
+void GameViewPresenterBase::pauseClicked() {
     miniProgrammingWorld->getPerformance()->pauseGame();
 }
 
-void GameViewPresenterImpl::undoClicked() {
+void GameViewPresenterBase::undoClicked() {
     miniProgrammingWorld->getPerformance()->getGameCommandStack()->undo();
 }
 
-void GameViewPresenterImpl::redoClicked() {
+void GameViewPresenterBase::redoClicked() {
     miniProgrammingWorld->getPerformance()->getGameCommandStack()->redo();
 }
 
-void GameViewPresenterImpl::close() {
+void GameViewPresenterBase::close() {
     miniProgrammingWorld->getPerformance()->abortOrStopGame();
 }
 
-void GameViewPresenterImpl::textTyped(std::string text) {
+void GameViewPresenterBase::textTyped(std::string text) {
     throw std::runtime_error("not implemented");
 }
 
-void GameViewPresenterImpl::addTileNode(const mpw::Tile& tile) {
+void GameViewPresenterBase::addTileNode(const mpw::Tile& tile) {
     Tile& nonConstTile = const_cast<Tile&>(tile); // TODO const-correctness: adapt after migrate generator
     const Location& location = nonConstTile.getLocation();
 
@@ -94,7 +94,7 @@ void GameViewPresenterImpl::addTileNode(const mpw::Tile& tile) {
     setTileNodeAt(location, tile);
 }
 
-void GameViewPresenterImpl::removeTileNode(const mpw::Tile& tile) {
+void GameViewPresenterBase::removeTileNode(const mpw::Tile& tile) {
     Tile& nonConstTile = const_cast<Tile&>(tile); // TODO const-correctness: adapt after migrate generator
     auto cell = getViewModel()->getCellAt(
             nonConstTile.getLocation().getRow(),
@@ -102,14 +102,14 @@ void GameViewPresenterImpl::removeTileNode(const mpw::Tile& tile) {
     cell->clearLayers();
 }
 
-void GameViewPresenterImpl::setTileNodeAt(const Location& location, const Tile& tile) {
+void GameViewPresenterBase::setTileNodeAt(const Location& location, const Tile& tile) {
     auto cell = getViewModel()->getCellAt(location.getRow(), location.getColumn());
     cell->clearLayers();
 
     onSetTileNodeAtForCell(*cell, tile);
 }
 
-int GameViewPresenterImpl::getRotationForDirection(mpw::Direction direction) {
+int GameViewPresenterBase::getRotationForDirection(mpw::Direction direction) {
     switch (direction) {
         case Direction::EAST:
             return 0;
@@ -123,7 +123,7 @@ int GameViewPresenterImpl::getRotationForDirection(mpw::Direction direction) {
     throw std::runtime_error("Invalid direction!");
 }
 
-void GameViewPresenterImpl::addLogEntry(const LogEntry& entry) {
+void GameViewPresenterBase::addLogEntry(const LogEntry& entry) {
     auto& nonConstEntry = const_cast<LogEntry&>(entry); // TODO const correctness
     auto viewModelEntry = std::make_shared<ViewModelLogEntry>();
     viewModelEntry->setMessage(nonConstEntry.getMessage());
@@ -131,7 +131,7 @@ void GameViewPresenterImpl::addLogEntry(const LogEntry& entry) {
     getViewModel()->addToLogEntries(viewModelEntry);
 }
 
-void GameViewPresenterImpl::speedChanged(double speedValue) {
+void GameViewPresenterBase::speedChanged(double speedValue) {
     if (!(speedValue >= 0 && speedValue <= 10)) {
         throw std::runtime_error("Provided speed is not in range [0, 10]");
     }

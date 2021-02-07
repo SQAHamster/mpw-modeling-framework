@@ -1,5 +1,5 @@
-#ifndef DE_UNISTUTTGART_ISTE_SQA_MPW_FRAMEWORK_GAMEVIEWPRESENTERIMPL_H
-#define DE_UNISTUTTGART_ISTE_SQA_MPW_FRAMEWORK_GAMEVIEWPRESENTERIMPL_H
+#ifndef DE_UNISTUTTGART_ISTE_SQA_MPW_FRAMEWORK_GameViewPresenterBase_H
+#define DE_UNISTUTTGART_ISTE_SQA_MPW_FRAMEWORK_GameViewPresenterBase_H
 
 #include "GameViewModel.h"
 #include "GameViewPresenter.h"
@@ -15,13 +15,13 @@
 
 namespace viewmodel {
 
-class GameViewPresenterImpl: public GameViewPresenter {
+class GameViewPresenterBase: public GameViewPresenter {
 private:
 	using inherited = GameViewPresenter;
 
 public:
 
-    GameViewPresenterImpl(std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld);
+    GameViewPresenterBase(std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld);
 
     void playClicked() override;
     void pauseClicked() override;
@@ -59,4 +59,4 @@ private:
 
 }
 
-#endif //DE_UNISTUTTGART_ISTE_SQA_MPW_FRAMEWORK_GAMEVIEWPRESENTERIMPL_H
+#endif //DE_UNISTUTTGART_ISTE_SQA_MPW_FRAMEWORK_GameViewPresenterBase_H
