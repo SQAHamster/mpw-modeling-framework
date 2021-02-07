@@ -18,7 +18,7 @@
     import «getModulePackage()».commands.«className.toLowerCase()».*;
     «ENDFOREACH-»
 	«IF !interface && name.startsWith("Concrete") && eAllOperations.exists(o|o.isQuery())-»
-    import static «getModulePackage()».mpw.Direction.*;
+    import static de.unistuttgart.iste.sqa.mpw.framework.mpw.Direction.*;
     import java.util.stream.Collectors;
 	«ENDIF-»
 	«IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
@@ -51,7 +51,11 @@
 «ENDDEFINE»
 
 «DEFINE SingleImportDefinition FOR EClassifier-»
+    «IF isMpwFrameworkType()-»
+    import «getFrameworkBasePackage()».«ePackage.name».«name»;
+    «ELSE-»
     import «getModulePackage()».«ePackage.name».«name»;
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE CommandEntityImportDefinition FOR EClass-»

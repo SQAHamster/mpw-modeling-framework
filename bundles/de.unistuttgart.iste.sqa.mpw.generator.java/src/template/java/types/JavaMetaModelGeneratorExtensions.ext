@@ -27,3 +27,5 @@ toJavaPackagePath(EPackage this) :
 
 toJavaPackageName(EPackage this) :
     getModulePackage() + "." + this.name;
+    
+getFrameworkBasePackage() : "de.unistuttgart.iste.sqa.mpw.framework";

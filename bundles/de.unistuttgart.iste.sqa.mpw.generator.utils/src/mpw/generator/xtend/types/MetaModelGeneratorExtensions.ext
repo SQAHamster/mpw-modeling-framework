@@ -40,3 +40,9 @@ isSemaphore(EClassifier this) : name == "Semaphore";
 isInheritedEntity(EClassifier this) : EClass.isInstance(this) && ((EClass)this).eAllSuperTypes.exists(t|t.name == "Entity");
 isViewModelType(EClassifier this) :
     EClass.isInstance(this) && ((EClass)this).eSuperTypes.exists(t|t.name == "ViewModel");
+    
+isMpwFrameworkType(EClassifier this) :
+    ePackage.nsURI == "http://www.mpw.uni-stuttgart.de/basetypes" ||
+    ePackage.nsURI == "http://www.mpw.uni-stuttgart.de/commands" ||
+    ePackage.nsURI == "http://www.mpw.uni-stuttgart.de/mpw" ||
+    ePackage.nsURI == "http://www.mpw.uni-stuttgart.de/viewmodel";
