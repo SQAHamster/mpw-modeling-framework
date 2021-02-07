@@ -31,11 +31,17 @@ public:
 
     void close() override;
 
-    void textTyped(std::string text) override;
-
     void bind() override;
 
 protected:
+
+  // needs to be implemented by derived presenter classes, since here
+  // no concrete Stage is available.
+  virtual const mpw::Size& getStageSizeFromConcreteStage() = 0;
+
+  // needs to be implemented by derived presenter classes, since here
+  // no concrete Stage is available.
+  virtual const framework::ObservableListProperty<mpw::Tile>& getTilesPropertyFromConcreteStage() = 0;
 
   virtual void onBind();
   virtual void onSetTileNodeAtForCell(ViewModelCell& cell, const mpw::Tile& tile) = 0;

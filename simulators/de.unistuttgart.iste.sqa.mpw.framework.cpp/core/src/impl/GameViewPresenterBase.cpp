@@ -23,16 +23,16 @@ namespace viewmodel {
 GameViewPresenterBase::GameViewPresenterBase(std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld)
     : inherited(Semaphore())
     , miniProgrammingWorld(std::move(miniProgrammingWorld)) {
-    const Size& size = this->miniProgrammingWorld->getStage()->getStageSize();
-    GameViewPresenter::getViewModel()->init(size);
 }
 
 void GameViewPresenterBase::bind() {
+    const Size& size = getStageSizeFromConcreteStage();
+    GameViewPresenter::getViewModel()->init(size);
+
     auto lock = getSemaphore().lock();
 
-    Stage& territory = *miniProgrammingWorld->getStage();
-    auto& tilesProperty = territory.tilesProperty();
-    
+    auto& tilesProperty = getTilesPropertyFromConcreteStage();
+
     tilesProperty.addOnAddedListener([this](auto& tile) { addTileNode(tile); });
     tilesProperty.addOnRemovedListener([this](auto& tile) { removeTileNode(tile); });
     tilesProperty.forEach([this](auto& tile) { addTileNode(tile); });
@@ -72,10 +72,6 @@ void GameViewPresenterBase::redoClicked() {
 
 void GameViewPresenterBase::close() {
     miniProgrammingWorld->getPerformance()->abortOrStopGame();
-}
-
-void GameViewPresenterBase::textTyped(std::string text) {
-    throw std::runtime_error("not implemented");
 }
 
 void GameViewPresenterBase::addTileNode(const mpw::Tile& tile) {
