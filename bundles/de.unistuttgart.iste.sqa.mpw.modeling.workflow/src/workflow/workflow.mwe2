@@ -18,18 +18,16 @@ var modelingModuleBaseName = "${moduleBaseName}.modeling"
 var rootPath = ".."
 var transformationsProject = "${modelingModuleBaseName}.transformations"
 
-var transformationIntermediateDirectory = ""
-
-var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/${transformationIntermediateDirectory}/RoleTransformation.qvto"
-var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/${transformationIntermediateDirectory}/CommandTransformation.qvto"
-var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/${transformationIntermediateDirectory}/QueryTransformation.qvto"
-var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/${transformationIntermediateDirectory}/GenerationClassesTransformation.qvto"
+var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/RoleTransformation.qvto"
+var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/CommandTransformation.qvto"
+var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/QueryTransformation.qvto"
+var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/GenerationClassesTransformation.qvto"
 
 Workflow {
 	/* set up EMF for standalone execution */
 	bean = StandaloneSetup { 
         scanClassPath = true
-		platformUri="../"
+		platformUri=rootPath
 		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
 		registerGeneratedEPackage="commandBehavior.CommandPackage"
         registerGeneratedEPackage="queryBehavior.QueryPackage"

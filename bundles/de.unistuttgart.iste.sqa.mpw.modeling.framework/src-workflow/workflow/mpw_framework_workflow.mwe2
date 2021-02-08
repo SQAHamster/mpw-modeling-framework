@@ -9,6 +9,5 @@ Workflow {
         sourceProjectName = "${moduleBaseName}.modeling.mpw"
         generatedProjectBasePackage = "'${moduleBaseName}.framework'"
         targetSimulatorProjectBaseName = "simulators/${moduleBaseName}.framework"
-        transformationIntermediateDirectory = "transforms" // inside mpw-workspace, the intermediate source-directory has to be regarded
     }
 }

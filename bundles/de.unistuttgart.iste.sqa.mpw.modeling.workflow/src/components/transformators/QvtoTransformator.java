@@ -19,6 +19,7 @@ import org.eclipse.m2m.qvt.oml.ExecutionContextImpl;
 import org.eclipse.m2m.qvt.oml.ExecutionDiagnostic;
 import org.eclipse.m2m.qvt.oml.TransformationExecutor;
 
+import components.helpers.EclipsePathHelper;
 import components.helpers.QvtoLogger;
 
 /**
@@ -27,7 +28,8 @@ import components.helpers.QvtoLogger;
  * It uses modelslots to obtain the input models. Optionally a target slot can be specified where the result will be written to.
  */
 public class QvtoTransformator extends WorkflowComponentWithModelSlot {
-	private final static Logger log = Logger.getLogger(QvtoTransformator.class.getName());
+	private static final String TRANSFORMATION_MODULE = "de.unistuttgart.iste.sqa.mpw.modeling.transformations";
+	private static final Logger log = Logger.getLogger(QvtoTransformator.class.getName());
 	
 	private String transformationUri;
 	private SourceTargetRelationship sourceTargetRelationship = SourceTargetRelationship.EXISTING_TARGET;
@@ -97,7 +99,7 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 		public ModelToModelTransformationExecutor(WorkflowContext workflowContext, Issues issues, String uri) {
 			this.workflowContext = workflowContext;
 			this.issues = issues;
-			this.transformationURI = URI.createURI(transformationUri);
+			this.transformationURI = createTransformationUriFromString(transformationUri);
 			this.internalExecutor = new TransformationExecutor(transformationURI);
 		}
 
@@ -160,6 +162,15 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 		
 		public String getTransformationName() {
 			return transformationURI.lastSegment();
+		}
+		
+		private URI createTransformationUriFromString(final String baseUri) {
+			String transformationUri = baseUri;
+			if (EclipsePathHelper.isProjectInSameWorkspace(TRANSFORMATION_MODULE)) {
+				// append "transforms" intermediary directory, since it is not read from archive
+				transformationUri = transformationUri.replace(TRANSFORMATION_MODULE, TRANSFORMATION_MODULE + "/transforms");
+			}
+			return URI.createURI(transformationUri);
 		}
 		
 	}
