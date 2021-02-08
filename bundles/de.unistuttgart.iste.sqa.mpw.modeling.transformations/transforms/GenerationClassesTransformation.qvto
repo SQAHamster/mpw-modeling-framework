@@ -36,9 +36,7 @@ mapping inout EPackage::transformPackage() {
     
     eClassifiers += self.eClassifiers[EClass][hasAnnotationValue("role", "editor")]->map createBuilderClass();
     
-    if (self.name = "mpw") {
-        self.eClassifiers[EClass]->map transformMpwClass();
-    }
+    self.eClassifiers[EClass]->map transformMpwClass();
 }
 
 mapping EClass::toGameFacadeClass() : EClass {
