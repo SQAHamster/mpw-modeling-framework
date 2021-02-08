@@ -2,9 +2,9 @@ name: Java CI with Maven / CMake
 
 on:
   push:
-    branches: [ 'master', 'restructure-components' ]
+    branches: [ 'master' ]
   pull_request:
-    branches: [ 'master', 'restructure-components' ]
+    branches: [ 'master' ]
 
 jobs:
   build:
