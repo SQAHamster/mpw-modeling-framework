@@ -85,6 +85,13 @@ public class GamePerformanceImpl extends GamePerformance {
 			} catch (final InterruptedException ignored) {
 			}
 		}).start();
+		waitUntilAquired();
+	}
+
+	private void waitUntilAquired() {
+		while (getSemaphore().availablePermits() == 1) {
+			Thread.yield();
+		}
 	}
 
 	@Override
