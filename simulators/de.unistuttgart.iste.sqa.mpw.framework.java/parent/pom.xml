@@ -166,9 +166,9 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>local-deployment</id>
-			<name>Local file-system repository</name>
-			<url>${local.mpw.framework.repository}</url>
+			<id>snapshot-deployment</id>
+			<name>Snapshot repository</name>
+			<url>${env.SNAPSHOT_REPOSITORY_URL}</url>
 		</snapshotRepository>
 	</distributionManagement>
 
