@@ -2,7 +2,7 @@
 
 #include "Stage.h"
 #include "GameLog.h"
-#include "Semaphore.h"
+#include "MpwSemaphore.h"
 #include "CommandStack.h"
 #include "GamePerformance.h"
 

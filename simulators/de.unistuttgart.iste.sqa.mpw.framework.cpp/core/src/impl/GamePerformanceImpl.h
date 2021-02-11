@@ -2,7 +2,7 @@
 #define DE_UNISTUTTGART_ISTE_SQA_MPW_FRAMEWORK_GAMEPERFORMANCEIMPL_H
 
 #include "GamePerformance.h"
-#include "Semaphore.h"
+#include "MpwSemaphore.h"
 
 namespace mpw {
 

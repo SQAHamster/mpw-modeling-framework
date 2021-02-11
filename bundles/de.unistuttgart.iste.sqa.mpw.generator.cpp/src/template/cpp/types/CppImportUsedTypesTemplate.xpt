@@ -16,7 +16,7 @@
     #include <unordered_set>
 	«ENDIF-»
     «IF eStructuralFeatures.union(eOperations).exists(e|e.eType.isSemaphore())-»
-    #include "Semaphore.h"
+    #include "MpwSemaphore.h"
     «ENDIF-»
 	«IF (abstract ? eOperations : eAllOperations).select(o|o.isQuery()).exists(o|o.getQueryForOperation().isOptional)-»
     #include <optional>
