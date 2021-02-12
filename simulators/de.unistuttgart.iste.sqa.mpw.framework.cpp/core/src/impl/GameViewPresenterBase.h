@@ -43,7 +43,7 @@ protected:
   // no concrete Stage is available.
   virtual const framework::ObservableListProperty<mpw::Tile>& getTilesPropertyFromConcreteStage() = 0;
 
-  Color getColorForLogEntry(const mpw::LogEntry& entry) const;
+  virtual Color getColorForLogEntry(const mpw::LogEntry& entry) const;
 
   virtual void onBind();
   virtual void onSetTileNodeAtForCell(ViewModelCell& cell, const mpw::Tile& tile) = 0;
