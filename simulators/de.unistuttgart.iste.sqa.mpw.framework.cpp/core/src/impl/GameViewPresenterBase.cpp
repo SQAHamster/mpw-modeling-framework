@@ -123,7 +123,7 @@ void GameViewPresenterBase::addLogEntry(const LogEntry& entry) {
     auto& nonConstEntry = const_cast<LogEntry&>(entry); // TODO const correctness
     auto viewModelEntry = std::make_shared<ViewModelLogEntry>();
     viewModelEntry->setMessage(nonConstEntry.getMessage());
-    viewModelEntry->setColor(Color::BLACK);
+    viewModelEntry->setColor(getColorForLogEntry(entry));
     getViewModel()->addToLogEntries(viewModelEntry);
 }
 
@@ -132,6 +132,10 @@ void GameViewPresenterBase::speedChanged(double speedValue) {
         throw std::runtime_error("Provided speed is not in range [0, 10]");
     }
     miniProgrammingWorld->getPerformance()->setSpeed(speedValue);
+}
+
+Color GameViewPresenterBase::getColorForLogEntry(const LogEntry& entry) const {
+    return Color::BLACK;
 }
 
 
