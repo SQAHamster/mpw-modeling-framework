@@ -13,6 +13,8 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EAnnotationImpl;
 import org.eclipse.xtext.EcoreUtil2;
 
+import util.LambdaVisitor;
+
 /**
  * Simple helper class which is used to debug purposes.
  * It converts complex, custom annotation parts in a model tree to simple annotations to ensure they are loadable as a simple XMI file. 
@@ -65,14 +67,15 @@ public class CustomAnnotationConverter {
 
 	private void convertReference(EObject sourceObject, EAnnotation targetAnnotation, EReference reference) {
 		var object = sourceObject.eGet(reference);
-		if (object instanceof EObject) {
+		new LambdaVisitor<Object>()
+		.on(EObject.class).then(eObject -> {
 			convertForReference((EObject)object, targetAnnotation, reference);
-		} else if (object instanceof EList<?>) {
-			var references = (EList<?>)object;
+		})
+		.on(EList.class).then(references -> {
 			for (var referenceObject : references) {
 				convertForReference((EObject)referenceObject, targetAnnotation, reference);
 			}
-		}
+		});
 	}
 
 	private EClass convertAttributes(EObject sourceObject, EAnnotation targetAnnotation) {

@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.impl.EAnnotationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
@@ -87,26 +88,15 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 		}
 	}
 
-	private void save(WorkflowContext context, EObject object) {
+	private void save(final WorkflowContext context, final EObject object) {
+		final String name = getName(object);
+		final String directoryName = object.eClass().getEPackage().getName() + directorySuffix;
+		final String fileUri = "platform:/resource/" + projectName + "/debugout/" + directoryName + "/" + name + "." + fileExtension;
+		
 		try {
-			Map<String, String> saveOptions = new HashMap<String, String>();
-			saveOptions.put(org.eclipse.emf.ecore.xmi.XMLResource.OPTION_ENCODING, "UTF-8");
-			
-			var name = getName(object);
-			String directoryName = object.eClass().getEPackage().getName() + directorySuffix;
-			String fileUri = "platform:/resource/" + projectName + "/debugout/" + directoryName + "/" + name + "." + fileExtension;
-			
-			var resourceSet = new ResourceSetImpl();
-
-			var resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
-			resourceFactoryRegistry.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
-			resourceFactoryRegistry.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
-			
-			var resource = resourceSet.createResource(URI.createURI(fileUri));
-			EObject copiedObject = EcoreUtil.copy(object);
+			final EObject copiedObject = EcoreUtil.copy(object);
 			removeAnnotationContents(copiedObject);
-			resource.getContents().add(copiedObject);
-			resource.save(saveOptions);
+			saveObjectToFileUri(copiedObject, fileUri);
 			
 			replaceEcoreLinksToGeneratedOnes(context, fileUri, directoryName);
 			
@@ -114,6 +104,28 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 		} catch (IOException e) {
 			log.error("Error during creating Xmi.", e);
 		}
+	}
+
+	private void saveObjectToFileUri(final EObject copiedObject, final String fileUri) throws IOException {
+		var resource = createResourceSetForFileUri(fileUri);
+		resource.getContents().add(copiedObject);
+		resource.save(createUtf8SaveOptions());
+	}
+
+	private static Resource createResourceSetForFileUri(final String fileUri) {
+		final var resourceSet = new ResourceSetImpl();
+
+		final var resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
+		resourceFactoryRegistry.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+		resourceFactoryRegistry.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+		
+		return resourceSet.createResource(URI.createURI(fileUri));
+	}
+
+	private static Map<String, String> createUtf8SaveOptions() {
+		final Map<String, String> saveOptions = new HashMap<String, String>();
+		saveOptions.put(org.eclipse.emf.ecore.xmi.XMLResource.OPTION_ENCODING, "UTF-8");
+		return saveOptions;
 	}
 
 	/**

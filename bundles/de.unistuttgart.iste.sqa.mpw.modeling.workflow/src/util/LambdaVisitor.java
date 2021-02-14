@@ -10,26 +10,50 @@ import java.util.function.Consumer;
  */
 public final class LambdaVisitor<T> implements Consumer<T> {
     private final Map<Class<? extends T>, Consumer<Object>> consumerMap = new HashMap<>();
+    private Runnable elseRunnable = () -> {};
     
     public <S extends T> Acceptor<T, S> on(final Class<S> matchingClass) {
         return new Acceptor<>(this, matchingClass);
     }
-    
+
+    public LambdaVisitor<T> orElse(Runnable runnable) {
+    	elseRunnable = runnable;
+    	return this;
+    }
+
     @Override
     public void accept(final T currentObject) {
     	final Class<? extends Object> currentObjectClass = currentObject.getClass();
 		Optional<Consumer<Object>> consumerOptional = Optional.ofNullable(consumerMap.get(currentObjectClass));
         if (consumerOptional.isEmpty()) {
-            consumerOptional = findMatchingInterface(currentObject);
+            consumerOptional = findMatchingBaseClass(currentObject);
         }
-        consumerOptional.ifPresent(consumer -> consumer.accept(currentObject));
+        if (consumerOptional.isEmpty()) {
+            consumerOptional = findMatchingInterface(currentObject.getClass());
+        }
+        consumerOptional.ifPresentOrElse(consumer -> consumer.accept(currentObject), elseRunnable);
     }
 
-	private Optional<Consumer<Object>> findMatchingInterface(final T currentObject) {
-		for (final Class<?> interfaceClass : currentObject.getClass().getInterfaces()) {
+	private Optional<Consumer<Object>> findMatchingInterface(final Class<?> objectClass) {
+		for (final Class<?> interfaceClass : objectClass.getInterfaces()) {
 		    if (consumerMap.containsKey(interfaceClass)) {
 		        return Optional.of(consumerMap.get(interfaceClass));
 		    }
+		}
+		final Class<?> superClass = objectClass.getSuperclass();
+		if (superClass != null) {
+			return findMatchingInterface(superClass);
+		}
+		return Optional.empty();
+	}
+
+	private Optional<Consumer<Object>> findMatchingBaseClass(final T currentObject) {
+		Class<?> superClass = currentObject.getClass().getSuperclass();
+		while (superClass != null) {
+			if (consumerMap.containsKey(superClass)) {
+		        return Optional.of(consumerMap.get(superClass));
+		    }
+			superClass = superClass.getSuperclass();
 		}
 		return Optional.empty();
 	}
