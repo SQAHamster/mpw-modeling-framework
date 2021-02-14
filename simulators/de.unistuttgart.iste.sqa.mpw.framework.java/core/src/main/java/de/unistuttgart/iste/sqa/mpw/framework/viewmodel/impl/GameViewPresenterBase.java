@@ -18,7 +18,7 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 
 	private final Map<LogEntry, ViewModelLogEntry> logEntryMap = new HashMap<>();
 
-	public GameViewPresenterBase(MiniProgrammingWorld miniProgrammingWorld) {
+	public GameViewPresenterBase(final MiniProgrammingWorld miniProgrammingWorld) {
 		super(new Semaphore(1, true));
 		this.miniProgrammingWorld = miniProgrammingWorld;
 	}
@@ -45,7 +45,7 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 	}
 
 	private void bindTiles() {
-		var tilesProperty = getTilesPropertyFromConcreteStage();
+		final var tilesProperty = getTilesPropertyFromConcreteStage();
 		tilesProperty.addListener(tilesChangedListener);
 		tilesProperty.forEach(this::addTileNode);
 	}
@@ -55,18 +55,18 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 	protected abstract ReadOnlyListProperty<Tile> getTilesPropertyFromConcreteStage();
 
 	private void bindGameLog() {
-		var gameLog = miniProgrammingWorld.getGameLog();
-		var logEntriesProperty = gameLog.logEntriesProperty();
+		final var gameLog = miniProgrammingWorld.getGameLog();
+		final var logEntriesProperty = gameLog.logEntriesProperty();
 		logEntriesProperty.addListener(logChangedListener);
 		logEntriesProperty.forEach(this::addLogEntry);
 	}
 
 	private void bindButtons() {
-		var viewModel = getViewModel();
-		var modeProperty = miniProgrammingWorld.getPerformance().modeProperty();
-		var gameCommandStack = miniProgrammingWorld.getPerformance().getGameCommandStack();
-		var anyExecutedCommandsBinding = gameCommandStack.executedCommandsProperty().emptyProperty().not();
-		var anyUndoneCommandsBinding = gameCommandStack.undoneCommandsProperty().emptyProperty().not();
+		final var viewModel = getViewModel();
+		final var modeProperty = miniProgrammingWorld.getPerformance().modeProperty();
+		final var gameCommandStack = miniProgrammingWorld.getPerformance().getGameCommandStack();
+		final var anyExecutedCommandsBinding = gameCommandStack.executedCommandsProperty().emptyProperty().not();
+		final var anyUndoneCommandsBinding = gameCommandStack.undoneCommandsProperty().emptyProperty().not();
 
 		viewModel.playButtonEnabledProperty().bind(modeProperty.isEqualTo(Mode.PAUSED));
 		viewModel.pauseButtonEnabledProperty().bind(modeProperty.isEqualTo(Mode.RUNNING));
@@ -94,20 +94,20 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 		}
 	};
 
-	private void addLogEntry(LogEntry entry) {
-		var viewModelLogEntry = new ViewModelLogEntry();
+	private void addLogEntry(final LogEntry entry) {
+		final var viewModelLogEntry = new ViewModelLogEntry();
 		viewModelLogEntry.setMessage(entry.getMessage());
 		viewModelLogEntry.setColor(getColorForLogEntry(entry));
 		getViewModel().addToLogEntries(viewModelLogEntry);
 		logEntryMap.put(entry, viewModelLogEntry);
 	}
 
-	protected Color getColorForLogEntry(LogEntry entry) {
+	protected Color getColorForLogEntry(final LogEntry entry) {
 		return Color.BLACK;
 	}
 
-	private void removeLogEntry(LogEntry entry) {
-		var viewModelLogEntry = logEntryMap.remove(entry);
+	private void removeLogEntry(final LogEntry entry) {
+		final var viewModelLogEntry = logEntryMap.remove(entry);
 		getViewModel().removeFromLogEntries(viewModelLogEntry);
 	}
 
@@ -143,12 +143,12 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 	}
 
 	private void removeTileNode(final Tile tile) {
-		var cell = getViewModel().getCellAt(tile.getLocation().getRow(), tile.getLocation().getColumn());
+		final var cell = getViewModel().getCellAt(tile.getLocation().getRow(), tile.getLocation().getColumn());
 		cell.getLayers().clear();
 	}
 
 	private void setTileNodeAt(final Location location, final Tile tile) {
-		var cell = getViewModel().getCellAt(location.getRow(), location.getColumn());
+		final var cell = getViewModel().getCellAt(location.getRow(), location.getColumn());
 		cell.getLayers().clear();
 		onSetTileNodeAtForCell(cell, tile);
 	}
@@ -192,7 +192,7 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 	}
 
 	@Override
-	public void speedChanged(double speedValue) {
+	public void speedChanged(final double speedValue) {
 		Preconditions.checkState(speedValue >= 0 && speedValue <= 10,
 					"Provided speed is not in range [0, 10]");
 		miniProgrammingWorld.getPerformance().setSpeed(speedValue);
@@ -203,7 +203,7 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 		miniProgrammingWorld.getPerformance().abortOrStopGame();
 	}
 
-	protected void runLocked(Runnable runnable) {
+	protected void runLocked(final Runnable runnable) {
 		try {
 			getSemaphore().acquire();
 			runnable.run();

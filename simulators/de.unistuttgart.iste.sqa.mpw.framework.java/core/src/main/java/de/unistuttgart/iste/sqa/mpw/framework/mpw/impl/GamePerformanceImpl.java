@@ -27,7 +27,7 @@ public class GamePerformanceImpl extends GamePerformance {
 		pauseGame();
 	}
 
-	private void startGameInMode(Mode mode) {
+	private void startGameInMode(final Mode mode) {
 		checkState(getMode() == Mode.INITIALIZING,
 				"start game is only possible during initialization");
 
@@ -111,7 +111,7 @@ public class GamePerformanceImpl extends GamePerformance {
 	}
 
 	private void clearCommandStack() {
-		var gameCommandStack = getGameCommandStack();
+		final var gameCommandStack = getGameCommandStack();
 		gameCommandStack.getExecutedCommands().clear();
 		gameCommandStack.getUndoneCommands().clear();
 	}
@@ -131,14 +131,14 @@ public class GamePerformanceImpl extends GamePerformance {
 		unblockForMode(Mode.STOPPED);
 	}
 
-	private void unblockForMode(Mode mode) {
+	private void unblockForMode(final Mode mode) {
 		setMode(mode);
 		if (getSemaphore().availablePermits() == 0) {
 			getSemaphore().release();
 		}
 	}
 
-	private void runRegardingPause(Runnable runnable) {
+	private void runRegardingPause(final Runnable runnable) {
 		try {
 			getSemaphore().acquire();
 			runnable.run();

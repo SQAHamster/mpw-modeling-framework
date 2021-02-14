@@ -13,44 +13,44 @@ public class CommandUtils {
 
     private CommandUtils() {}
 
-    public static Method findSetMethod(Entity entity, String propertyName) {
+    public static Method findSetMethod(final Entity entity, final String propertyName) {
         return findModifier("set", entity, propertyName);
     }
 
-    public static Method findAddMethod(Entity entity, String propertyName) {
+    public static Method findAddMethod(final Entity entity, final String propertyName) {
         return findModifier("addTo", entity, propertyName);
     }
 
-    public static Method findRemoveMethod(Entity entity, String propertyName) {
+    public static Method findRemoveMethod(final Entity entity, final String propertyName) {
         return findModifier("removeFrom", entity, propertyName);
     }
 
-    private static Method findModifier(String prefix, Entity entity, String propertyName) {
+    private static Method findModifier(final String prefix, final Entity entity, final String propertyName) {
         if (entity == null) {
             throw new NullPointerException("entity must not be null");
         }
 
-        var cls = entity.getClass();
-        var targetMethodName = prefix + toFirstUpper(propertyName);
+        final var entityClass = entity.getClass();
+        final var targetMethodName = prefix + toFirstUpper(propertyName);
 
-        var method = findCachedMethod(cls, targetMethodName);
+        var method = findCachedMethod(entityClass, targetMethodName);
         if (method == null) {
-            var methodOptional = Arrays.stream(cls.getMethods()).filter(m -> m.getName().equals(targetMethodName)).findFirst();
+            final var methodOptional = Arrays.stream(entityClass.getMethods()).filter(m -> m.getName().equals(targetMethodName)).findFirst();
 
             if (methodOptional.isEmpty()) {
-                throw new RuntimeException("Failed to find method '" + targetMethodName + "' in class '" + cls + "'");
+                throw new RuntimeException("Failed to find method '" + targetMethodName + "' in class '" + entityClass + "'");
             }
 
             method = methodOptional.get();
-            putMethodToCache(cls, targetMethodName, method);
+            putMethodToCache(entityClass, targetMethodName, method);
         }
 
         return method;
     }
 
-    private static Method findCachedMethod(Class<?> cls, String methodName) {
+    private static Method findCachedMethod(final Class<?> cls, final String methodName) {
         if (cachedMethods.containsKey(cls)) {
-            var methodMap = cachedMethods.get(cls);
+            final var methodMap = cachedMethods.get(cls);
             if (methodMap.containsKey(methodName)) {
                 return methodMap.get(methodName);
             }
@@ -58,12 +58,12 @@ public class CommandUtils {
         return null;
     }
 
-    private static void putMethodToCache(Class<?> cls, String methodName, Method method) {
-        var fieldMap = cachedMethods.computeIfAbsent(cls, k -> new HashMap<>());
+    private static void putMethodToCache(final Class<?> cls, final String methodName, final Method method) {
+        final var fieldMap = cachedMethods.computeIfAbsent(cls, k -> new HashMap<>());
         fieldMap.put(methodName, method);
     }
 
-    public static String toFirstUpper(String str) {
+    public static String toFirstUpper(final String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 

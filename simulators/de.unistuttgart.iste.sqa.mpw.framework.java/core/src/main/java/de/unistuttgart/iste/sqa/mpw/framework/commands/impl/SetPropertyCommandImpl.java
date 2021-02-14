@@ -8,10 +8,10 @@ public class SetPropertyCommandImpl extends SetPropertyCommand {
 	@Override
 	public void execute() {
 		try {
-			var entity = getEntity();
-			var method = CommandUtils.findSetMethod(entity, getPropertyName());
+			final var entity = getEntity();
+			final var method = CommandUtils.findSetMethod(entity, getPropertyName());
 			method.invoke(getEntity(), getNewValue());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Error: could not execute SetPropertyCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}
@@ -19,10 +19,10 @@ public class SetPropertyCommandImpl extends SetPropertyCommand {
 	@Override
 	public void undo() {
 		try {
-			var entity = getEntity();
-			var method = CommandUtils.findSetMethod(entity, getPropertyName());
+			final var entity = getEntity();
+			final var method = CommandUtils.findSetMethod(entity, getPropertyName());
 			method.invoke(getEntity(), getOldValue());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Error: could not execute SetPropertyCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}

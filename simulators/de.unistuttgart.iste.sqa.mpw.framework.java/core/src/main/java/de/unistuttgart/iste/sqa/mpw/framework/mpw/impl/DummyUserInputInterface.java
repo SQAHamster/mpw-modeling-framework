@@ -5,17 +5,17 @@ import de.unistuttgart.iste.sqa.mpw.framework.mpw.UserInputInterface;
 public class DummyUserInputInterface implements UserInputInterface {
 
 	@Override
-	public int readInteger(String message) {
+	public int readInteger(final String message) {
 		throw new RuntimeException("Dummy IO interface does not support reading values");
 	}
 
 	@Override
-	public String readString(String message) {
+	public String readString(final String message) {
 		throw new RuntimeException("Dummy IO interface does not support reading values");
 	}
 
 	@Override
-	public void confirmAlert(Throwable t) {
+	public void confirmAlert(final Throwable t) {
 		if (t instanceof RuntimeException) {
 			throw (RuntimeException)t;
 		}

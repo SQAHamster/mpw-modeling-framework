@@ -8,23 +8,23 @@ public abstract class CompositeCommandBase extends CompositeCommand {
 
     @Override
     public void undo() {
-        var subCommands = getSubCommands();
+        final var subCommands = getSubCommands();
         for (int i = subCommands.size() - 1; i >= 0; i--) {
-            Command subCommand = subCommands.get(i);
+            final Command subCommand = subCommands.get(i);
             subCommand.undo();
         }
     }
 
     @Override
     public void redo() {
-        var subCommands = getSubCommands();
-        for (Command subCommand : subCommands) {
+        final var subCommands = getSubCommands();
+        for (final Command subCommand : subCommands) {
             subCommand.redo();
         }
     }
 
-    protected void executeSetProperty(Entity entity, String propertyName, Object oldValue, Object newValue) {
-        var command = new SetPropertyCommandImpl();
+    protected void executeSetProperty(final Entity entity, final String propertyName, final Object oldValue, final Object newValue) {
+        final var command = new SetPropertyCommandImpl();
         command.setEntity(entity);
         command.setOldValue(oldValue);
         command.setNewValue(newValue);
@@ -34,8 +34,8 @@ public abstract class CompositeCommandBase extends CompositeCommand {
         command.execute();
     }
 
-    protected void executeAddReference(Entity entity, String propertyName, Entity entityToAdd) {
-        var command = new AddEntityCommandImpl();
+    protected void executeAddReference(final Entity entity, final String propertyName, final Entity entityToAdd) {
+        final var command = new AddEntityCommandImpl();
         command.setEntity(entity);
         command.setEntityToAdd(entityToAdd);
         command.setPropertyName(propertyName);
@@ -44,8 +44,8 @@ public abstract class CompositeCommandBase extends CompositeCommand {
         command.execute();
     }
 
-    protected void executeRemoveReference(Entity entity, String propertyName, Entity entityToRemove) {
-        var command = new RemoveEntityCommandImpl();
+    protected void executeRemoveReference(final Entity entity, final String propertyName, final Entity entityToRemove) {
+        final var command = new RemoveEntityCommandImpl();
         command.setEntity(entity);
         command.setEntityToRemove(entityToRemove);
         command.setPropertyName(propertyName);

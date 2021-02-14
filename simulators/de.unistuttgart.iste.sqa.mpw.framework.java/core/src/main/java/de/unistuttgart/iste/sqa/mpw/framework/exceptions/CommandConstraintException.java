@@ -7,15 +7,15 @@ public class CommandConstraintException extends RuntimeException {
 		super();
 	}
 
-	public CommandConstraintException(String message, Throwable cause) {
+	public CommandConstraintException(final String message, final Throwable cause) {
 		super(message, cause);
 	}
 
-	public CommandConstraintException(String message) {
+	public CommandConstraintException(final String message) {
 		super(message);
 	}
 
-	public CommandConstraintException(Throwable cause) {
+	public CommandConstraintException(final Throwable cause) {
 		super(cause);
 	}
 	

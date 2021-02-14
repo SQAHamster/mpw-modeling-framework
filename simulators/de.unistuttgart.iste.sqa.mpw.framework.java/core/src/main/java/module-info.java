@@ -3,6 +3,7 @@ module mpw.framework.core {
     requires javafx.base;
 
     exports de.unistuttgart.iste.sqa.mpw.framework;
+    exports de.unistuttgart.iste.sqa.mpw.framework.basetypes;
     exports de.unistuttgart.iste.sqa.mpw.framework.commands;
     exports de.unistuttgart.iste.sqa.mpw.framework.commands.impl;
     exports de.unistuttgart.iste.sqa.mpw.framework.exceptions;

@@ -8,10 +8,10 @@ public class AddEntityCommandImpl extends AddEntityCommand {
 	@Override
 	public void execute() {
 		try {
-			var entity = getEntity();
-			var method = CommandUtils.findAddMethod(entity, getPropertyName());
+			final var entity = getEntity();
+			final var method = CommandUtils.findAddMethod(entity, getPropertyName());
 			method.invoke(entity, getEntityToAdd());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Error: could not execute AddEntityCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}
@@ -19,10 +19,10 @@ public class AddEntityCommandImpl extends AddEntityCommand {
 	@Override
 	public void undo() {
 		try {
-			var entity = getEntity();
-			var method = CommandUtils.findRemoveMethod(entity, getPropertyName());
+			final var entity = getEntity();
+			final var method = CommandUtils.findRemoveMethod(entity, getPropertyName());
 			method.invoke(entity, getEntityToAdd());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Error: could not execute AddEntityCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}

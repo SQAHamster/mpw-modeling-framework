@@ -13,14 +13,14 @@ public class CommandStackImpl extends CommandStack {
 
 
 	@Override
-	public void execute(Command command) {
+	public void execute(final Command command) {
 		command.execute();
 		addToExecutedCommands(command);
 	}
 
 	@Override
 	public synchronized void undo() {
-		var stack = getExecutedCommands();
+		final var stack = getExecutedCommands();
 		checkState(stack.size() > 0, "Cannot undo");
 
 		final Command undoneCommand = stack.remove(stack.size() - 1);
@@ -30,7 +30,7 @@ public class CommandStackImpl extends CommandStack {
 
 	@Override
 	public synchronized void redo() {
-		var undoStack = getUndoneCommands();
+		final var undoStack = getUndoneCommands();
 		checkState(undoStack.size() > 0, "Cannot redo");
 
 		final Command undoneCommand = undoStack.remove(undoStack.size() - 1);
@@ -40,7 +40,7 @@ public class CommandStackImpl extends CommandStack {
 
 	@Override
 	public synchronized void undoAll() {
-		var stack = getExecutedCommands();
+		final var stack = getExecutedCommands();
 		while (stack.size() > 0) {
 			undo();
 		}
@@ -48,7 +48,7 @@ public class CommandStackImpl extends CommandStack {
 
 	@Override
 	public synchronized void redoAll() {
-		var undoStack = getUndoneCommands();
+		final var undoStack = getUndoneCommands();
 		while (undoStack.size() > 0) {
 			redo();
 		}

@@ -11,10 +11,10 @@ public class RemoveEntityCommandImpl extends RemoveEntityCommand {
 	@Override
 	public void execute() {
 		try {
-			var entity = getEntity();
-			var method = CommandUtils.findRemoveMethod(entity, getPropertyName());
+			final var entity = getEntity();
+			final var method = CommandUtils.findRemoveMethod(entity, getPropertyName());
 			method.invoke(entity, getEntityToRemove());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Error: could not execute RemoveEntityCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}
@@ -22,10 +22,10 @@ public class RemoveEntityCommandImpl extends RemoveEntityCommand {
 	@Override
 	public void undo() {
 		try {
-			var entity = getEntity();
-			var method = CommandUtils.findAddMethod(entity, getPropertyName());
+			final var entity = getEntity();
+			final var method = CommandUtils.findAddMethod(entity, getPropertyName());
 			method.invoke(entity, getEntityToRemove());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Error: could not execute RemoveEntityCommand '" + getPropertyName() + "' on entity " + getEntity(), e);
 		}
 	}
