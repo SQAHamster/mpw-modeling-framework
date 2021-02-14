@@ -17,7 +17,9 @@
 «ENDDEFINE»
 
 «DEFINE JavaClass FOR EClass-»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
+    
+    package «this.ePackage.toJavaPackageName()»;
     
     import «getFrameworkBasePackage()».mpw.*;
     «EXPAND ImportTypeGenerationAnnotation FOREACH eAnnotations.typeSelect(ImportTypeAnnotation)»

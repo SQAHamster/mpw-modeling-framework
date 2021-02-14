@@ -4,7 +4,7 @@
 «EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE main FOR Transformation»
-    «FILE "generated/commands/" + name.toFirstUpper() + "Command.h"»
+    «FILE "generated/commands/" + name.toFirstUpper() + "Command.h"»«toCppHeaderGeneratedComment()»
     	
         #ifndef «this.toCppIncludeGuard()»
         #define «this.toCppIncludeGuard()»
@@ -44,7 +44,10 @@
         #endif //«this.toCppIncludeGuard()»
 
     «ENDFILE»
-    «FILE "generated/commands/" + name.toFirstUpper() + "Command.cpp"»#include "«name.toFirstUpper()»Command.h"
+    «FILE "generated/commands/" + name.toFirstUpper() + "Command.cpp"»«toCppHeaderGeneratedComment()»
+        
+        #include "«name.toFirstUpper()»Command.h"
+
         #include "FrameworkAssert.h"
         #include "CommandConstraintException.h"
         #include "«targetClass.getConcreteName()».h"
@@ -68,7 +71,7 @@
         }
         
     «ENDFILE»
-    «FILE "generated/commands/" + name.toFirstUpper() + "CommandParameters.h"»
+    «FILE "generated/commands/" + name.toFirstUpper() + "CommandParameters.h"»«toCppHeaderGeneratedComment()»
     
 	    #ifndef «this.toCppParameterIncludeGuard()»
 	    #define «this.toCppParameterIncludeGuard()»
@@ -81,7 +84,7 @@
 «ENDDEFINE»
 
 «DEFINE CMakeLists FOR List[Transformation]»
-    «FILE "generated/commands/CMakeLists.txt"-»
+    «FILE "generated/commands/CMakeLists.txt"-»# generated
     
 set(GEN_COMMAND_SRCS ${GEN_COMMAND_SRCS}
     «FOREACH this AS c-»

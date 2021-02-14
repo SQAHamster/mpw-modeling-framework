@@ -22,7 +22,9 @@
 «ENDDEFINE»
 
 «DEFINE JavaClass FOR EClass»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
+
+    package «this.ePackage.toJavaPackageName()»;
     
     «EXPAND template::java::types::JavaImportUsedTypesTemplate::ImportDefinitions FOR this»
     
@@ -64,7 +66,9 @@
 «ENDDEFINE»
 
 «DEFINE JavaInterface FOR EClass»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
+    
+    package «this.ePackage.toJavaPackageName()»;
     
     «EXPAND template::java::types::JavaImportUsedTypesTemplate::ImportDefinitions FOR this»
     
@@ -96,7 +100,9 @@
 «ENDDEFINE»
 
 «DEFINE JavaEnum FOR EEnum»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
+    
+    package «this.ePackage.toJavaPackageName()»;
     
     public enum «this.name» {
       «FOREACH eLiterals AS l SEPARATOR ", "»

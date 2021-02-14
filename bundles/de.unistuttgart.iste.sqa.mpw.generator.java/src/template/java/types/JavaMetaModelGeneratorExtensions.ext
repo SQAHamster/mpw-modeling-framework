@@ -29,3 +29,6 @@ toJavaPackageName(EPackage this) :
     getModulePackage() + "." + this.name;
     
 getFrameworkBasePackage() : "de.unistuttgart.iste.sqa.mpw.framework";
+
+toJavaHeaderGeneratedComment() : 
+    "/*\n * This file is generated. Do not change it manually.\n */";

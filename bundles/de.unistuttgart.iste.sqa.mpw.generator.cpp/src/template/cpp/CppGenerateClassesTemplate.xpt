@@ -22,7 +22,7 @@
 «ENDDEFINE»
 
 «DEFINE CppClassHeader FOR EClass-»
-    «FILE "generated/" + name + ".h"»
+    «FILE "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
     
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
@@ -56,7 +56,9 @@
 «ENDDEFINE»
 
 «DEFINE CppClassSource FOR EClass-»
-    «FILE "generated/" + name + ".cpp"»#include "«name».h"
+    «FILE "generated/" + name + ".cpp"»«toCppHeaderGeneratedComment()»
+
+    #include "«name».h"
     
     «EXPAND template::cpp::types::CppImportUsedTypesTemplate::SourceImportDefinitions FOR this»
     

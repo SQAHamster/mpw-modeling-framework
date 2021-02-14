@@ -4,7 +4,9 @@
 «EXTENSION template::java::JavaGeneratorExtensions»
 
 «DEFINE main FOR Transformation»
-    «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Command.java"»package «this.getCommandJavaPackageName()»;
+    «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Command.java"»«toJavaHeaderGeneratedComment()»
+
+        package «this.getCommandJavaPackageName()»;
     	
         import static «getFrameworkBasePackage()».FrameworkAssert.*;
         import «getFrameworkBasePackage()».exceptions.*;

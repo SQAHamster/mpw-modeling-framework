@@ -26,7 +26,7 @@
 «ENDDEFINE»
 
 «DEFINE CppClassHeader FOR EClass»
-    «FILE "generated/" + name + ".h"»
+    «FILE "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
     
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
@@ -106,7 +106,9 @@
 «ENDDEFINE»
 
 «DEFINE CppClassSource FOR EClass»
-    «FILE "generated/" + name + ".cpp"»#include "«name».h"
+    «FILE "generated/" + name + ".cpp"»«toCppHeaderGeneratedComment()»
+
+    #include "«name».h"
     
     «EXPAND template::cpp::types::CppImportUsedTypesTemplate::SourceImportDefinitions FOR this»
     
@@ -155,7 +157,7 @@
 «ENDDEFINE»
 
 «DEFINE CppInterface FOR EClass»
-    «FILE "generated/" + name + ".h"»
+    «FILE "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
     
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
@@ -190,7 +192,7 @@
     «ENDFILE»
 
     «IF isDependency()»
-    «FILE "generated/Dummy" + name + ".h"»
+    «FILE "generated/Dummy" + name + ".h"»«toCppHeaderGeneratedComment()»
     
     #ifndef «this.toCppDummyIncludeGuard()»
     #define «this.toCppDummyIncludeGuard()»
@@ -217,7 +219,7 @@
 «ENDDEFINE»
 
 «DEFINE CppEnum FOR EEnum»
-    «FILE "generated/" + name + ".h"»
+    «FILE "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
     
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
@@ -256,7 +258,7 @@
 «ENDDEFINE»
 
 «DEFINE CMakeLists FOR List[EPackage]»
-    «FILE "generated/CMakeLists.txt"-»
+    «FILE "generated/CMakeLists.txt"-»# generated
     
 add_subdirectory(commands)
     
@@ -277,7 +279,7 @@ set(GEN_SRCS ${GEN_SRCS}
     PARENT_SCOPE)
 
     «ENDFILE»
-    «FILE "impl/CMakeListsImpl.cmake"-»
+    «FILE "impl/CMakeListsImpl.cmake"-»# generated
 set(IMPL_GEN_SRCS ${IMPL_GEN_SRCS}
     «FOREACH this.eClassifiers.typeSelect(EClass)
                               .select(c|c.needsImplSubclass())

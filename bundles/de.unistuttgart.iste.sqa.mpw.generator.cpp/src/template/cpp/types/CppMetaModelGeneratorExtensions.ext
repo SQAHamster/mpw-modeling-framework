@@ -41,3 +41,6 @@ toCppDummyIncludeGuard(EClassifier this) : toCppIncludeGuard("Dummy" + this.name
 
 toCppIncludeGuard(String this) :
     getModulePackage().replaceAll("\\.", "_").toUpperCase() + "_" + this.toUpperCase() + "_H";
+
+toCppHeaderGeneratedComment() : 
+    "/*\n * This file is generated. Do not change it manually.\n */";
