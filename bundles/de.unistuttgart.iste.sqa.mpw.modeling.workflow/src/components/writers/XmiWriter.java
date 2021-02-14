@@ -36,6 +36,11 @@ import components.helpers.EclipsePathHelper;
  * This files then can be inspected to see effects of transformation steps.
  */
 public class XmiWriter extends WorkflowComponentWithModelSlot {
+	private static final String WORKFLOW_CONTEXT_SLOT_ENTITY_MODELS = "entityModels";
+	private static final String FEATURE_NAMEDELEMENT_NAME = "name";
+	private static final String FILE_EXTENSION_ECORE = "ecore";
+	private static final String FILE_EXTENSION_XMI = "xmi";
+
 	private final static Logger log = Logger.getLogger(XmiWriter.class.getName());
 	
 	private String fileExtension = "xmi";
@@ -116,15 +121,15 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 		final var resourceSet = new ResourceSetImpl();
 
 		final var resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
-		resourceFactoryRegistry.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
-		resourceFactoryRegistry.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+		resourceFactoryRegistry.getExtensionToFactoryMap().put(FILE_EXTENSION_ECORE, new EcoreResourceFactoryImpl());
+		resourceFactoryRegistry.getExtensionToFactoryMap().put(FILE_EXTENSION_XMI, new XMIResourceFactoryImpl());
 		
 		return resourceSet.createResource(URI.createURI(fileUri));
 	}
 
 	private static Map<String, String> createUtf8SaveOptions() {
 		final Map<String, String> saveOptions = new HashMap<String, String>();
-		saveOptions.put(org.eclipse.emf.ecore.xmi.XMLResource.OPTION_ENCODING, "UTF-8");
+		saveOptions.put(org.eclipse.emf.ecore.xmi.XMLResource.OPTION_ENCODING, StandardCharsets.UTF_8.name());
 		return saveOptions;
 	}
 
@@ -147,7 +152,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	private String replaceEntityModelNamesToPackageNames(final WorkflowContext context, String text, final String directoryName) {
 		final String projectNameSuffix = projectName.substring(projectName.lastIndexOf('.') + 1);
 
-		final var modeledEcoreFiles = (List<?>)context.get("entityModels");
+		final var modeledEcoreFiles = (List<?>)context.get(WORKFLOW_CONTEXT_SLOT_ENTITY_MODELS);
 		for (final var object : modeledEcoreFiles) {
 			final var ePackage = (EPackage)object;
 			
@@ -165,7 +170,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	}
 
 	private String getName(final EObject object) {
-		final var nameFeature = object.eClass().getEStructuralFeature("name");
+		final var nameFeature = object.eClass().getEStructuralFeature(FEATURE_NAMEDELEMENT_NAME);
 		return "" + object.eGet(nameFeature);
 	}
 	

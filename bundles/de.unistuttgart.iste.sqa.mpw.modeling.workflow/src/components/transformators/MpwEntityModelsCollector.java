@@ -16,6 +16,8 @@ import viewmodel.ViewmodelPackage;
  *       model slot, in external workspaces they have to be added explicitly.
  */
 final class MpwEntityModelsCollector {
+	private static final String WORKFLOW_CONTEXT_SLOT_ENTITY_MODELS = "entityModels";
+	
 	private MpwEntityModelsCollector() {}
 	
 	public static List<EPackage> getAllRelevantMpwPackages(final WorkflowContext workflowContext) {
@@ -31,7 +33,7 @@ final class MpwEntityModelsCollector {
 
 	private static List<EPackage> getWorkspaceModels(final WorkflowContext workflowContext) {
 		@SuppressWarnings("unchecked")
-		final var workspaceModels = (List<EPackage>)workflowContext.get("entityModels");
+		final var workspaceModels = (List<EPackage>)workflowContext.get(WORKFLOW_CONTEXT_SLOT_ENTITY_MODELS);
 		return workspaceModels;
 	}
 	

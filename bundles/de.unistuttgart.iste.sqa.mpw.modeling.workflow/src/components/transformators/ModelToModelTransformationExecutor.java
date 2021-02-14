@@ -24,11 +24,18 @@ import util.LambdaVisitor;
 
 /**
  * Internal class, which processes the transformation executions for QVTo.
- * It obtains dependent models from the given {@link WorkflowContext} and bounds them to the global variables of the QVTo transformation.
+ * It obtains dependent models from the given {@link WorkflowContext} and bounds them to the config parameters of the QVTo transformation.
  */
 final class ModelToModelTransformationExecutor {
-	private static final String TRANSFORMATION_MODULE = "de.unistuttgart.iste.sqa.mpw.modeling.transformations";
 	private static final Logger log = Logger.getLogger(ModelToModelTransformationExecutor.class.getName());
+
+	private static final String QVTO_CONFIGPARAM_ENTITY_MODELS = "EntityModels";
+	private static final String QVTO_CONFIGPARAM_QUERIES = "Queries";
+	private static final String QVTO_CONFIGPARAM_COMMANDS = "Commands";
+	private static final String QVTO_CONFIGPARAM_SOURCE_MODEL_URI = "SourceModelUri";
+	private static final String WORKFLOW_CONTEXT_SLOT_QUERIES = "queries";
+	private static final String WORKFLOW_CONTEXT_SLOT_COMMANDS = "commands";
+	private static final String TRANSFORMATION_MODULE = "de.unistuttgart.iste.sqa.mpw.modeling.transformations";
 	
 	private final TransformationExecutor internalExecutor;
 	private final URI transformationURI;
@@ -104,11 +111,11 @@ final class ModelToModelTransformationExecutor {
 		
 		context.setLog(new QvtoLogger(getName(eObject), log));
 		
-		context.setConfigProperty("EntityModels", MpwEntityModelsCollector.getAllRelevantMpwPackages(workflowContext));
-		context.setConfigProperty("Queries", workflowContext.get("queries"));
-		context.setConfigProperty("Commands", workflowContext.get("commands"));
+		context.setConfigProperty(QVTO_CONFIGPARAM_ENTITY_MODELS, MpwEntityModelsCollector.getAllRelevantMpwPackages(workflowContext));
+		context.setConfigProperty(QVTO_CONFIGPARAM_QUERIES, workflowContext.get(WORKFLOW_CONTEXT_SLOT_QUERIES));
+		context.setConfigProperty(QVTO_CONFIGPARAM_COMMANDS, workflowContext.get(WORKFLOW_CONTEXT_SLOT_COMMANDS));
 		if (eObject.eResource() != null) {
-			context.setConfigProperty("SourceModelUri", eObject.eResource().getURI().toString());
+			context.setConfigProperty(QVTO_CONFIGPARAM_SOURCE_MODEL_URI, eObject.eResource().getURI().toString());
 		}
 		return context;
 	}

@@ -10,6 +10,9 @@ import com.google.inject.Singleton;
  */
 @Singleton
 public class Mwe2ParamsMap {
+	public static final String PARAM_KEY_ADDITIONAL_ARCHIVES_PATHS = "additionalArchivesPaths";
+	public static final String PARAM_KEY_INCLUDE_JARS_WITH_NAME = "includeJarsWithName";
+	
 	private Map<String, String> params = new HashMap<>();
 
 	public Map<String, String> getParams() {

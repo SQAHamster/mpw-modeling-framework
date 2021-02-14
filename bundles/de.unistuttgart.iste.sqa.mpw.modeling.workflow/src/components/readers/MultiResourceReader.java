@@ -36,7 +36,9 @@ import util.LambdaVisitor;
  * It recursively traverses a file tree and loads each model found with the given file-extension.
  */
 public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot {
-	protected final static Logger log = Logger.getLogger(MultiResourceReader.class.getName());
+	protected static final Logger log = Logger.getLogger(MultiResourceReader.class.getName());
+	
+	private static final String REGEX_PATTERN_FILE_EXTENSION = "\\.\\w+";
 	
 	private final ResourceSet resourceSet = new ResourceSetImpl();
 	
@@ -48,7 +50,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	private String rootPath = "..";
 	
 	protected MultiResourceReader(final String fileExtension, final String defaultSubPath) {
-		if (!fileExtension.matches("\\.\\w+")) {
+		if (!fileExtension.matches(REGEX_PATTERN_FILE_EXTENSION)) {
 			throw new IllegalArgumentException("invalid fileExtension: " + fileExtension);
 		}
 		this.fileExtension = fileExtension;

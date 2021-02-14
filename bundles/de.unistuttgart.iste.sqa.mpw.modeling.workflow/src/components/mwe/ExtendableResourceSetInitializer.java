@@ -14,8 +14,11 @@ import org.eclipse.xtext.mwe.RuntimeResourceSetInitializer;
 import com.google.inject.Inject;
 
 import components.helpers.EclipsePathHelper;
+import static components.mwe.Mwe2ParamsMap.*;
 
 class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
+	private static final String FILE_EXTENSION_JAR = "jar";
+
 	protected final static Logger log = Logger.getLogger(ExtendableResourceSetInitializer.class.getName());
 	
 	@Inject
@@ -24,7 +27,7 @@ class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
 	public List<String> getClassPathEntries() {
         final List<String> classPathEntries = super.getClassPathEntries();
         
-        final String additionalArchivesPaths = paramsMap.getParams().get("additionalArchivesPaths");
+        final String additionalArchivesPaths = paramsMap.getParams().get(PARAM_KEY_ADDITIONAL_ARCHIVES_PATHS);
         if (additionalArchivesPaths == null) {
         	return classPathEntries;
         }
@@ -40,7 +43,7 @@ class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
 
 	private List<String> getJarPaths(final String additionalArchivesPaths) {
 		final String[] paths = additionalArchivesPaths.split(";");
-		final String includePattern = paramsMap.getParams().get("includeJarsWithName");
+		final String includePattern = paramsMap.getParams().get(PARAM_KEY_INCLUDE_JARS_WITH_NAME);
         if (includePattern == null) {
         	return Arrays.asList(paths);
         }
@@ -74,7 +77,7 @@ class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
 	private List<String> listJarFilesInPath(final String path) throws IOException {
 		return Files.list(Path.of(path))
         		.map(p -> p.toAbsolutePath().toString())
-        		.filter(p -> p.endsWith("jar"))
+        		.filter(p -> p.endsWith(FILE_EXTENSION_JAR))
         		.collect(Collectors.toList());
 	}
 }

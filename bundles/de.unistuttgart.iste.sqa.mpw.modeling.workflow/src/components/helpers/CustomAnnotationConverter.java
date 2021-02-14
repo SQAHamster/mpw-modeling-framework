@@ -20,6 +20,9 @@ import util.LambdaVisitor;
  * It converts complex, custom annotation parts in a model tree to simple annotations to ensure they are loadable as a simple XMI file. 
  */
 public class CustomAnnotationConverter {
+	private static final String PARAM_ANNOTATION_ETYPE = "eType";
+	private static final String PARAM_ANNOTATION_NAME = "name";
+
 	private CustomAnnotationConverter() {
 	}
 	
@@ -108,8 +111,8 @@ public class CustomAnnotationConverter {
 		final var annotation = EcoreFactory.eINSTANCE.createEAnnotation();
 		annotation.setSource(eObject.getClass().getSimpleName());
 		
-		putIfFeatureExists(eObject, "name", annotation);
-		putIfFeatureExists(eObject, "eType", annotation);
+		putIfFeatureExists(eObject, PARAM_ANNOTATION_NAME, annotation);
+		putIfFeatureExists(eObject, PARAM_ANNOTATION_ETYPE, annotation);
 		
 		return annotation;
 	}
