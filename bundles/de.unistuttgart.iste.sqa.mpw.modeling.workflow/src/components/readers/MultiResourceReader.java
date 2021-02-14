@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.mwe.core.WorkflowContext;
@@ -27,6 +28,7 @@ import org.eclipse.emf.mwe.utils.Reader;
 import com.google.common.base.CaseFormat;
 
 import components.helpers.EclipsePathHelper;
+import util.LambdaVisitor;
 
 /**
  * Base reader class which loads multiple EMF resources of a project in the workspace.
@@ -35,6 +37,8 @@ import components.helpers.EclipsePathHelper;
  */
 public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot {
 	protected final static Logger log = Logger.getLogger(MultiResourceReader.class.getName());
+	
+	private final ResourceSet resourceSet = new ResourceSetImpl();
 	
 	private final String fileExtension;
 	
@@ -89,23 +93,30 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		final String projectDirectory = getProjectPath();
 		final String targetDirectory = EclipsePathHelper.toJavaCompatibleAbsoluteFilePath(projectDirectory) + "/" + projectSubPath;
 		try (var files = listFiles(targetDirectory)) {
-			
-			var modelNames = files.map(f -> f.toFile().getPath())
-				 .map(f -> substringAfter(f, targetDirectory))
-				 .filter(f -> f.endsWith(fileExtension))
-			     .filter(f -> !isExcluded(f))
-			     .collect(Collectors.toList());
-			
-			modelNames.forEach(fileName -> {
-				log.debug("found: " + fileName);
-			});
+			var modelNames = toRelevantModelNames(targetDirectory, files);
+			logFoundModelNames(modelNames);
+			addModelsToSlot(context, modelNames);
 			
 			log.info("found " + modelNames.size() + " " + fileExtension + " files");
 			
-			addModelsToSlot(context, modelNames);
 		} catch (IOException e) {
 			log.error("Failed to locate " + getModelNameFromExtension() + " files under: " + targetDirectory, e);
 		}
+	}
+	
+	private List<String> toRelevantModelNames(final String targetDirectory, Stream<Path> files) {
+		var modelNames = files.map(f -> f.toFile().getPath())
+			 .map(f -> substringAfter(f, targetDirectory))
+			 .filter(f -> f.endsWith(fileExtension))
+		     .filter(f -> !isExcluded(f))
+		     .collect(Collectors.toList());
+		return modelNames;
+	}
+
+	private void logFoundModelNames(List<String> modelNames) {
+		modelNames.forEach(fileName -> {
+			log.debug("found: " + fileName);
+		});
 	}
 
 	/*
@@ -127,23 +138,35 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 
 	private void addModelsToSlot(WorkflowContext context, List<String> modelNames) {
 		String baseUri = getBaseUri();
-		ResourceSet resourceSet = new ResourceSetImpl();
 		var models = obtainTargetListForSlot(context);
 		
 		for (var modelName : modelNames) {
-			var uri = baseUri + modelName;
-			boolean firstElementOnly = true;
-			var object = Reader.load(resourceSet, uri, firstElementOnly);
-			if (object instanceof EObject) {
-				var eObject = (EObject)object;
-				if (eObject.eResource() != null && eObject.eResource().getErrors().size() > 0) {
-					throw new RuntimeException("error loading " + modelName + ": " + eObject.eResource().getErrors().get(0));
-				}
-			}
+			var object = loadModel(baseUri, modelName);
 			models.add(object);
 		}
 
 		context.set(getModelSlot(), models);
+	}
+
+	private Object loadModel(String baseUri, String modelName) {
+		var uri = baseUri + modelName;
+		boolean firstElementOnly = true;
+		var object = Reader.load(resourceSet, uri, firstElementOnly);
+		checkNoErrorsFromLoading(modelName, object);
+		return object;
+	}
+
+	private void checkNoErrorsFromLoading(String modelName, Object object) {
+		new LambdaVisitor<Object>()
+			.on(EObject.class).then(eObject -> {
+				throwExceptionIfResourceHasErrors(modelName, eObject.eResource());
+			}).accept(object);
+	}
+
+	private void throwExceptionIfResourceHasErrors(String modelName, Resource resource) {
+		if (resource != null && resource.getErrors().size() > 0) {
+			throw new RuntimeException("error loading " + modelName + ": " + resource.getErrors().get(0));
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -158,18 +181,16 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	private Stream<Path> listFiles(String directory) throws IOException {
 		final Path path = Path.of(directory);
 		if (Files.exists(path)) {
-			return Files.find(path, 
-					Integer.MAX_VALUE,
-			        (filePath, fileAttr) 
-			        -> fileAttr.isRegularFile()).sorted(new Comparator<Path>() {
-						@Override
-						public int compare(Path lhs, Path rhs) {
-							return lhs.toAbsolutePath().compareTo(rhs.toAbsolutePath());
-						}
-					});
+			return findFilesSortedByPath(path);
 		}
 		final List<Path> emptyList = Collections.emptyList();
 		return emptyList.stream();
+	}
+
+	private Stream<Path> findFilesSortedByPath(final Path path) throws IOException {
+		return Files.find(path, 
+				Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile())
+				.sorted(Comparator.comparing(Path::toAbsolutePath));
 	}
 	
 	private boolean isExcluded(String filePath) {

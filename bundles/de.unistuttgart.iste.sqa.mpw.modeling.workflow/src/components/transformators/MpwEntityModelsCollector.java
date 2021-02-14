@@ -42,6 +42,6 @@ final class MpwEntityModelsCollector {
 	}
 	
 	private static boolean modelWithUriExists(final List<EPackage> result, final String modelUri) {
-		return result.stream().anyMatch(p -> p.getNsURI().equals(modelUri));
+		return result.stream().anyMatch(ePackage -> ePackage.getNsURI().equals(modelUri));
 	}
 }

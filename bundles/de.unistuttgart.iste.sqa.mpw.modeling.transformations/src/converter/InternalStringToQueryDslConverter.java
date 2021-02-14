@@ -60,7 +60,7 @@ final class InternalStringToQueryDslConverter {
 
 	private static String toParametersSignature(List<Parameter> parameters) {
 		return parameters.stream()
-				.map(p -> toNameTypeString(p))
+				.map(parameter -> toNameTypeString(parameter))
 				.collect(Collectors.joining(", "));
 	}
 	

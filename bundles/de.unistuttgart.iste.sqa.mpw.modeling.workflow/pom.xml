@@ -13,7 +13,6 @@
     
     <name>Modeling Workflow Base</name>
     
-    
     <build>
         <plugins>
             <plugin>

@@ -68,7 +68,11 @@ class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
 		if (!Files.isDirectory(Path.of(path))) {
 			return Arrays.asList(path);
 		}
-        return Files.list(Path.of(path))
+        return listJarFilesInPath(path);
+	}
+
+	private List<String> listJarFilesInPath(String path) throws IOException {
+		return Files.list(Path.of(path))
         		.map(p -> p.toAbsolutePath().toString())
         		.filter(p -> p.endsWith("jar"))
         		.collect(Collectors.toList());
