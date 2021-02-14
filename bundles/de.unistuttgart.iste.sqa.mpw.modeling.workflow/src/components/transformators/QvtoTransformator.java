@@ -29,7 +29,7 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 		return transformationUri;
 	}
 
-	public void setTransformationUri(String uri) {
+	public void setTransformationUri(final String uri) {
 		this.transformationUri = uri;
 	}
 	
@@ -37,7 +37,7 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 		return sourceTargetRelationship;
 	}
 
-	public void setSourceTargetRelationship(String sourceTargetRelationship) {
+	public void setSourceTargetRelationship(final String sourceTargetRelationship) {
 		this.sourceTargetRelationship = SourceTargetRelationship.valueOf(sourceTargetRelationship);
 	}
 	
@@ -48,15 +48,15 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 		return targetModelSlot;
 	}
 
-	public void setTargetModelSlot(String targetModelSlot) {
+	public void setTargetModelSlot(final String targetModelSlot) {
 		this.targetModelSlot = targetModelSlot;
 	}
 
 	@Override
-	protected void invokeInternal(WorkflowContext workflowContext, ProgressMonitor monitor, Issues issues) {
+	protected void invokeInternal(final WorkflowContext workflowContext, final ProgressMonitor monitor, final Issues issues) {
 		executor = new ModelToModelTransformationExecutor(workflowContext, issues, transformationUri, sourceTargetRelationship);
 
-		Object slotContent = workflowContext.get(getModelSlot());
+		final Object slotContent = workflowContext.get(getModelSlot());
 		
 		new LambdaVisitor<Object>()
 		    .on(List.class).then(modelInstances -> { transformList(modelInstances); })
@@ -69,13 +69,13 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 		workflowContext.set(getTargetModelSlot(), executor.getResultInstances());
 	}
 
-	private void transformList(List<?> modelInstances) {
-		for (var instance : modelInstances) {
+	private void transformList(final List<?> modelInstances) {
+		for (final var instance : modelInstances) {
 			executor.transformNext((EObject)instance);
 		}
 	}
 
-	private void transformSingleObject(EObject eObject) {
+	private void transformSingleObject(final EObject eObject) {
 		executor.transformNext(eObject);
 	}
 

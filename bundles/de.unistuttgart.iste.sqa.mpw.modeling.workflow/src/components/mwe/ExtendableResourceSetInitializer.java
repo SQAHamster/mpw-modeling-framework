@@ -22,56 +22,56 @@ class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
 	private Mwe2ParamsMap paramsMap;
 	
 	public List<String> getClassPathEntries() {
-        List<String> classPathEntries = super.getClassPathEntries();
+        final List<String> classPathEntries = super.getClassPathEntries();
         
-        String additionalArchivesPaths = paramsMap.getParams().get("additionalArchivesPaths");
+        final String additionalArchivesPaths = paramsMap.getParams().get("additionalArchivesPaths");
         if (additionalArchivesPaths == null) {
         	return classPathEntries;
         }
         
-        var additionalArchivesPathParts = getJarPaths(additionalArchivesPaths);
-        for (String additionalArchivesPath : additionalArchivesPathParts) {
-        	var jars = collectAdditionalJars(additionalArchivesPath.trim());
+        final var additionalArchivesPathParts = getJarPaths(additionalArchivesPaths);
+        for (final String additionalArchivesPath : additionalArchivesPathParts) {
+        	final var jars = collectAdditionalJars(additionalArchivesPath.trim());
         	classPathEntries.addAll(jars);
         }
 
         return classPathEntries;
     }
 
-	private List<String> getJarPaths(String additionalArchivesPaths) {
+	private List<String> getJarPaths(final String additionalArchivesPaths) {
 		final String[] paths = additionalArchivesPaths.split(";");
-		String includePattern = paramsMap.getParams().get("includeJarsWithName");
+		final String includePattern = paramsMap.getParams().get("includeJarsWithName");
         if (includePattern == null) {
         	return Arrays.asList(paths);
         }
 		return Arrays.asList(paths).stream().filter(path -> path.matches(includePattern)).collect(Collectors.toList());
 	}
 	
-	private List<String> collectAdditionalJars(String additionalArchivesPath) {
-        var additionalEntries = new ArrayList<String>();
+	private List<String> collectAdditionalJars(final String additionalArchivesPath) {
+        final var additionalEntries = new ArrayList<String>();
         
         var path = EclipsePathHelper.toJavaCompatibleAbsoluteFilePath(additionalArchivesPath);
         path = Path.of(path).toAbsolutePath().toString();
 		log.info("searching additional jars in: " + path);
 		
 		try {
-			List<String> additionalJars = getAdditionalJars(path);
+			final List<String> additionalJars = getAdditionalJars(path);
 			log.info("found additional jars: " + additionalJars);
 			additionalEntries.addAll(additionalJars);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			log.error("failed to process additional archives", e);
 		}
         return additionalEntries;
 	}
 	
-	private List<String> getAdditionalJars(String path) throws IOException {
+	private List<String> getAdditionalJars(final String path) throws IOException {
 		if (!Files.isDirectory(Path.of(path))) {
 			return Arrays.asList(path);
 		}
         return listJarFilesInPath(path);
 	}
 
-	private List<String> listJarFilesInPath(String path) throws IOException {
+	private List<String> listJarFilesInPath(final String path) throws IOException {
 		return Files.list(Path.of(path))
         		.map(p -> p.toAbsolutePath().toString())
         		.filter(p -> p.endsWith("jar"))

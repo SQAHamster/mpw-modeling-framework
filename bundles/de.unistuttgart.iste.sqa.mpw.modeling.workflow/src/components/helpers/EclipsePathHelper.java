@@ -12,8 +12,8 @@ public class EclipsePathHelper {
 	 *             is not directly compatible with the Java path syntax. Hence the path will be processed with the Eclipse
 	 *             Path class to get a valid java path.
 	 */
-	public static String toJavaCompatibleAbsoluteFilePath(String path) {
-		var eclipsePath = new org.eclipse.core.runtime.Path(path);
+	public static String toJavaCompatibleAbsoluteFilePath(final String path) {
+		final var eclipsePath = new org.eclipse.core.runtime.Path(path);
 		return eclipsePath.toFile().getAbsolutePath();
 	}
 	

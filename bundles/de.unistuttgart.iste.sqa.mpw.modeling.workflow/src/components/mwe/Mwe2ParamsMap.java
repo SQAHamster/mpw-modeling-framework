@@ -16,7 +16,7 @@ public class Mwe2ParamsMap {
 		return params;
 	}
 
-	public void setParams(Map<String, String> params) {
+	public void setParams(final Map<String, String> params) {
 		this.params = params;
 	}
 	

@@ -47,7 +47,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	private Set<String> excludeModels = new HashSet<>();
 	private String rootPath = "..";
 	
-	protected MultiResourceReader(String fileExtension, String defaultSubPath) {
+	protected MultiResourceReader(final String fileExtension, final String defaultSubPath) {
 		if (!fileExtension.matches("\\.\\w+")) {
 			throw new IllegalArgumentException("invalid fileExtension: " + fileExtension);
 		}
@@ -59,7 +59,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		return projectName;
 	}
 
-	public void setProjectName(String baseUri) {
+	public void setProjectName(final String baseUri) {
 		this.projectName = baseUri;
 	}
 	
@@ -67,7 +67,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		return projectSubPath;
 	}
 
-	public void setProjectSubPath(String projectSubPath) {
+	public void setProjectSubPath(final String projectSubPath) {
 		this.projectSubPath = projectSubPath;
 	}
 	
@@ -75,7 +75,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		return rootPath;
 	}
 
-	public void setRootPath(String rootPath) {
+	public void setRootPath(final String rootPath) {
 		this.rootPath = rootPath;
 	}
 
@@ -87,25 +87,25 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	}
 
 	@Override
-	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
+	protected void invokeInternal(final WorkflowContext context, final ProgressMonitor monitor, final Issues issues) {
 		log.info("searching " + getModelNameFromExtension() + " models for base URI: " + getBaseUri());
 		
 		final String projectDirectory = getProjectPath();
 		final String targetDirectory = EclipsePathHelper.toJavaCompatibleAbsoluteFilePath(projectDirectory) + "/" + projectSubPath;
-		try (var files = listFiles(targetDirectory)) {
-			var modelNames = toRelevantModelNames(targetDirectory, files);
+		try (final var files = listFiles(targetDirectory)) {
+			final var modelNames = toRelevantModelNames(targetDirectory, files);
 			logFoundModelNames(modelNames);
 			addModelsToSlot(context, modelNames);
 			
 			log.info("found " + modelNames.size() + " " + fileExtension + " files");
 			
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			log.error("Failed to locate " + getModelNameFromExtension() + " files under: " + targetDirectory, e);
 		}
 	}
 	
-	private List<String> toRelevantModelNames(final String targetDirectory, Stream<Path> files) {
-		var modelNames = files.map(f -> f.toFile().getPath())
+	private List<String> toRelevantModelNames(final String targetDirectory, final Stream<Path> files) {
+		final var modelNames = files.map(f -> f.toFile().getPath())
 			 .map(f -> substringAfter(f, targetDirectory))
 			 .filter(f -> f.endsWith(fileExtension))
 		     .filter(f -> !isExcluded(f))
@@ -113,7 +113,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		return modelNames;
 	}
 
-	private void logFoundModelNames(List<String> modelNames) {
+	private void logFoundModelNames(final List<String> modelNames) {
 		modelNames.forEach(fileName -> {
 			log.debug("found: " + fileName);
 		});
@@ -132,53 +132,53 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	private static String substringAfter(String string, String match) {
 		string = string.replaceAll("\\\\", "/");
 		match = match.replaceAll("\\\\", "/");
-		int index = string.indexOf(match);
+		final int index = string.indexOf(match);
 		return string.substring(index + match.length());
 	}
 
-	private void addModelsToSlot(WorkflowContext context, List<String> modelNames) {
-		String baseUri = getBaseUri();
-		var models = obtainTargetListForSlot(context);
+	private void addModelsToSlot(final WorkflowContext context, final List<String> modelNames) {
+		final String baseUri = getBaseUri();
+		final var models = obtainTargetListForSlot(context);
 		
-		for (var modelName : modelNames) {
-			var object = loadModel(baseUri, modelName);
+		for (final var modelName : modelNames) {
+			final var object = loadModel(baseUri, modelName);
 			models.add(object);
 		}
 
 		context.set(getModelSlot(), models);
 	}
 
-	private Object loadModel(String baseUri, String modelName) {
-		var uri = baseUri + modelName;
-		boolean firstElementOnly = true;
-		var object = Reader.load(resourceSet, uri, firstElementOnly);
+	private Object loadModel(final String baseUri, final String modelName) {
+		final var uri = baseUri + modelName;
+		final boolean firstElementOnly = true;
+		final var object = Reader.load(resourceSet, uri, firstElementOnly);
 		checkNoErrorsFromLoading(modelName, object);
 		return object;
 	}
 
-	private void checkNoErrorsFromLoading(String modelName, Object object) {
+	private void checkNoErrorsFromLoading(final String modelName, final Object object) {
 		new LambdaVisitor<Object>()
 			.on(EObject.class).then(eObject -> {
 				throwExceptionIfResourceHasErrors(modelName, eObject.eResource());
 			}).accept(object);
 	}
 
-	private void throwExceptionIfResourceHasErrors(String modelName, Resource resource) {
+	private void throwExceptionIfResourceHasErrors(final String modelName, final Resource resource) {
 		if (resource != null && resource.getErrors().size() > 0) {
 			throw new RuntimeException("error loading " + modelName + ": " + resource.getErrors().get(0));
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<Object> obtainTargetListForSlot(WorkflowContext context) {
-		Object slotContent = context.get(getModelSlot());
+	private List<Object> obtainTargetListForSlot(final WorkflowContext context) {
+		final Object slotContent = context.get(getModelSlot());
 		if (slotContent != null) {
 			return (List<Object>)slotContent;
 		}
 		return new ArrayList<Object>();
 	}
 	
-	private Stream<Path> listFiles(String directory) throws IOException {
+	private Stream<Path> listFiles(final String directory) throws IOException {
 		final Path path = Path.of(directory);
 		if (Files.exists(path)) {
 			return findFilesSortedByPath(path);
@@ -193,10 +193,10 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 				.sorted(Comparator.comparing(Path::toAbsolutePath));
 	}
 	
-	private boolean isExcluded(String filePath) {
-		String fileName = new File(filePath).getName();
-		for (var pattern : excludeModels) {
-			var resolvedWildcards = pattern.replaceAll("\\*" + fileExtension, fileName); // allow "*.<fileextension>" pattern
+	private boolean isExcluded(final String filePath) {
+		final String fileName = new File(filePath).getName();
+		for (final var pattern : excludeModels) {
+			final var resolvedWildcards = pattern.replaceAll("\\*" + fileExtension, fileName); // allow "*.<fileextension>" pattern
 			if (filePath.endsWith(resolvedWildcards)) {
 				return true;
 			}

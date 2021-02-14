@@ -41,8 +41,8 @@ final class ModelToModelTransformationExecutor {
 	
 	private final ArrayList<EObject> resultInstances = new ArrayList<EObject>();
 	
-	public ModelToModelTransformationExecutor(WorkflowContext workflowContext, 
-			Issues issues, String uri, SourceTargetRelationship sourceTargetRelationship) {
+	public ModelToModelTransformationExecutor(final WorkflowContext workflowContext,
+			final Issues issues, final String uri, final SourceTargetRelationship sourceTargetRelationship) {
 		this.workflowContext = workflowContext;
 		this.issues = issues;
 		this.transformationURI = createTransformationUriFromString(uri);
@@ -54,12 +54,12 @@ final class ModelToModelTransformationExecutor {
 	/**
 	 * Entry point to transform a model object with the underlying QVTo transformation.
 	 */
-	void transformNext(EObject eObject) {
-		var result = executeTransformation(eObject);
+	void transformNext(final EObject eObject) {
+		final var result = executeTransformation(eObject);
 		handleErrors(eObject, result);
 	}
 
-	private ExecutionDiagnostic executeTransformation(EObject eObject) {
+	private ExecutionDiagnostic executeTransformation(final EObject eObject) {
 		if (sourceTargetRelationship == SourceTargetRelationship.EXISTING_TARGET) {
 			return executeExistingTargetTransformation(eObject);
 		} else {
@@ -67,21 +67,21 @@ final class ModelToModelTransformationExecutor {
 		}
 	}
 
-	private ExecutionDiagnostic executeExistingTargetTransformation(EObject eObject) {
-		var context = createExecutionContextForObject(eObject);
-		var input = new BasicModelExtent(Arrays.asList(eObject));
+	private ExecutionDiagnostic executeExistingTargetTransformation(final EObject eObject) {
+		final var context = createExecutionContextForObject(eObject);
+		final var input = new BasicModelExtent(Arrays.asList(eObject));
 		
-		var result = internalExecutor.execute(context, input);
+		final var result = internalExecutor.execute(context, input);
 		getResultInstances().add(eObject);
 		
 		return result;
 	}
 
-	private ExecutionDiagnostic executeNewTargetTransformation(EObject eObject) {
-		var context = createExecutionContextForObject(eObject);
-		var input = new BasicModelExtent(Arrays.asList(eObject));
-		var output = new BasicModelExtent();
-		var result = internalExecutor.execute(context, input, output);
+	private ExecutionDiagnostic executeNewTargetTransformation(final EObject eObject) {
+		final var context = createExecutionContextForObject(eObject);
+		final var input = new BasicModelExtent(Arrays.asList(eObject));
+		final var output = new BasicModelExtent();
+		final var result = internalExecutor.execute(context, input, output);
 		final List<EObject> contents = output.getContents();
 		
 		if (contents.size() > 0) {
@@ -99,8 +99,8 @@ final class ModelToModelTransformationExecutor {
 		return result;
 	}
 
-	private ExecutionContext createExecutionContextForObject(EObject eObject) {
-		var context = new ExecutionContextImpl();
+	private ExecutionContext createExecutionContextForObject(final EObject eObject) {
+		final var context = new ExecutionContextImpl();
 		
 		context.setLog(new QvtoLogger(getName(eObject), log));
 		
@@ -113,15 +113,15 @@ final class ModelToModelTransformationExecutor {
 		return context;
 	}
 	
-	private void handleErrors(EObject eObject, ExecutionDiagnostic result) {
+	private void handleErrors(final EObject eObject, final ExecutionDiagnostic result) {
 		if (result.getSeverity() == Diagnostic.OK) {
 			successfulTransformationsCount++;
 			log.debug("Transformed QVTo " + transformationURI + " successfully for: " + getName(eObject));
 		} else {
 			log.error("Failed QVTo " + transformationURI + " for: " + getName(eObject));
-			var status = BasicDiagnostic.toIStatus(result);
+			final var status = BasicDiagnostic.toIStatus(result);
 			issues.addError(status.getMessage());
-			for (var child : result.getChildren()) {
+			for (final var child : result.getChildren()) {
 				issues.addError("> " + child.getMessage());
 			}
 		}
@@ -145,7 +145,7 @@ final class ModelToModelTransformationExecutor {
 	}
 	
 
-	private static String getName(EObject object) {
+	private static String getName(final EObject object) {
 		final StringBuilder stringBuilder = new StringBuilder();
 		new LambdaVisitor<Object>()
 			.on(NamedElement.class).then(namedElement -> {

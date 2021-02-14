@@ -36,17 +36,17 @@ public class Mwe2LauncherExtended  {
 	
 	private static final Logger logger = Logger.getLogger(Mwe2Launcher.class);
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		try {
 			new Mwe2LauncherExtended().run(args);
-		} catch(Throwable throwable) {
+		} catch(final Throwable throwable) {
 			logger.error(throwable.getMessage(), throwable);
 			System.exit(1);
 		}
 	}
 
-	public void run(String[] args) {
-		Options options = getOptions();
+	public void run(final String[] args) {
+		final Options options = getOptions();
 		final CommandLineParser parser = new DefaultParser();
 		CommandLine line = null;
 		try {
@@ -57,18 +57,18 @@ public class Mwe2LauncherExtended  {
 				throw new ParseException("Only one module name expected. But " + line.getArgs().length
 						+ " were passed (" + line.getArgList() + ")");
 
-			String moduleName = line.getArgs()[0];
-			Map<String, String> params = new HashMap<String, String>();
-			String[] optionValues = line.getOptionValues(PARAM);
+			final String moduleName = line.getArgs()[0];
+			final Map<String, String> params = new HashMap<String, String>();
+			final String[] optionValues = line.getOptionValues(PARAM);
 			if (optionValues != null) {
-				for (String string : optionValues) {
-					int index = string.indexOf('=');
+				for (final String string : optionValues) {
+					final int index = string.indexOf('=');
 					if (index == -1) {
 						throw new ParseException("Incorrect parameter syntax '" + string
 								+ "'. It should be 'name=value'");
 					}
-					String name = string.substring(0, index);
-					String value = string.substring(index + 1);
+					final String name = string.substring(0, index);
+					final String value = string.substring(index + 1);
 					if (params.put(name, value) != null) {
 						throw new ParseException("Duplicate parameter '" + name + "'.");
 					}
@@ -77,18 +77,18 @@ public class Mwe2LauncherExtended  {
 			// check  OperationCanceledException is accessible
 			OperationCanceledException.class.getName();
 			
-			Injector injector = createStandaloneSetup().createInjectorAndDoEMFRegistration();
+			final Injector injector = createStandaloneSetup().createInjectorAndDoEMFRegistration();
 			
-			var paramsMap = injector.getInstance(Mwe2ParamsMap.class);
+			final var paramsMap = injector.getInstance(Mwe2ParamsMap.class);
 			paramsMap.setParams(params);
 			
-			Mwe2Runner mweRunner = injector.getInstance(Mwe2Runner.class);
+			final Mwe2Runner mweRunner = injector.getInstance(Mwe2Runner.class);
 			if (moduleName.contains("/")) {
 				mweRunner.run(URI.createURI(moduleName), params);
 			} else {
 				mweRunner.run(moduleName, params);
 			}
-		} catch(NoClassDefFoundError e) {
+		} catch(final NoClassDefFoundError e) {
 			if ("org/eclipse/core/runtime/OperationCanceledException".equals(e.getMessage())){
 				System.err.println("Could not load class: org.eclipse.core.runtime.OperationCanceledException");
 				System.err.println("Add org.eclipse.equinox.common to the class path.");

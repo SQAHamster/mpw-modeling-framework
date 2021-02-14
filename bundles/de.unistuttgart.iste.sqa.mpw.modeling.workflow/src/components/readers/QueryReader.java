@@ -21,17 +21,17 @@ public class QueryReader extends MultiResourceReader {
 	}
 	
 	@Override
-	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
+	protected void invokeInternal(final WorkflowContext context, final ProgressMonitor monitor, final Issues issues) {
 		super.invokeInternal(context, monitor, issues);
 
-		var inputs = InputsFactoryImpl.eINSTANCE.createQueryInputs();
-		var models = inputs.getModels();
+		final var inputs = InputsFactoryImpl.eINSTANCE.createQueryInputs();
+		final var models = inputs.getModels();
 		
-		String modelSlot = getModelSlot();
-		var objects = (List<?>)context.get(modelSlot);
+		final String modelSlot = getModelSlot();
+		final var objects = (List<?>)context.get(modelSlot);
 		
-		for (Object object : objects) {
-			var queryModel = (Model)object;
+		for (final Object object : objects) {
+			final var queryModel = (Model)object;
 			models.add(queryModel);
 		}
 		

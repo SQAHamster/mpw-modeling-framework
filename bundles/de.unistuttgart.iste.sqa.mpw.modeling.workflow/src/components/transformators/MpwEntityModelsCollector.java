@@ -31,7 +31,7 @@ final class MpwEntityModelsCollector {
 
 	private static List<EPackage> getWorkspaceModels(final WorkflowContext workflowContext) {
 		@SuppressWarnings("unchecked")
-		var workspaceModels = (List<EPackage>)workflowContext.get("entityModels");
+		final var workspaceModels = (List<EPackage>)workflowContext.get("entityModels");
 		return workspaceModels;
 	}
 	

@@ -32,40 +32,40 @@ public class CommandReader extends MultiResourceReader {
 	}
 	
 	@Override
-	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
+	protected void invokeInternal(final WorkflowContext context, final ProgressMonitor monitor, final Issues issues) {
 		super.invokeInternal(context, monitor, issues);
 		
-		var commands = getCommandsFromSlot(context);
-		var validComands = validateCommands(commands, issues);
+		final var commands = getCommandsFromSlot(context);
+		final var validComands = validateCommands(commands, issues);
 		
-		var inputs = InputsFactoryImpl.eINSTANCE.createHenshinCommandInputs();
+		final var inputs = InputsFactoryImpl.eINSTANCE.createHenshinCommandInputs();
 		inputs.getModules().addAll(validComands);
 		
 		context.set(getModelSlot() + "Composition", inputs);
 	}
 
-	private List<org.eclipse.emf.henshin.model.Module> getCommandsFromSlot(WorkflowContext context) {
+	private List<org.eclipse.emf.henshin.model.Module> getCommandsFromSlot(final WorkflowContext context) {
 		final ArrayList<org.eclipse.emf.henshin.model.Module> commands = new ArrayList<>();
-		String modelSlot = getModelSlot();
-		var objects = (List<?>)context.get(modelSlot);
+		final String modelSlot = getModelSlot();
+		final var objects = (List<?>)context.get(modelSlot);
 		
-		for (Object object : objects) {
-			var commandModel = (org.eclipse.emf.henshin.model.Module)object;
+		for (final Object object : objects) {
+			final var commandModel = (org.eclipse.emf.henshin.model.Module)object;
 			commands.add(commandModel);
 		}
 		
 		return commands;
 	}
 	
-	private List<org.eclipse.emf.henshin.model.Module> validateCommands(List<org.eclipse.emf.henshin.model.Module> commands, Issues issues) {
+	private List<org.eclipse.emf.henshin.model.Module> validateCommands(final List<org.eclipse.emf.henshin.model.Module> commands, final Issues issues) {
 		final ArrayList<org.eclipse.emf.henshin.model.Module> validCommands = new ArrayList<>();
 		
 		// Note: ocl instance has to be kept in this variable, since it must not be garbage collected until this method ends
-		OCL ocl = OCL.newInstance();
+		final OCL ocl = OCL.newInstance();
 
 		createOclValidator(ocl);
 		
-		for (var commandModel : commands) {
+		for (final var commandModel : commands) {
 			if (isValid(commandModel)) {
 				validCommands.add(commandModel);
 			} else {
@@ -76,7 +76,7 @@ public class CommandReader extends MultiResourceReader {
 		return validCommands;
 	}
 	
-	private void createOclValidator(OCL ocl) {
+	private void createOclValidator(final OCL ocl) {
 		CompleteOCLStandaloneSetup.doSetup();
 		final String uri = getWorkflowProjectResourcePathPrefix() + "/validation/CommandValidation.ocl";
 		currentValidator = new CompleteOCLEObjectValidator(HenshinPackage.eINSTANCE, URI.createURI(uri), ocl.getEnvironmentFactory());
@@ -86,15 +86,15 @@ public class CommandReader extends MultiResourceReader {
 	 * Validates the given commandModel and stores the diagnostic result in the {@link #currentDiagnostics} field.
 	 * @return true, if the commandModel is valid.
 	 */
-	private boolean isValid(org.eclipse.emf.henshin.model.Module commandModel) {
+	private boolean isValid(final org.eclipse.emf.henshin.model.Module commandModel) {
 		currentDiagnostics = Diagnostician.INSTANCE.createDefaultDiagnostic(commandModel);
 		currentValidator.validate(commandModel, currentDiagnostics, new HashMap<Object, Object>());
 		return currentDiagnostics.getSeverity() == Diagnostic.OK;
 	}
 	
-	private void addDiagnosticsError(Issues issues) {
+	private void addDiagnosticsError(final Issues issues) {
 		issues.addError(currentDiagnostics.getMessage());
-		for (var child : currentDiagnostics.getChildren()) {
+		for (final var child : currentDiagnostics.getChildren()) {
 			issues.addError("> " + child.getMessage());
 		}
 	}

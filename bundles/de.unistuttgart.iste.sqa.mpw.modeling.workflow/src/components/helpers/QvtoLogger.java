@@ -10,33 +10,33 @@ public class QvtoLogger implements Log {
 	private final String name;
 	private final Logger log;
 
-	public QvtoLogger(String name, Logger log) {
+	public QvtoLogger(final String name, final Logger log) {
 		this.name = name;
 		this.log = log;
 	}
 
 	@Override
-	public void log(String message) {
+	public void log(final String message) {
 		log.info(name + ": " + message);
 	}
 
 	@Override
-	public void log(int level, String message) {
+	public void log(final int level, final String message) {
 		log.info(name + ": " + levelToString(level) + " " + message);
 	}
 
 	@Override
-	public void log(String message, Object arg) {
+	public void log(final String message, final Object arg) {
 		log.info(name + ": " + String.format(message, arg));
 	}
 
 	@Override
-	public void log(int level, String message, Object arg) {
+	public void log(final int level, final String message, final Object arg) {
 		log.info(name + ": " + levelToString(level) + String.format(message, arg));
 		
 	}
 	
-	private static String levelToString(int level) {
+	private static String levelToString(final int level) {
 		if (level > 0) {
 			return "[" + level + "]";
 		}
