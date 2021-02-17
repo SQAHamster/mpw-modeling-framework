@@ -20,7 +20,12 @@ void Semaphore::release() {
 }
 
 bool Semaphore::isLocked() {
-    return mutex->try_lock();
+    if (mutex->try_lock()) {
+        // could aquire lock, so it isn't locked -> unlock it again to reconstruct previous state
+        mutex->unlock();
+        return false;
+    }
+    return true;
 }
 
 }
