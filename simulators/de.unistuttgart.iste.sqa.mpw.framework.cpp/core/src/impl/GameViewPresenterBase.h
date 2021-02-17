@@ -52,12 +52,17 @@ protected:
 
 private:
 
+    void bindTiles();
+    void bindGameLog();
+    void bindButtons();
+
     void addTileNode(const mpw::Tile& tile);
     void removeTileNode(const mpw::Tile& tile);
 
     void setTileNodeAt(const mpw::Location& location, const mpw::Tile& tile);
 
     void addLogEntry(const mpw::LogEntry& entry);
+    void updateButtonEnables();
 
     const std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld;
 

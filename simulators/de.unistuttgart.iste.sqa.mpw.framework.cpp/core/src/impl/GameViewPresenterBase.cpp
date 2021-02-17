@@ -31,12 +31,25 @@ void GameViewPresenterBase::bind() {
 
     auto lock = getSemaphore().lock();
 
+    bindTiles();
+    bindGameLog();
+    bindButtons();
+    onBind();
+}
+
+void GameViewPresenterBase::bindTiles() {
     auto& tilesProperty = getTilesPropertyFromConcreteStage();
 
     tilesProperty.addOnAddedListener([this](auto& tile) { addTileNode(tile); });
     tilesProperty.addOnRemovedListener([this](auto& tile) { removeTileNode(tile); });
     tilesProperty.forEach([this](auto& tile) { addTileNode(tile); });
+}
 
+void GameViewPresenterBase::onBind() {
+    // can be overridden by subclasses
+}
+
+void GameViewPresenterBase::bindGameLog() {
     auto miniProgrammingWorldLog = miniProgrammingWorld->getGameLog();
     miniProgrammingWorldLog->logEntriesProperty().addOnAddedListener([this](const LogEntry& entry) {
         auto lock = getSemaphore().lock();
@@ -45,13 +58,30 @@ void GameViewPresenterBase::bind() {
     miniProgrammingWorldLog->logEntriesProperty().forEach([this](const LogEntry& entry) {
         addLogEntry(entry);
     });
-
-    onBind();
 }
 
-void GameViewPresenterBase::onBind()
-{
-  // can be overridden by subclasses
+void GameViewPresenterBase::bindButtons() {
+    auto viewModel = getViewModel();
+    auto& modeProperty = miniProgrammingWorld->getPerformance()->modeProperty();
+    auto gameCommandStack = miniProgrammingWorld->getPerformance()->getGameCommandStack();
+    modeProperty.addListener([&](Mode, Mode) { updateButtonEnables(); });
+    gameCommandStack->executedCommandsProperty().addOnAnyChangeListener([&](const commands::Command&) { updateButtonEnables(); });
+    gameCommandStack->undoneCommandsProperty().addOnAnyChangeListener([&](const commands::Command&) { updateButtonEnables(); });
+    updateButtonEnables();
+}
+
+void GameViewPresenterBase::updateButtonEnables() {
+    auto viewModel = getViewModel();
+    auto gameCommandStack = miniProgrammingWorld->getPerformance()->getGameCommandStack();
+
+    Mode mode = miniProgrammingWorld->getPerformance()->getMode();
+    bool anyExecutedCommand = !gameCommandStack->getExecutedCommands().empty();
+    bool anyUndoneCommand = !gameCommandStack->getUndoneCommands().empty();
+
+    viewModel->setPlayButtonEnabled(mode == Mode::PAUSED);
+    viewModel->setPauseButtonEnabled(mode == Mode::RUNNING);
+    viewModel->setUndoButtonEnabled(anyExecutedCommand && mode != Mode::RUNNING);
+    viewModel->setRedoButtonEnabled(anyUndoneCommand && mode != Mode::RUNNING);
 }
 
 void GameViewPresenterBase::playClicked() {
@@ -137,6 +167,5 @@ void GameViewPresenterBase::speedChanged(double speedValue) {
 Color GameViewPresenterBase::getColorForLogEntry(const LogEntry& entry) const {
     return Color::BLACK;
 }
-
 
 }

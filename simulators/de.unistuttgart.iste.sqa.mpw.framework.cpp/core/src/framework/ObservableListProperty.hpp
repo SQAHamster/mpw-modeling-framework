@@ -62,6 +62,17 @@ public:
         removedListeners.erase(id);
     }
 
+    ListenerId addOnAnyChangeListener(Listener listener) const { // mark const to allow returning const property which allows modifying listeners
+        addedListeners[nextId] = listener;
+        removedListeners[nextId] = listener;
+        return nextId++;
+    }
+
+    void removeOnAnyChangeListener(ListenerId id) const { // mark const to allow returning const property which allows modifying listeners
+        addedListeners.erase(id);
+        removedListeners.erase(id);
+    }
+
 };
 
 }
