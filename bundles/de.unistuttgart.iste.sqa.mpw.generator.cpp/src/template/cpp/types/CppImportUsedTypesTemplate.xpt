@@ -22,7 +22,7 @@
     #include <optional>
 	«ENDIF-»
     «IF eOperations.exists(o|o.getUsedTypes().exists(t|t.name == "Throwable"))-»
-    #include <stdexcept>
+    #include <exception>
     «ENDIF-»
 	«IF eStructuralFeatures.union(eOperations).exists(e|e.isAny())-»
     #include "Any.h"

@@ -24,7 +24,7 @@ toCppType(String this, String metaTypeName, EPackage thisPackage) :
     else if (this.isAnyTypeName()) then "Any"
     else if (this == "Semaphore") then "framework::Semaphore"
     else if (this.isValueTypeClassName(thisPackage) || metaTypeName == "ecore::EEnum") then toQualifiedTypeName(this, thisPackage)
-    else if (this == "Throwable") then "std::runtime_error"
+    else if (this == "Throwable") then "const std::exception&"
     else "std::shared_ptr<" + toQualifiedTypeName(this, thisPackage) + ">";
 
 featureToSingleCppType(EStructuralFeature this) : this.toCppType();
