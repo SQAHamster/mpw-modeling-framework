@@ -25,4 +25,16 @@ void assertObjectFound(const std::string& referenceName, const std::string& obje
                     "Object of type '" + objectTypeName + "' for reference '" + referenceName + "' not found");
 }
 
+void checkState(bool check) {
+    if (!check) {
+        throw AssertionFailedException();
+    }
+}
+
+void checkState(bool check, const std::string& message) {
+    if (!check) {
+        throw AssertionFailedException(message);
+    }
+}
+
 }

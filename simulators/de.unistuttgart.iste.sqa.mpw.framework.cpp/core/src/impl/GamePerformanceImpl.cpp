@@ -1,8 +1,14 @@
 #include "GamePerformanceImpl.h"
 
 #include "CommandStack.h"
+#include "FrameworkAssert.h"
+
 #include <thread>
 #include <stdexcept>
+#include <cassert>
+#include <GameAbortedException.h>
+
+using namespace framework;
 
 namespace mpw {
 
@@ -12,68 +18,36 @@ GamePerformanceImpl::GamePerformanceImpl()
 }
 
 void GamePerformanceImpl::startGame() {
-    if (getMode() != Mode::INITIALIZING) {
-        throw std::runtime_error("startGame() can only be called in mode INITIALIZING");
-    }
-    setMode(Mode::RUNNING);
+    startGameInMode(Mode::RUNNING);
 }
 
 void GamePerformanceImpl::startGamePaused() {
-    if (getMode() != Mode::INITIALIZING) {
-        throw std::runtime_error("startGame() can only be called in mode INITIALIZING");
-    }
+    startGameInMode(Mode::RUNNING);
     pauseGame();
 }
 
-void GamePerformanceImpl::pauseGame() {
-    if (getMode() != Mode::INITIALIZING && getMode() != Mode::RUNNING) {
-        throw std::runtime_error("pause() can only be called in modes INITIALIZING/RUNNING");
-    }
-    setMode(Mode::PAUSED);
-    getSemaphore().acquire();
-}
+void GamePerformanceImpl::startGameInMode(Mode mode) {
+    checkState(getMode() == Mode::INITIALIZING,
+               "start game is only possible during initialization");
 
-void GamePerformanceImpl::resumeGame() {
-    if (getMode() != Mode::PAUSED) {
-        throw std::runtime_error("pause() can only be called in mode RUNNING");
-    }
-    getGameCommandStack()->redoAll();
-    setMode(Mode::RUNNING);
-    getSemaphore().release();
-}
-
-void GamePerformanceImpl::stopGame() {
-    setMode(Mode::STOPPED);
-    if (getSemaphore().isLocked()) {
-        getSemaphore().release();
-    }
-}
-
-void GamePerformanceImpl::abortOrStopGame() {
-    Mode mode = getMode();
-    if ((mode == Mode::STOPPED) || (mode == Mode::INITIALIZING)) {
-        setMode(Mode::STOPPED);
-    } else {
-        setMode(Mode::ABORTED);
-    }
-    if (getSemaphore().isLocked()) {
-        getSemaphore().release();
-    }
-}
-
-void GamePerformanceImpl::hardReset() {
-    getGameCommandStack()->clearExecutedCommands();
-    getGameCommandStack()->clearUndoneCommands();
-    stopGame();
-    setMode(Mode::INITIALIZING);
+    clearCommandStack();
+    this->setMode(mode);
 }
 
 void GamePerformanceImpl::preExecuteGameCommand() {
-    if (getMode() != Mode::PAUSED && getMode() != Mode::RUNNING) {
-        throw std::runtime_error("execute() can only be called in modes PAUSED/RUNNING");
+    stopControlFlowIfPaused();
+    if (this->getMode() == Mode::ABORTED) {
+        this->setMode(Mode::STOPPED);
+        throw GameAbortedException("Stopped execution of command due to abort");
+    } else if (this->getMode() != Mode::RUNNING) {
+        throw std::runtime_error("The game needs to be running to execute game commands");
     }
+    checkState(getMode() != Mode::STOPPED);
+}
 
-    auto lock = getSemaphore().lock();
+void GamePerformanceImpl::stopControlFlowIfPaused() {
+    // obtain lock by RAII pattern
+    SemaphoreLock semaphoreLock = getSemaphore().lock();
 }
 
 void GamePerformanceImpl::delayControlFlow() {
@@ -81,6 +55,58 @@ void GamePerformanceImpl::delayControlFlow() {
         double speed = getSpeed();
         long delayTimeInMillis = static_cast<long>((11.0 - speed) / 5.0 * 400.0);
         std::this_thread::sleep_for(std::chrono::milliseconds(delayTimeInMillis));
+    }
+}
+
+void GamePerformanceImpl::pauseGame() {
+    checkState(getMode() == Mode::RUNNING, "Cannot pause: game is not running");
+    setMode(Mode::PAUSED);
+    acquireSemaphore();
+}
+
+void GamePerformanceImpl::acquireSemaphore() {
+    if (!getSemaphore().isLocked()) {
+        getSemaphore().acquire();
+    }
+}
+
+void GamePerformanceImpl::resumeGame() {
+    checkState(getMode() == Mode::PAUSED, "Cannot resume: game is not paused");
+    assert(getSemaphore().isLocked());
+
+    getGameCommandStack()->redoAll();
+    unblockForMode(Mode::RUNNING);
+}
+
+void GamePerformanceImpl::hardReset() {
+    clearCommandStack();
+    this->stopGame();
+    setMode(Mode::INITIALIZING);
+}
+
+void GamePerformanceImpl::clearCommandStack() {
+    auto gameCommandStack = getGameCommandStack();
+    gameCommandStack->clearExecutedCommands();
+    gameCommandStack->clearUndoneCommands();
+}
+
+void GamePerformanceImpl::abortOrStopGame() {
+    Mode mode = getMode();
+    if ((mode == Mode::STOPPED) || (mode == Mode::INITIALIZING)) {
+        stopGame();
+    } else {
+        unblockForMode(Mode::ABORTED);
+    }
+}
+
+void GamePerformanceImpl::stopGame() {
+    unblockForMode(Mode::STOPPED);
+}
+
+void GamePerformanceImpl::unblockForMode(Mode mode) {
+    setMode(mode);
+    if (getSemaphore().isLocked()) {
+        getSemaphore().release();
     }
 }
 

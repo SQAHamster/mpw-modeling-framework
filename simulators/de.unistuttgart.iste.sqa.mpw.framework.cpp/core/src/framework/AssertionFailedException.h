@@ -1,4 +1,3 @@
-
 #ifndef DE_UNISTUTTGART_FRAMEWORK_ASSERTIONFAILEDEXCEPTION_H
 #define DE_UNISTUTTGART_FRAMEWORK_ASSERTIONFAILEDEXCEPTION_H
 
@@ -9,17 +8,19 @@ namespace framework {
 
 class AssertionFailedException : public std::exception {
 public:
-    AssertionFailedException(std::string message)
-  : message(message)
-  {
-  }
+    AssertionFailedException() {
+    }
 
-  const char *what() const noexcept override {
-      return message.c_str();
-  }
+    AssertionFailedException(std::string message)
+            : message(message) {
+    }
+
+    const char* what() const noexcept override {
+        return message.c_str();
+    }
 
 private:
-  std::string message;
+    std::string message;
 };
 
 }

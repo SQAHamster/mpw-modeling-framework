@@ -32,6 +32,15 @@ public:
 
 	void delayControlFlow() override;
 
+private:
+
+    void startGameInMode(Mode mode);
+    void clearCommandStack();
+    void acquireSemaphore();
+    void unblockForMode(Mode mode);
+
+    void stopControlFlowIfPaused();
+
 };
 
 }
