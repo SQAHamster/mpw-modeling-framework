@@ -9,6 +9,10 @@
       «FOREACH eStructuralFeatures AS f-»
       static constexpr unsigned «f.name.toFeatureKeyName()» = «offset+counterInc(this.name)»;
       «ENDFOREACH-»
+      «FOREACH eAllStructuralFeatures.without(eStructuralFeatures)
+        .reject(f|f.eContainingClass.name == "MiniProgrammingWorld" && f.eType.name == "Stage") AS f-»«REM»Note: Stage has to be filtered out, since it is removed from MiniProgrammingWorld«ENDREM-»
+      using «getBaseClass().name»::«f.name.toFeatureKeyName()»;
+      «ENDFOREACH-»
       «ENDLET-»
 «ENDDEFINE»
 
