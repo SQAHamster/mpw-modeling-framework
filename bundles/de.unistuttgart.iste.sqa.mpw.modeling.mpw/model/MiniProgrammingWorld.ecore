@@ -106,6 +106,7 @@
     <eOperations name="hardReset"/>
     <eOperations name="abortOrStopGame"/>
     <eOperations name="preExecuteGameCommand"/>
+    <eOperations name="preExecuteEditorCommand"/>
     <eOperations name="delayControlFlow"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="semaphore" lowerBound="1"
         eType="ecore:EDataType BaseTypes.ecore#//Semaphore" changeable="false"/>

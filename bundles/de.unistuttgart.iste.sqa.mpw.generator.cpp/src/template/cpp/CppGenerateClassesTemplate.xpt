@@ -124,6 +124,7 @@
 	        throw; // rethrow
 	    }
     «ELSE-»
+        game.lock()->getPerformance()->preExecuteEditorCommand();
         «targetRoleVariableName»->«command.name»(«parametersVariableName»);
     «ENDIF-»
 «ENDDEFINE»

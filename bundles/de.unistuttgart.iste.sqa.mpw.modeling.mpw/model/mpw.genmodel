@@ -204,6 +204,7 @@
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/hardReset"/>
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/abortOrStopGame"/>
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/preExecuteGameCommand"/>
+      <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/preExecuteEditorCommand"/>
       <genOperations ecoreOperation="MiniProgrammingWorld.ecore#//GamePerformance/delayControlFlow"/>
     </genClasses>
   </genPackages>
