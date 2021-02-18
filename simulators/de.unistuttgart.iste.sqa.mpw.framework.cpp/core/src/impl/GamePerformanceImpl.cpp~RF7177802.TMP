@@ -45,13 +45,6 @@ void GamePerformanceImpl::preExecuteGameCommand() {
     checkState(getMode() != Mode::STOPPED);
 }
 
-void GamePerformanceImpl::preExecuteEditorCommand()
-{
-  if (this->getMode() != Mode::INITIALIZING) {
-    throw std::runtime_error("The game needs to be initializing to execute editor commands");
-  }
-}
-
 void GamePerformanceImpl::stopControlFlowIfPaused() {
     // obtain lock by RAII pattern
     SemaphoreLock semaphoreLock = getSemaphore().lock();

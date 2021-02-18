@@ -30,6 +30,8 @@ public:
 
 	void preExecuteGameCommand() override;
 
+	void preExecuteEditorCommand() override;
+
 	void delayControlFlow() override;
 
 private:

@@ -49,6 +49,13 @@ public class GamePerformanceImpl extends GamePerformance {
 		}
 	}
 
+	@Override
+	public void preExecuteEditorCommand() {
+		if (this.getMode() != Mode.INITIALIZING) {
+			throw new IllegalStateException("The game needs to be initializing to execute editor commands");
+		}
+	}
+
 	private void stopControlFlowIfPaused() {
 		try {
 			getSemaphore().acquire();
