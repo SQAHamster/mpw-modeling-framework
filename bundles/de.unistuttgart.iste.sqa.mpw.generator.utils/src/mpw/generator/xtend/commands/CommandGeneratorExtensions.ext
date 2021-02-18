@@ -16,7 +16,13 @@ getCommandNamespace(Transformation this) :
 Transformation getCommandForOperation(EOperation operation) : 
     operation.eAnnotations.selectFirst(a|a.source == "command").contents.first();
 
-getConcreteName(EClass this) : "Concrete" + name;
+// in case the type is a role type (e.g. EditorHamster), the concrete name will be returned (e.g. ConcreteHamster)
+// otherwise, the name of the type is returned.
+getConcreteNameForRoleElseName(EClassifier this) : 
+    if (isMarkedWithAnnotation("baseName")) then "Concrete" + getAnnotationValue("baseName")
+    else name;
+
+getConcreteName(EClassifier this) : "Concrete" + name;
 
 getConcreteTypeName(InstanceCondition this) :
   let transformation = (Transformation)eRootContainer : 

@@ -170,6 +170,6 @@
                                                               .union(this.eAllContents.typeSelect(InstanceCondition).collect(c|c.instanceType))
                                                               .union(this.eAllContents.typeSelect(Statement).collect(s|s.type))
                                                               .reject(t|t.isDataType())
-														      .collect(t|t.name)
+														      .collect(t|t.getConcreteNameForRoleElseName())
 														      .toSet()»
 «ENDDEFINE»
