@@ -12,7 +12,7 @@ extension template::cpp::types::CppEmfGeneratorExtensions;
  */
 
 getQualifiedCommandCppName(Transformation this) :
-    getCommandNamespace() + "::" + targetClass.name.toLowerCase();
+    getCommandNamespace() + "::" + getCommandTargetClassBaseName().toLowerCase();
 
 toFindParameterTypeName(InstanceCondition this) :
   let transformation = (Transformation)eRootContainer : 

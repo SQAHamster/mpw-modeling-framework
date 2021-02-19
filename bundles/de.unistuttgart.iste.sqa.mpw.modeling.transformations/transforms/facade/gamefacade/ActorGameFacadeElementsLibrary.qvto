@@ -48,7 +48,6 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
     self.map createCommands();
     self.map createQueries();
     
-    self.map addWriteOperation();
     self.map addInputInterfaceOperation();
 }
 
@@ -131,46 +130,6 @@ helper EClass::createInternalStageConstructorOperation() : EOperation {
         };
         
         eAnnotations += toAnnotation("documentation", "Internal constructor.");
-    };
-}
-
-/**
- * Mapping: create write operation
- */
-mapping inout EClass::addWriteOperation() {
-	var writeOperation := createWriteOperation();
-    writeOperation.eAnnotations += createGameLogVariableAnnotation();
-    writeOperation.eAnnotations += createCallWriteAnnotation();
-	eOperations += writeOperation;
-}
-
-helper EClass::createWriteOperation() : EOperation {
-	return object EOperation {
-	    name := "write";
-        eParameters += object EParameter {
-            name := "message";
-            eType := EString.oclAsType(EClassifier);    
-        };
-	};
-}
-
-helper EClass::createGameLogVariableAnnotation() : VariableDefinitionAnnotation {
-	return object VariableDefinitionAnnotation {
-        variableName := "gameLog";
-        variableTypeName := "GameLog";
-        rhs := object ExpressionAnnotation {
-            expression := createPathExpression(self.getEStructuralFeature("game"), "gameLog");
-        };
-    };
-}
-
-helper EClass::createCallWriteAnnotation() : MethodCallAnnotation {
-	return object MethodCallAnnotation {
-        variableName := "gameLog";
-        methodName := "write";
-        parameterInputVariableExpressions += createPathExpression("internal" + baseName, concreteClass);
-        parameterInputVariableExpressions += createPathExpression("message", stringType);
-        closingStatement := true;
     };
 }
 

@@ -34,7 +34,7 @@
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="model/ViewModel.ecore#/"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_uHPOgF7eEeuY4q_LlGgkew" name="mpw class diagram (compact)" repPath="#_uHK9EF7eEeuY4q_LlGgkew" changeId="9b4344a4-5613-4fe6-a87f-b2c70c11aa49">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_uHPOgF7eEeuY4q_LlGgkew" name="mpw class diagram (compact)" repPath="#_uHK9EF7eEeuY4q_LlGgkew" changeId="8aa1466e-4be3-4d88-9751-a6bb4cffd144">
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="model/MiniProgrammingWorld.ecore#/"/>
       </ownedRepresentationDescriptors>
@@ -1193,10 +1193,6 @@
       </ownedStyle>
       <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']"/>
       <ownedElements xmi:type="diagram:DNodeListElement" uid="_EKe8kDkqEeu0KvmSgTDkRg" name="write(actor Actor, message EString)" tooltipText="write(actor, message)">
-        <target xmi:type="ecore:EOperation" href="model/MiniProgrammingWorld.ecore#//GameLog/write"/>
-        <semanticElements xmi:type="ecore:EOperation" href="model/MiniProgrammingWorld.ecore#//GameLog/write"/>
-        <semanticElements xmi:type="ecore:EParameter" href="model/MiniProgrammingWorld.ecore#//GameLog/write/actor"/>
-        <semanticElements xmi:type="ecore:EParameter" href="model/MiniProgrammingWorld.ecore#//GameLog/write/message"/>
         <ownedStyle xmi:type="diagram:BundledImage" uid="_EKfjoDkqEeu0KvmSgTDkRg" labelAlignment="LEFT">
           <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='Operation']/@style"/>
         </ownedStyle>
@@ -2859,10 +2855,6 @@
         <children xmi:type="notation:Node" xmi:id="_uHOA1l7eEeuY4q_LlGgkew" type="2003" element="_uHMynV7eEeuY4q_LlGgkew">
           <children xmi:type="notation:Node" xmi:id="_uHOA117eEeuY4q_LlGgkew" type="5007"/>
           <children xmi:type="notation:Node" xmi:id="_uHOA2F7eEeuY4q_LlGgkew" type="7004">
-            <children xmi:type="notation:Node" xmi:id="_uHOA2V7eEeuY4q_LlGgkew" type="3010" element="_uHMyn17eEeuY4q_LlGgkew">
-              <styles xmi:type="notation:FontStyle" xmi:id="_uHOA2l7eEeuY4q_LlGgkew" fontName="Arial" fontHeight="8"/>
-              <layoutConstraint xmi:type="notation:Location" xmi:id="_uHOA217eEeuY4q_LlGgkew"/>
-            </children>
             <styles xmi:type="notation:SortingStyle" xmi:id="_uHOA3F7eEeuY4q_LlGgkew"/>
             <styles xmi:type="notation:FilteringStyle" xmi:id="_uHOA3V7eEeuY4q_LlGgkew"/>
           </children>
@@ -3716,16 +3708,6 @@
         <description xmi:type="style:FlatContainerStyleDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@style"/>
       </ownedStyle>
       <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']"/>
-      <ownedElements xmi:type="diagram:DNodeListElement" uid="_uHMyn17eEeuY4q_LlGgkew" name="write(actor Actor, message EString)" tooltipText="write(actor, message)">
-        <target xmi:type="ecore:EOperation" href="model/MiniProgrammingWorld.ecore#//GameLog/write"/>
-        <semanticElements xmi:type="ecore:EOperation" href="model/MiniProgrammingWorld.ecore#//GameLog/write"/>
-        <semanticElements xmi:type="ecore:EParameter" href="model/MiniProgrammingWorld.ecore#//GameLog/write/actor"/>
-        <semanticElements xmi:type="ecore:EParameter" href="model/MiniProgrammingWorld.ecore#//GameLog/write/message"/>
-        <ownedStyle xmi:type="diagram:BundledImage" uid="_uHMyoF7eEeuY4q_LlGgkew" labelAlignment="LEFT">
-          <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='Operation']/@style"/>
-        </ownedStyle>
-        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='Operation']"/>
-      </ownedElements>
     </ownedDiagramElements>
     <ownedDiagramElements xmi:type="diagram:DEdge" uid="_uHMyoV7eEeuY4q_LlGgkew" name="[1..1] gameLog" sourceNode="_uHMyW17eEeuY4q_LlGgkew" targetNode="_uHMynV7eEeuY4q_LlGgkew">
       <target xmi:type="ecore:EReference" href="model/MiniProgrammingWorld.ecore#//MiniProgrammingWorld/gameLog"/>

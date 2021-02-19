@@ -20,11 +20,12 @@ var transformationsProject = "${modelingModuleBaseName}.transformations"
 
 var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/RoleTransformation.qvto"
 var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/CommandTransformation.qvto"
+var createMoveCommandTransformationUri = "${platformUriPrefix}/${transformationsProject}/commands/CreateWriteCommandTransformation.qvto"
 var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/QueryTransformation.qvto"
 var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/GenerationClassesTransformation.qvto"
 
 Workflow {
-	/* set up EMF for standalone execution */
+	// set up EMF for standalone execution
 	bean = StandaloneSetup { 
         scanClassPath = true
 		platformUri=rootPath
@@ -35,29 +36,32 @@ Workflow {
         registerGeneratedEPackage="generationAnnotations.GenerationAnnotationsPackage"
 	}
 	
-	/** instantiate metamodel */
+	// instantiate EMF meta-model
 	bean = EmfRegistryMetaModel : mm_emf { }
 
-	/* load models and store in slot */
+	// find and read entity models
     component = MultiEcoreReader {
         rootPath = rootPath
         excludeModel = "stereotypes/*"
         projectName = sourceProjectName
         modelSlot = "entityModels"
     }
-	
+
+    // find and read Query-DSL input models
 	component = QueryReader {
 		rootPath = rootPath
 		projectName = sourceProjectName
 		modelSlot = "queries"
 	}
 	
+    // find and read Henshin input models
 	component = CommandReader {
 		rootPath = rootPath
 		projectName = sourceProjectName
 		modelSlot = "commands"
 	}
 	
+    // transform Query-DSL inputs to QueryBehavior models
 	component = QvtoTransformator {
 		transformationUri = queryTransformationUri
 		modelSlot = "queriesComposition"
@@ -65,29 +69,43 @@ Workflow {
 		sourceTargetRelationship = "NEW_TARGET"
 	}
 	
+    // for debugging: write the "queries" into file under "/debugout"
     component = XmiWriter {
         rootPath = rootPath
         projectName = sourceProjectName
         modelSlot = "queries"
     }
 	
+    // transforms Henshin transformations to CommandBehavior models
 	component = QvtoTransformator {
 		transformationUri = commandTransformationUri
 		modelSlot = "commands"
 		sourceTargetRelationship = "NEW_TARGET"
 	}
 	
+	// creates an implicit write command for the Actors found in the entityModels slot
+	component = QvtoTransformator {
+		transformationUri = createMoveCommandTransformationUri
+        modelSlot = "entityModels"
+        targetModelSlot = "commands"
+		sourceTargetRelationship = "NEW_TARGET"
+		mergeToExistingSlotContent = true
+	}
+	
+    // for debugging: write the "commands" into file under "/debugout"
 	component = XmiWriter {
         rootPath = rootPath
         projectName = sourceProjectName
 		modelSlot = "commands"
 	}
 	
+    // transform "entityModels" to roles (Actor / Stage types will be splitted to ReadOnly/Editor/Game roles)
     component = QvtoTransformator {
 		transformationUri = roleTransformationUri
 		modelSlot = "entityModels"
 	}
 	
+    // for debugging: write the "entityModels" before generation classes transformation into file under "/debugout"
 	component = XmiWriter {
         rootPath = rootPath
         projectName = sourceProjectName
@@ -95,12 +113,14 @@ Workflow {
 		fileExtension = "ecore"
 	}
     
+    // transform "entityModels" with generation classes transformation (primarily adds facades)
     component = QvtoTransformator {
         transformationUri = generationClassesTransformationUri
         modelSlot = "entityModels"
         targetModelSlot = "generationEcoreModels"
     }
     
+    // for debugging: write the "entityModels" finally before generation under "/debugout"
     component = XmiWriter {
         rootPath = rootPath
         projectName = sourceProjectName
@@ -109,24 +129,28 @@ Workflow {
         directorySuffix = "_generation"
     }
 	
-	/* check model */
+	// check model "entityModels"
 	component = CheckComponent {
 		metaModel = mm_emf
 		checkFile = "util::Checks"
 		emfAllChildrenSlot = "entityModels"
 	}
 	
+	// check model "generationEcoreModels"
 	component = CheckComponent {
 		metaModel = mm_emf
 		checkFile = "util::Checks"
 		emfAllChildrenSlot = "generationEcoreModels"
 	}
 	
+	// call Java generation
     component = @JavaGenerator auto-inject {
         rootPath = rootPath
         generatedProjectBasePackage = generatedProjectBasePackage
         targetSimulatorProject = "${targetSimulatorProjectBaseName}.java"
     }
+    
+    // call C++ generation
     component = @CppGenerator auto-inject {
         rootPath = rootPath
         generatedProjectBasePackage = generatedProjectBasePackage

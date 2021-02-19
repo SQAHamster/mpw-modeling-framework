@@ -1,0 +1,126 @@
+import types.EmfHelpers;
+import util.BasicHelpers;
+
+modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+
+modeltype CommandModel uses "http://www.mpw.uni-stuttgart.de/behavior/command";
+modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
+
+/**
+  *  Library for creating a rule to insert log entries into the game log.
+  *
+  *  It is used for two cases:
+  *  Firstly, in any actor command, it is inserted after the original main unit.
+  *  Secondly, a dedicated write game command is implicitly added to the actor.
+  */
+library GameLogEntryRuleCreator;
+
+/**
+ * Creates a rule, which inserts a LogEntry object into the GameLog.
+ * Note: the GameLog instance itself is available in every actor command, hence it can be simply used.
+ */
+helper createAddGameLogEntryRule(actorType: EClass, messageExpression: QueryModel::Expression) : CommandModel::Rule {
+    return object CommandModel::Rule {
+        name := "addGameLog";
+        
+        var gameLogInstance := createGameLogInstance();
+        instanceConditions += gameLogInstance;
+        
+        var selfInstance := createSelfInstance(actorType);
+        instanceConditions += selfInstance;
+        thisInstance := selfInstance;
+        
+        var newEntryInstance := createNewEntryInstance();
+        instanceConditions += newEntryInstance;
+        
+        var gameLogToLogEntryReference := createGameLogToLogEntryReference(gameLogInstance, newEntryInstance);
+        referenceConditions += gameLogToLogEntryReference;
+        modifications += createGameLogToLogEntryReferenceModification(gameLogToLogEntryReference);
+        
+        var messageAttribute := createMessageAttribute(newEntryInstance, messageExpression);
+        attributeConditions += messageAttribute;
+        
+        var entryToActorReference := createEntryToActorReference(newEntryInstance, selfInstance);
+        referenceConditions += entryToActorReference;
+        modifications += createEntryToActorReferenceModification(entryToActorReference);
+    };
+}
+
+helper createGameLogInstance() : InstanceCondition {
+	return object InstanceCondition {
+        variableName := "gameLog";
+        instanceType := findClassForName("GameLog");
+    };
+}
+
+helper createSelfInstance(actorType: EClass) : InstanceCondition {
+	return object InstanceCondition {
+        variableName := "self";
+        instanceType := actorType;
+    };
+}
+
+helper createNewEntryInstance() : InstanceCondition {
+	return object InstanceCondition {
+        variableName := "entry";
+        instanceType := findClassForName("LogEntry");
+        isCreate := true;
+    };
+}
+
+helper createGameLogToLogEntryReference(gameLogInstance: InstanceCondition,
+        newEntryInstance: InstanceCondition) : ReferenceCondition {
+	return object ManyReferenceCondition {
+        source := gameLogInstance;
+        target := newEntryInstance;
+        type := findClassForName("GameLog").eReferences->any(r|r.name = "logEntries");
+        referenceName := type.name;
+        isCreate := true;
+    };
+}
+
+helper createGameLogToLogEntryReferenceModification(gameLogToLogEntryReference: ReferenceCondition) : Modification {
+	return object Modification {
+        action := CommandModel::Action::CREATE;
+        reference := gameLogToLogEntryReference;
+    };
+}
+
+helper createMessageAttribute(newEntryInstance: InstanceCondition, 
+        messageExpression: QueryModel::Expression) : AttributeCondition {
+	return object CommandModel::AttributeCondition {
+        instance := newEntryInstance;
+        attributeName := "message";
+        attributeValue := messageExpression;
+        isCreate := true;
+    };
+}
+
+helper createEntryToActorReference(newEntryInstance: InstanceCondition, 
+        selfInstance: InstanceCondition) : ReferenceCondition {
+	return object SingleReferenceCondition {
+        source := newEntryInstance;
+        target := selfInstance;
+        type := findClassForName("LogEntry").eReferences->any(r|r.name = "actor");
+        referenceName := type.name;
+        isCreate := true;
+    };
+}
+
+helper createEntryToActorReferenceModification(entryToActorReference: ReferenceCondition) : Modification{
+	return object Modification {
+        action := CommandModel::Action::CREATE;
+        reference := entryToActorReference;
+    };
+}
+
+
+/**
+ * Converts a given command name to the related log message.
+ * 
+ * It splits the camel cases and then converts each word to upperCamelCase.
+ * Example: "pickGrain" will be converted to "Pick Grain".
+ */
+query commandNameToLogMessage(commandName: String) : String {
+    return commandName.firstToUpper().replaceAll("([a-z])([A-Z])", "$1 $2");
+}

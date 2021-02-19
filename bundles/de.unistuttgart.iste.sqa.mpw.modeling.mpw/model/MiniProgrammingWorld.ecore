@@ -70,11 +70,7 @@
     </eOperations>
     <eOperations name="abort"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GameLog">
-    <eOperations name="write">
-      <eParameters name="actor" eType="#//Actor"/>
-      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
+  <eClassifiers xsi:type="ecore:EClass" name="GameLog" eSuperTypes="BaseTypes.ecore#//Entity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="logEntries" upperBound="-1"
         eType="#//LogEntry" containment="true"/>
   </eClassifiers>
@@ -92,7 +88,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LogEntry">
+  <eClassifiers xsi:type="ecore:EClass" name="LogEntry" eSuperTypes="BaseTypes.ecore#//Entity">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="actor" eType="#//Actor"/>

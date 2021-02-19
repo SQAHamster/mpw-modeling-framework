@@ -8,8 +8,6 @@ set(IMPL_GEN_SRCS ${IMPL_GEN_SRCS}
     "core/src/impl/RemoveEntityCommandImpl.cpp"
     "core/src/impl/CommandStackImpl.h"
     "core/src/impl/CommandStackImpl.cpp"
-    "core/src/impl/GameLogImpl.h"
-    "core/src/impl/GameLogImpl.cpp"
     "core/src/impl/GamePerformanceImpl.h"
     "core/src/impl/GamePerformanceImpl.cpp"
     "core/src/impl/GameViewModelImpl.h"

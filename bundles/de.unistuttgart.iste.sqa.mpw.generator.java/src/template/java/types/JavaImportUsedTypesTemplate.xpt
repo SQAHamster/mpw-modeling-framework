@@ -14,7 +14,7 @@
     «IF eStructuralFeatures.exists(e|e.eType.isSemaphore())-»
     import java.util.concurrent.Semaphore;
     «ENDIF-»
-    «FOREACH eAllOperations.select(o|o.isCommand()).collect(o|o.getCommandForOperation().targetClass.name).toSet() AS className-»
+    «FOREACH eAllOperations.select(o|o.isCommand()).collect(o|o.getCommandForOperation().getCommandTargetClassBaseName()).toSet() AS className-»
     import «getModulePackage()».commands.«className.toLowerCase()».*;
     «ENDFOREACH-»
 	«IF !interface && name.startsWith("Concrete") && eAllOperations.exists(o|o.isQuery())-»

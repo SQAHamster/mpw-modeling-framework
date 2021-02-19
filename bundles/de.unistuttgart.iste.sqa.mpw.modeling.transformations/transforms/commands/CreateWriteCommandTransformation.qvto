@@ -1,0 +1,43 @@
+import types.EmfHelpers;
+import util.BasicHelpers;
+import util.ExpressionHelperLibrary;
+import commands.GameLogEntryRuleCreator;
+
+modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+
+modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
+modeltype CommandModel uses "http://www.mpw.uni-stuttgart.de/behavior/command";
+modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
+
+/**
+  *  Transformation which adds a write command to an Actor.
+  */
+transformation WriteCommandTransformation(in inModel: Ecore, out outModel: CommandModel);
+
+main() {
+    inModel.objectsOfType(EClass)[isInstanceOf("Actor")]->map toWriteCommand();
+}
+
+/**
+ * Implicitly adds a write command for the actor.
+ */
+mapping EClass::toWriteCommand() : CommandModel::Transformation {
+    name := "write";
+    targetClass := self;
+    roleName := "game";
+    
+    var messageParameter := object BaseTypes::Parameter {
+        name := "message";
+    	type := EString.oclAsType(EClassifier);
+    };
+    var messageParameterUsageExpression := ExpressionHelperLibrary::createPathExpression(messageParameter.name, messageParameter.type);
+    var addGameLogRule := GameLogEntryRuleCreator::createAddGameLogEntryRule(self, messageParameterUsageExpression);
+    mainUnit := addGameLogRule;
+    mainUnit.parameters += messageParameter;
+    mainUnit.mainUnit := true;
+    units := mainUnit;
+    
+    documentation := "Writes a new string for this hamster to the game log. The message
+     * will be displayed in a way that it can be associated to this hamster
+     * object.";
+}

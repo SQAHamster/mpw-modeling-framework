@@ -1,5 +1,6 @@
 package components.transformators;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -22,6 +23,7 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 	private String transformationUri;
 	private SourceTargetRelationship sourceTargetRelationship = SourceTargetRelationship.EXISTING_TARGET;
 	private String targetModelSlot;
+	private boolean mergeToExistingSlotContent = false;
 	
 	private ModelToModelTransformationExecutor executor;
 	
@@ -51,6 +53,15 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 	public void setTargetModelSlot(final String targetModelSlot) {
 		this.targetModelSlot = targetModelSlot;
 	}
+	
+	public boolean isMergeToExistingSlotContent() {
+		return mergeToExistingSlotContent;
+	}
+
+	public void setMergeToExistingSlotContent(boolean mergeToExistingSlotContent) {
+		this.mergeToExistingSlotContent = mergeToExistingSlotContent;
+	}
+
 
 	@Override
 	protected void invokeInternal(final WorkflowContext workflowContext, final ProgressMonitor monitor, final Issues issues) {
@@ -66,7 +77,21 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 		
 		log.info("Transformed " + executor.getSuccessfulTransformationsCount() + " models successfully with " + executor.getTransformationName());
 		
-		workflowContext.set(getTargetModelSlot(), executor.getResultInstances());
+		addResultInstancesToSlot(workflowContext);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void addResultInstancesToSlot(final WorkflowContext workflowContext) {
+		final Object previousSlotContent = workflowContext.get(getTargetModelSlot());
+		final ArrayList<EObject> resultInstances = executor.getResultInstances();
+		if (previousSlotContent != null && mergeToExistingSlotContent) {
+			new LambdaVisitor<Object>()
+			    .on(List.class).then(modelInstances -> { modelInstances.addAll(resultInstances); })
+			    .orElse(() -> { workflowContext.set(getTargetModelSlot(), resultInstances); })
+			.accept(previousSlotContent);
+		} else {
+			workflowContext.set(getTargetModelSlot(), resultInstances);
+		}
 	}
 
 	private void transformList(final List<?> modelInstances) {

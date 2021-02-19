@@ -10,13 +10,12 @@
         «EXPAND PreconditionsDefinition FOR this»
         «EXPAND OldValueVariablesDefinition FOR this»
         
-	    «IF getParentTransformation().isActorCommand()-»
-	        gameLog.write(self, "«getParentTransformation().toLogMessage()»");
-	    «ENDIF-»
-	    
 	    if (!internalMainRule()) {
 	        throw new RuntimeException("Transformation was not successfully executed: «getParentTransformation().name»");
 	    }
+        «IF getParentTransformation().needsGameLogInsertion()-»
+            addGameLog();
+        «ENDIF-»
         
         «EXPAND PostconditionsDefinition FOR this»
     }

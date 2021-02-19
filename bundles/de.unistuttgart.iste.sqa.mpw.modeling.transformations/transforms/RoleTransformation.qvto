@@ -162,7 +162,7 @@ helper Ecore::EClass::createCommandRole(baseName: String, roleName: String) : Ec
       eAnnotations += toAnnotation("role", roleName);
       eAnnotations += toAnnotation("baseName", baseName);
     };
-    roleClass.eOperations += Commands->select(c|c.roleName = roleName and c.targetClass.name = baseName)->map transformCommandToOperation();
+    roleClass.eOperations += Commands->select(c|c.roleName = roleName and (c.targetClass.name = baseName or c.targetClass = self))->map transformCommandToOperation();
     self.ePackage.eClassifiers += roleClass;
   
     return roleClass;
@@ -222,6 +222,22 @@ mapping inout CommandModel::InstanceCondition::replaceRoleReferencesInInstanceCo
 }
 
 query ecore::EClassifier::toRoledType(roleName: String) : ecore::EClassifier {
+    if (self.oclAsType(EClass).eSuperTypes->exists(t|t.name = "Stage" or t.name = "Actor")) {
+        var foundClassifier := findClassifierForName(roleName.firstToUpper() + self.getAnnotationValue("baseName"));
+        if (foundClassifier.oclIsInvalid()) {
+            // WORKAROUND: due to a bug which loads multiple Ecore models multiple times, the models might not use the correct types
+            // hence this type has been pointing to a wrong stage/actor type, which is not transformed by RoleTransformation earlier.
+            // Fix this by special handling.
+            foundClassifier := self.toRoledTypeForUntransformedEntities(roleName).oclAsType(EClass);
+        };
+        assert(foundClassifier != null);
+        return foundClassifier;
+    };
+    return self;
+}
+
+// since this takes a non "roled" type, the role prefix can be simply added
+query ecore::EClassifier::toRoledTypeForUntransformedEntities(roleName: String) : ecore::EClassifier {
     if (self.oclAsType(EClass).eSuperTypes->exists(t|t.name = "Stage" or t.name = "Actor")) {
         return findClassifierForName(roleName.firstToUpper() + self.name);
     };

@@ -1,4 +1,5 @@
 import commands.RuleReferenceSorter;
+import commands.GameLogEntryRuleCreator;
 import queries.QueryParserLibrary;
 import types.AnnotationHelpers;
 import types.EmfHelpers;
@@ -54,6 +55,14 @@ mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
                             ->collect(s|s._query)
                             ->asOrderedSet();
   isInit := self.annotations->exists(a|a.key = "isInit" and a.value = "true");
+  
+  if (targetClass.isActor()) {
+      result->map addGameLogEntry();
+  };
+}
+
+query EClass::isActor() : Boolean {
+	return self.eSuperTypes->exists(t|t.name = "Actor");
 }
 
 helper Henshin::Module::findTargetClass() : ecore::EClass {
@@ -434,4 +443,16 @@ query Henshin::Node::resolveInstance() : CommandModel::InstanceCondition {
     };
 
     return res;
+}
+
+/**
+ * Implicitly adds a gamelog insertion for the actor.
+ */
+mapping inout CommandModel::Transformation::addGameLogEntry() {
+    var messageExpression := object QueryModel::ConstantExpression {
+        type := EString.oclAsType(EClassifier);
+        _literal := "\"" + GameLogEntryRuleCreator::commandNameToLogMessage(self.name) + "\"";
+    };
+    var addGameLogRule := GameLogEntryRuleCreator::createAddGameLogEntryRule(self.targetClass, messageExpression);
+    self.units += addGameLogRule;
 }

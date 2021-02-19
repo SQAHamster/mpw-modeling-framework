@@ -22,7 +22,9 @@ getConcreteNameForRoleElseName(EClassifier this) :
     if (isMarkedWithAnnotation("baseName")) then "Concrete" + getAnnotationValue("baseName")
     else name;
 
-getConcreteName(EClassifier this) : "Concrete" + name;
+getConcreteName(EClassifier this) : 
+    if (!name.startsWith("Concrete")) then "Concrete" + name
+    else name;
 
 getConcreteTypeName(InstanceCondition this) :
   let transformation = (Transformation)eRootContainer : 
@@ -42,9 +44,6 @@ isPolymorphic(ManyReferenceCondition this) :
 getParentTransformation(Unit this):
     (Transformation)eContainer;
   
-toLogMessage(Transformation this):
-    name.toFirstUpper().replaceAll("([a-z])([A-Z])", "$1 $2");
-  
 isActorCommand(Transformation this):
     targetClass.eAllSuperTypes.exists(t|t.name == "Actor");
     
@@ -56,3 +55,12 @@ commandSetter(EClassifier type) :
 commandAdder() : "executeAddReference";
     
 commandRemover() : "executeRemoveReference";
+
+needsGameLogInsertion(Transformation this) :
+    isActorCommand() && name != "write";
+
+// since the targetClass points to the ConcreteXxx class (after role transformation), the base name 
+// has to be used for some use cases.
+getCommandTargetClassBaseName(Transformation this) :
+    if (targetClass.isMarkedWithAnnotation("baseName")) then targetClass.getAnnotationValue("baseName")
+    else targetClass.name;
