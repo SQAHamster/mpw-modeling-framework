@@ -20,7 +20,7 @@ var transformationsProject = "${modelingModuleBaseName}.transformations"
 
 var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/RoleTransformation.qvto"
 var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/CommandTransformation.qvto"
-var createMoveCommandTransformationUri = "${platformUriPrefix}/${transformationsProject}/commands/CreateWriteCommandTransformation.qvto"
+var createMoveCommandTransformationUri = "${platformUriPrefix}/${transformationsProject}/CreateWriteCommandTransformation.qvto"
 var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/QueryTransformation.qvto"
 var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/GenerationClassesTransformation.qvto"
 
