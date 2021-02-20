@@ -70,7 +70,9 @@ isBuiltInType(EClassifier this) :
     isPrimitive() || this.name == "Object" || isSemaphore() || this.name == "Throwable";
 
 isPrimitive(EClassifier this) :
-    (this.name == "EInt" || this.name == "EBoolean" || this.name == "EDouble" || this.name == "EString");
+    (this.name == "EInt" || this.name == "EBoolean" || this.name == "EDouble" || this.isString());
+
+isString(EClassifier this) : this.name == "EString";
 
 isAny(ETypedElement this) : this.eType.name.isAnyTypeName();
 isAnyTypeName(String this) : (this == "EObject" || this == "Object");

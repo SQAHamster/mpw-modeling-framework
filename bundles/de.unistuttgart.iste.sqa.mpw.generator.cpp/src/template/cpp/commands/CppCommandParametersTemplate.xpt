@@ -24,7 +24,7 @@
     std::shared_ptr<«targetClass.ePackage.name»::«targetClass.getConcreteName()»> self;
     commands::CommandStack& commandStack;
     «IF isActorCommand()-»
-    mpw::GameLog& gameLog;
+    std::shared_ptr<mpw::GameLog> gameLog;
     «ENDIF-»
     «FOREACH mainUnit.parameters AS p»
     «p.toCppType()» «p.name»;
@@ -33,7 +33,7 @@
 
 «DEFINE ConstructorParameterDefinitions FOR Transformation-»
     std::shared_ptr<«targetClass.ePackage.name»::«targetClass.getConcreteName()»> self,
-    commands::CommandStack& commandStack «IF isActorCommand()-», mpw::GameLog& gameLog«ENDIF-»
+    commands::CommandStack& commandStack «IF isActorCommand()-», std::shared_ptr<mpw::GameLog> gameLog«ENDIF-»
     «FOREACH mainUnit.parameters AS p-»
     ,«p.toCppType()» «p.name-»
     «ENDFOREACH-»

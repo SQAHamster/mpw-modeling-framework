@@ -50,6 +50,7 @@ isActorCommand(Transformation this):
 commandSetter(EClassifier type) : 
     if (type.isValueType()) then "executeSetValueProperty"
     else if (type.isEnum()) then "executeSetEnumProperty"
+    else if (type.isString()) then "executeSetStringProperty"
     else "executeSetProperty";
     
 commandAdder() : "executeAddReference";

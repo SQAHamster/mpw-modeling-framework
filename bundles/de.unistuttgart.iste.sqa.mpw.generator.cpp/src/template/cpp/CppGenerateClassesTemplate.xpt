@@ -104,7 +104,7 @@
     commands::«command.name.toFirstUpper()»CommandParameters «parametersVariableName»(
     /*self*/ nullptr, *game.lock()->get«command.roleName.toFirstUpper()»CommandStack()
     «IF command.isActorCommand()-»
-    , *game.lock()->getGameLog()
+    , game.lock()->getGameLog()
     «ENDIF-»
     «FOREACH parameterMappings AS mapping-»
          , «mapping.value-»
