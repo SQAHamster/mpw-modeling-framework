@@ -37,6 +37,10 @@ namespace commands {
         internalExecuteSetProperty(entity, featureKey, static_cast<int>(oldValue), static_cast<int>(newValue));
     }
 
+    void executeSetStringProperty(std::shared_ptr<basetypes::Entity> entity, unsigned featureKey, const std::string& oldValue, const std::string& newValue) {
+        internalExecuteSetProperty(entity, featureKey, oldValue, newValue);
+    }
+
     void executeAddReference(std::shared_ptr<basetypes::Entity> entity, unsigned featureKey, std::shared_ptr<basetypes::Entity> entityToAdd);
     void executeRemoveReference(std::shared_ptr<basetypes::Entity> entity, unsigned featureKey, std::shared_ptr<basetypes::Entity> entityToRemove);
 
