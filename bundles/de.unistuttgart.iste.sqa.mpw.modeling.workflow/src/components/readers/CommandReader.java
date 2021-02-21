@@ -7,8 +7,10 @@ import java.util.List;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.henshin.model.HenshinPackage;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
@@ -65,6 +67,7 @@ public class CommandReader extends MultiResourceReader {
 		createOclValidator(ocl);
 		
 		for (final var commandModel : commands) {
+			log.info("validating " + commandModel.getName());
 			if (isValid(commandModel)) {
 				validCommands.add(commandModel);
 			} else {
@@ -87,8 +90,14 @@ public class CommandReader extends MultiResourceReader {
 	 */
 	private boolean isValid(final org.eclipse.emf.henshin.model.Module commandModel) {
 		currentDiagnostics = Diagnostician.INSTANCE.createDefaultDiagnostic(commandModel);
-		currentValidator.validate(commandModel, currentDiagnostics, new HashMap<Object, Object>());
-		return currentDiagnostics.getSeverity() == Diagnostic.OK;
+		var contentIterator = EcoreUtil.<EObject>getAllContents(commandModel, false);
+		while (contentIterator.hasNext()) {
+			currentValidator.validate(contentIterator.next(), currentDiagnostics, new HashMap<Object, Object>());
+			if (currentDiagnostics.getSeverity() != Diagnostic.OK) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	private void addDiagnosticsError(final Issues issues) {

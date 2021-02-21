@@ -16,7 +16,20 @@ inv mainUnitsAreDistinguishable: noSingleMainUnit implies allRules->collect(self
 def: anyNonRuleUnit : Boolean = units->exists(not oclIsTypeOf(Rule))
 inv moduleNamedUnitExists: anyNonRuleUnit implies units->exists(name = oclContainer().oclAsType(Module).name)
 
+-- every module has to have a name
+inv moduleHasName: not (name.oclIsUndefined() or name = null)
+
 context Rule
 def: selfNode : Node = lhs.nodes->any(name = 'self')
+
+context Edge
+
+def: isManyReference : Boolean = type.many -- type.upperBound = -1
+def: isLhs : Boolean = action.toString() <> 'create'
+def: isExploringEdge : Boolean = isLhs and action.toString() <> 'delete*'
+
+-- intersection of multi-references is not supported (might be extended in future)
+inv multipleManyReferencesToObjectNotSupported:
+    isManyReference and isExploringEdge implies target.incoming->select(r|r.isManyReference and isExploringEdge)->size() = 1
 
 endpackage
