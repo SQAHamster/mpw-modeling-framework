@@ -1,4 +1,5 @@
 import types.EmfHelpers;
+import util.BasicHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 	
@@ -21,10 +22,13 @@ query QueryModel::Statement::hasNext() : Boolean {
 query QueryModel::StatementsExpression::getHelperMethodName() : String {
     var name := "helper";
     
-    var parentElementName := self.parentElement().name;
-    if (not parentElementName.oclIsInvalid() and parentElementName <> null) {
-    	name := name + "_" + self.parentElement().name.firstToUpper();
+    var parentElementName := self.parentElement().name.firstToUpper();
+    if (parentElementName.oclIsInvalid() or parentElementName = null) {
+    	parentElementName := self.parentElement().metaClassName() + self.parentElement().determineIndexInParentContainer().toString();
     };
+    
+    assert((not parentElementName.oclIsInvalid()) and parentElementName <> null);
+    name := name + "_" + parentElementName;
     
     self.statements[IntermediaryResultStatement]->collect(s|s.internalStatementsExpression.statements)
                                                 ->flatten()
@@ -43,7 +47,8 @@ query QueryModel::StatementsExpression::getHelperMethodName() : String {
                 name := name + "_" + s.oclAsType(QueryStatement)._query.name;
             };
             case (s.oclIsTypeOf(CollectionMethodStatement)) {
-                name := name + "_" + s.oclAsType(CollectionMethodStatement).methodType.toString().toLower();
+                var collectionMethodStatement := s.oclAsType(CollectionMethodStatement);
+                name := name + "_" + collectionMethodStatement.methodType.toString().toLower() + collectionMethodStatement->parameters->collect(p|p.collectionMethodParameterToString())->joinToString("_");
             };
             case (s.oclIsTypeOf(EnumLiteralStatement)) {
                 name := name + "_" + s.oclAsType(EnumLiteralStatement).enumLiteral.name;
@@ -56,6 +61,21 @@ query QueryModel::StatementsExpression::getHelperMethodName() : String {
     
     assert(name != null);
     return name;
+}
+
+query EObject::collectionMethodParameterToString() : String {
+	if (self.oclIsKindOf(ENamedElement)) {
+		return self.oclAsType(ENamedElement).name;
+	};
+    if (self.oclIsKindOf(QueryModel::ConstantExpression)) {
+        return self.oclAsType(QueryModel::ConstantExpression)._literal;
+    };
+	return "";
+}
+
+query Input::Element::determineIndexInParentContainer() : Integer {
+	var subobjectsOfContainer := self.container().subobjects();
+	return subobjectsOfContainer->asOrderedSet()->indexOf(self);
 }
 
 query QueryModel::StatementsExpression::parentElement() : Input::Element {
