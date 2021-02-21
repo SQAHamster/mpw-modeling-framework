@@ -1,5 +1,6 @@
 import commands.RuleReferenceSorter;
 import commands.GameLogEntryRuleCreator;
+import commands.ContractDocumentationGenerator;
 import queries.QueryParserLibrary;
 import types.AnnotationHelpers;
 import types.EmfHelpers;
@@ -59,6 +60,17 @@ mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
   if (targetClass.isActor()) {
       result->map addGameLogEntry();
   };
+  
+  result->map extendContractDocumentation();
+}
+
+mapping inout CommandModel::Transformation::extendContractDocumentation() {
+    var contractsDocumentation := ContractDocumentationGenerator::toDocumentationLines(self);
+    if (self.documentation = null and contractsDocumentation.length() > 0) {
+        documentation := contractsDocumentation;
+    } else if (self.documentation <> null) {
+        documentation := self.documentation + ContractDocumentationGenerator::toDocumentationLines(self);
+    };
 }
 
 query EClass::isActor() : Boolean {
