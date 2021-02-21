@@ -156,16 +156,27 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 		for (final var object : modeledEcoreFiles) {
 			final var ePackage = (EPackage)object;
 			
-			final var originalUri = ePackage.eResource().getURI().toString();
-			final String fileName = new File(ePackage.eResource().getURI().toPlatformString(true)).getName();
-			
-			final String originalUriSuffix = "mpw/model//" + fileName;
-			final String modifiedUriSuffix = projectNameSuffix + "/debugout/" + directoryName + "//" + ePackage.getName() + ".ecore";
-			final var modifiedUri = originalUri.replaceAll(originalUriSuffix, modifiedUriSuffix);
-			
-			text = text.replaceAll(originalUri, modifiedUri);
+			final Resource eResource = ePackage.eResource();
+			final boolean isLoadedFromWorkspaceFile = eResource.getURI().toPlatformString(true) != null;
+			if (isLoadedFromWorkspaceFile) {
+				text = replaceReferences(text, directoryName, projectNameSuffix, ePackage);
+			}
 		}
 			
+		return text;
+	}
+
+	private String replaceReferences(String text, final String directoryName, final String projectNameSuffix,
+			final EPackage ePackage) {
+		final Resource eResource = ePackage.eResource();
+		final var originalUri = eResource.getURI().toString();
+		final String fileName = new File(eResource.getURI().toPlatformString(true)).getName();
+		
+		final String originalUriSuffix = "mpw/model//" + fileName;
+		final String modifiedUriSuffix = projectNameSuffix + "/debugout/" + directoryName + "//" + ePackage.getName() + ".ecore";
+		final var modifiedUri = originalUri.replaceAll(originalUriSuffix, modifiedUriSuffix);
+		
+		text = text.replaceAll(originalUri, modifiedUri);
 		return text;
 	}
 

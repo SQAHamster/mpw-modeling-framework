@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
@@ -50,6 +51,11 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	private String projectSubPath;
 	private Set<String> excludeModels = new HashSet<>();
 	private String rootPath = "..";
+	
+	/**
+	 * Defines, if after loading the models all contents are checked for valid references to registered packages.
+	 */
+	protected boolean validatePackageRegistrationOfAllContents = true;
 	
 	protected MultiResourceReader(final String fileExtension, final String defaultSubPath) {
 		if (!fileExtension.matches(REGEX_PATTERN_FILE_EXTENSION)) {
@@ -200,21 +206,32 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	 * Ensure that no model is loaded multiple times! This leads to inconsistencies.
 	 */
 	private void validateNoUsedPackageIsLoadedMultipleTimes(final String modelName, final Object object) {
-		new LambdaVisitor<Object>()
-		.on(EObject.class).then(eObject -> {
-			throwExceptionIfResourceInconsistentRegisteredPackageUsages(modelName, eObject);
-		}).accept(object);
+		if (validatePackageRegistrationOfAllContents) {
+			new LambdaVisitor<Object>()
+			.on(EObject.class).then(eObject -> {
+				throwExceptionIfResourceInconsistentRegisteredPackageUsages(modelName, eObject);
+			}).accept(object);
+		}
 	}
 	
 	private void throwExceptionIfResourceInconsistentRegisteredPackageUsages(final String modelName, final EObject resourceRoot) {
 		var eObjectIterator = EcoreUtil.<EObject>getAllContents(resourceRoot, false);
 		while (eObjectIterator.hasNext()) {
 			final EObject eObject = eObjectIterator.next();
-			final EPackage checkPackage = eObject.eClass().getEPackage();
-			var registeredPackage = EPackage.Registry.INSTANCE.getEPackage(checkPackage.getNsURI());
-			if (registeredPackage != checkPackage) {
-				throw new IllegalStateException("package " + checkPackage.getName() + " is loaded multiple times!");
-			}
+			new LambdaVisitor<EObject>()
+			.on(EClassifier.class).then(eClassifier -> {
+				throwExceptionIfPackageIsNotTheRegisteredOne(eClassifier.getEPackage());
+			})
+			.orElse(() -> {
+				throwExceptionIfPackageIsNotTheRegisteredOne(eObject.eClass().getEPackage());
+			}).accept(eObject);
+		}
+	}
+	
+	private void throwExceptionIfPackageIsNotTheRegisteredOne(final EPackage checkPackage) {
+		var registeredPackage = EPackage.Registry.INSTANCE.getEPackage(checkPackage.getNsURI());
+		if (registeredPackage != checkPackage) {
+			throw new IllegalStateException("package " + checkPackage.getName() + " is loaded multiple times!");
 		}
 	}
 
