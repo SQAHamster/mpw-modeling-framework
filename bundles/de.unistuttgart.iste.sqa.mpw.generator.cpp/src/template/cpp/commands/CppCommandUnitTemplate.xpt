@@ -151,7 +151,7 @@
 
 «REM»Use a single reference only for checking an already reached instance«ENDREM»
 «DEFINE CheckSingleReferenceDefinition FOR SingleReferenceCondition»
-    if («this.target.variableName» != «this.source.variableName»«accessor()»«getter(this.referenceName)»()) {
+    if («this.target.variableName» != («EXPAND SafeTypeCastDefinition(this.source.variableName + accessor() + getter(this.referenceName) + "()", this.target.instanceType) FOR this.type.eType»)) {
         return false;
     }
 «ENDDEFINE»
