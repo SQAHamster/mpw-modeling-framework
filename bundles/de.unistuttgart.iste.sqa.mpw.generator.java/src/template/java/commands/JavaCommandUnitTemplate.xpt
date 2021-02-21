@@ -111,8 +111,8 @@
 
 «DEFINE SingleReferenceDefinition FOR SingleReferenceCondition»
     «IF !this.isCreate && !this.isForbid»
-        // new variable from reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
         «IF useForExploring-»
+            // new variable from reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
             «EXPAND ExploreSingleReferenceDefinition FOR this-»
         «ELSE-»
             «EXPAND CheckSingleReferenceDefinition FOR this-»
@@ -122,11 +122,20 @@
 
 «REM»Use a single reference to reach a new instance and store it as a variable«ENDREM»
 «DEFINE ExploreSingleReferenceDefinition FOR SingleReferenceCondition»
-    «this.target.instanceType.name» «this.target.variableName» = «this.source.variableName».«getter(this.referenceName)»();
+    «this.target.instanceType.name» «this.target.variableName» = «EXPAND SafeTypeCastDefinition(this.source.variableName + "." + getter(this.referenceName) + "()", this.target.instanceType) FOR this.type.eType»;
     if («this.target.variableName» == null) {
         return false;
     }
 «ENDDEFINE»
+
+«REM»If the this type (source) is different to the targetType, a safe instanceof + cast is performed«ENDREM»
+«DEFINE SafeTypeCastDefinition(String variable, ecore::EClassifier targetType) FOR ecore::EClassifier-»
+    «IF targetType == this-»
+        «variable-»
+    «ELSE-»
+        («variable» instanceof «targetType.name») ? («targetType.name»)«variable» : null
+    «ENDIF-»
+«ENDDEFINE-»
 
 «REM»Use a single reference only for checking an already reached instance«ENDREM»
 «DEFINE CheckSingleReferenceDefinition FOR SingleReferenceCondition»
@@ -137,9 +146,9 @@
 
 «DEFINE ManyReferenceDefinition FOR ManyReferenceCondition»
     «IF !this.isCreate»
-        // find new variable from many-reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
         «LET (Rule)this.eContainer AS rule»
         «IF useForExploring-»
+            // find new variable from many-reference: «this.source.variableName»:«this.source.instanceType.name» -> «this.referenceName» -> «this.target.variableName»:«this.target.instanceType.name»
             «EXPAND ExploreManyReferenceDefinition(rule) FOR this-»
         «ELSE-»
             «EXPAND CheckManyReferenceDefinition(rule) FOR this-»
@@ -263,7 +272,7 @@
     «IF this.isForbid»
     if («source.variableName».«getter(this.referenceName)»() != null) {        
     «ELSE»
-    «target.instanceType.name» «target.variableName» = «source.variableName».«getter(this.referenceName)»();
+    «target.instanceType.name» «target.variableName» = «EXPAND SafeTypeCastDefinition(source.variableName + "." + getter(this.referenceName) + "()", target.instanceType) FOR this.type.eType»;
     if («target.variableName» == null) {
     «ENDIF»
         continue;
