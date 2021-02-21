@@ -1,9 +1,29 @@
-# poly-hamster-simulator
-Polyglot hamstersimulation, which is based on a Model-Driven-Engineering approach to allow the support of multiple target languages like Java and C++.
+# MPW Modeling Framework
+
+A framework to allow modeling of Mini Programming Worlds (MPWs).
+
+![modeling approach](documentation/graphics/mdsd-approach.svg)
+
+The approach defines four sections:
+
+* MPW Modeling Framework: represented by this repository, here the framework based on EMF is implemented
+* Concrete MPW Modeling: based on the MPW Modeling, concrete MPWs can be modeled (see https://github.com/Fumapps/mpw-modeling-hamster)
+* MPW Simulator Framework: the generated meta-models are provided as a basic framework for the concrete simulators
+    * The framework is placed under `/simulators` for the languages Java and C++
+* Concrete MPW Simulator: this section relates to the final simulator, which can be executed (see under `/simulators` of https://github.com/Fumapps/mpw-modeling-hamster)
+
+## Motivation
+
+The motivation of this project is to develop a polyglot hamster-simulation, which is based on a Model-Driven-Engineering approach to allow the support of multiple target languages like Java and C++.
+Under https://git.rss.iste.uni-stuttgart.de/open-to-public/pse the PSE-Simulator can be found, which is a Java based simulator used for teaching in the course _Programmierung und Softwareentwicklung_ (PSE) at the University of Stuttgart.
+While for Java this simulator is sufficient, there is also the requirement for teaching C++.
+To provide a well-defined environment to teach C++ with the hamster-simulation, this project has the goal to provide a native C++ version, which is not based on wrappers.
+
+Note: wrapping the JVM and provide a C-API works for many projects, but for teaching it brings complexity for setup and understanding the internals of the simulators.
 
 ## Java Version
 
-The project is developed with JDK 14. Ensure that Eclipse has mapped a JavaSE-14.
+The project is developed with JDK 15. Ensure that Eclipse has mapped a JavaSE-15.
 
 Note: Eclipse can be started with a custom Java Runtime by specifying the `-vm` property in the `eclipse.ini` file
 
@@ -32,6 +52,8 @@ Example:
     * Update site: http://download.eclipse.org/modeling/emft/henshin/updates/release
 * C/C++ Development Tools - 10.1.0
     * Update site: https://download.eclipse.org/tools/cdt/releases/10.1/
+* Query-DSL (QueryDSL Feature - 1.0.0-SNAPSHOT)
+    * Update site: https://raw.githubusercontent.com/Fumapps/mpw-modeling-querydsl/querydsl-updatesite/repository
 
 ### Optional: Setup Maven
 
@@ -44,9 +66,6 @@ Example:
 
 Note: after checkout there are many errors due to ungenerated files. They shall disappear after the following steps.
 Simply click "Proceed" when a dialog occurs due to errors.
-
-* run QueryDsl workflow generation
-    * `de.unistuttgart.iste.sqa.mpw.modeling.querydsl/src/de/unistuttgart/iste/sqa/mpw/modeling/querydsl/GenerateQueryDsl.mwe2`
 
 * run genmodels for "generate model code"
     * `de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/mpw.genmodel`
@@ -64,13 +83,3 @@ Simply click "Proceed" when a dialog occurs due to errors.
 
 Note: Xpand / Xtend may still show some phantom errors in `de.unistuttgart.iste.sqa.mpw.generator.java/src/template` after successful generation. This errors can simply be ignored or removed by editing (e.g. inserting a dummy space character) the files marked with error and then save them.
       It seems that it is caused by "`Collection.flatten()`" usage in Xpand / Xtend. Currently I don't know why this errors occur and how to prevent them.
-
-## Running QueryDSL editor
-
-* right click on project `de.unistuttgart.iste.sqa.mpw.modeling.querydsl`
-* run as Eclipse Application
-    * note: ensure that in the run configuration the Java JDK 14 is used
-* import project in the runtime eclipse workspace
-    * browse to the development workspace
-    * select the `de.unistuttgart.iste.sqa.mpw.modeling.queries` project
-* double click on any `*.query` file, it shall be opened with syntax highlighting
