@@ -211,14 +211,17 @@ mapping inout CommandModel::Transformation::replaceRoleReferencesInCommand() {
 
 mapping inout BaseTypes::Parameter::replaceRoleReferencesInParameter(roleName: String) {
     self.type := self.type.toRoledType(roleName);
+    assert(self.type != null);
 }
 
 mapping inout CommandModel::VariableDeclaration::replaceRoleReferencesInVariableDeclaration(roleName: String) {
     self.variableType := self.variableType.toRoledType(roleName);
+    assert(self.variableType != null);
 }
 
 mapping inout CommandModel::InstanceCondition::replaceRoleReferencesInInstanceCondition(roleName: String) {
     self.instanceType := self.instanceType.toRoledType(roleName).oclAsType(EClass);
+    assert(self.instanceType != null);
 }
 
 query ecore::EClassifier::toRoledType(roleName: String) : ecore::EClassifier {

@@ -10,12 +10,18 @@ public final class ListLambdaVisitor<T> implements Consumer<List<T>> {
     private final LambdaVisitor<T> singleObjectLambdaVisitor = new LambdaVisitor<>();
     private Runnable emptyRunnable = () -> {};
     
-    public <S extends T> LambdaVisitor.Acceptor<T, S> on(final Class<S> matchingClass) {
-        return singleObjectLambdaVisitor.on(matchingClass);
+    public <S extends T> Acceptor<T, S> on(final Class<S> matchingClass) {
+        var nestedAcceptor = singleObjectLambdaVisitor.on(matchingClass);
+        return new Acceptor<>(this, nestedAcceptor);
     }
 
     public ListLambdaVisitor<T> orElse(Runnable runnable) {
     	singleObjectLambdaVisitor.orElse(runnable);
+    	return this;
+    }
+    
+    public ListLambdaVisitor<T> orElse(Consumer<T> consumer) {
+    	singleObjectLambdaVisitor.orElse(consumer);
     	return this;
     }
 
@@ -35,4 +41,20 @@ public final class ListLambdaVisitor<T> implements Consumer<List<T>> {
     	}
 
     }
+    
+    public static final class Acceptor<T, S extends T> {
+        private final ListLambdaVisitor<T> visitor;
+        private final LambdaVisitor.Acceptor<T, S> nestedAcceptor;
+
+        Acceptor(final ListLambdaVisitor<T> visitor, LambdaVisitor.Acceptor<T, S> nestedAcceptor) {
+            this.visitor = visitor;
+            this.nestedAcceptor = nestedAcceptor;
+        }
+
+        public ListLambdaVisitor<T> then(final Consumer<S> f) {
+        	nestedAcceptor.then(f);
+            return visitor;
+        }
+    }
+    
 }

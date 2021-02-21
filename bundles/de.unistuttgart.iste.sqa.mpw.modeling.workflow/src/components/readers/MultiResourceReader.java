@@ -15,10 +15,12 @@ import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot;
@@ -148,6 +150,11 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		}
 
 		context.set(getModelSlot(), models);
+		postProcessModels(models);
+	}
+
+	protected void postProcessModels(List<Object> models) {
+		// intended to be overridden on demand
 	}
 
 	private Object loadModel(final String baseUri, final String modelName) {
@@ -155,6 +162,8 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		final boolean firstElementOnly = true;
 		final var object = Reader.load(resourceSet, uri, firstElementOnly);
 		checkNoErrorsFromLoading(modelName, object);
+		validateNoUnresolvedProxies(modelName, object);
+		validateNoUsedPackageIsLoadedMultipleTimes(modelName, object);
 		return object;
 	}
 
@@ -164,13 +173,51 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 				throwExceptionIfResourceHasErrors(modelName, eObject.eResource());
 			}).accept(object);
 	}
-
+	
 	private void throwExceptionIfResourceHasErrors(final String modelName, final Resource resource) {
 		if (resource != null && resource.getErrors().size() > 0) {
 			throw new RuntimeException("error loading " + modelName + ": " + resource.getErrors().get(0));
 		}
 	}
+
+	private void validateNoUnresolvedProxies(final String modelName, final Object object) {
+		new LambdaVisitor<Object>()
+		.on(EObject.class).then(eObject -> {
+			throwExceptionIfResourceHasUnresolvedProxies(modelName, eObject.eResource());
+		}).accept(object);
+	}
 	
+	private void throwExceptionIfResourceHasUnresolvedProxies(final String modelName, final Resource resource) {
+		final var unresolvedReferences = EcoreUtil.UnresolvedProxyCrossReferencer.find(resource);
+		if (!unresolvedReferences.isEmpty()) {
+			final String unresolvedMessage = unresolvedReferences.keySet().stream().map(o -> "\n  > " + o).collect(Collectors.joining());
+			throw new RuntimeException("error loading " + modelName + ": there are unresolved proxies " + unresolvedMessage);
+		}
+	}
+	
+	/**
+	 * Goes through each object and checks that the referenced package is the registered one.
+	 * Ensure that no model is loaded multiple times! This leads to inconsistencies.
+	 */
+	private void validateNoUsedPackageIsLoadedMultipleTimes(final String modelName, final Object object) {
+		new LambdaVisitor<Object>()
+		.on(EObject.class).then(eObject -> {
+			throwExceptionIfResourceInconsistentRegisteredPackageUsages(modelName, eObject);
+		}).accept(object);
+	}
+	
+	private void throwExceptionIfResourceInconsistentRegisteredPackageUsages(final String modelName, final EObject resourceRoot) {
+		var eObjectIterator = EcoreUtil.<EObject>getAllContents(resourceRoot, false);
+		while (eObjectIterator.hasNext()) {
+			final EObject eObject = eObjectIterator.next();
+			final EPackage checkPackage = eObject.eClass().getEPackage();
+			var registeredPackage = EPackage.Registry.INSTANCE.getEPackage(checkPackage.getNsURI());
+			if (registeredPackage != checkPackage) {
+				throw new IllegalStateException("package " + checkPackage.getName() + " is loaded multiple times!");
+			}
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	private List<Object> obtainTargetListForSlot(final WorkflowContext context) {
 		final Object slotContent = context.get(getModelSlot());

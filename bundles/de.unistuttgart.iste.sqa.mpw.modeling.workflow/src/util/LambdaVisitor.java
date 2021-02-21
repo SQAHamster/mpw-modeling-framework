@@ -10,14 +10,19 @@ import java.util.function.Consumer;
  */
 public final class LambdaVisitor<T> implements Consumer<T> {
     private final Map<Class<? extends T>, Consumer<Object>> consumerMap = new HashMap<>();
-    private Runnable elseRunnable = () -> {};
+    private Consumer<T> elseRunnable = (T) -> {};
     
     public <S extends T> Acceptor<T, S> on(final Class<S> matchingClass) {
         return new Acceptor<>(this, matchingClass);
     }
 
     public LambdaVisitor<T> orElse(Runnable runnable) {
-    	elseRunnable = runnable;
+    	elseRunnable = (o) -> { runnable.run(); };
+    	return this;
+    }
+    
+    public LambdaVisitor<T> orElse(Consumer<T> consumer) {
+    	elseRunnable = consumer;
     	return this;
     }
 
@@ -31,7 +36,9 @@ public final class LambdaVisitor<T> implements Consumer<T> {
         if (consumerOptional.isEmpty()) {
             consumerOptional = findMatchingInterface(currentObject.getClass());
         }
-        consumerOptional.ifPresentOrElse(consumer -> consumer.accept(currentObject), elseRunnable);
+        consumerOptional.ifPresentOrElse(
+        		consumer -> consumer.accept(currentObject), 
+        		() ->  elseRunnable.accept(currentObject));
     }
 
 	private Optional<Consumer<Object>> findMatchingInterface(final Class<?> objectClass) {

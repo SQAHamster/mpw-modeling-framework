@@ -37,7 +37,7 @@ final class InternalStringToQueryDslConverter {
 		var result = parser.parse(reader);
 		
 		if (result.hasSyntaxErrors()) {
-			throw new RuntimeException("String cannot be parsed to a query: " + result.getSyntaxErrors().toString());
+			throw new RuntimeException("String '" + string + "' for '" + contextClassName + "' cannot be parsed to a query: " + result.getSyntaxErrors().toString());
         }
 		return (ClassContext)result.getRootASTElement();
 	}
