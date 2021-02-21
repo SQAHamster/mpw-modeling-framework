@@ -65,6 +65,6 @@ final class InternalStringToQueryDslConverter {
 	}
 	
 	private static String toNameTypeString(Parameter parameter) {
-		return parameter.getVariableName() + ": " + parameter.getTypeName();
+		return String.format("%s: %s", parameter.getVariableName(), parameter.getTypeName());
 	}
 }

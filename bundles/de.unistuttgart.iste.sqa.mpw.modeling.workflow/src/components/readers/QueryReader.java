@@ -35,6 +35,6 @@ public class QueryReader extends MultiResourceReader {
 			models.add(queryModel);
 		}
 		
-		context.set(modelSlot + "Composition", inputs);
+		context.set(String.format("%sComposition", modelSlot), inputs);
 	}
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +97,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	private void save(final WorkflowContext context, final EObject object) {
 		final String name = getName(object);
 		final String directoryName = object.eClass().getEPackage().getName() + directorySuffix;
-		final String fileUri = "platform:/resource/" + projectName + "/debugout/" + directoryName + "/" + name + "." + fileExtension;
+		final String fileUri = MessageFormat.format("platform:/resource/{0}/debugout/{1}/{2}.{3}", projectName, directoryName, name, fileExtension);
 		
 		try {
 			final EObject copiedObject = EcoreUtil.copy(object);
@@ -140,7 +141,7 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 	 */
 	private void replaceEcoreLinksToGeneratedOnes(final WorkflowContext context, final String resourceUri, final String directoryName) throws IOException {
 		final String fileName = URI.createURI(resourceUri).lastSegment();
-		final var filePathString = EclipsePathHelper.getMappedPlatformUriForProject(projectName).toFileString() + "/debugout/" + directoryName + "/" + fileName;
+		final var filePathString = MessageFormat.format("{0}/debugout/{1}/{2}", EclipsePathHelper.getMappedPlatformUriForProject(projectName).toFileString(), directoryName, fileName);
 		final var path = Paths.get(filePathString);
 		final var charset = StandardCharsets.UTF_8;
 
@@ -172,8 +173,8 @@ public class XmiWriter extends WorkflowComponentWithModelSlot {
 		final var originalUri = eResource.getURI().toString();
 		final String fileName = new File(eResource.getURI().toPlatformString(true)).getName();
 		
-		final String originalUriSuffix = "mpw/model//" + fileName;
-		final String modifiedUriSuffix = projectNameSuffix + "/debugout/" + directoryName + "//" + ePackage.getName() + ".ecore";
+		final String originalUriSuffix = MessageFormat.format("mpw/model//{0}", fileName);
+		final String modifiedUriSuffix = MessageFormat.format("{0}/debugout/{1}//{2}.ecore", projectNameSuffix, directoryName, ePackage.getName());
 		final var modifiedUri = originalUri.replaceAll(originalUriSuffix, modifiedUriSuffix);
 		
 		text = text.replaceAll(originalUri, modifiedUri);

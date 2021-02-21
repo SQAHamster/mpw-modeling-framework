@@ -40,8 +40,7 @@ public class CommandReader extends MultiResourceReader {
 		
 		final var inputs = InputsFactoryImpl.eINSTANCE.createHenshinCommandInputs();
 		inputs.getModules().addAll(validComands);
-		
-		context.set(getModelSlot() + "Composition", inputs);
+		context.set(String.format("%sComposition", getModelSlot()), inputs);
 	}
 
 	private List<org.eclipse.emf.henshin.model.Module> getCommandsFromSlot(final WorkflowContext context) {
@@ -78,7 +77,7 @@ public class CommandReader extends MultiResourceReader {
 	
 	private void createOclValidator(final OCL ocl) {
 		CompleteOCLStandaloneSetup.doSetup();
-		final String uri = getWorkflowProjectResourcePathPrefix() + "/validation/CommandValidation.ocl";
+		final String uri = String.format("%s/validation/CommandValidation.ocl", getWorkflowProjectResourcePathPrefix());
 		currentValidator = new CompleteOCLEObjectValidator(HenshinPackage.eINSTANCE, URI.createURI(uri), ocl.getEnvironmentFactory());
 	}
 
@@ -101,11 +100,13 @@ public class CommandReader extends MultiResourceReader {
 	
 	private static String getWorkflowProjectResourcePathPrefix() {
 		final String workflowProjectName = "de.unistuttgart.iste.sqa.mpw.modeling.workflow";
-		String uri = "platform:/resource/" + workflowProjectName;
+		final StringBuilder uri = new StringBuilder();
+		uri.append("platform:/resource/");
+		uri.append(workflowProjectName);
 		if (EclipsePathHelper.isProjectInSameWorkspace(workflowProjectName)) {
-			uri += "/src";
+			uri.append("/src");
 		}
-		return uri;
+		return uri.toString();
 	}
 
 }

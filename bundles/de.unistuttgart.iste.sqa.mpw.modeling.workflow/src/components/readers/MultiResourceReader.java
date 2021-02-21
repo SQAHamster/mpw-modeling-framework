@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -271,7 +272,7 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	}
 	
 	private String getBaseUri() {
-		return "platform:/resource/" + projectName + "/" + projectSubPath + "/";
+		return MessageFormat.format("platform:/resource/{0}/{1}/", projectName, projectSubPath);
 	}
 	
 	private String getModelNameFromExtension() {
