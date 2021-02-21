@@ -30,6 +30,7 @@ Workflow {
         scanClassPath = true
 		platformUri=rootPath
 		registerGeneratedEPackage="org.eclipse.emf.henshin.model.HenshinPackage"
+		registerGeneratedEPackage="mpw.MpwPackage"
 		registerGeneratedEPackage="commandBehavior.CommandPackage"
         registerGeneratedEPackage="queryBehavior.QueryPackage"
         registerGeneratedEPackage="behaviorInputs.InputsPackage"
