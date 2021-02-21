@@ -82,7 +82,7 @@
 «DEFINE PostUnitExpand FOR Unit»«ENDDEFINE»
 
 «DEFINE PostUnitExpand FOR Rule»
-    «EXPAND FindObjectDefinition FOREACH referenceConditions.typeSelect(ManyReferenceCondition).select(r|!r.isCreate)»
+    «EXPAND FindObjectDefinition FOREACH referenceConditions.typeSelect(ManyReferenceCondition).select(r|!r.isCreate && r.useForExploring)»
 «ENDDEFINE»
 
 «DEFINE ThisInstanceDefinition FOR InstanceCondition»

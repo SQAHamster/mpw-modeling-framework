@@ -5,7 +5,7 @@
 
 «DEFINE UnitDeclaration FOR Unit»
     bool «IF mainUnit»internalMainRule«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF»);
-    «EXPAND FindObjectDeclaration FOREACH eAllContents.typeSelect(ManyReferenceCondition)-»
+    «EXPAND FindObjectDeclaration FOREACH eAllContents.typeSelect(ManyReferenceCondition).select(r|!r.isCreate && r.useForExploring)-»
 «ENDDEFINE»
 
 «DEFINE FindObjectDeclaration FOR ManyReferenceCondition»
@@ -92,7 +92,7 @@
 «DEFINE PostUnitExpand FOR Unit»«ENDDEFINE»
 
 «DEFINE PostUnitExpand FOR Rule»
-    «EXPAND FindObjectDefinition FOREACH referenceConditions.typeSelect(ManyReferenceCondition).select(r|!r.isCreate)»
+    «EXPAND FindObjectDefinition FOREACH referenceConditions.typeSelect(ManyReferenceCondition).select(r|!r.isCreate && r.useForExploring)»
 «ENDDEFINE»
 
 «DEFINE ThisInstanceDefinition FOR InstanceCondition»
