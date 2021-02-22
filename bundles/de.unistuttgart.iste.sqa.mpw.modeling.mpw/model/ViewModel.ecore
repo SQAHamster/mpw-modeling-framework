@@ -31,38 +31,91 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameViewInput" abstract="true" interface="true">
-    <eOperations name="playClicked"/>
-    <eOperations name="pauseClicked"/>
-    <eOperations name="undoClicked"/>
-    <eOperations name="redoClicked"/>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Interface, which defines the view inputs of a MPW simulator.&#xD;&#xA;It defines the input methods to play, pause, undo and redo which usually are called by button click event handlers.&#xD;&#xA;Also, the input speedChanged is used to change the speed, e.g. controlled by a slider control.&#xD;&#xA;&#xD;&#xA;A dedicated input is close(), which indicates that the user wants to close the simulator, e.g. by clicking the &quot;X&quot; on a graphical simulator window."/>
+    </eAnnotations>
+    <eOperations name="playClicked">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Input event for clicking the play button."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="pauseClicked">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Input event for clicking the pause button."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="undoClicked">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Input event for clicking the undo button."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="redoClicked">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Input event for clicking the redo button."/>
+      </eAnnotations>
+    </eOperations>
     <eOperations name="speedChanged" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Input event for for changing the speed of the simulation."/>
+      </eAnnotations>
       <eParameters name="speedValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     </eOperations>
-    <eOperations name="close"/>
+    <eOperations name="close">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Input event for closing the simulator."/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameViewPresenter" abstract="true" eSuperTypes="#//GameViewInput stereotypes/ViewModelStereotypes.ecore#//Presenter">
-    <eOperations name="bind"/>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for a presenter of a game view.&#xD;&#xA;It implements the GameViewInput interface to accept user inputs.&#xD;&#xA;By calling bind(), it starts observing a concrete MiniProgrammingWorld and updates the GameViewModel accordingly."/>
+    </eAnnotations>
+    <eOperations name="bind">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Binds the view-model to the concrete MiniProgrammingWorld, which has to be given at construction time."/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="viewModel" lowerBound="1"
-        eType="#//GameViewModel" changeable="false" containment="true"/>
+        eType="#//GameViewModel" changeable="false" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The view-model, which represents the visible information to be rendered on a screen."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="semaphore" eType="ecore:EDataType BaseTypes.ecore#//Semaphore"
-        changeable="false"/>
+        changeable="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Used to synchronize access from a different thread to the view-model."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ViewModelCell" eSuperTypes="stereotypes/ViewModelStereotypes.ecore#//ViewModel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Relates to a tile in the logical MiniProgrammingWorld and therefore represents a concrete location on the game map.&#xD;&#xA;It contains a ordered collection of ViewModelCellLayers, which represent the graphical images to be rendered."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="layers" upperBound="-1"
         eType="#//ViewModelCellLayer" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="location" lowerBound="1"
         eType="ecore:EClass MiniProgrammingWorld.ecore#//Location" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ViewModelRow" eSuperTypes="stereotypes/ViewModelStereotypes.ecore#//ViewModel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents a row in the view-model, which contains one ViewModelCell for each column."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cells" upperBound="-1"
         eType="#//ViewModelCell" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ViewModelCellLayer" eSuperTypes="stereotypes/ViewModelStereotypes.ecore#//ViewModel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents a graphical layer on a cell, which uses a symbolic / logical imageName to refer to a concrete graphic, like a Hamster image.&#xD;&#xA;With rotation and visible, it further provides information for the rendering layer how the image shall be rendered."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="imageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rotation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ViewModelLogEntry">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents a log entry contained in a list. It contains a message and a color."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="#//Color"/>
   </eClassifiers>

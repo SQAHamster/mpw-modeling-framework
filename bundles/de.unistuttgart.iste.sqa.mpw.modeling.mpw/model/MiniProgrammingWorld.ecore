@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mpw" nsURI="http://www.mpw.uni-stuttgart.de/mpw" nsPrefix="mpw">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="This package represents the central meta-model for a MPW,&#xA;which is used as a base for concrete MPWs like the hamster-simulator.&#xA;&#xA;It defines meta-classes like MiniProgrammingWorld, Stage, Actor or Prop,&#xA;which are used to build a game based on a &quot;theatre&quot; metaphor."/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Actor" abstract="true" eSuperTypes="#//TileContent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents the base class of actors in a mini programming world.&#xA;&#xA;Usually there is only one instance per mini world, like a hamster.&#xA;An actor is enriched by game commands, which will be called on a dedicated actor facade to control the game."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" lowerBound="1"
-        eType="#//Direction"/>
+        eType="#//Direction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The looking direction of the actor."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Prop" abstract="true" eSuperTypes="#//TileContent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Prop" abstract="true" eSuperTypes="#//TileContent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for props (requisites), which can be placed on the stage.&#xA;&#xA;Examples of the hamster-simulator, are walls or grains."/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Tile" eSuperTypes="BaseTypes.ecore#//Entity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents a field on the stage, where actors or props can be placed on.&#xA;&#xA;It is connected to other tiles by its west, north, east and south references&#xA;to build up a mesh. Further, it defines a location, which defines the&#xA;column and row position of the tile.&#xA;&#xA;It can reference up to many TileContent objects, which is the base class for actors&#xA;and props."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
         eType="#//TileContent" eOpposite="#//TileContent/currentTile"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="location" lowerBound="1"
@@ -21,12 +38,18 @@
         derived="true" eOpposite="#//Stage/tiles"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TileContent" abstract="true" eSuperTypes="BaseTypes.ecore#//Entity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for entities, which can be placed as contents on a tile.&#xA;&#xA;It has two sub types: Actor and Prop."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="currentTile" eType="#//Tile"
         eOpposite="#//Tile/contents"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" eType="#//Stage"
         eOpposite="#//Stage/tileContents"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Stage" abstract="true" eSuperTypes="BaseTypes.ecore#//Entity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A concrete stage can be designed by derived from the Stage class.&#xA;&#xA;A stage consists of a two-dimensional mesh of Tile objects, which&#xA;has the dimensions defined in the stageSize property.&#xA;The size is defined by a given number of columns and rows.&#xA;&#xA;Besides the collection of Tile objects, it also acts as the container&#xA;of the TileContent objects, which can be referenced to the tiles."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tiles" upperBound="-1"
         eType="#//Tile" containment="true" eOpposite="#//Tile/stage"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tileContents" upperBound="-1"
@@ -35,6 +58,9 @@
         eType="#//Size" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MiniProgrammingWorld" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents the root meta-class for a MPW (Mini Programming World).&#xA;&#xA;It typically is derived by game classes like a HamsterGame, which is used&#xA;to realize a concrete MPW. MiniProgrammingWorld contains a Stage object,&#xA;which is set by a concrete derived class in context of a concrete MPW.&#xA;&#xA;Further, it defines command stacks, a game log and a performance class, which&#xA;controls the mode of the game."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" lowerBound="1" eType="#//Stage"
         derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="editorCommandStack" lowerBound="1"
@@ -47,11 +73,17 @@
         eType="#//UserInputInterface"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="stereotypes/MpwStereotypes.ecore#//ValueType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Datastructure, which defines a column and row to refer to a location on the stage."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="row" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Direction">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Enumeration of the directions in which an actor can look in a&#xA;MPW. Its values are the regular directions, north, east, south&#xA;and west."/>
+    </eAnnotations>
     <eLiterals name="NORTH"/>
     <eLiterals name="SOUTH" value="1"/>
     <eLiterals name="WEST" value="2"/>
@@ -59,22 +91,44 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UserInputInterface" abstract="true"
       interface="true" eSuperTypes="stereotypes/MpwStereotypes.ecore#//Dependency">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Interface to interact with a UI or mock object for reading values from the user.&#xA;Warning: subclasses of this interface must support multithreading. &lt;code>readInteger&lt;/code>,&#xA;&lt;code>readString&lt;/code> and &lt;code>confirmAlert&lt;/code> may be invoked from different threads before&#xA;the previous invocation returned. It is guaranteed that in this case, &lt;code>abort&lt;/code> is called&#xA;before the next invocation."/>
+    </eAnnotations>
     <eOperations name="readInteger" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Read an integer value from a user. This blocks until there is&#xA;an integer to return or it is aborted.&#xA;This must be thread safe&#xA;@param message The message used in the prompt for the number.&#xA;@return The integer value read or an empty optional, if aborted."/>
+      </eAnnotations>
       <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="readString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Read a string value from a user. This blocks until there is a&#xA;String to return or it is aborted&#xA;This must be thread safe&#xA;@param message The message used in the prompt for the string.&#xA;@return The string value read or an empty optional, if aborted."/>
+      </eAnnotations>
       <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="confirmAlert">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Inform a user about an abnormal execution aborting.&#xA;This blocks until it returns or is aborted&#xA;This must be thread safe&#xA;@param t The throwable which lead to aborting the program."/>
+      </eAnnotations>
       <eParameters name="t" eType="ecore:EDataType BaseTypes.ecore#//Throwable"/>
     </eOperations>
-    <eOperations name="abort"/>
+    <eOperations name="abort">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Aborts readInteger, readString or confirmAlert. This is used due to multi ui systems,&#xA;where every dialog could return first. Because only one dialog is able to return a&#xA;value, all other dialogs can be aborted.&lt;br>&#xA;This must be thread-safe.&#xA;May be called multiple times, even if no input is pending"/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameLog" eSuperTypes="BaseTypes.ecore#//Entity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents a collection of log entries, which are used&#xA;to provide information about the game's performance.&#xA;&#xA;It consists of LogEntry objects, which contain a message&#xA;and a reference to the initiating Actor. On the screen,&#xA;log entries are rendered to provide tracability for the&#xA;client."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="logEntries" upperBound="-1"
         eType="#//LogEntry" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Size" eSuperTypes="stereotypes/MpwStereotypes.ecore#//ValueType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Objects of the class Size represent any kind of thing having a&#xA;two dimensional size. It is used in the context of a MPW&#xA;as a measure of the stage's extend.&#xA;&#xA;(which limits the amount of tiles an actor can move)."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnCount" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -89,11 +143,17 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LogEntry" eSuperTypes="BaseTypes.ecore#//Entity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A log entry object represents a log message of the&#xA;MPW and is typically displayed in the log&#xA;view at the right side of a simulator window."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="actor" eType="#//Actor"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GamePerformance">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Makes it possible to control the execution of the associated MPW.&#xA;Supported features are&#xA;&lt;ul>&#xA;    &lt;li>undo(All), redo(All)&lt;/li>&#xA;    &lt;li>speed&lt;/li>&#xA;    &lt;li>pause(Async), resume, stop&lt;/li>&#xA;    &lt;li>mode (read-only)&lt;/li>&#xA;&lt;/ul>&#xA;&#xA;Internally the GamePerformance contains a CommandStack used &#xA;to keep track of game commands."/>
+    </eAnnotations>
     <eOperations name="startGame"/>
     <eOperations name="startGamePaused"/>
     <eOperations name="pauseGame"/>
@@ -116,10 +176,33 @@
         eType="ecore:EClass Command.ecore#//CommandStack" changeable="false" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Mode">
-    <eLiterals name="RUNNING"/>
-    <eLiterals name="INITIALIZING" value="1"/>
-    <eLiterals name="STOPPED" value="2"/>
-    <eLiterals name="PAUSED" value="3"/>
-    <eLiterals name="ABORTED" value="4"/>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The modes a MPW can be in"/>
+    </eAnnotations>
+    <eLiterals name="RUNNING">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The game runs, new commands can be executed.&#xA;It is possible to pause the game or to stop it.&#xA;It is not possible to load a new stage."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="INITIALIZING" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Default mode before the stage is loaded.&#xA;It is possible to load other stages.&#xA;To execute game commands (on an actor), it is necessary to call startGame."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="STOPPED" value="2">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The game was stopped on purpose or an exception occurred which stopped the game.&#xA;It is possible to undo / redo commands, but it is not possible to execute new commands.&#xA;It is also not possible to load another stage."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="PAUSED" value="3">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="It is necessary to continue the game to execute new game commands.&#xA;It is possible to resume the game or to stop it.&#xA;It is not possible to load a new stage."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="ABORTED" value="4">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The game was aborted via API or mainly UI&#xA;like STOPPED, however it throws an GameAbortedException, which&#xA;shall not caught by the higher level doRun method.&#xA;After one executed game command, this Mode is automatically converted to STOPPED."/>
+      </eAnnotations>
+    </eLiterals>
   </eClassifiers>
 </ecore:EPackage>

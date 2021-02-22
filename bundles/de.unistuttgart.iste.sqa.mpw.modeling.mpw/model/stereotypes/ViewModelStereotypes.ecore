@@ -6,8 +6,20 @@
     <details key="documentation" value="In this package stereotypes are defined which are used in view models to classify roles like ViewModel datastructures or Presenter classes.&#xD;&#xA;&#xD;&#xA;Note: the stereotypes are only relevant for transformation / generation and in the generated target simulator they are not present."/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Presenter" abstract="true" interface="true"
-      eSuperTypes="#//ViewStereotype"/>
+      eSuperTypes="#//ViewStereotype">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Stereotype to mark a type as a presenter."/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ViewModel" abstract="true" interface="true"
-      eSuperTypes="#//ViewStereotype"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ViewStereotype" abstract="true" interface="true"/>
+      eSuperTypes="#//ViewStereotype">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Stereotype to mark a type as a view-model."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewStereotype" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Defines a base interface for stereotypes in the view context."/>
+    </eAnnotations>
+  </eClassifiers>
 </ecore:EPackage>
