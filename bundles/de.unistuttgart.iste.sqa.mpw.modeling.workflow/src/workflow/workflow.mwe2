@@ -106,13 +106,14 @@ Workflow {
 		modelSlot = "entityModels"
 	}
 	
-    // for debugging: write the "entityModels" before generation classes transformation into file under "/debugout"
-	component = XmiWriter {
+    // for debugging: write the "entityModels" before generation classes / facade transformation into file under "/debugout"
+	/*component = XmiWriter {
         rootPath = rootPath
         projectName = sourceProjectName
 		modelSlot = "entityModels"
 		fileExtension = "ecore"
-	}
+        directorySuffix = "TransformedNoFacades"
+	}*/
     
     // transform "entityModels" with generation classes transformation (primarily adds facades)
     component = QvtoTransformator {
@@ -127,7 +128,7 @@ Workflow {
         projectName = sourceProjectName
         modelSlot = "generationEcoreModels"
         fileExtension = "ecore"
-        directorySuffix = "_generation"
+        directorySuffix = "Transformed"
     }
 	
 	// check model "entityModels"
