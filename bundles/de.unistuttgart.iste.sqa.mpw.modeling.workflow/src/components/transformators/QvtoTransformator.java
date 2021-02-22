@@ -23,6 +23,7 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 	private String transformationUri;
 	private SourceTargetRelationship sourceTargetRelationship = SourceTargetRelationship.EXISTING_TARGET;
 	private String targetModelSlot;
+	private boolean errorOnTransformingNoOutput = true;
 	private boolean mergeToExistingSlotContent = false;
 	
 	private ModelToModelTransformationExecutor executor;
@@ -54,6 +55,18 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 		this.targetModelSlot = targetModelSlot;
 	}
 	
+	public boolean isErrorOnTransformingNoOutput() {
+		return errorOnTransformingNoOutput;
+	}
+
+	/**
+	 * @param errorOnTransformingNoOutput if true, an ERROR log is written, if the transformation does not 
+	 * produce any output.
+	 */
+	public void setErrorOnTransformingNoOutput(boolean errorOnTransformingNoOutput) {
+		this.errorOnTransformingNoOutput = errorOnTransformingNoOutput;
+	}
+
 	public boolean isMergeToExistingSlotContent() {
 		return mergeToExistingSlotContent;
 	}
@@ -66,6 +79,7 @@ public class QvtoTransformator extends WorkflowComponentWithModelSlot {
 	@Override
 	protected void invokeInternal(final WorkflowContext workflowContext, final ProgressMonitor monitor, final Issues issues) {
 		executor = new ModelToModelTransformationExecutor(workflowContext, issues, transformationUri, sourceTargetRelationship);
+		executor.setErrorOnTransformingNoOutput(errorOnTransformingNoOutput);
 
 		final Object slotContent = workflowContext.get(getModelSlot());
 		

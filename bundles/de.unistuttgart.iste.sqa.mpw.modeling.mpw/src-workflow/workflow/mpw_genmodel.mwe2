@@ -12,6 +12,7 @@ var mpwModelProject  = "${modelingModuleBaseName}.mpw"
 Workflow {
 	bean = StandaloneSetup { 
 		platformUri="${rootPath}"
+        scanClassPath = true
 	}
 	
 	component = org.eclipse.emf.mwe2.ecore.EcoreGenerator {

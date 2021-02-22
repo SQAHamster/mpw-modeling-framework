@@ -6,8 +6,11 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.core.runtime
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.codegen;bundle-version="2.21.0",
+ org.apache.log4j;resolution:=optional,
+ org.apache.commons.logging
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-15
 Export-Package: basetypes,
@@ -29,3 +32,6 @@ Export-Package: basetypes,
  viewmodelstereotypes.impl,
  viewmodelstereotypes.util
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.mpw
+Import-Package: org.eclipse.emf.codegen.ecore.genmodel,
+ org.eclipse.emf.mwe2.ecore,
+ org.eclipse.xtext.ecore

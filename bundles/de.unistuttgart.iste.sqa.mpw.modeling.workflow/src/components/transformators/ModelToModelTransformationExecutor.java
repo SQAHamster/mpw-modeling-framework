@@ -40,6 +40,7 @@ final class ModelToModelTransformationExecutor {
 	private final TransformationExecutor internalExecutor;
 	private final URI transformationURI;
 	private final SourceTargetRelationship sourceTargetRelationship;
+	private boolean errorOnTransformingNoOutput = true;
 	
 	private final WorkflowContext workflowContext;
 	private final Issues issues;
@@ -94,7 +95,7 @@ final class ModelToModelTransformationExecutor {
 		if (contents.size() > 0) {
 			final EObject resultObject = contents.get(0);
 			getResultInstances().add(resultObject);
-		} else {
+		} else if (errorOnTransformingNoOutput) {
 			log.error("failed to transform any model for " + getTransformationName() + " on " + getName(eObject));
 		}
 		
@@ -142,6 +143,18 @@ final class ModelToModelTransformationExecutor {
 		return transformationURI.lastSegment();
 	}
 	
+	public boolean isErrorOnTransformingNoOutput() {
+		return errorOnTransformingNoOutput;
+	}
+
+	/**
+	 * @param errorOnTransformingNoOutput if true, an ERROR log is written, if the transformation does not 
+	 * produce any output.
+	 */
+	public void setErrorOnTransformingNoOutput(boolean errorOnTransformingNoOutput) {
+		this.errorOnTransformingNoOutput = errorOnTransformingNoOutput;
+	}
+
 	private URI createTransformationUriFromString(final String baseUri) {
 		String transformationUri = baseUri;
 		if (EclipsePathHelper.isProjectInSameWorkspace(TRANSFORMATION_MODULE)) {

@@ -20,7 +20,7 @@ var transformationsProject = "${modelingModuleBaseName}.transformations"
 
 var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/RoleTransformation.qvto"
 var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/CommandTransformation.qvto"
-var createMoveCommandTransformationUri = "${platformUriPrefix}/${transformationsProject}/CreateWriteCommandTransformation.qvto"
+var createWriteCommandTransformationUri = "${platformUriPrefix}/${transformationsProject}/CreateWriteCommandTransformation.qvto"
 var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/QueryTransformation.qvto"
 var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/GenerationClassesTransformation.qvto"
 
@@ -86,11 +86,12 @@ Workflow {
 	
 	// creates an implicit write command for the Actors found in the entityModels slot
 	component = QvtoTransformator {
-		transformationUri = createMoveCommandTransformationUri
+		transformationUri = createWriteCommandTransformationUri
         modelSlot = "entityModels"
         targetModelSlot = "commands"
 		sourceTargetRelationship = "NEW_TARGET"
 		mergeToExistingSlotContent = true
+		errorOnTransformingNoOutput = false
 	}
 	
     // for debugging: write the "commands" into file under "/debugout"

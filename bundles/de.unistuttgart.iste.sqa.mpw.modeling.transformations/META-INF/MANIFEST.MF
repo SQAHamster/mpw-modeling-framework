@@ -8,6 +8,9 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.codegen;bundle-version="2.21.0",
+ org.apache.log4j;resolution:=optional,
+ org.apache.commons.logging,
  org.eclipse.emf.henshin.model;bundle-version="1.6.0";visibility:=reexport,
  org.eclipse.m2m.qvt.oml,
  de.unistuttgart.iste.sqa.mpw.modeling.querydsl;bundle-version="1.0.0";visibility:=reexport,
@@ -31,3 +34,6 @@ Export-Package: behaviorInputs,
  queryBehavior.impl,
  queryBehavior.util
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.transformations
+Import-Package: org.eclipse.emf.codegen.ecore.genmodel,
+ org.eclipse.emf.mwe2.ecore,
+ org.eclipse.xtext.ecore
