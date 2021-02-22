@@ -3,10 +3,16 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="commandBehavior" nsURI="http://www.mpw.uni-stuttgart.de/behavior/command"
     nsPrefix="commandBehavior">
   <eClassifiers xsi:type="ecore:EClass" name="Module" eSuperTypes="BehaviorsBaseTypes.ecore#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Root node for a commandBehaviors base model, which defines a collection of transformations."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="transformations" upperBound="-1"
         eType="#//Transformation" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Transformation" eSuperTypes="BehaviorsBaseTypes.ecore#//NamedElement BehaviorsBaseTypes.ecore#//AnnotationableElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Crentral class which represents the operational behavior to specify the model transformation for a command.&#xA;With roleName the role is noticed, which contains either &quot;game&quot; or &quot;editor&quot;.&#xA;&#xA;With isInit the transformation can be marked as a command, which is used for initialization.&#xA;This is required to be regarded for generating preconditions, since preconditions shall not be checked before the initialization of an entity has finished."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="units" upperBound="-1"
         eType="#//Unit" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mainUnit" lowerBound="1"
@@ -24,12 +30,18 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Unit" abstract="true" eSuperTypes="BehaviorsBaseTypes.ecore#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base type of units.&#xA;While Rule is a unit to realize a graph tarnsformation rule, the other are used for structuring the control flow.&#xA;They are compositions of sub units, which are invoked during runtime.&#xA;&#xA;Additionally, the collection mappedParameters specifies the parameters which will be passed as arguments to the invocation of the related method."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="ecore:EClass BehaviorsBaseTypes.ecore#//Parameter" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mainUnit" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Rule" eSuperTypes="#//Unit">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Unit, which represents a graph transformation rule.&#xA;In contrast to Henshin, it does not define a lhs and rhs graph explicitly, but contains a merged modeled data structure using InstanceCondition, ReferenceCondition and AttributeCondition elements."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="thisInstance" lowerBound="1"
         eType="#//InstanceCondition"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="instanceConditions" upperBound="-1"
@@ -46,6 +58,9 @@
         eType="#//VariableDeclaration" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Defines further conditions to be matched on instance attributes.&#xA;With attributeName the name of the EAttribute is noticed, while instance is the reference to the related InstanceCondition which owns the attribute.&#xA;The value to be matched is stored in the attributeValueLiteral string, which has to be compatible with the attribute's type.&#xA;Like in previously described conditions, isCreate indicates if the condition is used as a modification on the right side of the object graph.&#xA;If set, the attribute condition will be set on the instance.&#xA;Further, the attribute value can be resolved by an Expression used from the QueryBehaviors package.&#xA;It might refer to parameters or property paths to refer to nested properties."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
         eType="#//InstanceCondition"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" lowerBound="1"
@@ -58,6 +73,9 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InstanceCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Relates to a node in the object graph and represents the condition for an object to be matched.&#xA;It is transformed from Henshin Node instances.&#xA;&#xA;InstanceCondition defines a variableName, which is used to store an object reference in the generated code.&#xA;If the name is not specified in the Henshin input model, an unique variable name is chosen by the transformation logic.&#xA;A boolean flag isCreate is used to indicate, if the instance is only available on the right side of the transformation rule and hence shall be created in context of this rule.&#xA;Further, the type is defined with instanceType, which relates to an EClass and is determined by the type set in the related Henshin input node.&#xA;Rule has a containment reference collection instanceConditions where the InstanceCondition objects are stored.&#xA;The main instance identified by the name &quot;self&quot; in the Henshin rule is further referenced by the dedicated thisInstance reference."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="instanceType" lowerBound="1"
@@ -66,6 +84,9 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ReferenceCondition" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents edges in the object graph of the transformation rule and describes conditions to be matched at runtime.&#xA;Since it connects two nodes in the graph, the two source and target references are used to refer to related InstanceCondition objects.&#xA;It defines a referenceName used to identify the accessor method to be called on the source instance in the generated code.&#xA;With the type field, it links to the underlying EReference.&#xA;If isCreate is set, it defines an creating edge, which results in a setter or insertion call in the generated code.&#xA;The flag useForExploring is evaluated for traversing the object tree to find all required InstanceCondition objects.&#xA;If the flag is set to false, a reference will be ignored while performing pattern matching in the generated code."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
         eType="#//InstanceCondition"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
@@ -83,12 +104,26 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SingleReferenceCondition" eSuperTypes="#//ReferenceCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Relates to a simple reference, which links only to one object.&#xA;As a restriction, only single references are allowed to be used with forbid semantics, which represents a negative application condition."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isForbid" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ManyReferenceCondition" eSuperTypes="#//ReferenceCondition"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ClearReferenceCondition" eSuperTypes="#//ReferenceCondition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ManyReferenceCondition" eSuperTypes="#//ReferenceCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Is used for collection references."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClearReferenceCondition" eSuperTypes="#//ReferenceCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Is used for clearing a collection."/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Modification">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Is used to link to the condition types for expressing modifications.&#xA;The type defines the field action, which is based on the enumeration type Action.&#xA;Four actions DELETE, CREATE, MODIFY and CLEAR are defined, which represent the according modification.&#xA;Further, it defines three links to ReferenceCondition, InstanceCondition and AttributeCondition, while only one of them is used at a time.&#xA;In combination with the action, it represents a modification like deleting an instance.&#xA;If the MODIFY action is used for an attribute, it further needs a value for newAttributeValue, which will be set as the new value of the attribute.&#xA;Some information is explicitly redundant to make generation easier, e.g. by setting a redundant isCreate flag at the condition types.&#xA;Further, the design is kept simple, e.g. by not deriving dedicated modification types for each realistic modification.&#xA;Through validation of the input models, inconsistent states like setting multiple condition links on a Modification objects are prevented."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//ReferenceCondition"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="instance" eType="#//InstanceCondition"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="#//AttributeCondition"/>
@@ -116,19 +151,31 @@
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SequentialUnit" eSuperTypes="#//Unit">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Contains a collection of targetInvocations, which are invoked in sequential order.&#xA;If any of the invocations is not successful, the SequentialUnit is marked as failed."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetInvocations" upperBound="-1"
         eType="#//Invocation" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IteratedUnit" eSuperTypes="#//Unit">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Defines an unit, which repeats the invocation specified by targetInvocation a certain number of times.&#xA;The attribute repeat contains the numeric literal or variable name which is used to evaluate the number of times to repeat.&#xA;The IteratedUnit is only successful itself, if all iterations are completed and all target invocations in the are successful."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="repeat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetInvocation" lowerBound="1"
         eType="#//Invocation" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PriorityChainUnit" eSuperTypes="#//Unit">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Similar to the sequential one, this unit specifies a collection of invocations.&#xA;But in contrast, only if the execution of an unit is not successful, the next one will be tried to be evaluated.&#xA;If no invocation in conditionalInvocations is successful, the invocation of the PriorityChainUnit is handed as failed."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="conditionalInvocations"
         upperBound="-1" eType="#//Invocation" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IfElseUnit" eSuperTypes="#//Unit">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This unit is used for branching the control flow.&#xA;The ifInvocation defines the conditional unit, which is invoked to control the branch.&#xA;If the invocation results as successful, the thenInvocation is called.&#xA;Otherwise, if it results as failed, elseInvocation is invoked.&#xA;The result of thenInvocation or elseInvocation is used to mark the IfElseUnit as successful or failed."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ifInvocation" lowerBound="1"
         eType="#//Invocation" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="thenInvocation" lowerBound="1"
@@ -137,6 +184,9 @@
         eType="#//Invocation" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Invocation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represented an invocation, which defines the targetMethodName for the generated method relating to the target unit."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetMethodName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mappedParameters" upperBound="-1"

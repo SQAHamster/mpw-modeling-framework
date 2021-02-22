@@ -3,10 +3,16 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="queryBehavior" nsURI="http://www.mpw.uni-stuttgart.de/behavior/query"
     nsPrefix="queryBehavior">
   <eClassifiers xsi:type="ecore:EClass" name="Module" eSuperTypes="BehaviorsBaseTypes.ecore#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Root class of a queryBehavior model.&#xA;It defines a containment collection of ExpressionalElement instances."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
         eType="#//ExpressionalElement" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExpressionalElement" eSuperTypes="BehaviorsBaseTypes.ecore#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for the main elements used in the queryBehavior package.&#xA;It defines a reference mainExpression, which realizes the operational behavior of the element.&#xA;Sub types are Query, Precondition, Postcondition and ClassInvariant."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mainExpression" lowerBound="1"
         eType="#//Expression" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contextClass" lowerBound="1"
@@ -14,41 +20,86 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="#//ExpressionalElement BehaviorsBaseTypes.ecore#//TypedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents a query, which makes use of its mainExpression to evaluate a value.&#xA;It might be marked as internal to ensure, that it will not be put on the facade of the related Actor / Stage."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValueLiteral" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="ecore:EClass BehaviorsBaseTypes.ecore#//Parameter" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="internal" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Constraint" eSuperTypes="#//ExpressionalElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint" eSuperTypes="#//ExpressionalElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for constraints like preconditions, postconditions and class invariants."/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CommandConstraint" eSuperTypes="#//Constraint">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for the command based constraints realized through pre- and postconditions.&#xA;It defines the commandName to refer to the related command."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="commandName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Precondition" eSuperTypes="#//CommandConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Precondition" eSuperTypes="#//CommandConstraint">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Defines a precondition for a command."/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Postcondition" eSuperTypes="#//CommandConstraint">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Defines a postcondition for a command.&#xA;It can make use of old expressions to refer to values at start of the command."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="oldValueVariableExpressions"
         upperBound="-1" eType="#//VariableExpression" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ClassInvariant" eSuperTypes="#//Constraint"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true" eSuperTypes="BehaviorsBaseTypes.ecore#//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassInvariant" eSuperTypes="#//Constraint">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Constraint which is defined on the level of a class.&#xA;It semantically adds pre- and postconditions to every command implicitly."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true" eSuperTypes="BehaviorsBaseTypes.ecore#//TypedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for an expression."/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NotExpression" eSuperTypes="#//Expression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Negates an inner expression, which has to be a boolean typed expression."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inner" lowerBound="1" eType="#//Expression"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OldExpression" eSuperTypes="#//Expression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Wraps an inner expression to indicate, that the value shall be evaluated before performing the body of the related ExpressionalElement."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inner" lowerBound="1" eType="#//Expression"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BinaryExpression" eSuperTypes="#//Expression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for expressions, which take two sub expressions to combine them."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" lowerBound="1" eType="#//Expression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" lowerBound="1" eType="#//Expression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AndExpression" eSuperTypes="#//BinaryExpression"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OrExpression" eSuperTypes="#//BinaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AndExpression" eSuperTypes="#//BinaryExpression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Binary expression, which takes two boolean typed expressions and performs a logical AND on them."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrExpression" eSuperTypes="#//BinaryExpression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Binary expression, which takes two boolean typed expressions and performs a logical OR on them."/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CalculationExpression" eSuperTypes="#//BinaryExpression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Binary expression, which takes two numeric typed expressions and performs a basic calculation on it.&#xA;The calculation is controlled by the enumeration type CalculationOperator allowing the values PLUS, MINUS, MULTIPLY and DIVIDE."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" lowerBound="1"
         eType="#//CalculationOperator"/>
   </eClassifiers>
@@ -58,12 +109,22 @@
     <eLiterals name="MULTIPLY" value="2" literal="*"/>
     <eLiterals name="DIVIDE" value="3" literal="/"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ImpliesExpression" eSuperTypes="#//BinaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ImpliesExpression" eSuperTypes="#//BinaryExpression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Binary expression to evaluate a logical implication.&#xA;If the first, boolean typed expression is true, it will evaluate the second expression, which also has to return a boolean value."/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConstantExpression" eSuperTypes="#//Expression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An expression which defines a constant or literal value."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="literal" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompareExpression" eSuperTypes="#//BinaryExpression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Binary expression, which compares two values given by sub expressions.&#xA;The operator is set by the enumeration CompareOperator, which defines the literals EQUAL, NOT_EQUAL, GREATER, SMALLER, GREATER_EQUAL and SMALLER_EQUAL."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" lowerBound="1"
         eType="#//CompareOperator"/>
   </eClassifiers>
@@ -76,12 +137,18 @@
     <eLiterals name="SMALLER_EQUAL" value="5" literal="&lt;="/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VariableExpression" eSuperTypes="#//Expression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A special expression, which is intended to introduce a new variable with a given name.&#xA;The value of the variable is evaluated by a sub expression.&#xA;Variables introduced with a VariableExpression can be used by a VariableReferenceUsageStatement."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="valueExpression" lowerBound="1"
         eType="#//Expression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StatementsExpression" eSuperTypes="#//Expression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents an expression which refers to an value built by statements."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//Statement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="helperMethodName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
@@ -97,6 +164,9 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true" eSuperTypes="BehaviorsBaseTypes.ecore#//TypedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base type for representing a statement, which can be used in StatementExpression objects.&#xA;Usually they are building a property path by accessing and navigating through variables, parameters and properties.&#xA;&#xA;With the previous and next references, they can build a chain of statements."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="debugName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="next" eType="#//Statement"
         eOpposite="#//Statement/previous"/>
@@ -105,7 +175,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IntermediaryResultStatement" eSuperTypes="#//Statement #//VariableExpression">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Special statement which is used to explicitly store the result of multiple statements in a intermediary variable. This is mainly used to safely check the intermediate result (e.g. if null) and then use it to perform the next statements on base of it."/>
+      <details key="documentation" value="Special statement which is used to explicitly store the result of multiple statements in a intermediary variable.&#xA;This is mainly used to safely check the intermediate result (e.g. if null) and then use it to perform the next statements on base of it.&#xA;&#xA;It derives from VariableExpression, since it introduces a new variable by its intermediary result.&#xA;The transformation logic determines with an heuristic, which statements have to be handled with an intermediary result."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="internalStatementsExpression"
         lowerBound="1" eType="#//StatementsExpression">
@@ -119,14 +189,23 @@
         lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SelfStatement" eSuperTypes="#//Statement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Allows to access the thisinstance or another dedicated object, which represents the context object of the current class.&#xA;With the attribute selfAlias the name of the self variable is defined.&#xA;A SelfStatement is often used as the starting point of a property path."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="selfAlias" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ElementByNameUsageStatement" eSuperTypes="#//Statement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents a simple statement to refer to parameter or variables by only providing their names.&#xA;Besides SelfStatement, they provide a further construct to start a property path."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FeatureStatement" eSuperTypes="#//Statement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Realizes a statement to refer to an EStructuralFeature of a given type.&#xA;Usually, it is set as the next statement of a previous statement, which obtains an object of the owning type of the feature.&#xA;It defines attribute directAccessible, which indicates, if the feature is directly accessible or a getter operation has to be used."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="directAccessible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
@@ -134,17 +213,23 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GetPropertyStatement" eSuperTypes="#//Statement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="documentation"/>
+      <details key="documentation" value="A special statement which is similar to FeatureStatement, but does not directly relate to an EStructuralFeature.&#xA;It is used for calling getter operations related to properties, which are not directly available in the given class.&#xA;Examples are the getter operations on the role interfaces of the hamster.&#xA;The name of the target getter operation is defined by the attribute propertyGetterName."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyGetterName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="QueryStatement" eSuperTypes="#//Statement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Allows to call an operation based on a query.&#xA;It has a reference query which links to the related Query instance.&#xA;If the query requires parameter values, the parameters names have to be specified by the attribute parameterNames.&#xA;These parameter names are used to refer to variables or parameters of the current context."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1" eType="#//Query"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterNames" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CollectionMethodStatement" eSuperTypes="#//Statement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Special statement which can be applied on collections only.&#xA;It defines a methodType, which indicates which operation shall be applied.&#xA;While NOT_EMPTY, IS_EMPTY and SIZE are parameterless methods, TYPE_SELECT and AT require a parameter.&#xA;Hence, the property parameters can be used to set parameter objects, which have to be compatible with the methodType:&#xA;&#xA;* TYPE_SELECT requires an EClassifier parameter.&#xA;* AT requires an ConstantExpression, which returns a numeric value."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="methodType" lowerBound="1"
@@ -160,10 +245,16 @@
     <eLiterals name="AT" value="4" literal="AT"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EnumLiteralStatement" eSuperTypes="#//Statement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Used to refer to an enumeration literal, like directions."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="enumLiteral" lowerBound="1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EEnumLiteral"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VariableReferenceUsageStatement" eSuperTypes="#//Statement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An alternative statement for accessing variables.&#xA;While ElementByNameUsageStatement refers to a variable only by its name, this statement type makes used of a previously defined VariableExpression.&#xA;One use case is to refer to a VariableExpression inserted by the transformation logic for an old value expression to store the value on start of a command.&#xA;For realizing the related postcondition, then the VariableReferenceUsageStatement is used to link to this variable.&#xA;Another use case is to reuse variables introduced by IntermediaryResultStatement objects."/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="variableReference" lowerBound="1"
         eType="#//VariableExpression"/>
   </eClassifiers>
