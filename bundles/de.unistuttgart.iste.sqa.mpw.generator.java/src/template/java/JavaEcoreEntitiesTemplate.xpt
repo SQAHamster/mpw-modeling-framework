@@ -38,9 +38,11 @@
       «EXPAND template::java::properties::JavaPropertyTemplate::GetPropertyValueDefinitions FOR this»
       «EXPAND template::java::properties::JavaPropertyTemplate::SetPropertyValueDefinitions FOR this»
       «FOREACH operationsWithoutGenerationAnnotations() AS o-»
+      «o.documentationToJavaDoc()-»
       public abstract «o.operationToSignature()»;
       «ENDFOREACH-»
       «FOREACH operationsWithGenerationAnnotations() AS o»
+      «o.documentationToJavaDoc()-»
       public «o.operationToSignature()» {
           «EXPAND template::java::JavaGenerateClassesTemplate::GenerationOperationAnnotation FOREACH o.eAnnotations-»
       }
@@ -76,6 +78,7 @@
     «documentationToJavaDoc()-»
     public interface «this.name» «toInheritance()» {
       «FOREACH eOperations AS o»
+          «o.documentationToJavaDoc()-»
           «o.operationToSignature()»;
           «IF o.isPropertyGetter()-»
               «o.operationToObservableGetterSignature()»;

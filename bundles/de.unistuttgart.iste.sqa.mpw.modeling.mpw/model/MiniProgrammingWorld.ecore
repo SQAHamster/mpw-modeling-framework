@@ -154,22 +154,66 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Makes it possible to control the execution of the associated MPW.&#xA;Supported features are&#xA;&lt;ul>&#xA;    &lt;li>undo(All), redo(All)&lt;/li>&#xA;    &lt;li>speed&lt;/li>&#xA;    &lt;li>pause(Async), resume, stop&lt;/li>&#xA;    &lt;li>mode (read-only)&lt;/li>&#xA;&lt;/ul>&#xA;&#xA;Internally the GamePerformance contains a CommandStack used &#xA;to keep track of game commands."/>
     </eAnnotations>
-    <eOperations name="startGame"/>
-    <eOperations name="startGamePaused"/>
-    <eOperations name="pauseGame"/>
-    <eOperations name="resumeGame"/>
-    <eOperations name="stopGame"/>
-    <eOperations name="hardReset"/>
-    <eOperations name="abortOrStopGame"/>
-    <eOperations name="preExecuteGameCommand"/>
-    <eOperations name="preExecuteEditorCommand"/>
-    <eOperations name="delayControlFlow"/>
+    <eOperations name="startGame">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Start the execution of a game. Before executing start, no commands can be&#xA;executed by the actor objects in the game.&#xA;This is only possible if the current mode is Mode.INITIALIZING&#xA;The game will be started in running mode."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="startGamePaused">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Start the execution of a game. Before executing start, no commands can be&#xA;executed by the actor objects in the game.&#xA;This is only possible if the current mode is Mode.INITIALIZING&#xA;The game will be started in pause mode."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="pauseGame">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Pauses the game when it is running.&#xA;If the game is not running (paused previously, not started or stopped), an exception&#xA;is thrown.&#xA;This is executed asynchronously, but this method waits until the started thread&#xA;has performed a paused state."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="resumeGame">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Resumes the game.&#xA;It is only possible to execute this in paused mode."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="stopGame">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Stop the execution of the game. The game is finished and needs to be reset / hardReset&#xA;or closed.&#xA;If the game is already stopped, this does nothing"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="hardReset">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Hard-resets the game command stack. It clears executed commands and undone commands, however, it does NOT&#xA;undo all commands. If this behaviour is desired, it is necessary to call undoAll first.&#xA;This also sets the mode to initializing."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="abortOrStopGame">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Abort or stop the execution of the game. The game is finished and needs to be reset / hardReset&#xA;or closed.&#xA;If the game is running, paused or aborted, the game is aborted.&#xA;if the game is initializing or stopped, it is stopped."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="preExecuteGameCommand">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Called by the facade to validate the execution of a game command."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="preExecuteEditorCommand">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Called by the facade to validate the execution of an editor command."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="delayControlFlow">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Called by the facade to delay the control flow for game commands."/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="semaphore" lowerBound="1"
         eType="ecore:EDataType BaseTypes.ecore#//Semaphore" changeable="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" lowerBound="1" eType="#//Mode"
         defaultValueLiteral="INITIALIZING"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
-        defaultValueLiteral="4.0"/>
+        defaultValueLiteral="4.0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The speed of the game performance. Valid values are in the range from&#xA;0.0 to 10.0,&#xA;where 0.0 is slow and 10.0 is fast."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="delayEnabled" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="gameCommandStack" lowerBound="1"

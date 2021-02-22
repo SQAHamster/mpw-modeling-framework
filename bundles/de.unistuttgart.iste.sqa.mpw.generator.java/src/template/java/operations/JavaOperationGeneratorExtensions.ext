@@ -15,7 +15,7 @@ extension mpw::generator::xtend::BasicLanguageExtensions;
 
 operationToSignature(EOperation this) :
     let parameters = if (isCommand()) then name.toFirstUpper() + "CommandParameters parameters" else eParameters.collect(e|e.eType.name.toJavaType() + " " + e.name).joinToString(", ") :
-    documentationToJavaDoc() + operationToJavaType() + " " + effectiveOperationName() + "(" + parameters + ")";
+    operationToJavaType() + " " + effectiveOperationName() + "(" + parameters + ")";
 
 documentationToJavaDoc(EOperation this) :
     let documentationText = getDocumentation() :
