@@ -1,5 +1,6 @@
 import ecore;
 
+extension template::java::types::JavaEmfGeneratorExtensions reexport;
 extension mpw::generator::xtend::types::MetaModelGeneratorExtensions reexport;
 
 extension template::java::operations::JavaOperationGeneratorExtensions;
@@ -29,6 +30,10 @@ toJavaPackageName(EPackage this) :
     getModulePackage() + "." + this.name;
     
 getFrameworkBasePackage() : "de.unistuttgart.iste.sqa.mpw.framework";
+
+documentationToJavaDoc(EModelElement this) :
+    let documentationText = getDocumentation() :
+    if (documentationText != null) then documentationText.toJavaDoc() else "";
 
 toJavaHeaderGeneratedComment() : 
     "/*\n * This file is generated. Do not change it manually.\n */";

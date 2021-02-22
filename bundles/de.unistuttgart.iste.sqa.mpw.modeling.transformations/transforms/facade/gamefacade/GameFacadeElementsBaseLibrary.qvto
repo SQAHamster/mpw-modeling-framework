@@ -38,6 +38,7 @@ abstract mapping inout EClass::createElementsBase() {
     baseName := self.name;
     self.eAnnotations += toAnnotation("role", "game");
     var concreteClass := self.getConcreteClass();
+    self->map copyDocumentationToFacadeClass(concreteClass);
     
     self.eAnnotations += object ImportTypeAnnotation {
         relativeQualifiedTypeName := "commands." + baseName.toLowerCase() + ".*";
@@ -218,3 +219,10 @@ query EClassifier::findFacadeForRoleType() : EClass {
 	var baseName := self.getBaseName();
     return findClassForName(baseName);
 };
+
+mapping inout EClass::copyDocumentationToFacadeClass(sourceClass: EClass) {
+    var documentationValue := sourceClass.getAnnotationValueIgnoringSource("documentation");
+    if (documentationValue != null) {
+        eAnnotations += toAnnotation("documentation", documentationValue);
+    };
+}

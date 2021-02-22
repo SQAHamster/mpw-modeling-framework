@@ -33,17 +33,19 @@
     
     namespace «this.ePackage.name» {
     
+    «documentationToCppDoc()-»
     class «name» «toInheritance()» {
         private:
 
         «FOREACH eStructuralFeatures AS f-»
+            «f.documentationToCppDoc()-»
             «f.featureToSimpleFieldType()» «f.name»;
         «ENDFOREACH-»
         
         public:
 
         «FOREACH eOperations AS o-»
-		    «o.getAnnotationValue("documentation").toCppDoc()»
+		    «o.documentationToCppDoc()-»
             «o.operationToCppType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.toCppType()» «p.name»«ENDFOREACH»);
         «ENDFOREACH»
         «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations»
@@ -82,7 +84,7 @@
 «DEFINE GenerationAnnotationDeclaration FOR EAnnotation»«ENDDEFINE-»
 
 «DEFINE GenerationAnnotationDeclaration FOR GetPropertyAnnotation-»
-    «getAnnotationValue("documentation").toCppDoc()»
+    «documentationToCppDoc()-»
     «getterType.toCppType()» «getterOperationName»();
 «ENDDEFINE»
 

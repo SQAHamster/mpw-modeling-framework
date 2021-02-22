@@ -24,14 +24,16 @@
     import «getFrameworkBasePackage()».mpw.*;
     «EXPAND ImportTypeGenerationAnnotation FOREACH eAnnotations.typeSelect(ImportTypeAnnotation)»
     
+    «documentationToJavaDoc()-»
     public class «name» {
         «FOREACH eStructuralFeatures AS f-»
+            «f.documentationToJavaDoc()-»
             private «f.featureToJavaType()» «f.name»;
         «ENDFOREACH-»
         
         «FOREACH eOperations AS o-»
 		    «REM»TODO JML«constraints.toJml()»«ENDREM-»
-		    «o.getAnnotationValue("documentation").toJavaDoc()»
+		    «o.documentationToJavaDoc()-»
             public «o.operationToJavaType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.name.toJavaType()» «p.name»«ENDFOREACH») {
             «EXPAND GenerationOperationAnnotation FOREACH o.eAnnotations-»
             }
@@ -45,7 +47,7 @@
 «DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE-»
 
 «DEFINE GenerationAnnotation FOR GetPropertyAnnotation-»
-    «getAnnotationValue("documentation").toJavaDoc()»
+    «documentationToJavaDoc()-»
     public «getterType.name.toJavaType()» «getterOperationName»() {
         return this.«field.name»;
     }

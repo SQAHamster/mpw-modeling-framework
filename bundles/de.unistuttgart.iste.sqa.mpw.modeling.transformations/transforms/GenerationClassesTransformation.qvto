@@ -44,4 +44,3 @@ mapping EClass::toGameFacadeClass() : EClass {
     name := baseName;
     eAnnotations += "facade".toMarkerAnnotation();
 }
-

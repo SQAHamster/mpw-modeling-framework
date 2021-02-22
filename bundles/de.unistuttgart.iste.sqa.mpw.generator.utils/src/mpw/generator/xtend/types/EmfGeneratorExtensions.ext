@@ -99,4 +99,8 @@ getAnnotationValue(EModelElement this, String key) :
 
 isEnum(EClassifier this) : EEnum.isInstance(this);
 isDataType(EClassifier this) : metaType.name == "ecore::EDataType"; // note: EDataType.isInstance(this) does not work
+
+getDocumentation(EModelElement this) :
+    let documentationDetail = eAnnotations.collect(a|a.details.selectFirst(d|d.key == "documentation")).selectFirst(d|d != null) :
+    if (documentationDetail != null) then documentationDetail.value else null;
     

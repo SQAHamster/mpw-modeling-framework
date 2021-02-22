@@ -57,10 +57,10 @@ defaultValueOf(EStructuralFeature f) :
     
 toJavaDoc(String this) :
     if (length > 0) then 
-        "/** " + this + " */"
+        "/**\n * " + this.replaceAll("\n", "\n * ") + "\n*/\n"
     else "";
     
 toComment(String this) :
     if (length > 0) then 
-        "/* " + this + " */"
+        "/*\n * " + this.replaceAll("\n", "\n * ") + "\n*/\n"
     else "";

@@ -56,12 +56,12 @@ defaultValueOf(EStructuralFeature f) :
 
 toCppDoc(String this) :
     if (length > 0) then 
-        "/** " + this + " */"
+        "/**\n * " + this.replaceAll("\n", "\n * ") + "\n*/\n"
     else "";
     
 toComment(String this) :
     if (length > 0) then 
-        "/* " + this + " */"
+        "/*\n * " + this.replaceAll("\n", "\n * ") + "\n*/\n"
     else "";
 
 toCppLiteral(String this) :

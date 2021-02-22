@@ -15,7 +15,7 @@ var platformUriPrefix = "platform:/resource"
 var moduleBaseName = "de.unistuttgart.iste.sqa.mpw"
 var modelingModuleBaseName = "${moduleBaseName}.modeling"
 
-var rootPath = ".."
+var rootPath = "../.."
 var transformationsProject = "${modelingModuleBaseName}.transformations"
 
 var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/RoleTransformation.qvto"

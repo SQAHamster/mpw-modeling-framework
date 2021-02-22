@@ -33,8 +33,8 @@ private operationToReturnType(EOperation this) :
     else operationToCppType();
 
 documentationToCppDoc(EOperation this) :
-    let documentationDetail = eAnnotations.collect(a|a.details.selectFirst(d|d.key == "documentation")).selectFirst(d|d != null) :
-    if (documentationDetail != null) then documentationDetail.value.toCppDoc() else "";
+    let documentationText = getDocumentation() :
+    if (documentationText != null) then documentationText.toCppDoc() else "";
 
 private effectiveOperationName(EOperation this) :
     if (isPropertyGetter()) then name.getter() else name;

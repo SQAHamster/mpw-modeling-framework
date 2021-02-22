@@ -17,9 +17,9 @@ query toDocumentationLines(command: CommandModel::Transformation) : String {
     var documentation := command.constraints
                                ->collect(c|c.toDocumentation())
                                ->select(doc|doc <> null and doc.length() > 0)
-                               ->joinToString("<br/>\n * ");
+                               ->joinToString("<br/>\n");
     if (documentation.length() > 0) {
-    	documentation := "<br/>\n * " + documentation + "\n";
+    	documentation := "<br/>\n<br/>\n" + documentation + "\n";
     };
     assert(not documentation.oclIsInvalid());
     return documentation;

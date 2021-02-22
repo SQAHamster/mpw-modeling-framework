@@ -4,19 +4,20 @@
 
 «DEFINE PropertyDefinitions FOR EClass»
 	  «FOREACH eStructuralFeatures AS f»
-	  «IF f.isObservableProperty()»
+	  «f.documentationToJavaDoc()-»
+	  «IF f.isObservableProperty()-»
       private final «f.featureToObservableFieldType()» «f.name» = «f.featureToObservableFieldInstantiation()»;
-      «ELSEIF f.changeable && f.eType.isDependency()»
+      «ELSEIF f.changeable && f.eType.isDependency()-»
       private «f.featureToJavaType()» «f.name» = «EXPAND InlineFeatureFieldInstantiation FOR f»;
-      «ELSEIF f.isCollection()»
+      «ELSEIF f.isCollection()-»
       private final «f.featureToJavaType()» «f.name» = «EXPAND InlineFeatureFieldInstantiation FOR f»;
-      «ELSEIF f.derived || f.changeable»
+      «ELSEIF f.derived || f.changeable-»
       private «f.featureToJavaType()» «f.name»;
-      «ELSEIF f.isConstructorInjectedProperty()»
+      «ELSEIF f.isConstructorInjectedProperty()-»
       private final «f.featureToJavaType()» «f.name»;
-	  «ELSEIF !f.derived»
+	  «ELSEIF !f.derived-»
       private final «f.featureToJavaType()» «f.name» = «EXPAND InlineFeatureFieldInstantiation FOR f»;
-	  «ENDIF»
+	  «ENDIF-»
 	  «IF f.isCollection() && f.isReference() && !f.eType.isValueType()-»
 	  /** internal lookup for {@link «name»#«f.name»} */
       private final Set<«f.featureToSingleJavaType()»> «f.name»Lookup = new HashSet<>();

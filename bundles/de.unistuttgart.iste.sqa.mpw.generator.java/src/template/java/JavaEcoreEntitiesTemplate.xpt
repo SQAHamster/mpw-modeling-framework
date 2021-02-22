@@ -28,6 +28,7 @@
     
     «EXPAND template::java::types::JavaImportUsedTypesTemplate::ImportDefinitions FOR this»
     
+    «documentationToJavaDoc()-»
     public «IF needsImplSubclass() || abstract»abstract«ENDIF» class «this.name» «this.toInheritance()» {
       «EXPAND template::java::properties::JavaPropertyTemplate::PropertyDefinitions FOR this»
       «EXPAND template::java::properties::JavaPropertyTemplate::ConstructorDefinition FOR this»
@@ -72,6 +73,7 @@
     
     «EXPAND template::java::types::JavaImportUsedTypesTemplate::ImportDefinitions FOR this»
     
+    «documentationToJavaDoc()-»
     public interface «this.name» «toInheritance()» {
       «FOREACH eOperations AS o»
           «o.operationToSignature()»;
@@ -104,6 +106,7 @@
     
     package «this.ePackage.toJavaPackageName()»;
     
+    «documentationToJavaDoc()-»
     public enum «this.name» {
       «FOREACH eLiterals AS l SEPARATOR ", "»
       «l»

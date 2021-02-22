@@ -4,7 +4,8 @@
 
 «DEFINE PropertyDefinitions FOR EClass»
       «FOREACH eStructuralFeatures AS f»
-      «IF f.isObservableProperty()»
+      «f.documentationToCppDoc()-»
+      «IF f.isObservableProperty()-»
       «f.featureToObservableFieldType()» «f.name»;
       «ELSE-»
       «f.featureToSimpleFieldType()» «f.name»;

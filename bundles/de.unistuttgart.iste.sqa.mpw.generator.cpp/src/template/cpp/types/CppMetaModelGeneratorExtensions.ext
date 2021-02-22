@@ -1,5 +1,6 @@
 import ecore;
 
+extension template::cpp::types::CppEmfGeneratorExtensions reexport;
 extension mpw::generator::xtend::types::MetaModelGeneratorExtensions reexport;
 
 extension mpw::generator::xtend::util::GlobalsGeneratorExtensions;
@@ -41,6 +42,10 @@ toCppDummyIncludeGuard(EClassifier this) : toCppIncludeGuard("Dummy" + this.name
 
 toCppIncludeGuard(String this) :
     getModulePackage().replaceAll("\\.", "_").toUpperCase() + "_" + this.toUpperCase() + "_H";
+
+documentationToCppDoc(EModelElement this) :
+    let documentationText = getDocumentation() :
+    if (documentationText != null) then documentationText.toCppDoc() else "";
 
 toCppHeaderGeneratedComment() : 
     "/*\n * This file is generated. Do not change it manually.\n */";

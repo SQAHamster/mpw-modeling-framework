@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EPackage;
 
+import components.helpers.AnnotationRetainer;
 import util.ListLambdaVisitor;
 
 /**
@@ -42,15 +43,25 @@ public class MultiEcoreReader extends MultiResourceReader {
 		models.addAll(resultingModels);
 	}
 
-	private void handlePackage(final List<Object> resultingModels, EPackage ePackage) {
+	private void handlePackage(final List<Object> resultingModels, final EPackage ePackage) {
 		var registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ePackage.getNsURI());
 		if (registeredPackage != null) {
 			log.info("Discard loaded ecore resource " + ePackage.getName() + " since it was already loaded and registered. Use the registered one instead.");
 			resultingModels.add(registeredPackage);
+			copyMissingAnnotationsToRegisteredPackage(ePackage, registeredPackage);
 		} else {
 			EPackage.Registry.INSTANCE.put(ePackage.getNsURI(), ePackage);
 			resultingModels.add(ePackage);
 		}
+	}
+
+	/**
+	 * The already registered is probably created using generated Ecore classes (genmodel).
+	 * In this case, no annotations (especially documentation) is not retained.
+	 * Since the loaded EPackage contains all annotations, copy them to the registered EPackage.
+	 */
+	private void copyMissingAnnotationsToRegisteredPackage(final EPackage loadedPackage, final EPackage registeredPackage) {
+		new AnnotationRetainer(loadedPackage).copyMissingAnnotationsTo(registeredPackage);
 	}
 
 }

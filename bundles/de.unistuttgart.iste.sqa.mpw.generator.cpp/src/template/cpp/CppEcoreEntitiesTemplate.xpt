@@ -37,6 +37,7 @@
     
     namespace «this.ePackage.name» {
     
+    «documentationToCppDoc()-»
     class «this.name» «this.toInheritance()» {
     
     private:
@@ -168,6 +169,7 @@
     
     namespace «this.ePackage.name» {
     
+    «documentationToCppDoc()-»
     class «this.name» «this.toInheritance()» «IF name == "Entity"», public ReflectivePropertyObject«ENDIF» {
     
     public:
@@ -226,6 +228,7 @@
     
     namespace «this.ePackage.name» {
     
+    «documentationToCppDoc()-»
     enum class «this.name» {
       «FOREACH eLiterals AS l SEPARATOR ", "»
       «l»
