@@ -21,6 +21,10 @@ To provide a well-defined environment to teach C++ with the hamster-simulation, 
 
 Note: wrapping the JVM and provide a C-API works for many projects, but for teaching it brings complexity for setup and understanding the internals of the simulators.
 
+## Wiki
+
+Please visit the wiki (https://github.com/Fumapps/mpw-modeling-framework/wiki) for further information regarding design, architecture or other topics.
+
 ## Java Version
 
 The project is developed with JDK 15. Ensure that Eclipse has mapped a JavaSE-15.
