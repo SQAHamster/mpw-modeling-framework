@@ -21,6 +21,22 @@ To provide a well-defined environment to teach C++ with the hamster-simulation, 
 
 Note: wrapping the JVM and provide a C-API works for many projects, but for teaching it brings complexity for setup and understanding the internals of the simulators.
 
+## Concrete MPWs
+
+### Hamster Simulator
+
+MPW which is based on the [Boles](https://www.java-hamster-modell.de/simulator.html) and [PSE](https://git.rss.iste.uni-stuttgart.de/open-to-public/pse) hamster-simulator, to teach programming
+based on controlling a hamster in a territory, to pick and put grains.
+
+See: https://github.com/Fumapps/mpw-modeling-hamster
+
+### Kara the ladybug Simulator
+
+MPW which is based on the "Kara the ladybug" game (https://www.swisseduc.ch/compscience/karatojava/kara/).
+It allows to control a ladybug to collect leafs and move mushrooms in a mini world.
+
+See: https://github.com/Fumapps/mpw-modeling-kara
+
 ## Wiki
 
 Please visit the wiki (https://github.com/Fumapps/mpw-modeling-framework/wiki) for further information regarding design, architecture or other topics.
@@ -71,19 +87,21 @@ Example:
 Note: after checkout there are many errors due to ungenerated files. They shall disappear after the following steps.
 Simply click "Proceed" when a dialog occurs due to errors.
 
-* run genmodels for "generate model code"
+* run genmodels for "generate model code" or call Maven `generate-sources`
     * `de.unistuttgart.iste.sqa.mpw.modeling.mpw/model/mpw.genmodel`
     * `de.unistuttgart.iste.sqa.mpw.modeling.transformations/model/transformations.genmodel`
     * `de.unistuttgart.iste.sqa.mpw.modeling.transformations/model/inputs/inputs.genmodel`
 
-* run transformation / generation workflow
-    * `de.unistuttgart.iste.sqa.mpw.modeling.workflow/src/workflow/workflow.mwe2`
+* run transformation / generation workflow or call Maven `package`
+    * `/de.unistuttgart.iste.sqa.mpw.modeling.framework/src-workflow/workflow/mpw_framework_workflow.mwe2`
 
 * open target project in the IDE of choice
-    * Java: by Maven: `de.unistuttgart.iste.sqa.mpw.hamstersimulator.java`
+    * Java: by Maven: `de.unistuttgart.iste.sqa.mpw.framework.java`
+    * C++: by CMake: `de.unistuttgart.iste.sqa.mpw.framework.cpp`
 
 * run unit tests
     * Java: under `/core/src/test/java`
+    * C++: use CTest after building
 
 Note: Xpand / Xtend may still show some phantom errors in `de.unistuttgart.iste.sqa.mpw.generator.java/src/template` after successful generation. This errors can simply be ignored or removed by editing (e.g. inserting a dummy space character) the files marked with error and then save them.
       It seems that it is caused by "`Collection.flatten()`" usage in Xpand / Xtend. Currently I don't know why this errors occur and how to prevent them.
