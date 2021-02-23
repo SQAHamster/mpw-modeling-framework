@@ -105,26 +105,24 @@ void GameViewPresenterBase::close() {
 }
 
 void GameViewPresenterBase::addTileNode(const mpw::Tile& tile) {
-    Tile& nonConstTile = const_cast<Tile&>(tile); // TODO const-correctness: adapt after migrate generator
-    const Location& location = nonConstTile.getLocation();
+    const Location& location = tile.getLocation();
 
-    auto& contentsProperty = nonConstTile.contentsProperty();
-    addedContentListenerIds[&tile] = contentsProperty.addOnAddedListener([this, &nonConstTile](const mpw::TileContent&) {
+    auto& contentsProperty = tile.contentsProperty();
+    addedContentListenerIds[&tile] = contentsProperty.addOnAddedListener([this, &tile](const mpw::TileContent&) {
         auto lock = getSemaphore().lock();
-        setTileNodeAt(nonConstTile.getLocation(), nonConstTile);
+        setTileNodeAt(tile.getLocation(), tile);
     });
-    removedContentListenerIds[&tile] = contentsProperty.addOnRemovedListener([this, &nonConstTile](const mpw::TileContent&) {
+    removedContentListenerIds[&tile] = contentsProperty.addOnRemovedListener([this, &tile](const mpw::TileContent&) {
         auto lock = getSemaphore().lock();
-        setTileNodeAt(nonConstTile.getLocation(), nonConstTile);
+        setTileNodeAt(tile.getLocation(), tile);
     });
     setTileNodeAt(location, tile);
 }
 
 void GameViewPresenterBase::removeTileNode(const mpw::Tile& tile) {
-    Tile& nonConstTile = const_cast<Tile&>(tile); // TODO const-correctness: adapt after migrate generator
     auto cell = getViewModel()->getCellAt(
-            nonConstTile.getLocation().getRow(),
-            nonConstTile.getLocation().getColumn());
+            tile.getLocation().getRow(),
+            tile.getLocation().getColumn());
     cell->clearLayers();
 }
 
@@ -150,9 +148,8 @@ int GameViewPresenterBase::getRotationForDirection(mpw::Direction direction) {
 }
 
 void GameViewPresenterBase::addLogEntry(const LogEntry& entry) {
-    auto& nonConstEntry = const_cast<LogEntry&>(entry); // TODO const correctness
     auto viewModelEntry = std::make_shared<ViewModelLogEntry>();
-    viewModelEntry->setMessage(nonConstEntry.getMessage());
+    viewModelEntry->setMessage(entry.getMessage());
     viewModelEntry->setColor(getColorForLogEntry(entry));
     getViewModel()->addToLogEntries(viewModelEntry);
 }

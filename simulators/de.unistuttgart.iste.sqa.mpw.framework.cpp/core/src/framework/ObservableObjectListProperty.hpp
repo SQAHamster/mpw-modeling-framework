@@ -39,7 +39,21 @@ public:
         return nullptr;
     }
 
+    std::shared_ptr<const T> front() const override {
+        if (references.size() > 0) {
+            return references.front().get().shared_from_this();
+        }
+        return nullptr;
+    }
+
     std::shared_ptr<T> back() override {
+        if (references.size() > 0) {
+            return references.back().get().shared_from_this();
+        }
+        return nullptr;
+    }
+
+    std::shared_ptr<const T> back() const override {
         if (references.size() > 0) {
             return references.back().get().shared_from_this();
         }

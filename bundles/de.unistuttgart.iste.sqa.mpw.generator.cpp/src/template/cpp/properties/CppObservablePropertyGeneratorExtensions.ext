@@ -25,11 +25,14 @@ private attributeToObservableFieldType(EStructuralFeature this) :
 	if (this.upperBound == -1) then "framework::ObservablePrimitiveListProperty<" + this.toCppType() + ">"
 	else "framework::ObservablePrimitiveProperty<" + this.toCppType() + ">";
 
+propertyGetterValueToType(ETypedElement this) : elementToCppPropertyGetter();
+propertyGetterValueToConstType(ETypedElement this) : elementToConstCppPropertyGetter();
+
 propertyGetterToObservableFieldType(ETypedElement this) : 
     if (this.upperBound == -1) then "framework::ObservableListProperty<" + toCppInPropertyName() + ">"
     else if (EAttribute.isInstance(this) || eType.isBuiltInType() || eType.isEnum() || eType.isValueType()) then "framework::ObservablePrimitiveProperty<" + toCppInPropertyName() + ">"
     else "framework::ObservableObjectProperty<" + toCppInPropertyName() + ">";
-    
+
 // Avoid that std::shared_ptr is wrapped around references
 private toCppInPropertyName(ETypedElement this) :
     if (EAttribute.isInstance(this) || this.eType.isBuiltInType()) then toCppType()
@@ -43,10 +46,26 @@ featureToObservableFieldInstantiation(EStructuralFeature this) :
 	else if (this.eType.isBuiltInType()) then "{}"
 	else "{ nullptr }";
 
+operationToVirtualPropertyGetterSignature(EOperation this) :
+    documentationToCppDoc() + "virtual " + propertyGetterValueToType() + " " + name.getter() + "() noexcept";
+operationToConstVirtualPropertyGetterSignature(EOperation this) :
+    documentationToCppDoc() + "virtual " + propertyGetterValueToConstType() + " " + name.getter() + "() const noexcept";
 operationToObservableGetterSignature(EOperation this) :
-    "virtual const " + propertyGetterToObservableFieldType() + "& " + name + "Property()";
+    "virtual " + propertyGetterToObservableFieldType() + "& " + name + "Property() noexcept";
+operationToConstObservableGetterSignature(EOperation this) :
+    "virtual const " + propertyGetterToObservableFieldType() + "& " + name + "Property() const noexcept";
     
-featureToCppPropertyGetter(EStructuralFeature this) : 
-    if (this.isObjectReference() && this.isCollection()) then "framework::ObjectListView<" + this.eType.name + ">&"
-    else featureToCppType();
+featureToCppPropertyGetter(EStructuralFeature this) : elementToCppPropertyGetter();
+    
+private elementToCppPropertyGetter(ETypedElement this) : 
+    if (this.isObjectReference() && this.isCollection()) then "framework::ObjectListView<" + this.eType.toQualifiedTypeName() + ">&"
+    else if (this.eType.isString()) then "const std::string&"
+    else this.toCppType();
+
+featureToConstCppPropertyGetter(EStructuralFeature this) : elementToConstCppPropertyGetter();
+
+private elementToConstCppPropertyGetter(ETypedElement this) : 
+    if (this.isObjectReference() && this.isCollection()) then "const framework::ObjectListView<" + this.eType.toQualifiedTypeName() + ">&"
+    else if (this.eType.isString()) then "const std::string&"
+    else this.toConstCppType();
     

@@ -62,7 +62,21 @@ public:
         return elements.front();
     }
 
+    std::shared_ptr<const T> front() const override {
+        if (elements.empty()) {
+            return {};
+        }
+        return elements.front();
+    }
+
     std::shared_ptr<T> back() override {
+        if (elements.empty()) {
+            return {};
+        }
+        return elements.back();
+    }
+
+    std::shared_ptr<const T> back() const override {
         if (elements.empty()) {
             return {};
         }

@@ -18,6 +18,12 @@ operationToNonVirtualSignature(EOperation this) : operationToSignatureWithOption
 private operationToSignatureWithOptionalVirtual(EOperation this, Boolean virtual) :
     documentationToCppDoc() + (if (virtual) then "virtual " else "") + operationToReturnType() + " " + effectiveOperationName() + "(" + getOperationParameters() + ")";
 
+operationToVirtualConstSignature(EOperation this) : operationToConstSignatureWithOptionalVirtual(true);
+operationToNonVirtualConstSignature(EOperation this) : operationToConstSignatureWithOptionalVirtual(false);
+
+private operationToConstSignatureWithOptionalVirtual(EOperation this, Boolean virtual) :
+    documentationToCppDoc() + (if (virtual) then "virtual " else "") + operationToConstReturnType() + " " + effectiveOperationName() + "(" + getOperationParameters() + ") const";
+
 operationToOverrideSignature(EOperation this) :
     operationToReturnType() + " " + effectiveOperationName() + "(" + getOperationParameters() + ") override";
 
@@ -31,6 +37,10 @@ private getOperationParameters(EOperation this) :
 private operationToReturnType(EOperation this) :
     if (isQuery()) then this.getQueryForOperation().toCppQueryReturnType()
     else operationToCppType();
+
+// Note: currently only used for simple operations, do not cover all cases like the non-const one (might be improved in future)
+private operationToConstReturnType(EOperation this) :
+    operationToConstCppType();
 
 documentationToCppDoc(EOperation this) :
     let documentationText = getDocumentation() :

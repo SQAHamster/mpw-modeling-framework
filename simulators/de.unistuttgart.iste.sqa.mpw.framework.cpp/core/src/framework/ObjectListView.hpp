@@ -67,7 +67,9 @@ public:
     }
 
     virtual std::shared_ptr<T> front() = 0;
+    virtual std::shared_ptr<const T> front() const = 0;
     virtual std::shared_ptr<T> back() = 0;
+    virtual std::shared_ptr<const T> back() const = 0;
 
 };
 

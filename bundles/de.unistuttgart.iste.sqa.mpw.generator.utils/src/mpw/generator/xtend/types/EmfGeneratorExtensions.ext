@@ -43,11 +43,9 @@ isCollection(ETypedElement this) :
 isReference(EStructuralFeature this) :
     EReference.isInstance(this);
     
-isObjectReference(EStructuralFeature this) :
-    EReference.isInstance(this) && !this.eType.isValueType();
-    
+isObjectReference(ETypedElement this) : eType.isObjectReference();
 isObjectReference(EClassifier this) :
-    !isValueType() && !isPrimitive();
+    !isValueType() && !isPrimitive() && !isEnum();
 	
 isConstructorInjectedProperty(EStructuralFeature this) :
     !this.changeable && !this.isContainment() && !this.derived;

@@ -18,6 +18,8 @@ public:
 
     std::shared_ptr<viewmodel::ViewModelCell> getCellAt(int row,
 			int column) override;
+    std::shared_ptr<const viewmodel::ViewModelCell> getCellAt(int row,
+			int column) const override;
 
 };
 

@@ -118,12 +118,21 @@
 «DEFINE GetPropertyValueDeclarations FOR EClass»
       «FOREACH eStructuralFeatures AS f»
       «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToCppPropertyGetter()» «f.name.getter()»() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToConstCppPropertyGetter()» «f.name.getter()»() const noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
       «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE GetPropertyValueDefinitions FOR EClass»
       «FOREACH eStructuralFeatures AS f»
       «f.featureToCppPropertyGetter()» «name»::«f.name.getter()»() noexcept {
+        «IF f.isObservableProperty() && !f.isCollection()-»
+        return this->«f.name».get();
+        «ELSE-»
+        return this->«f.resolveFieldValue()»;
+        «ENDIF-»
+      }
+
+      «f.featureToConstCppPropertyGetter()» «name»::«f.name.getter()»() const noexcept {
         «IF f.isObservableProperty() && !f.isCollection()-»
         return this->«f.name».get();
         «ELSE-»
@@ -253,13 +262,17 @@
 
 «DEFINE GetPropertyDeclarations FOR EClass»
       «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
-      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»const «f.propertyGetterToObservableFieldType()»& «f.name»Property() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.propertyGetterToObservableFieldType()»& «f.name»Property() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»const «f.propertyGetterToObservableFieldType()»& «f.name»Property() const noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
       «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE GetPropertyDefinitions FOR EClass»
       «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
-      const «f.propertyGetterToObservableFieldType()»& «name»::«f.name»Property() noexcept {
+      «f.propertyGetterToObservableFieldType()»& «name»::«f.name»Property() noexcept {
+        return this->«f.name»;
+      }
+      const «f.propertyGetterToObservableFieldType()»& «name»::«f.name»Property() const noexcept {
         return this->«f.name»;
       }
       «ENDFOREACH»
@@ -268,11 +281,17 @@
 «DEFINE VirtualBaseMethodDelegateDefinitions FOR EClass»
     «IF !abstract-»
 	    «FOREACH eAllStructuralFeatures.without(eStructuralFeatures).select(f|f.hasPropertyGetterOperation(this)) AS f»
-	    const «f.propertyGetterToObservableFieldType()»& «f.name»Property() noexcept override {
+	    «f.propertyGetterToObservableFieldType()»& «f.name»Property() noexcept override {
+	        return inherited::«f.name»Property();
+	    }
+	    const «f.propertyGetterToObservableFieldType()»& «f.name»Property() const noexcept override {
 	        return inherited::«f.name»Property();
 	    }
 	    
 	    «f.featureToCppType()» «f.name.getter()»() noexcept override {
+	        return inherited::«f.name.getter()»();
+	    }
+	    «f.featureToConstCppType()» «f.name.getter()»() const noexcept override {
 	        return inherited::«f.name.getter()»();
 	    }
 	    «ENDFOREACH»

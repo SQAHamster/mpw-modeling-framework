@@ -15,6 +15,13 @@ std::shared_ptr<viewmodel::ViewModelCell> GameViewModelImpl::getCellAt(
     return cell.value();
 }
 
+std::shared_ptr<const viewmodel::ViewModelCell> GameViewModelImpl::getCellAt(
+		int rowIndex, int columnIndex) const {
+    auto row = collectionhelpers::get_at(getRows(), rowIndex);
+    auto cell = collectionhelpers::get_at(row->get()->getCells(), columnIndex);
+    return cell.value();
+}
+
 void GameViewModelImpl::init(mpw::Size size) {
     setSize(size);
     for (int rowIndex = 0; rowIndex < size.getRowCount(); rowIndex++) {
