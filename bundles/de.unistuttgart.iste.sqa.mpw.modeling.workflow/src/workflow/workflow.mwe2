@@ -22,7 +22,7 @@ var roleTransformationUri  = "${platformUriPrefix}/${transformationsProject}/Rol
 var commandTransformationUri  = "${platformUriPrefix}/${transformationsProject}/CommandTransformation.qvto"
 var createWriteCommandTransformationUri = "${platformUriPrefix}/${transformationsProject}/CreateWriteCommandTransformation.qvto"
 var queryTransformationUri  = "${platformUriPrefix}/${transformationsProject}/QueryTransformation.qvto"
-var generationClassesTransformationUri  = "${platformUriPrefix}/${transformationsProject}/GenerationClassesTransformation.qvto"
+var facadeTransformationUri  = "${platformUriPrefix}/${transformationsProject}/FacadeTransformation.qvto"
 
 Workflow {
 	// set up EMF for standalone execution
@@ -116,9 +116,9 @@ Workflow {
         directorySuffix = "TransformedNoFacades"
 	}*/
     
-    // transform "entityModels" with generation classes transformation (primarily adds facades)
+    // transform "entityModels" for facade generation
     component = QvtoTransformator {
-        transformationUri = generationClassesTransformationUri
+        transformationUri = facadeTransformationUri
         modelSlot = "entityModels"
         targetModelSlot = "generationEcoreModels"
     }
