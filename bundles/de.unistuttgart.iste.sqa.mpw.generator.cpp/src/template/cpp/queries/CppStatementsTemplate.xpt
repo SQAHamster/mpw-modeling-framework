@@ -24,7 +24,7 @@
 «DEFINE StatementDefinition FOR Statement»«ENDDEFINE»
 
 «DEFINE StatementDefinition FOR IntermediaryResultStatement-»
-    «type.toCppType()» «variableName» = «EXPAND StatementsDefinitions FOR internalStatementsExpression»;
+    «type.toConstCppType()» «variableName» = «EXPAND StatementsDefinitions FOR internalStatementsExpression»;
     «IF next == null-»
         return «variableName»;
     «ELSE-»

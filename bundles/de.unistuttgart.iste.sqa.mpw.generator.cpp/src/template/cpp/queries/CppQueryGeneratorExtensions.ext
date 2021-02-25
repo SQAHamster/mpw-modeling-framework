@@ -2,6 +2,7 @@ import ecore;
 import queryBehavior;
 import commandBehavior;
 import behaviorsbase;
+import generationAnnotations;
 
 extension mpw::generator::xtend::queries::QueryGeneratorExtensions reexport;
 
@@ -18,6 +19,9 @@ toOperatorCode(CalculationOperator this) : toDefaultOperatorCode();
 
 toCppType(behaviorsbase::TypedElement element) :
     toCppType(element.type.name, element.type.metaType.name, element.type.ePackage);
+
+toConstCppType(behaviorsbase::TypedElement element) :
+    toConstCppType(element.type.name, element.type.metaType.name, element.type.ePackage);
 
 getDefaultValueLiteralString(Query query) : toDefaultValueLiteralString(query, query.defaultValueLiteral);
     
@@ -45,8 +49,8 @@ getFunctionStatementCall(Statement this) :
     else "";
     
 toCppQueryReturnType(Query this) : 
-    if (this.isOptional) then "std::optional<" + toCppType() + ">"
-    else toCppType();
+    if (this.isOptional) then "std::optional<" + toConstCppType() + ">"
+    else toConstCppType();
 
 accessor(ReferenceCondition this) : accessor(this.source);
 accessor(AttributeCondition this) : accessor(this.instance);
@@ -54,4 +58,6 @@ accessor(AttributeCondition this) : accessor(this.instance);
 accessor(InstanceCondition this) :
     if (this.instanceType.isValueType()) then "."
     else "->";
-    
+
+operationContainsQueryCall(EOperation this) :
+    eAnnotations.typeSelect(generationAnnotations::QueryCallAnnotation).size > 0;

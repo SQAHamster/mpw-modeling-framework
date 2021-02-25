@@ -5,14 +5,14 @@
 
 «DEFINE QueryDeclarations FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
-	  «q.toCppQueryReturnType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») noexcept override;
+	  «q.toCppQueryReturnType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») const noexcept override;
       «EXPAND HelperStatementDeclarations FOR q.eAllContents.typeSelect(StatementsExpression).select(e|e.needsHelperMethod)-»
       «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE QueryDefinitions FOR EClass»
 	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q»
-      «q.toCppQueryReturnType()» «name»::«q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») noexcept {
+      «q.toCppQueryReturnType()» «name»::«q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») const noexcept {
 	      try {
   	          return «EXPAND ExpressionDefinition FOR q.mainExpression-»;
 	      } catch (...) {
@@ -26,7 +26,7 @@
 «DEFINE ExpressionDefinition FOR Expression-»«ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR VariableExpression-»
-    «valueExpression.toCppType()» «variableName» = «EXPAND ExpressionDefinition FOR valueExpression»;
+    «valueExpression.toConstCppType()» «variableName» = «EXPAND ExpressionDefinition FOR valueExpression»;
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR NotExpression-»
@@ -80,7 +80,7 @@
 «ENDDEFINE»
 
 «DEFINE HelperStatementDeclaration FOR StatementsExpression»
-      «this.toCppType()» «helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»);
+      «this.toConstCppType()» «helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») const noexcept;
 «ENDDEFINE»
 
 «DEFINE HelperStatementDefinition FOR StatementsExpression-»
@@ -88,7 +88,7 @@
 «ENDDEFINE»
 
 «DEFINE HelperStatementDefinitionForClassName(String className) FOR StatementsExpression»
-      «this.toCppType()» «className»::«helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») {
+      «this.toCppType()» «className»::«helperMethodName»(«FOREACH this.findParameterList() AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH») const noexcept {
           «REM»Note: for helper methods intermediary statements are used, which generate the 'return' by themselves«ENDREM-»
           «EXPAND template::cpp::queries::CppStatementsTemplate::StatementsDefinitions FOR this-»
       }

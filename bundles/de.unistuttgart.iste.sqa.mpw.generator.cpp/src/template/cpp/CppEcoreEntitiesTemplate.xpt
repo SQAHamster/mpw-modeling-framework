@@ -188,7 +188,7 @@
           «o.operationToObservableGetterSignature()» = 0;
           «o.operationToConstObservableGetterSignature()» = 0;
       «ELSE-»
-          «o.operationToVirtualSignature()» = 0;
+          «o.operationToVirtualSignature()»«IF o.isQuery()» const noexcept«ENDIF» = 0;
       «ENDIF-»
       «ENDFOREACH»
       «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations»

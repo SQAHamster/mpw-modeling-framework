@@ -46,7 +46,7 @@
 
         «FOREACH eOperations AS o-»
 		    «o.documentationToCppDoc()-»
-            «o.operationToCppType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.toCppType()» «p.name»«ENDFOREACH»);
+            «o.operationToCppType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.toCppType()» «p.name»«ENDFOREACH»)«IF o.operationContainsQueryCall()» const noexcept«ENDIF»;
         «ENDFOREACH»
         «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations»
     };
@@ -67,7 +67,7 @@
     namespace «this.ePackage.name» {
     
         «FOREACH eOperations AS o-»
-            «o.operationToCppType()» «name»::«o.name»(«FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.toCppType()» «p.name»«ENDFOREACH») {
+            «o.operationToCppType()» «name»::«o.name»(«FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.toCppType()» «p.name»«ENDFOREACH»)«IF o.operationContainsQueryCall()» const noexcept«ENDIF» {
             «EXPAND GenerationAnnotationOperationDefinition FOREACH o.eAnnotations-»
             }
             
