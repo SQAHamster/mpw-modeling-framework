@@ -1,33 +1,20 @@
 package components.readers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.emf.common.util.BasicDiagnostic;
-import org.eclipse.emf.common.util.Diagnostic;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EValidator;
-import org.eclipse.emf.ecore.util.Diagnostician;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.henshin.model.HenshinPackage;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.eclipse.ocl.pivot.utilities.OCL;
-import org.eclipse.ocl.xtext.completeocl.CompleteOCLStandaloneSetup;
-import org.eclipse.ocl.xtext.completeocl.validation.CompleteOCLEObjectValidator;
 
 import behaviorInputs.impl.InputsFactoryImpl;
-import components.helpers.EclipsePathHelper;
+import components.helpers.OclValidationHelper;
 
 /**
  * MultiResourceReader Component used to read Henshin commands recursively in a given file path.
  */
 public class CommandReader extends MultiResourceReader {
-	private BasicDiagnostic currentDiagnostics;
-	private EValidator currentValidator;
+	private final OclValidationHelper oclValidationHelper = new OclValidationHelper("CommandValidation.ocl");
 
 	public CommandReader() {
 		super(".henshin", "src-commands");
@@ -38,7 +25,7 @@ public class CommandReader extends MultiResourceReader {
 		super.invokeInternal(context, monitor, issues);
 		
 		final var commands = getCommandsFromSlot(context);
-		final var validComands = validateCommands(commands, issues);
+		final var validComands = oclValidationHelper.validateContents(commands, issues);
 		
 		final var inputs = InputsFactoryImpl.eINSTANCE.createHenshinCommandInputs();
 		inputs.getModules().addAll(validComands);
@@ -56,66 +43,6 @@ public class CommandReader extends MultiResourceReader {
 		}
 		
 		return commands;
-	}
-	
-	private List<org.eclipse.emf.henshin.model.Module> validateCommands(final List<org.eclipse.emf.henshin.model.Module> commands, final Issues issues) {
-		final ArrayList<org.eclipse.emf.henshin.model.Module> validCommands = new ArrayList<>();
-		
-		// Note: ocl instance has to be kept in this variable, since it must not be garbage collected until this method ends
-		final OCL ocl = OCL.newInstance();
-
-		createOclValidator(ocl);
-		
-		for (final var commandModel : commands) {
-			log.info("validating " + commandModel.getName());
-			if (isValid(commandModel)) {
-				validCommands.add(commandModel);
-			} else {
-				addDiagnosticsError(issues);
-			}
-		}
-		
-		return validCommands;
-	}
-	
-	private void createOclValidator(final OCL ocl) {
-		CompleteOCLStandaloneSetup.doSetup();
-		final String uri = String.format("%s/validation/CommandValidation.ocl", getWorkflowProjectResourcePathPrefix());
-		currentValidator = new CompleteOCLEObjectValidator(HenshinPackage.eINSTANCE, URI.createURI(uri), ocl.getEnvironmentFactory());
-	}
-
-	/**
-	 * Validates the given commandModel and stores the diagnostic result in the {@link #currentDiagnostics} field.
-	 * @return true, if the commandModel is valid.
-	 */
-	private boolean isValid(final org.eclipse.emf.henshin.model.Module commandModel) {
-		currentDiagnostics = Diagnostician.INSTANCE.createDefaultDiagnostic(commandModel);
-		var contentIterator = EcoreUtil.<EObject>getAllContents(commandModel, false);
-		while (contentIterator.hasNext()) {
-			currentValidator.validate(contentIterator.next(), currentDiagnostics, new HashMap<Object, Object>());
-			if (currentDiagnostics.getSeverity() != Diagnostic.OK) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	private void addDiagnosticsError(final Issues issues) {
-		issues.addError(currentDiagnostics.getMessage());
-		for (final var child : currentDiagnostics.getChildren()) {
-			issues.addError("> " + child.getMessage());
-		}
-	}
-	
-	private static String getWorkflowProjectResourcePathPrefix() {
-		final String workflowProjectName = "de.unistuttgart.iste.sqa.mpw.modeling.workflow";
-		final StringBuilder uri = new StringBuilder();
-		uri.append("platform:/resource/");
-		uri.append(workflowProjectName);
-		if (EclipsePathHelper.isProjectInSameWorkspace(workflowProjectName)) {
-			uri.append("/src");
-		}
-		return uri.toString();
 	}
 
 }

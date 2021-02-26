@@ -106,12 +106,19 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		try (final var files = listFiles(targetDirectory)) {
 			final var modelNames = toRelevantModelNames(targetDirectory, files);
 			logFoundModelNames(modelNames);
-			addModelsToSlot(context, modelNames);
+			addModelsToSlot(context, modelNames, issues);
 			
 			log.info("found " + modelNames.size() + " " + fileExtension + " files");
 			
 		} catch (final IOException e) {
 			log.error("Failed to locate " + getModelNameFromExtension() + " files under: " + targetDirectory, e);
+		}
+		stopIfErrors(monitor, issues);
+	}
+
+	private void stopIfErrors(final ProgressMonitor monitor, final Issues issues) {
+		if (issues.hasErrors()) {
+			monitor.done();
 		}
 	}
 	
@@ -147,31 +154,36 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 		return string.substring(index + match.length());
 	}
 
-	private void addModelsToSlot(final WorkflowContext context, final List<String> modelNames) {
+	private void addModelsToSlot(final WorkflowContext context, final List<String> modelNames, final Issues issues) {
 		final String baseUri = getBaseUri();
 		final var models = obtainTargetListForSlot(context);
 		
 		for (final var modelName : modelNames) {
-			final var object = loadModel(baseUri, modelName);
-			models.add(object);
+			final EObject eObject = loadModel(baseUri, modelName);
+			models.add(eObject);
 		}
 
 		context.set(getModelSlot(), models);
-		postProcessModels(models);
+		postProcessModels(models, issues);
 	}
 
-	protected void postProcessModels(List<Object> models) {
+	protected void postProcessModels(final List<EObject> models, final Issues issues) {
 		// intended to be overridden on demand
 	}
 
-	private Object loadModel(final String baseUri, final String modelName) {
-		final var uri = baseUri + modelName;
+	private EObject loadModel(final String baseUri, final String modelName) {
+		final String uri = baseUri + modelName;
+		final EObject eObject = load(uri);
+		checkNoErrorsFromLoading(modelName, eObject);
+		validateNoUnresolvedProxies(modelName, eObject);
+		validateNoUsedPackageIsLoadedMultipleTimes(modelName, eObject);
+		return eObject;
+	}
+	
+	private EObject load(final String uri) {
 		final boolean firstElementOnly = true;
-		final var object = Reader.load(resourceSet, uri, firstElementOnly);
-		checkNoErrorsFromLoading(modelName, object);
-		validateNoUnresolvedProxies(modelName, object);
-		validateNoUsedPackageIsLoadedMultipleTimes(modelName, object);
-		return object;
+		// Note: with firstElementOnly == true, always an EObject is loaded, hence this cast is ok
+		return (EObject)Reader.load(resourceSet, uri, firstElementOnly);
 	}
 
 	private void checkNoErrorsFromLoading(final String modelName, final Object object) {
@@ -237,12 +249,12 @@ public abstract class MultiResourceReader extends WorkflowComponentWithModelSlot
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Object> obtainTargetListForSlot(final WorkflowContext context) {
+	private List<EObject> obtainTargetListForSlot(final WorkflowContext context) {
 		final Object slotContent = context.get(getModelSlot());
 		if (slotContent != null) {
-			return (List<Object>)slotContent;
+			return (List<EObject>)slotContent;
 		}
-		return new ArrayList<Object>();
+		return new ArrayList<EObject>();
 	}
 	
 	private Stream<Path> listFiles(final String directory) throws IOException {

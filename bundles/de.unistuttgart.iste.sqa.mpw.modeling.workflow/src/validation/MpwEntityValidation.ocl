@@ -1,0 +1,32 @@
+import _'http://www.eclipse.org/emf/2002/Ecore'
+
+package ecore
+
+context EPackage
+
+def: isConcreteMiniProgrammingWorld : Boolean = eClasses->exists(c|c.inheritsMpw)
+def: eClasses : OrderedSet(EClass) = eClassifiers->select(c|c.oclIsKindOf(EClass))->collect(c|c.oclAsType(EClass))->asOrderedSet()
+
+context EClass
+
+-- there needs to be exactly one concrete MiniProgrammingWorld
+inv oneDerivedMpw: ePackage.isConcreteMiniProgrammingWorld
+    implies ePackage.eClasses->select(c|c.inheritsMpw)->size() = 1
+
+-- there needs to be exactly one concrete Stage
+inv oneDerivedStage: ePackage.isConcreteMiniProgrammingWorld
+    implies ePackage.eClasses->select(c|c.inheritsStage)->size() = 1
+    
+-- any concrete Actor
+inv anyDerivedActor: ePackage.isConcreteMiniProgrammingWorld
+    implies ePackage.eClasses->exists(c|c.inheritsActor)
+    
+-- concrete MiniProgrammingWorld needs link to a Stage
+inv mpwContainsInheritedStage: inheritsMpw
+    implies eAllReferences->exists(r|r.eType.oclAsType(EClass).inheritsStage and r.containment = true)
+
+def: inheritsMpw : Boolean = eAllSuperTypes->exists(c|c.name = 'MiniProgrammingWorld')
+def: inheritsStage : Boolean = eAllSuperTypes->exists(c|c.name = 'Stage')
+def: inheritsActor : Boolean = eAllSuperTypes->exists(c|c.name = 'Actor')
+
+endpackage

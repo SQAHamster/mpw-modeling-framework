@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.mwe.core.issues.Issues;
 
 import components.helpers.AnnotationRetainer;
+import components.helpers.OclValidationHelper;
 import util.ListLambdaVisitor;
 
 /**
@@ -14,6 +17,7 @@ import util.ListLambdaVisitor;
  */
 public class MultiEcoreReader extends MultiResourceReader {
 	protected static final Logger log = Logger.getLogger(MultiEcoreReader.class.getName());
+	private final OclValidationHelper oclValidationHelper = new OclValidationHelper("MpwEntityValidation.ocl");
 
 	public MultiEcoreReader() {
 		super(".ecore", "model");
@@ -25,13 +29,20 @@ public class MultiEcoreReader extends MultiResourceReader {
 	}
 	
 	@Override
-	protected void postProcessModels(List<Object> models) {
-		registerLoadedEcores(models);
+	protected void postProcessModels(final List<EObject> models, final Issues issues) {
+		final boolean valid = validateEntityModels(models, issues);
+		if (valid) {
+			registerLoadedEcores(models);
+		}
 	}
 
-	private void registerLoadedEcores(List<Object> models) {
-		final List<Object> resultingModels = new ArrayList<Object>();
-		new ListLambdaVisitor<Object>()
+	private boolean validateEntityModels(final List<EObject> models, final Issues issues) {
+		return oclValidationHelper.areAllContentsValid(models, issues);
+	}
+
+	private void registerLoadedEcores(final List<EObject> models) {
+		final List<EObject> resultingModels = new ArrayList<EObject>();
+		new ListLambdaVisitor<EObject>()
 		.on(EPackage.class).then(ePackage -> {
 			handlePackage(resultingModels, ePackage);
 		})
@@ -43,7 +54,7 @@ public class MultiEcoreReader extends MultiResourceReader {
 		models.addAll(resultingModels);
 	}
 
-	private void handlePackage(final List<Object> resultingModels, final EPackage ePackage) {
+	private void handlePackage(final List<EObject> resultingModels, final EPackage ePackage) {
 		var registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ePackage.getNsURI());
 		if (registeredPackage != null) {
 			log.info("Discard loaded ecore resource " + ePackage.getName() + " since it was already loaded and registered. Use the registered one instead.");
