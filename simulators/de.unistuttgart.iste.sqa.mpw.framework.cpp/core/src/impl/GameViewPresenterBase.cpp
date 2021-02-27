@@ -55,6 +55,10 @@ void GameViewPresenterBase::bindGameLog() {
         auto lock = getSemaphore().lock();
         addLogEntry(entry);
     });
+    miniProgrammingWorldLog->logEntriesProperty().addOnRemovedListener([this](const LogEntry& entry) {
+        auto lock = getSemaphore().lock();
+        removeLogEntry(entry);
+    });
     miniProgrammingWorldLog->logEntriesProperty().forEach([this](const LogEntry& entry) {
         addLogEntry(entry);
     });
@@ -152,6 +156,16 @@ void GameViewPresenterBase::addLogEntry(const LogEntry& entry) {
     viewModelEntry->setMessage(entry.getMessage());
     viewModelEntry->setColor(getColorForLogEntry(entry));
     getViewModel()->addToLogEntries(viewModelEntry);
+    gameLogMapping[&entry] = viewModelEntry.get();
+}
+
+void GameViewPresenterBase::removeLogEntry(const LogEntry& entry) {
+    auto iterator = gameLogMapping.find(&entry);
+    if (iterator != gameLogMapping.end()) {
+        ViewModelLogEntry& viewModelEntry = *(*iterator).second;
+        getViewModel()->removeFromLogEntries(viewModelEntry.shared_from_this());
+        gameLogMapping.erase(iterator);
+    }
 }
 
 void GameViewPresenterBase::speedChanged(double speedValue) {

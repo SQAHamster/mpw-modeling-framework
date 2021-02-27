@@ -62,12 +62,14 @@ private:
     void setTileNodeAt(const mpw::Location& location, const mpw::Tile& tile);
 
     void addLogEntry(const mpw::LogEntry& entry);
+    void removeLogEntry(const mpw::LogEntry& entry);
     void updateButtonEnables();
 
     const std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld;
 
     std::unordered_map<const mpw::Tile*, unsigned int> addedContentListenerIds;
     std::unordered_map<const mpw::Tile*, unsigned int> removedContentListenerIds;
+    std::unordered_map<const mpw::LogEntry*, viewmodel::ViewModelLogEntry*> gameLogMapping;
 };
 
 }
