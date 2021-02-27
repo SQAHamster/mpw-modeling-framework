@@ -33,16 +33,16 @@ helper createAddGameLogEntryRule(actorType: EClass, messageExpression: QueryMode
         var newEntryInstance := createNewEntryInstance();
         instanceConditions += newEntryInstance;
         
-        var gameLogToLogEntryReference := createGameLogToLogEntryReference(gameLogInstance, newEntryInstance);
-        referenceConditions += gameLogToLogEntryReference;
-        modifications += createGameLogToLogEntryReferenceModification(gameLogToLogEntryReference);
-        
         var messageAttribute := createMessageAttribute(newEntryInstance, messageExpression);
         attributeConditions += messageAttribute;
         
         var entryToActorReference := createEntryToActorReference(newEntryInstance, selfInstance);
         referenceConditions += entryToActorReference;
         modifications += createEntryToActorReferenceModification(entryToActorReference);
+        
+        var gameLogToLogEntryReference := createGameLogToLogEntryReference(gameLogInstance, newEntryInstance);
+        referenceConditions += gameLogToLogEntryReference;
+        modifications += createGameLogToLogEntryReferenceModification(gameLogToLogEntryReference);
     };
 }
 
