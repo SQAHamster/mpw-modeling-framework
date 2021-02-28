@@ -4,7 +4,7 @@
 «EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE UnitDeclaration FOR Unit»
-    bool «IF mainUnit»internalMainRule«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF»);
+    bool «IF mainUnit»internalMainUnit«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF»);
     «EXPAND FindObjectDeclaration FOREACH eAllContents.typeSelect(ManyReferenceCondition).select(r|!r.isCreate && r.useForExploring)-»
 «ENDDEFINE»
 
@@ -20,7 +20,7 @@
         «EXPAND PreconditionsDefinition FOR this»
         «EXPAND OldValueVariablesDefinition FOR this»
     
-        if (!internalMainRule()) {
+        if (!internalMainUnit()) {
             throw std::runtime_error("Transformation was not successfully executed: «getParentTransformation().name»");
         }
         «IF getParentTransformation().needsGameLogInsertion()-»
@@ -30,7 +30,7 @@
         «EXPAND PostconditionsDefinition FOR this»
     }
     «ENDIF-»
-    bool «getParentTransformation().name.toFirstUpper()»Command::«IF mainUnit»internalMainRule«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF») {
+    bool «getParentTransformation().name.toFirstUpper()»Command::«IF mainUnit»internalMainUnit«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF») {
         «EXPAND UnitExpandBody FOR this»
     }
     «EXPAND PostUnitExpand FOR this»

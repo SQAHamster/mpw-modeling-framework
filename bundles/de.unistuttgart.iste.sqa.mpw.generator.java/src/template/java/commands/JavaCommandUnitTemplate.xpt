@@ -10,7 +10,7 @@
         «EXPAND PreconditionsDefinition FOR this»
         «EXPAND OldValueVariablesDefinition FOR this»
         
-	    if (!internalMainRule()) {
+	    if (!internalMainUnit()) {
 	        throw new RuntimeException("Transformation was not successfully executed: «getParentTransformation().name»");
 	    }
         «IF getParentTransformation().needsGameLogInsertion()-»
@@ -20,7 +20,7 @@
         «EXPAND PostconditionsDefinition FOR this»
     }
     «ENDIF-»
-    private boolean «IF mainUnit»internalMainRule«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
+    private boolean «IF mainUnit»internalMainUnit«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
         «EXPAND UnitExpandBody FOR this»
     }
     «EXPAND PostUnitExpand FOR this»
