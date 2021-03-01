@@ -14,8 +14,6 @@ import components.helpers.OclValidationHelper;
  * MultiResourceReader Component used to read Henshin commands recursively in a given file path.
  */
 public class CommandReader extends MultiResourceReader {
-	private final OclValidationHelper oclValidationHelper = new OclValidationHelper("CommandValidation.ocl");
-
 	public CommandReader() {
 		super(".henshin", "src-commands");
 	}
@@ -25,6 +23,7 @@ public class CommandReader extends MultiResourceReader {
 		super.invokeInternal(context, monitor, issues);
 		
 		final var commands = getCommandsFromSlot(context);
+		final OclValidationHelper oclValidationHelper = new OclValidationHelper("CommandValidation.ocl");
 		final var validComands = oclValidationHelper.validateContents(commands, issues);
 		
 		final var inputs = InputsFactoryImpl.eINSTANCE.createHenshinCommandInputs();

@@ -17,7 +17,6 @@ import util.ListLambdaVisitor;
  */
 public class MultiEcoreReader extends MultiResourceReader {
 	protected static final Logger log = Logger.getLogger(MultiEcoreReader.class.getName());
-	private final OclValidationHelper oclValidationHelper = new OclValidationHelper("MpwEntityValidation.ocl");
 
 	public MultiEcoreReader() {
 		super(".ecore", "model");
@@ -37,6 +36,7 @@ public class MultiEcoreReader extends MultiResourceReader {
 	}
 
 	private boolean validateEntityModels(final List<EObject> models, final Issues issues) {
+		final OclValidationHelper oclValidationHelper = new OclValidationHelper("MpwEntityValidation.ocl");
 		return oclValidationHelper.areAllContentsValid(models, issues);
 	}
 
