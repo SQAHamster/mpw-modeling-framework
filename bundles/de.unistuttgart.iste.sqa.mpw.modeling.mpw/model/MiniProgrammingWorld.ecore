@@ -35,7 +35,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="east" eType="#//Tile" eOpposite="#//Tile/west"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="west" eType="#//Tile" eOpposite="#//Tile/east"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stage" eType="#//Stage"
-        derived="true" eOpposite="#//Stage/tiles"/>
+        eOpposite="#//Stage/tiles"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TileContent" abstract="true" eSuperTypes="BaseTypes.ecore#//Entity">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
