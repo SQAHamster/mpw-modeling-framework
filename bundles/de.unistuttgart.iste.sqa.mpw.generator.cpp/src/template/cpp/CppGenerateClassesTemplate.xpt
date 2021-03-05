@@ -85,7 +85,9 @@
 
 «DEFINE GenerationAnnotationDeclaration FOR GetPropertyAnnotation-»
     «documentationToCppDoc()-»
-    «getterType.toCppType()» «getterOperationName»();
+    «getterType.toCppType()» «getterOperationName»() noexcept;
+    «documentationToCppDoc()-»
+    «getterType.toConstCppType()» «getterOperationName»() const noexcept ;
 «ENDDEFINE»
 
 «REM»
@@ -94,7 +96,10 @@
 «DEFINE GenerationAnnotationDefinition(EClass class) FOR EAnnotation»«ENDDEFINE-»
 
 «DEFINE GenerationAnnotationDefinition(EClass class) FOR GetPropertyAnnotation-»
-    «getterType.toCppType()» «class.name»::«getterOperationName»() {
+    «getterType.toCppType()» «class.name»::«getterOperationName»() noexcept {
+        return this->«field.resolveFieldValue()»;
+    }
+    «getterType.toConstCppType()» «class.name»::«getterOperationName»() const noexcept {
         return this->«field.resolveFieldValue()»;
     }
     
