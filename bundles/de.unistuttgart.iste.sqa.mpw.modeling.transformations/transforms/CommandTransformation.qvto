@@ -32,36 +32,36 @@ main() {
 }
 
 mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
-  name := self.name;
-  documentation := self.description;
-  targetClass := self.findTargetClass();
-  roleName := SourceModelUri.toRole();
-  units := self.units->map toUnit();
-  mainUnit := self.units->any(u|u.name = self.name).resolveone(CommandModel::Unit);
-  
-  if (mainUnit = null) {
-  	  mainUnit := createConditionalMainUnitForRules(result);
-  };
-  mainUnit.name := "execute";
-  mainUnit.mainUnit := true;
-  
-  units->forEach(u) {
-      u.parameters->select(p|p.name = "self")->forEach(p) {
-      	  outModel.removeElement(p);
-      };
-  };
-  
-  constraints := result.obtainConstraints();
-  usedQueries := constraints->collect(c|c.allSubobjectsOfType(QueryModel::QueryStatement))
-                            ->collect(s|s._query)
-                            ->asOrderedSet();
-  isInit := self.annotations->exists(a|a.key = "isInit" and a.value = "true");
-  
-  if (targetClass.isActor()) {
-      result->map addGameLogEntry();
-  };
-  
-  result->map extendContractDocumentation();
+    name := self.name;
+    documentation := self.description;
+    targetClass := self.findTargetClass();
+    roleName := SourceModelUri.toRole();
+    units := self.units->map toUnit();
+    mainUnit := self.units->any(u|u.name = self.name).resolveone(CommandModel::Unit);
+    
+    if (mainUnit = null) {
+        mainUnit := createConditionalMainUnitForRules(result);
+    };
+    mainUnit.name := "execute";
+    mainUnit.mainUnit := true;
+    
+    units->forEach(u) {
+        u.parameters->select(p|p.name = "self")->forEach(p) {
+            outModel.removeElement(p);
+        };
+    };
+    
+    constraints := result.obtainConstraints();
+    usedQueries := constraints->collect(c|c.allSubobjectsOfType(QueryModel::QueryStatement))
+                              ->collect(s|s._query)
+                              ->asOrderedSet();
+    isInit := self.annotations->exists(a|a.key = "isInit" and a.value = "true");
+    
+    if (targetClass.isActor()) {
+        result->map addGameLogEntry();
+    };
+    
+    result->map extendContractDocumentation();
 }
 
 mapping inout CommandModel::Transformation::extendContractDocumentation() {
@@ -74,59 +74,59 @@ mapping inout CommandModel::Transformation::extendContractDocumentation() {
 }
 
 query EClass::isActor() : Boolean {
-	return self.eSuperTypes->exists(t|t.name = "Actor");
+    return self.eSuperTypes->exists(t|t.name = "Actor");
 }
 
 helper Henshin::Module::findTargetClass() : ecore::EClass {
-	return self.units[Rule]->first().lhs.nodes->any(n|n.name = "self").type;
+    return self.units[Rule]->first().lhs.nodes->any(n|n.name = "self").type;
 }
 
 helper String::toRole() : String {
-	var lastSlashIndex := self.lastIndexOf("/");
-	var foreLastSlashIndex := self.substring(1, lastSlashIndex-1).lastIndexOf("/");
-	return self.substring(foreLastSlashIndex+1, lastSlashIndex-1);
+    var lastSlashIndex := self.lastIndexOf("/");
+    var foreLastSlashIndex := self.substring(1, lastSlashIndex-1).lastIndexOf("/");
+    return self.substring(foreLastSlashIndex+1, lastSlashIndex-1);
 }
 
 mapping Henshin::Unit::toUnit() : CommandModel::Unit
-	disjuncts Henshin::Rule::toRule,
-	          Henshin::IteratedUnit::toIteratedUnit,
-	          Henshin::SequentialUnit::toSequentialUnit,
+    disjuncts Henshin::Rule::toRule,
+              Henshin::IteratedUnit::toIteratedUnit,
+              Henshin::SequentialUnit::toSequentialUnit,
               Henshin::ConditionalUnit::toIfElseUnit,
               Henshin::PriorityUnit::toConditionalUnit;
 
 mapping Henshin::Rule::toRule() : CommandModel::Rule {
-  number := 0;
-
-  name := self.name;
-  parameters := self.parameters->map toParameter();
+    number := 0;
     
-  instanceConditions := self.lhs.nodes->map toInstanceCondition();
-  instanceConditions += self.rhs.nodes[action.toString() = "create"]->map toCreateInstanceCondition();
-  instanceConditions += self.getDeleteStarNodes()->map toInstanceCondition();
- 
-  variables := self.parameters->map toVariableDeclaration();
-  attributeConditions := self.lhs.nodes.allSubobjectsOfType(Attribute)->map toAttributeCondition();
-  attributeConditions += self.rhs.nodes.allSubobjectsOfType(Attribute)[action.toString() = "create"]->map toCreateAttributeCondition();
-  variableAssignments := self.lhs.nodes.allSubobjectsOfType(Attribute)->map toVariableAssignment();
-  
-  referenceConditions := self.lhs.edges[type.upperBound <> -1]->map toReferenceCondition();
-  referenceConditions += self.rhs.edges[type.upperBound <> -1 and action.toString() = "create"]->map toCreateReferenceCondition(self);
-  referenceConditions += self.lhs.getNACs().allSubobjectsOfType(Edge)[action.toString() = "forbid"]->map toForbidReferenceCondition(self);
-  referenceConditions += self.getDeleteStarEdges()->map toClearReferenceCondition();
-  
-  referenceConditions += self.lhs.edges[type.upperBound = -1]->map toManyReferenceCondition();
-  referenceConditions += self.rhs.edges[type.upperBound = -1 and action.toString() = "create"]->map toCreateManyReferenceCondition(self);
-  
-  modifications := self.lhs.edges[action.toString() = "delete"]->map toDeleteEdgeModifications();
-  modifications += self.getDeleteStarEdges()->map toClearEdgeModifications();
-  modifications += self.rhs.edges[action.toString() = "create"]->map toAddEdgeModifications();
-  modifications += self.lhs.allSubobjectsOfType(Attribute)[isModification()]->map toAttributeModifications();
-  
-  thisInstance := self.lhs.nodes->any(n|n.name = "self").resolveone(CommandModel::InstanceCondition);
-  
-  referenceConditions := result.sortReferences();
-  
-  thisInstance.variableName := "self";
+    name := self.name;
+    parameters := self.parameters->map toParameter();
+      
+    instanceConditions := self.lhs.nodes->map toInstanceCondition();
+    instanceConditions += self.rhs.nodes[action.toString() = "create"]->map toCreateInstanceCondition();
+    instanceConditions += self.getDeleteStarNodes()->map toInstanceCondition();
+    
+    variables := self.parameters->map toVariableDeclaration();
+    attributeConditions := self.lhs.nodes.allSubobjectsOfType(Attribute)->map toAttributeCondition();
+    attributeConditions += self.rhs.nodes.allSubobjectsOfType(Attribute)[action.toString() = "create"]->map toCreateAttributeCondition();
+    variableAssignments := self.lhs.nodes.allSubobjectsOfType(Attribute)->map toVariableAssignment();
+    
+    referenceConditions := self.lhs.edges[type.upperBound <> -1]->map toReferenceCondition();
+    referenceConditions += self.rhs.edges[type.upperBound <> -1 and action.toString() = "create"]->map toCreateReferenceCondition(self);
+    referenceConditions += self.lhs.getNACs().allSubobjectsOfType(Edge)[action.toString() = "forbid"]->map toForbidReferenceCondition(self);
+    referenceConditions += self.getDeleteStarEdges()->map toClearReferenceCondition();
+    
+    referenceConditions += self.lhs.edges[type.upperBound = -1]->map toManyReferenceCondition();
+    referenceConditions += self.rhs.edges[type.upperBound = -1 and action.toString() = "create"]->map toCreateManyReferenceCondition(self);
+    
+    modifications := self.lhs.edges[action.toString() = "delete"]->map toDeleteEdgeModifications();
+    modifications += self.getDeleteStarEdges()->map toClearEdgeModifications();
+    modifications += self.rhs.edges[action.toString() = "create"]->map toAddEdgeModifications();
+    modifications += self.lhs.allSubobjectsOfType(Attribute)[isModification()]->map toAttributeModifications();
+    
+    thisInstance := self.lhs.nodes->any(n|n.name = "self").resolveone(CommandModel::InstanceCondition);
+    
+    referenceConditions := result.sortReferences();
+    
+    thisInstance.variableName := "self";
 }
 
 query Henshin::Rule::getDeleteStarNodes() : Set(Node) {
@@ -134,21 +134,21 @@ query Henshin::Rule::getDeleteStarNodes() : Set(Node) {
 }
 
 query Henshin::Rule::getDeleteStarEdges() : Set(Edge) {
-	return self.getAllMultiRules()->first().lhs.edges[action.toString() = "delete*"];
+    return self.getAllMultiRules()->first().lhs.edges[action.toString() = "delete*"];
 }
 
 helper Henshin::Attribute::isModification() : Boolean {
-	if (self.action.toString() <> "preserve") {
-		return false;
-	};
-	var rhsAttribute = self.getRhsAttribute();
-	return self.value <> rhsAttribute.value;
+    if (self.action.toString() <> "preserve") {
+        return false;
+    };
+    var rhsAttribute = self.getRhsAttribute();
+    return self.value <> rhsAttribute.value;
 }
 
 helper Henshin::Attribute::getRhsAttribute() : Henshin::Attribute {
-	var lhsNode := self.node;
-	var rhsNode: Node := self.getGraph().getRule().mappings->any(origin = lhsNode).image;
-	return rhsNode.attributes->any(type = self.type);
+    var lhsNode := self.node;
+    var rhsNode: Node := self.getGraph().getRule().mappings->any(origin = lhsNode).image;
+    return rhsNode.attributes->any(type = self.type);
 }
 
 mapping Henshin::IteratedUnit::toIteratedUnit() : CommandModel::IteratedUnit {
@@ -159,66 +159,66 @@ mapping Henshin::IteratedUnit::toIteratedUnit() : CommandModel::IteratedUnit {
 }
 
 mapping Henshin::SequentialUnit::toSequentialUnit() : CommandModel::SequentialUnit {
-  name := self.name;
-  parameters := self.parameters->map toParameter();
-  targetInvocations := self.subUnits->map toInvocation(self);
+    name := self.name;
+    parameters := self.parameters->map toParameter();
+    targetInvocations := self.subUnits->map toInvocation(self);
 }
 
 mapping Henshin::ConditionalUnit::toIfElseUnit() : CommandModel::IfElseUnit {
-  name := self.name;
-  parameters := self.parameters->map toParameter();
-  ifInvocation := self._if.map toInvocation(self);
-  thenInvocation := self._then.map toInvocation(self);
-  elseInvocation := self._else.map toInvocation(self);
+    name := self.name;
+    parameters := self.parameters->map toParameter();
+    ifInvocation := self._if.map toInvocation(self);
+    thenInvocation := self._then.map toInvocation(self);
+    elseInvocation := self._else.map toInvocation(self);
 }
 
 mapping Henshin::PriorityUnit::toConditionalUnit() : CommandModel::PriorityChainUnit {
-  name := self.name;
-  parameters := self.parameters->map toParameter();
-  conditionalInvocations := self.subUnits->map toInvocation(self);
+    name := self.name;
+    parameters := self.parameters->map toParameter();
+    conditionalInvocations := self.subUnits->map toInvocation(self);
 }
 
 mapping Henshin::Unit::toInvocation(parentUnit: Henshin::Unit) : CommandModel::Invocation {
-  targetMethodName := self.name;
-  self.parameters->reject(p|p.kind = ParameterKind::VAR)->forEach(p) {
-  	var foundMapping = parentUnit.parameterMappings->any(m|m.target = p);
-  	assert(foundMapping != null);
-  	if (foundMapping != null) {
-  		result.mappedParameters += foundMapping.source.resolveone(BaseTypes::Parameter);
-  	}
-  	
-  }
+    targetMethodName := self.name;
+    self.parameters->reject(p|p.kind = ParameterKind::VAR)->forEach(p) {
+        var foundMapping = parentUnit.parameterMappings->any(m|m.target = p);
+        assert(foundMapping != null);
+        if (foundMapping != null) {
+            result.mappedParameters += foundMapping.source.resolveone(BaseTypes::Parameter);
+        }
+        
+    }
 }
 
 mapping Henshin::Node::toInstanceCondition() : CommandModel::InstanceCondition {
-  instanceType := self.type;
-  variableName := self.name;
-  if variableName = null then {
-  	variableName := "o" + number.toString();
-  	number := number + 1;
-  } endif
+    instanceType := self.type;
+    variableName := self.name;
+    if variableName = null then {
+        variableName := "o" + number.toString();
+        number := number + 1;
+    } endif
 }
 
 mapping Henshin::Node::toCreateInstanceCondition() : CommandModel::InstanceCondition {
-  instanceType := self.type;
-  variableName := self.name;
-  isCreate := true;
-  if variableName = null then {
-  	variableName := "o" + number.toString();
-  	number := number + 1;
-  } endif
+    instanceType := self.type;
+    variableName := self.name;
+    isCreate := true;
+    if variableName = null then {
+        variableName := "o" + number.toString();
+        number := number + 1;
+    } endif
 }
 
 mapping Henshin::Parameter::toParameter() : BaseTypes::Parameter
-  when { self.kind = ParameterKind::IN; } {
-  name := self.name;
-  type := self.type;
+    when { self.kind = ParameterKind::IN; } {
+    name := self.name;
+    type := self.type;
 }
 
 mapping Henshin::Parameter::toVariableDeclaration() : CommandModel::VariableDeclaration
-  when { self.kind = ParameterKind::VAR; } {
-  variableName := self.name;
-  variableType := self.type;
+    when { self.kind = ParameterKind::VAR; } {
+    variableName := self.name;
+    variableType := self.type;
 }
 
 mapping Henshin::Attribute::toAttributeCondition() : CommandModel::AttributeCondition
@@ -239,10 +239,10 @@ mapping Henshin::Attribute::toAttributeCondition() : CommandModel::AttributeCond
     attributeValue := parsedQuery.mainExpression;
     
     if (self.type.eType.name = "EBoolean") {
-    	attributeName := "is" + inName.substring(1, 1).toUpper();
-    	if (inName.size() >= 2) {
-    		attributeName := attributeName + inName.substring(2, inName.size());
-    	} endif;
+        attributeName := "is" + inName.substring(1, 1).toUpper();
+        if (inName.size() >= 2) {
+            attributeName := attributeName + inName.substring(2, inName.size());
+        } endif;
     } endif;
     instance := self.node.resolveInstance();
 }
@@ -255,8 +255,8 @@ mapping Henshin::Attribute::toVariableAssignment() : CommandModel::VariableAssig
         object ElementByNameUsageStatement {
             elementName := self.node.resolveone(CommandModel::InstanceCondition).variableName;
             type := self.node.type;
-    	},
-    	object FeatureStatement {
+        },
+        object FeatureStatement {
             feature := self.type;
             type := feature.eType;
         }
@@ -264,16 +264,16 @@ mapping Henshin::Attribute::toVariableAssignment() : CommandModel::VariableAssig
 }
 
 query Henshin::Attribute::isVariableAssignment() : Boolean {
-  var rule = self.node.graph.getRule();
-  var attributeValueLiteral := self.value.toEffectiveValueLiteral();
-  return self.node.graph = rule.lhs and rule.parameters->exists(p|p.name = attributeValueLiteral);
+    var rule = self.node.graph.getRule();
+    var attributeValueLiteral := self.value.toEffectiveValueLiteral();
+    return self.node.graph = rule.lhs and rule.parameters->exists(p|p.name = attributeValueLiteral);
 }
 
 /*
  * henshin requires quotes for Enum Literals, so remove them since they are not needed for further processing
  */
 query String::toEffectiveValueLiteral() : EString {
-	return self.replaceAll("\"(WEST|NORTH|SOUTH|EAST)\"", "$1");
+    return self.replaceAll("\"(WEST|NORTH|SOUTH|EAST)\"", "$1");
 }
 
 mapping Henshin::Attribute::toCreateAttributeCondition() : CommandModel::AttributeCondition merges Henshin::Attribute::toAttributeCondition {
@@ -281,128 +281,127 @@ mapping Henshin::Attribute::toCreateAttributeCondition() : CommandModel::Attribu
 }
 
 mapping Henshin::Edge::toReferenceCondition() : CommandModel::SingleReferenceCondition {
-  referenceName := self.type.name;
-  type := self.type;
-  source := self.source.resolveone(CommandModel::InstanceCondition);
-  target := self.target.resolveone(CommandModel::InstanceCondition);
+    referenceName := self.type.name;
+    type := self.type;
+    source := self.source.resolveone(CommandModel::InstanceCondition);
+    target := self.target.resolveone(CommandModel::InstanceCondition);
 }
 
 mapping Henshin::Edge::toCreateReferenceCondition(rule: Henshin::Rule) : CommandModel::SingleReferenceCondition {
-  referenceName := self.type.name;
-  rule.mappings->forEach(m) {
-  	if (m.image = self.source) {
-  		source := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
-  	} endif;
-  	if (m.image = self.target) {
-  		target := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
-  	} endif;
-  };
-  
-  if (source = null) {
-  	source := self.source.resolveone(CommandModel::InstanceCondition); // search in rhs
-  } endif;
-  
-  if (target = null) {
-  	target := self.target.resolveone(CommandModel::InstanceCondition); // search in rhs
-  } endif;
+    referenceName := self.type.name;
+    rule.mappings->forEach(m) {
+        if (m.image = self.source) {
+            source := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
+        } endif;
+        if (m.image = self.target) {
+            target := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
+        } endif;
+    };
+    
+    if (source = null) {
+        source := self.source.resolveone(CommandModel::InstanceCondition); // search in rhs
+    } endif;
+    
+    if (target = null) {
+        target := self.target.resolveone(CommandModel::InstanceCondition); // search in rhs
+    } endif;
 }
 
 mapping Henshin::Edge::toForbidReferenceCondition(rule: Henshin::Rule) : CommandModel::SingleReferenceCondition {
-  referenceName := self.type.name;
-  isForbid := true;
-  rule.lhs.getNestedConditions().mappings->forEach(m) { // search mappings in NAC Graph
-  	if (m.image = self.source) {
-  		source := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
-  	} endif;
-  };
-  
+    referenceName := self.type.name;
+    isForbid := true;
+    rule.lhs.getNestedConditions().mappings->forEach(m) { // search mappings in NAC Graph
+        if (m.image = self.source) {
+            source := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
+        } endif;
+    };
 }
 
 
 mapping Henshin::Edge::toManyReferenceCondition() : CommandModel::ManyReferenceCondition {
-  referenceName := self.type.name;
-  type := self.type;
-  source := self.source.resolveone(CommandModel::InstanceCondition);
-  target := self.target.resolveone(CommandModel::InstanceCondition);
+    referenceName := self.type.name;
+    type := self.type;
+    source := self.source.resolveone(CommandModel::InstanceCondition);
+    target := self.target.resolveone(CommandModel::InstanceCondition);
 }
 
 mapping Henshin::Edge::toCreateManyReferenceCondition(rule: Henshin::Rule) : CommandModel::ManyReferenceCondition {
-  referenceName := self.type.name;
-  rule.mappings->forEach(m) {
-  	if (m.image = self.source) {
-  		source := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
-  	} endif;
-  	if (m.image = self.target) {
-  		target := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
-  	} endif;
-  };
-  
-  if (target = null) {
-  	target := self.target.resolveone(CommandModel::InstanceCondition); // search in rhs
-  } endif;
+    referenceName := self.type.name;
+    rule.mappings->forEach(m) {
+        if (m.image = self.source) {
+            source := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
+        } endif;
+        if (m.image = self.target) {
+            target := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
+        } endif;
+    };
+    
+    if (target = null) {
+        target := self.target.resolveone(CommandModel::InstanceCondition); // search in rhs
+    } endif;
   
 }
 
 mapping Henshin::Edge::toAddEdgeModifications() : CommandModel::Modification {
-  reference := self.resolveone(CommandModel::ReferenceCondition);
-  action := CommandModel::Action::CREATE;
-  result.reference.isCreate := true;
+    reference := self.resolveone(CommandModel::ReferenceCondition);
+    action := CommandModel::Action::CREATE;
+    result.reference.isCreate := true;
 }
 
 mapping Henshin::Edge::toDeleteEdgeModifications() : CommandModel::Modification {
-  reference := self.resolveone(CommandModel::ReferenceCondition);
-  action := CommandModel::Action::DELETE;
+    reference := self.resolveone(CommandModel::ReferenceCondition);
+    action := CommandModel::Action::DELETE;
 }
 
 /*
  * Note: in henshin multi delete references are placed on sub-rules, so their real origins have to be determined by multi-mappings.
  */
 mapping Henshin::Edge::toClearReferenceCondition() : CommandModel::ClearReferenceCondition {
-  assert(self.target.attributes->isEmpty()); // only support clear without conditions
-  
-  var multiMappings := self.graph.getRule().multiMappings;
-  var originSource := multiMappings->selectOne(m|m.image = self.source).origin;
-  
-  referenceName := self.type.name;
-  source := originSource.resolveone(CommandModel::InstanceCondition);
-  target := self.target.resolveone(CommandModel::InstanceCondition);
+    assert(self.target.attributes->isEmpty()); // only support clear without conditions
+    
+    var multiMappings := self.graph.getRule().multiMappings;
+    var originSource := multiMappings->selectOne(m|m.image = self.source).origin;
+    
+    referenceName := self.type.name;
+    source := originSource.resolveone(CommandModel::InstanceCondition);
+    target := self.target.resolveone(CommandModel::InstanceCondition);
 }
 
 mapping Henshin::Edge::toClearEdgeModifications() : CommandModel::Modification {
-  reference := self.resolveone(CommandModel::ReferenceCondition);
-  action := CommandModel::Action::CLEAR;
+    reference := self.resolveone(CommandModel::ReferenceCondition);
+    action := CommandModel::Action::CLEAR;
 }
 
 mapping Henshin::Attribute::toAttributeModifications() : CommandModel::Modification {
-  var rhsAttribute := self.getRhsAttribute();
-  attribute := self.resolveone(CommandModel::AttributeCondition);
-  action := CommandModel::Action::MODIFY;
-  newAttributeValue := rhsAttribute.value.toEffectiveValueLiteral();
+    var rhsAttribute := self.getRhsAttribute();
+    attribute := self.resolveone(CommandModel::AttributeCondition);
+    action := CommandModel::Action::MODIFY;
+    newAttributeValue := rhsAttribute.value.toEffectiveValueLiteral();
 }
 
 helper createConditionalMainUnitForRules(inout m: CommandModel::Transformation) : CommandModel::Unit {
-  var mainUnit = object CommandModel::PriorityChainUnit {
-  	  name := m.name;
-  };
-  m.units += mainUnit;
-  mainUnit.conditionalInvocations := m.units[CommandModel::Rule]->map toParameterlessInvocation();
-  return mainUnit;
+    var mainUnit = object CommandModel::PriorityChainUnit {
+          name := m.name;
+    };
+    m.units += mainUnit;
+    mainUnit.conditionalInvocations := m.units[CommandModel::Rule]->map toParameterlessInvocation();
+    return mainUnit;
 }
 
 mapping CommandModel::Rule::toParameterlessInvocation() : CommandModel::Invocation {
-  targetMethodName := self.name;
+    targetMethodName := self.name;
 }
 
 helper CommandModel::Rule::createAttributeConditionExpression() : QueryModel::Expression {
-	var attributeConditions := self.attributeConditions->select(c|c.instance = self.thisInstance);
+    var attributeConditions := self.attributeConditions->select(c|c.instance = self.thisInstance);
     assert(attributeConditions->notEmpty());
   
     return attributeConditions->iterate(iter : CommandModel::AttributeCondition;
         acc : Expression = null |
         if (acc = null) then
-        	iter.map toCompareExpression()
+            iter.map toCompareExpression()
         else
-        	iter.toAndExpressionForAccumulator(acc)
+            iter.toAndExpressionForAccumulator(acc)
         endif
     );
 }
@@ -416,20 +415,20 @@ helper CommandModel::AttributeCondition::toAndExpressionForAccumulator(acc : Exp
 
 mapping CommandModel::AttributeCondition::toCompareExpression() : QueryModel::CompareExpression {
     lhs := createStatementsExpression( List{
-    	object SelfStatement {
-    		selfAlias := "self";
-    		type := self.instance.instanceType;
-    	},
-    	object FeatureStatement {
-    		feature := self.instance.instanceType.getEStructuralFeature(self.attributeName);
-    		type := feature.eType; 
-    	}
+        object SelfStatement {
+            selfAlias := "self";
+            type := self.instance.instanceType;
+        },
+        object FeatureStatement {
+            feature := self.instance.instanceType.getEStructuralFeature(self.attributeName);
+            type := feature.eType; 
+        }
     });
     rhs := self.attributeValue.deepclone();
 }
 
 helper CommandModel::Transformation::obtainConstraints() : List(QueryModel::Constraint) {
-	var queryModule := Queries->first().deepclone();
+    var queryModule := Queries->first().deepclone();
     var constraintsForThisCommand: List(QueryModel::Constraint);
     constraintsForThisCommand += queryModule.elements->selectByType(QueryModel::ClassInvariant)
                                                      ->select(q|q.contextClass.name = self.targetClass.name);
@@ -445,13 +444,13 @@ query Henshin::Node::resolveInstance() : CommandModel::InstanceCondition {
     var res := self.resolveone(CommandModel::InstanceCondition);
     
     if (res = null) {
-	    self.graph.getRule().mappings->forEach(m) {
-	  	    if (m.image = self) {
-	  		    res := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
-	        } elif (m.origin = self) {
-	  		    res := m.image.resolveone(CommandModel::InstanceCondition); // search in rhs
-	        } endif;
-	    };
+        self.graph.getRule().mappings->forEach(m) {
+              if (m.image = self) {
+                  res := m.origin.resolveone(CommandModel::InstanceCondition); // search in lhs
+            } elif (m.origin = self) {
+                  res := m.image.resolveone(CommandModel::InstanceCondition); // search in rhs
+            } endif;
+        };
     };
 
     return res;

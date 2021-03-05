@@ -9,5 +9,5 @@ modeltype QueryDsl uses "http://www.mpw.uni-stuttgart.de/querydsl";
 transformation CreateRootParameterListTransformation(inout model: QueryDsl);
 
 main() {
-	object QueryDsl::ParameterList@model {};
+    object QueryDsl::ParameterList@model {};
 }

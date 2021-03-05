@@ -3,90 +3,90 @@
 «EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE PropertyDefinitions FOR EClass»
-      «FOREACH eStructuralFeatures AS f»
-      «f.documentationToCppDoc()-»
-      «IF f.isObservableProperty()-»
-      «f.featureToObservableFieldType()» «f.name»;
-      «ELSE-»
-      «f.featureToSimpleFieldType()» «f.name»;
-      «ENDIF-»
-      «IF f.isCollection() && f.isReference() && !f.eType.isValueType()-»
-      /// \brief internal lookup for «f.name»
-      std::unordered_set<«f.eType.toQualifiedTypeName()»*> «f.name»Lookup;
-      «ENDIF-»
-      «ENDFOREACH»
+    «FOREACH eStructuralFeatures AS f»
+    «f.documentationToCppDoc()-»
+    «IF f.isObservableProperty()-»
+    «f.featureToObservableFieldType()» «f.name»;
+    «ELSE-»
+    «f.featureToSimpleFieldType()» «f.name»;
+    «ENDIF-»
+    «IF f.isCollection() && f.isReference() && !f.eType.isValueType()-»
+    /// \brief internal lookup for «f.name»
+    std::unordered_set<«f.eType.toQualifiedTypeName()»*> «f.name»Lookup;
+    «ENDIF-»
+    «ENDFOREACH»
 «ENDDEFINE»
 
 «REM»Generates a convenience shared_from_this method which statically returns the "this" type«ENDREM»
 «DEFINE StaticSharedFromThisDefinition FOR EClass»
-      «IF eSuperTypes.reject(t|t.interface).size > 0 || isInheritedEntity()-»
-      /// \brief returns a shared_ptr of type «this.name» which shares ownership of *this
-	  std::shared_ptr<«this.name»> shared_from_this() {
-	    return std::dynamic_pointer_cast<«this.name»>(«getSharedFromThisParentReference()»::shared_from_this());
-	  }
-      /// \brief returns a shared_ptr of const type «this.name» which shares ownership of *this
-	  std::shared_ptr<const «this.name»> shared_from_this() const {
-	    return std::dynamic_pointer_cast<const «this.name»>(«getSharedFromThisParentReference()»::shared_from_this());
-	  }
-      «ENDIF-»
+    «IF eSuperTypes.reject(t|t.interface).size > 0 || isInheritedEntity()-»
+    /// \brief returns a shared_ptr of type «this.name» which shares ownership of *this
+    std::shared_ptr<«this.name»> shared_from_this() {
+      return std::dynamic_pointer_cast<«this.name»>(«getSharedFromThisParentReference()»::shared_from_this());
+    }
+    /// \brief returns a shared_ptr of const type «this.name» which shares ownership of *this
+    std::shared_ptr<const «this.name»> shared_from_this() const {
+      return std::dynamic_pointer_cast<const «this.name»>(«getSharedFromThisParentReference()»::shared_from_this());
+    }
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE ConstructorDeclaration FOR EClass»
-      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
-      «IF needsStaticFactoryConstructorMethod()-»
-          static std::shared_ptr<«name»> create(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
-          private:
-          «name»() = default;
-          void init(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
-          public:
-      «ELSE-»
-          «name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
-      «ENDIF-»
-      «ENDLET»
+    «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
+    «IF needsStaticFactoryConstructorMethod()-»
+        static std::shared_ptr<«name»> create(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
+        private:
+        «name»() = default;
+        void init(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
+        public:
+    «ELSE-»
+        «name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
+    «ENDIF-»
+    «ENDLET»
 «ENDDEFINE»
 
 «DEFINE ConstructorDefinition FOR EClass»
-      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties-»
-      «LET injectedProperties.without(eStructuralFeatures) AS injectedForParentProperties-»
-      «LET injectedProperties.without(injectedForParentProperties) AS injectedForThisProperties-»
-      «IF needsStaticFactoryConstructorMethod()-»
-	      std::shared_ptr<«name»> «name»::create(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH») {
-	          auto instance = std::shared_ptr<«name»>(new «name»);«REM»need raw new, since make_shared doesn't work with private constructor«ENDREM»
-	          instance->init(«FOREACH injectedProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
-	          return instance;
-	      }
-	      
-	      void «name»::init(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
-	      «IF injectedForParentProperties.size > 0-»
-	      inherited::init(«FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
-	      «ENDIF-» {
-	      «EXPAND FieldInitializationDefinition(injectedForThisProperties) FOR this-»
-	      }
-      «ELSE-»
-	      «name»::«name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
-	      «IF injectedForParentProperties.size > 0-»
-	      : («FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
-	      «ENDIF-» {
-	      «EXPAND FieldInitializationDefinition(injectedForThisProperties) FOR this-»
-	      }
-      «ENDIF-»
-      «ENDLET-»«ENDLET-»«ENDLET-»
+    «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties-»
+    «LET injectedProperties.without(eStructuralFeatures) AS injectedForParentProperties-»
+    «LET injectedProperties.without(injectedForParentProperties) AS injectedForThisProperties-»
+    «IF needsStaticFactoryConstructorMethod()-»
+        std::shared_ptr<«name»> «name»::create(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH») {
+            auto instance = std::shared_ptr<«name»>(new «name»);«REM»need raw new, since make_shared doesn't work with private constructor«ENDREM»
+            instance->init(«FOREACH injectedProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»);
+            return instance;
+        }
+        
+        void «name»::init(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
+        «IF injectedForParentProperties.size > 0-»
+        inherited::init(«FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+        «ENDIF-» {
+        «EXPAND FieldInitializationDefinition(injectedForThisProperties) FOR this-»
+        }
+    «ELSE-»
+        «name»::«name»(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
+        «IF injectedForParentProperties.size > 0-»
+        : («FOREACH injectedForParentProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+        «ENDIF-» {
+        «EXPAND FieldInitializationDefinition(injectedForThisProperties) FOR this-»
+        }
+    «ENDIF-»
+    «ENDLET-»«ENDLET-»«ENDLET-»
 «ENDDEFINE»
 
 «DEFINE FieldInitializationDefinition(Set[EStructuralFeature] injectedForThisProperties) FOR EClass»
-      «FOREACH injectedForThisProperties AS f-»
-      this->«f.name» = «f.name»;
-      «ENDFOREACH-»
-      «FOREACH eStructuralFeatures.select(f|f.needsConstructorInstantiation()) AS f-»
-          this->«f.name» = «EXPAND FeatureFieldInstantiation FOR f»;
-      «ENDFOREACH-»
-      «FOREACH eStructuralFeatures.select(f|!f.isObjectReference() && f.defaultValueLiteral != null) AS f-»
-          «IF f.isObservableProperty()-»
-              this->«f.name».set(«f.toDefaultValueCppLiteral()»);
-          «ELSE-»
-              this->«f.name» = «f.toDefaultValueCppLiteral()»;
-          «ENDIF-»
-      «ENDFOREACH-»
+    «FOREACH injectedForThisProperties AS f-»
+    this->«f.name» = «f.name»;
+    «ENDFOREACH-»
+    «FOREACH eStructuralFeatures.select(f|f.needsConstructorInstantiation()) AS f-»
+        this->«f.name» = «EXPAND FeatureFieldInstantiation FOR f»;
+    «ENDFOREACH-»
+    «FOREACH eStructuralFeatures.select(f|!f.isObjectReference() && f.defaultValueLiteral != null) AS f-»
+        «IF f.isObservableProperty()-»
+            this->«f.name».set(«f.toDefaultValueCppLiteral()»);
+        «ELSE-»
+            this->«f.name» = «f.toDefaultValueCppLiteral()»;
+        «ENDIF-»
+    «ENDFOREACH-»
 «ENDDEFINE»
 
 «DEFINE FeatureFieldInstantiation FOR EStructuralFeature-»
@@ -100,19 +100,19 @@
 «ENDDEFINE»
 
 «DEFINE ImplConstructorDeclaration FOR EClass-»
-      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
-      «name»Impl(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
-      «ENDLET»
+    «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
+    «name»Impl(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»);
+    «ENDLET»
 «ENDDEFINE»
 
 «DEFINE ImplConstructorDefinition FOR EClass»
-      «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
-      «name»Impl::«name»Impl(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
-      «IF injectedProperties.size > 0-»
-      : («FOREACH injectedProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
-      «ENDIF-» {
-      }
-      «ENDLET»
+    «LET eAllStructuralFeatures.select(f|f.isConstructorInjectedProperty()) AS injectedProperties»
+    «name»Impl::«name»Impl(«FOREACH injectedProperties AS f SEPARATOR ", "»«f.featureToCppType()» «f.name»«ENDFOREACH»)
+    «IF injectedProperties.size > 0-»
+    : («FOREACH injectedProperties AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+    «ENDIF-» {
+    }
+    «ENDLET»
 «ENDDEFINE»
 
 «DEFINE DestructorDefinition FOR EClass»
@@ -120,30 +120,30 @@
 «ENDDEFINE»
 
 «DEFINE GetPropertyValueDeclarations FOR EClass»
-      «FOREACH eStructuralFeatures AS f»
-      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToCppPropertyGetter()» «f.name.getter()»() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
-      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToConstCppPropertyGetter()» «f.name.getter()»() const noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
-      «ENDFOREACH»
+    «FOREACH eStructuralFeatures AS f»
+    «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToCppPropertyGetter()» «f.name.getter()»() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+    «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.featureToConstCppPropertyGetter()» «f.name.getter()»() const noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+    «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE GetPropertyValueDefinitions FOR EClass»
-      «FOREACH eStructuralFeatures AS f»
-      «f.featureToCppPropertyGetter()» «name»::«f.name.getter()»() noexcept {
-        «IF f.isObservableProperty() && !f.isCollection()-»
-        return this->«f.name».get();
-        «ELSE-»
-        return this->«f.resolveFieldValue()»;
-        «ENDIF-»
-      }
-
-      «f.featureToConstCppPropertyGetter()» «name»::«f.name.getter()»() const noexcept {
-        «IF f.isObservableProperty() && !f.isCollection()-»
-        return this->«f.name».get();
-        «ELSE-»
-        return this->«f.resolveFieldValue()»;
-        «ENDIF-»
-      }
-      «ENDFOREACH»
+    «FOREACH eStructuralFeatures AS f»
+    «f.featureToCppPropertyGetter()» «name»::«f.name.getter()»() noexcept {
+      «IF f.isObservableProperty() && !f.isCollection()-»
+      return this->«f.name».get();
+      «ELSE-»
+      return this->«f.resolveFieldValue()»;
+      «ENDIF-»
+    }
+    
+    «f.featureToConstCppPropertyGetter()» «name»::«f.name.getter()»() const noexcept {
+      «IF f.isObservableProperty() && !f.isCollection()-»
+      return this->«f.name».get();
+      «ELSE-»
+      return this->«f.resolveFieldValue()»;
+      «ENDIF-»
+    }
+    «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE SetPropertyValueDeclarations FOR EClass»
@@ -159,31 +159,31 @@
 «DEFINE SetPropertyValueDefinitions FOR EClass-»
     «FOREACH eStructuralFeatures.select(e|e.changeable) AS f»
     void «name»::«f.adderOrSetter()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept {
-        «IF f.isCollection()-»
-            «IF f.isReference()-»
-                «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f-»
-            «ELSE-»
-                «EXPAND SimpleAdderForFeatureDefinition FOR f-»
-            «ENDIF-»
+    «IF f.isCollection()-»
+        «IF f.isReference()-»
+            «EXPAND MultiReferenceAdderForFeatureDefinition FOR (EReference)f-»
         «ELSE-»
-            «EXPAND SimpleSetterForFeatureDefinition FOR f-»
+            «EXPAND SimpleAdderForFeatureDefinition FOR f-»
         «ENDIF-»
-     }
-     «IF f.isCollection()-»
-     void «name»::«f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept {
-         «IF f.isReference()-»
-             «EXPAND MultiReferenceRemoverForFeatureDefinition FOR (EReference)f-»
-         «ELSE-»
-             «EXPAND SimpleRemoverForFeatureDefinition FOR f-»
-         «ENDIF-»
-     }
-     
-     void «name»::«f.name.clearer()»() noexcept {
-         while (!this->«f.name».empty()) {
-	        «f.name.remover()»(this->«f.name».front());
-         }
-     }
-     «ENDIF-»
+    «ELSE-»
+        «EXPAND SimpleSetterForFeatureDefinition FOR f-»
+    «ENDIF-»
+    }
+    «IF f.isCollection()-»
+    void «name»::«f.name.remover()»(«f.featureToSingleCppType()» «f.modifierParameterName()») noexcept {
+        «IF f.isReference()-»
+            «EXPAND MultiReferenceRemoverForFeatureDefinition FOR (EReference)f-»
+        «ELSE-»
+            «EXPAND SimpleRemoverForFeatureDefinition FOR f-»
+        «ENDIF-»
+    }
+    
+    void «name»::«f.name.clearer()»() noexcept {
+        while (!this->«f.name».empty()) {
+            «f.name.remover()»(this->«f.name».front());
+        }
+    }
+    «ENDIF-»
     «ENDFOREACH»
 «ENDDEFINE»
 
@@ -233,20 +233,20 @@
 «ENDDEFINE»
 
 «DEFINE CallSetterForOppositeDefinition FOR EReference-»
-      «IF eOpposite != null-»
-      if («modifierParameterName()» != nullptr) {
-          auto thisPtr = this->shared_from_this();
-          «modifierParameterName()»->«eOpposite.adderOrSetter()»(thisPtr);
-      }
-      «ENDIF-»
+    «IF eOpposite != null-»
+    if («modifierParameterName()» != nullptr) {
+        auto thisPtr = this->shared_from_this();
+        «modifierParameterName()»->«eOpposite.adderOrSetter()»(thisPtr);
+    }
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE CallSetterForUnsetOppositeDefinition FOR EReference-»
-      «IF eOpposite != null-»
-      if («modifierParameterName()» != nullptr && «modifierParameterName()»->«eOpposite.name.getter()»().get() == this) {
-          «modifierParameterName()»->«eOpposite.name.setter()»(nullptr);
-      }
-      «ENDIF-»
+    «IF eOpposite != null-»
+    if («modifierParameterName()» != nullptr && «modifierParameterName()»->«eOpposite.name.getter()»().get() == this) {
+        «modifierParameterName()»->«eOpposite.name.setter()»(nullptr);
+    }
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE CallSetterForUnsetPreviousOppositeDefinition FOR EReference-»
@@ -265,39 +265,39 @@
 «ENDDEFINE»
 
 «DEFINE GetPropertyDeclarations FOR EClass»
-      «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
-      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.propertyGetterToObservableFieldType()»& «f.name»Property() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
-      «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»const «f.propertyGetterToObservableFieldType()»& «f.name»Property() const noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
-      «ENDFOREACH»
+    «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
+    «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»«f.propertyGetterToObservableFieldType()»& «f.name»Property() noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+    «IF !f.hasPropertyGetterOperation()»virtual «ENDIF-»const «f.propertyGetterToObservableFieldType()»& «f.name»Property() const noexcept «IF f.hasPropertyGetterOperation()»override«ENDIF-»;
+    «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE GetPropertyDefinitions FOR EClass»
-      «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
-      «f.propertyGetterToObservableFieldType()»& «name»::«f.name»Property() noexcept {
+    «FOREACH eStructuralFeatures.select(f|f.isObservableProperty()) AS f»
+    «f.propertyGetterToObservableFieldType()»& «name»::«f.name»Property() noexcept {
         return this->«f.name»;
-      }
-      const «f.propertyGetterToObservableFieldType()»& «name»::«f.name»Property() const noexcept {
+    }
+    const «f.propertyGetterToObservableFieldType()»& «name»::«f.name»Property() const noexcept {
         return this->«f.name»;
-      }
-      «ENDFOREACH»
+    }
+    «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE VirtualBaseMethodDelegateDefinitions FOR EClass»
     «IF !abstract-»
-	    «FOREACH eAllStructuralFeatures.without(eStructuralFeatures).select(f|f.hasPropertyGetterOperation(this)) AS f»
-	    «f.propertyGetterToObservableFieldType()»& «f.name»Property() noexcept override {
-	        return inherited::«f.name»Property();
-	    }
-	    const «f.propertyGetterToObservableFieldType()»& «f.name»Property() const noexcept override {
-	        return inherited::«f.name»Property();
-	    }
-	    
-	    «f.featureToCppType()» «f.name.getter()»() noexcept override {
-	        return inherited::«f.name.getter()»();
-	    }
-	    «f.featureToConstCppType()» «f.name.getter()»() const noexcept override {
-	        return inherited::«f.name.getter()»();
-	    }
-	    «ENDFOREACH»
+        «FOREACH eAllStructuralFeatures.without(eStructuralFeatures).select(f|f.hasPropertyGetterOperation(this)) AS f»
+        «f.propertyGetterToObservableFieldType()»& «f.name»Property() noexcept override {
+            return inherited::«f.name»Property();
+        }
+        const «f.propertyGetterToObservableFieldType()»& «f.name»Property() const noexcept override {
+            return inherited::«f.name»Property();
+        }
+        
+        «f.featureToCppType()» «f.name.getter()»() noexcept override {
+            return inherited::«f.name.getter()»();
+        }
+        «f.featureToConstCppType()» «f.name.getter()»() const noexcept override {
+            return inherited::«f.name.getter()»();
+        }
+        «ENDFOREACH»
     «ENDIF-»
 «ENDDEFINE»

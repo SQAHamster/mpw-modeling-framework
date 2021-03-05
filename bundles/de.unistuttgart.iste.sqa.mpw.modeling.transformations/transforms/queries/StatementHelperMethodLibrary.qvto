@@ -2,7 +2,7 @@ import types.EmfHelpers;
 import util.BasicHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
-	
+    
 modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
@@ -24,7 +24,7 @@ query QueryModel::StatementsExpression::getHelperMethodName() : String {
     
     var parentElementName := self.parentElement().name.firstToUpper();
     if (parentElementName.oclIsInvalid() or parentElementName = null) {
-    	parentElementName := self.parentElement().metaClassName() + self.parentElement().determineIndexInParentContainer().toString();
+        parentElementName := self.parentElement().metaClassName() + self.parentElement().determineIndexInParentContainer().toString();
     };
     
     assert((not parentElementName.oclIsInvalid()) and parentElementName <> null);
@@ -33,10 +33,10 @@ query QueryModel::StatementsExpression::getHelperMethodName() : String {
     self.statements[IntermediaryResultStatement]->collect(s|s.internalStatementsExpression.statements)
                                                 ->flatten()
                                                 ->forEach (s) {
-    	switch {
-    		case (s.oclIsTypeOf(ElementByNameUsageStatement)) {
-    			name := name + "_" + s.oclAsType(ElementByNameUsageStatement).elementName;
-    		};
+        switch {
+            case (s.oclIsTypeOf(ElementByNameUsageStatement)) {
+                name := name + "_" + s.oclAsType(ElementByNameUsageStatement).elementName;
+            };
             case (s.oclIsTypeOf(FeatureStatement)) {
                 name := name + "_" + s.oclAsType(FeatureStatement).feature.name;
             };
@@ -56,7 +56,7 @@ query QueryModel::StatementsExpression::getHelperMethodName() : String {
             case (s.oclIsTypeOf(VariableReferenceUsageStatement)) {
                 name := name + "_" + s.oclAsType(VariableReferenceUsageStatement).variableReference.variableName;
             };
-    	};
+        };
     };
     
     assert(name != null);
@@ -64,18 +64,18 @@ query QueryModel::StatementsExpression::getHelperMethodName() : String {
 }
 
 query EObject::collectionMethodParameterToString() : String {
-	if (self.oclIsKindOf(ENamedElement)) {
-		return self.oclAsType(ENamedElement).name;
-	};
+    if (self.oclIsKindOf(ENamedElement)) {
+        return self.oclAsType(ENamedElement).name;
+    };
     if (self.oclIsKindOf(QueryModel::ConstantExpression)) {
         return self.oclAsType(QueryModel::ConstantExpression)._literal;
     };
-	return "";
+    return "";
 }
 
 query Input::Element::determineIndexInParentContainer() : Integer {
-	var subobjectsOfContainer := self.container().subobjects();
-	return subobjectsOfContainer->asOrderedSet()->indexOf(self);
+    var subobjectsOfContainer := self.container().subobjects();
+    return subobjectsOfContainer->asOrderedSet()->indexOf(self);
 }
 
 query QueryModel::StatementsExpression::parentElement() : Input::Element {

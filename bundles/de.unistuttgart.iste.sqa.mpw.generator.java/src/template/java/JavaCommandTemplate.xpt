@@ -7,40 +7,40 @@
     «FILE this.getCommandJavaPackagePath() + "/" + name.toFirstUpper() + "Command.java"»«toJavaHeaderGeneratedComment()»
 
         package «this.getCommandJavaPackageName()»;
-    	
+        
         import static «getFrameworkBasePackage()».FrameworkAssert.*;
         import «getFrameworkBasePackage()».exceptions.*;
-    	«EXPAND template::java::types::JavaImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
-    	import «getFrameworkBasePackage()».mpw.*;
-    	import «getFrameworkBasePackage()».commands.*;
-    	import «getFrameworkBasePackage()».commands.impl.*;
-    	import static «getFrameworkBasePackage()».mpw.Direction.*;
-    	import java.util.stream.Collectors;
-    	
-    	«REM»TODO JML«constraints.toJml()»«ENDREM-»
-    	«documentation.toJavaDoc()»
-		public class «name.toFirstUpper()»Command extends CompositeCommandBase {
-			private final «targetClass.getConcreteName()» self;
+        «EXPAND template::java::types::JavaImportUsedTypesTemplate::CommandEntityImportDefinition FOR targetClass»
+        import «getFrameworkBasePackage()».mpw.*;
+        import «getFrameworkBasePackage()».commands.*;
+        import «getFrameworkBasePackage()».commands.impl.*;
+        import static «getFrameworkBasePackage()».mpw.Direction.*;
+        import java.util.stream.Collectors;
+        
+        «REM»TODO JML«constraints.toJml()»«ENDREM-»
+        «documentation.toJavaDoc()»
+        public class «name.toFirstUpper()»Command extends CompositeCommandBase {
+            private final «targetClass.getConcreteName()» self;
             «IF isActorCommand()-»
             private final GameLog gameLog;
             «ENDIF-»
-			«IF mainUnit != null»
-			«FOREACH mainUnit.parameters AS p»
-			private final «p.type.name.toJavaType()» «p.name»;
-			«ENDFOREACH»
-			«ENDIF»
-		
-			public «name.toFirstUpper()»Command(«name.toFirstUpper()»CommandParameters parameters) {
-				this.self = parameters.self;
-	            «IF isActorCommand()-»
-	            this.gameLog = parameters.gameLog;
-	            «ENDIF-»
-				«FOREACH mainUnit.parameters AS p-»
-                   this.«p.name» = parameters.«p.name»;
+            «IF mainUnit != null»
+            «FOREACH mainUnit.parameters AS p»
+            private final «p.type.name.toJavaType()» «p.name»;
+            «ENDFOREACH»
+            «ENDIF»
+        
+            public «name.toFirstUpper()»Command(«name.toFirstUpper()»CommandParameters parameters) {
+                this.self = parameters.self;
+                «IF isActorCommand()-»
+                this.gameLog = parameters.gameLog;
+                «ENDIF-»
+                «FOREACH mainUnit.parameters AS p-»
+                    this.«p.name» = parameters.«p.name»;
                 «ENDFOREACH-»
-			}
-		
-			«EXPAND template::java::commands::JavaCommandUnitTemplate::UnitExpand FOR mainUnit»
+            }
+        
+            «EXPAND template::java::commands::JavaCommandUnitTemplate::UnitExpand FOR mainUnit»
             «EXPAND template::java::commands::JavaCommandUnitTemplate::UnitExpand FOREACH units.excluding(mainUnit)»
             «EXPAND template::java::JavaQueriesTemplate::HelperStatementDefinition FOREACH this.eAllContents
                                                                                      .typeSelect(Constraint)
@@ -58,9 +58,9 @@
         public class «name.toFirstUpper()»CommandParameters {
             public «targetClass.getConcreteName()» self;
             public CommandStack commandStack;
-		    «IF isActorCommand()-»
+            «IF isActorCommand()-»
             public GameLog gameLog;
-		    «ENDIF-»
+            «ENDIF-»
             «FOREACH mainUnit.parameters AS p»
             public «p.type.name.toJavaType()» «p.name»;
             «ENDFOREACH»

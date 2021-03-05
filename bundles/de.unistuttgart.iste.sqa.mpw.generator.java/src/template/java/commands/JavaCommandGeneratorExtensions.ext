@@ -12,13 +12,13 @@ extension mpw::generator::xtend::util::GlobalsGeneratorExtensions;
  */
 
 getCommandJavaPackagePath(Transformation this) :
-  this.getCommandJavaPackageName().replaceAll("\\.", "/");
+    this.getCommandJavaPackageName().replaceAll("\\.", "/");
 
 getCommandJavaPackageName(Transformation this) :
-  getModulePackage() + ".commands." + getCommandTargetClassBaseName().toLowerCase();
+    getModulePackage() + ".commands." + getCommandTargetClassBaseName().toLowerCase();
 
 getVisibility(Unit this) : 
-  if (name == "execute") then "public" else "private";
+    if (name == "execute") then "public" else "private";
   
 // override from general CommandGeneratorExtensions
 commandSetter() : "executeSetProperty";

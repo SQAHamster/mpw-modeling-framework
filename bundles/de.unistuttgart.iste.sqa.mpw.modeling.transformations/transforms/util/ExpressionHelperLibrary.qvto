@@ -25,7 +25,7 @@ helper createPathExpression(element: ETypedElement, featureNames: List(String)) 
             type := element.eType;
         };
     } else {
-    	pathStatements += object FeatureStatement {
+        pathStatements += object FeatureStatement {
             feature := element.oclAsType(EStructuralFeature);
             type := element.eType;
             directAccessible := true;
@@ -76,10 +76,10 @@ helper createStatementsExpression(inputStatements: List(Statement)) : Statements
     var previous: Statement := null;
     
     inputStatements->forEach (s) {
-    	if (previous != null) {
-    		s.previous := previous;
-    	};
-    	previous := s;
+        if (previous != null) {
+            s.previous := previous;
+        };
+        previous := s;
     };
     
     return object StatementsExpression {

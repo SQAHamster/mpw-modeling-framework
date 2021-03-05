@@ -45,7 +45,7 @@
         public:
 
         «FOREACH eOperations AS o-»
-		    «o.documentationToCppDoc()-»
+            «o.documentationToCppDoc()-»
             «o.operationToCppType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.toCppType()» «p.name»«ENDFOREACH»)«IF o.operationContainsQueryCall()» const noexcept«ENDIF»;
         «ENDFOREACH»
         «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations»
@@ -116,15 +116,15 @@
 
 «DEFINE GenerationAnnotationOperationDefinition FOR CommandCallAnnotation-»
     «IF command.isActorCommand()-»
-	    game.lock()->getPerformance()->preExecuteGameCommand();
-	    try {
-	        «targetRoleVariableName»->«command.name»(«parametersVariableName»);
-	        game.lock()->getPerformance()->delayControlFlow();
-	    } catch (std::exception& e) {
-	        // Stop the game to prevent execution of further commands!
-	        game.lock()->getPerformance()->setMode(mpw::Mode::STOPPED);
-	        throw; // rethrow
-	    }
+        game.lock()->getPerformance()->preExecuteGameCommand();
+        try {
+            «targetRoleVariableName»->«command.name»(«parametersVariableName»);
+            game.lock()->getPerformance()->delayControlFlow();
+        } catch (std::exception& e) {
+            // Stop the game to prevent execution of further commands!
+            game.lock()->getPerformance()->setMode(mpw::Mode::STOPPED);
+            throw; // rethrow
+        }
     «ELSE-»
         game.lock()->getPerformance()->preExecuteEditorCommand();
         «targetRoleVariableName»->«command.name»(«parametersVariableName»);

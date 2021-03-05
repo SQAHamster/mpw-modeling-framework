@@ -26,8 +26,8 @@ mapping inout StatementsExpression::convertIntermediaryStatements() {
 }
 
 mapping inout StatementsExpression::convertStatements() {
-	self.map checkStatementsForIntermediaryResult();
-	self.map putRemainingCollectedStatementsInResultIfNecessary();
+    self.map checkStatementsForIntermediaryResult();
+    self.map putRemainingCollectedStatementsInResultIfNecessary();
 }
 
 mapping inout StatementsExpression::checkStatementsForIntermediaryResult() {
@@ -64,7 +64,7 @@ helper toIntermediaryResult() : IntermediaryResultStatement {
 }
 
 helper createIntermediaryResultStatement() : IntermediaryResultStatement {
-	var resultStatement := object IntermediaryResultStatement {
+    var resultStatement := object IntermediaryResultStatement {
         variableName := nextNameForNumber();
         debugName := variableName;
     };
@@ -106,7 +106,7 @@ mapping inout StatementsExpression::connectStatements() {
     var lastStatement : Statement = null;
     statements->forEach (s) {
         s.previous := lastStatement;
-    	lastStatement := s;
+        lastStatement := s;
     }
 }
 

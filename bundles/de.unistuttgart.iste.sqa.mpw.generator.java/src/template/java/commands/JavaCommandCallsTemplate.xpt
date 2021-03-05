@@ -3,12 +3,12 @@
 «EXTENSION template::java::JavaGeneratorExtensions»
 
 «DEFINE CommandDefinitions FOR EClass»
-	  «FOREACH eAllOperations.select(o|o.isCommand()) AS o»
-	  @Override
-	  public void «o.name»(«o.name.toFirstUpper()»CommandParameters parameters) {
-	      parameters.self = this;
-	      var command = new «o.name.toFirstUpper()»Command(parameters);
-	      parameters.commandStack.execute(command);
-	  }
-      «ENDFOREACH»
+    «FOREACH eAllOperations.select(o|o.isCommand()) AS o»
+    @Override
+    public void «o.name»(«o.name.toFirstUpper()»CommandParameters parameters) {
+        parameters.self = this;
+        var command = new «o.name.toFirstUpper()»Command(parameters);
+        parameters.commandStack.execute(command);
+    }
+    «ENDFOREACH»
 «ENDDEFINE»

@@ -28,7 +28,7 @@ helper toAnnotation(key: String, value: String) : EAnnotation {
 query EModelElement::getAnnotationValue(source: String) : String {
     var annotation := self.eAnnotations->any(a|a.source = source);
     if (annotation != null) {
-    	return annotation.details->first().value;
+        return annotation.details->first().value;
     };
     return null;
 }
@@ -36,7 +36,7 @@ query EModelElement::getAnnotationValue(source: String) : String {
 query EModelElement::getAnnotationValueIgnoringSource(key: String) : String {
     var annotation := self.eAnnotations->any(a|a.details->exists(d|d.key = key));
     if (annotation != null) {
-    	return annotation.details->any(d|d.key = key).value;
+        return annotation.details->any(d|d.key = key).value;
     };
     return null;
 }

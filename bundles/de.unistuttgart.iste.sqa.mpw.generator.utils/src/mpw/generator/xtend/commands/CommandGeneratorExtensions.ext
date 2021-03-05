@@ -27,19 +27,19 @@ getConcreteName(EClassifier this) :
     else name;
 
 getConcreteTypeName(InstanceCondition this) :
-  let transformation = (Transformation)eRootContainer : 
-  if (transformation.targetClass.name == this.instanceType.name) then "Concrete" + this.instanceType.name
-  else this.instanceType.name;
+    let transformation = (Transformation)eRootContainer : 
+    if (transformation.targetClass.name == this.instanceType.name) then "Concrete" + this.instanceType.name
+    else this.instanceType.name;
 
 getVisibility(Unit this) : 
-  if (name == "execute") then "public" else "private";
+    if (name == "execute") then "public" else "private";
   
 getVariableNameForFindReference(ManyReferenceCondition this) :
-  if (isPolymorphic()) then target.variableName + this.type.eType.name
-  else target.variableName;
+    if (isPolymorphic()) then target.variableName + this.type.eType.name
+    else target.variableName;
   
 isPolymorphic(ManyReferenceCondition this) :
-  this.type.eType.name != this.target.instanceType.name;
+    this.type.eType.name != this.target.instanceType.name;
   
 getParentTransformation(Unit this):
     (Transformation)eContainer;

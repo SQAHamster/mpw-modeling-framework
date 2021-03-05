@@ -72,7 +72,7 @@ query EClass::getActorFields() : OrderedSet(EReference) {
  * Mapping: create the constructor and initialize all actor fields
  */
 mapping inout EClass::createConstructorOperation(actorFields: OrderedSet(EReference)) {
-	var constructorOperation := object EOperation {
+    var constructorOperation := object EOperation {
         name := self.name;
         eParameters += object EParameter {
             name := "game";

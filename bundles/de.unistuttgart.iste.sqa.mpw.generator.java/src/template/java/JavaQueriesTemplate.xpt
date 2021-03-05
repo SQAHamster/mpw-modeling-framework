@@ -4,16 +4,16 @@
 «EXTENSION template::java::JavaGeneratorExtensions»
 
 «DEFINE QueryDefinitions FOR EClass»
-	  «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q-»
-	  @Override
-	  public «q.type.name.toJavaType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH») {
-	      try {
-  	          return «EXPAND ExpressionDefinition FOR q.mainExpression-»;
-	      } catch (Exception e) {
-	          return «q.defaultValueLiteral»;
-	      }
-	  }
-	  «EXPAND HelperStatementDefinition FOREACH q.eAllContents.typeSelect(StatementsExpression).select(e|e.needsHelperMethod)-»
+      «FOREACH eAllOperations.select(o|o.isQuery() && !o.isPropertyGetter()).collect(o|o.getQueryForOperation()) AS q-»
+      @Override
+      public «q.type.name.toJavaType()» «q.name»(«FOREACH q.parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH») {
+          try {
+                return «EXPAND ExpressionDefinition FOR q.mainExpression-»;
+          } catch (Exception e) {
+              return «q.defaultValueLiteral»;
+          }
+      }
+      «EXPAND HelperStatementDefinition FOREACH q.eAllContents.typeSelect(StatementsExpression).select(e|e.needsHelperMethod)-»
       «ENDFOREACH-»
 «ENDDEFINE»
 

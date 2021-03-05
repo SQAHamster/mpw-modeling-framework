@@ -42,37 +42,37 @@
     
     private:
     
-      «this.toInheritedAlias()-»
-    
-      «EXPAND template::cpp::properties::CppPropertyTemplate::PropertyDefinitions FOR this»
-      
-    public:
-      «EXPAND template::cpp::properties::CppPropertyTemplate::ConstructorDeclaration FOR this»
-      «EXPAND template::cpp::properties::CppPropertyTemplate::StaticSharedFromThisDefinition FOR this»
-      «EXPAND template::cpp::CppQueriesTemplate::QueryDeclarations FOR this»
-      «EXPAND template::cpp::commands::CppCommandCallsTemplate::CommandDeclarations FOR this»
-      «EXPAND template::cpp::properties::CppPropertyTemplate::GetPropertyDeclarations FOR this»
-      «EXPAND template::cpp::properties::CppPropertyTemplate::GetPropertyValueDeclarations FOR this»
-      «EXPAND template::cpp::properties::CppPropertyTemplate::SetPropertyValueDeclarations FOR this»
-      «EXPAND template::cpp::properties::CppPropertyTemplate::VirtualBaseMethodDelegateDefinitions FOR this»
-      
-    public:
-    
-      virtual ~«this.name»() = «IF needsImplSubclass() || abstract»0«ELSE»default«ENDIF»;
+        «this.toInheritedAlias()-»
         
-      «FOREACH operationsWithoutGenerationAnnotations() AS o-»
-          «o.operationToVirtualSignature()» = 0;
-          «IF o.eType != null && o.eType.isObjectReference()-»
-              «o.operationToVirtualConstSignature()» = 0;
-          «ENDIF-»
-      «ENDFOREACH-»
-      «FOREACH operationsWithGenerationAnnotations() AS o»
-          «o.operationToNonVirtualSignature()»;
-      «ENDFOREACH»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::PropertyDefinitions FOR this»
       
-      «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations-»
-      «EXPAND template::cpp::properties::CppReflectivePropertyAccessorsTemplate::ReflectivePropertyKeyDefinitions FOR this»
-      «EXPAND template::cpp::properties::CppReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodDeclarations FOR this»
+    public:
+        «EXPAND template::cpp::properties::CppPropertyTemplate::ConstructorDeclaration FOR this»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::StaticSharedFromThisDefinition FOR this»
+        «EXPAND template::cpp::CppQueriesTemplate::QueryDeclarations FOR this»
+        «EXPAND template::cpp::commands::CppCommandCallsTemplate::CommandDeclarations FOR this»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::GetPropertyDeclarations FOR this»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::GetPropertyValueDeclarations FOR this»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::SetPropertyValueDeclarations FOR this»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::VirtualBaseMethodDelegateDefinitions FOR this»
+      
+    public:
+    
+        virtual ~«this.name»() = «IF needsImplSubclass() || abstract»0«ELSE»default«ENDIF»;
+          
+        «FOREACH operationsWithoutGenerationAnnotations() AS o-»
+            «o.operationToVirtualSignature()» = 0;
+            «IF o.eType != null && o.eType.isObjectReference()-»
+                «o.operationToVirtualConstSignature()» = 0;
+            «ENDIF-»
+        «ENDFOREACH-»
+        «FOREACH operationsWithGenerationAnnotations() AS o»
+            «o.operationToNonVirtualSignature()»;
+        «ENDFOREACH»
+        
+        «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations-»
+        «EXPAND template::cpp::properties::CppReflectivePropertyAccessorsTemplate::ReflectivePropertyKeyDefinitions FOR this»
+        «EXPAND template::cpp::properties::CppReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodDeclarations FOR this»
 
     };
     
@@ -93,13 +93,13 @@
     
     class «this.name»Impl : public «this.name» {
     private:
-      using inherited = «this.name»;
+        using inherited = «this.name»;
 
     public:
-      «EXPAND template::cpp::properties::CppPropertyTemplate::ImplConstructorDeclaration FOR this»
-      «FOREACH this.getManualImplementedOperations() AS o»
-      «o.operationToOverrideSignature()»;
-      «ENDFOREACH»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::ImplConstructorDeclaration FOR this»
+        «FOREACH this.getManualImplementedOperations() AS o»
+        «o.operationToOverrideSignature()»;
+        «ENDFOREACH»
     };
     
     }
@@ -177,21 +177,21 @@
     
     public:
     
-      virtual ~«this.name»() = default;
-      
-      «EXPAND template::cpp::properties::CppPropertyTemplate::StaticSharedFromThisDefinition FOR this»
+        virtual ~«this.name»() = default;
         
-      «FOREACH eOperations AS o»
-      «IF o.isPropertyGetter()-»
-          «o.operationToVirtualPropertyGetterSignature()» = 0;
-          «o.operationToConstVirtualPropertyGetterSignature()» = 0;
-          «o.operationToObservableGetterSignature()» = 0;
-          «o.operationToConstObservableGetterSignature()» = 0;
-      «ELSE-»
-          «o.operationToVirtualSignature()»«IF o.isQuery()» const noexcept«ENDIF» = 0;
-      «ENDIF-»
-      «ENDFOREACH»
-      «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations»
+        «EXPAND template::cpp::properties::CppPropertyTemplate::StaticSharedFromThisDefinition FOR this»
+          
+        «FOREACH eOperations AS o»
+        «IF o.isPropertyGetter()-»
+            «o.operationToVirtualPropertyGetterSignature()» = 0;
+            «o.operationToConstVirtualPropertyGetterSignature()» = 0;
+            «o.operationToObservableGetterSignature()» = 0;
+            «o.operationToConstObservableGetterSignature()» = 0;
+        «ELSE-»
+            «o.operationToVirtualSignature()»«IF o.isQuery()» const noexcept«ENDIF» = 0;
+        «ENDIF-»
+        «ENDFOREACH»
+        «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations»
     };
     
     }
@@ -237,9 +237,9 @@
     
     «documentationToCppDoc()-»
     enum class «this.name» {
-      «FOREACH eLiterals AS l SEPARATOR ", "»
-      «l»
-	  «ENDFOREACH»
+        «FOREACH eLiterals AS l SEPARATOR ", "»
+        «l»
+        «ENDFOREACH»
     };
     
     }

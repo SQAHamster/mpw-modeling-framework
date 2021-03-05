@@ -29,14 +29,14 @@
         «ENDFOREACH-»
         
         @Override
-	    public int hashCode() {
-	        final int prime = 31;
-	        int result = 1;
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
             «FOREACH eAttributes AS a-»
-    	        result = prime * result + «a.name»;
+                result = prime * result + «a.name»;
             «ENDFOREACH-»
-	        return result;
-	    }
+            return result;
+        }
         
         @Override
         public boolean equals(final Object obj) {
@@ -58,9 +58,9 @@
             return true;
         }
         
-	    public static «name» from(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToJavaType()» «a.name»«ENDFOREACH») {
-	        return new «name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.name»«ENDFOREACH»);
-	    }
+        public static «name» from(«FOREACH eAttributes AS a SEPARATOR ", "»«a.featureToJavaType()» «a.name»«ENDFOREACH») {
+            return new «name»(«FOREACH eAttributes AS a SEPARATOR ", "»«a.name»«ENDFOREACH»);
+        }
     }
     «ENDFILE»
 «ENDDEFINE»

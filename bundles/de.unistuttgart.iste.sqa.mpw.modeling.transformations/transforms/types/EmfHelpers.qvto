@@ -11,7 +11,7 @@ library EmfHelpers;
 configuration property EntityModels: List(EPackage);
 
 query String::getter() : String {
-	return "get" + self.firstToUpper();
+    return "get" + self.firstToUpper();
 }
 
 query String::setter() : String {
@@ -21,7 +21,7 @@ query String::setter() : String {
 query Element::root() : Element {
     var element := self;
     while (element.container() != null) {
-    	element := element.container();
+        element := element.container();
     };
     return element;
 }
@@ -32,7 +32,7 @@ query findClassForName(name: String) : ecore::EClass {
 
 query findClassifierForName(name: String) : ecore::EClassifier {
     switch {
-    	case(name = "EInt") return EInt.oclAsType(EClassifier);
+        case(name = "EInt") return EInt.oclAsType(EClassifier);
     };
     return EntityModels->collect(p|p.getEClassifier(name))
                        ->selectOne(c|c != null);

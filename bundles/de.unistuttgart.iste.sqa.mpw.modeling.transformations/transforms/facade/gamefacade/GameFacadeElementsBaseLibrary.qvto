@@ -120,12 +120,12 @@ mapping Transformation::toCommandOperation(facadeClass: EClass) : EOperation {
 }
 
 mapping inout EOperation::createGameVariablesForFacadeParameters() {
-	self.eAnnotations += self.eParameters->select(p|p.isStageParameter())
-	                                     ->map stageFacadeParameterToGameVariable();
+    self.eAnnotations += self.eParameters->select(p|p.isStageParameter())
+                                         ->map stageFacadeParameterToGameVariable();
 }
 
 query EParameter::isStageParameter() : Boolean {
-	return self.eType.isMarkedWithAnnotation("facade") and self.eType.getConcreteClass().isInstanceOf("Stage");
+    return self.eType.isMarkedWithAnnotation("facade") and self.eType.getConcreteClass().isInstanceOf("Stage");
 }
 
 mapping EParameter::stageFacadeParameterToGameVariable() : VariableDefinitionAnnotation {
@@ -143,12 +143,12 @@ mapping EParameter::stageFacadeParameterToGameVariable() : VariableDefinitionAnn
     };
     
     rhs := object ExpressionAnnotation {
-    	expression := createStatementsExpression(List{parameterStatement, getInternalGameStatement});
+        expression := createStatementsExpression(List{parameterStatement, getInternalGameStatement});
     }
 }
 
 query Transformation::getOperationName() : String {
-	if (self.isInit) {
+    if (self.isInit) {
         return "init";
     } else {
         return self.name;
@@ -216,7 +216,7 @@ mapping BaseTypes::Parameter::toEParameter() : EParameter {
 }
 
 query EClassifier::findFacadeForRoleType() : EClass {
-	var baseName := self.getBaseName();
+    var baseName := self.getBaseName();
     return findClassForName(baseName);
 };
 

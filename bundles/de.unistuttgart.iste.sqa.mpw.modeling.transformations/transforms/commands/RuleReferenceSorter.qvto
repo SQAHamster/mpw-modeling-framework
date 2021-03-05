@@ -14,44 +14,42 @@ helper CommandModel::Rule::sortReferences(): OrderedSet(ReferenceCondition) {
     var sortedResult: OrderedSet(ReferenceCondition);
     var lhsReferences = self.referenceConditions->select(r|not r.isCreate);
 
-	var order: Dict(ReferenceCondition, Integer);
-	var reachableInstances: Set(InstanceCondition);
-	var allReferencesCount = lhsReferences->size();
-	var i: Integer := 0;
-	
-	reachableInstances += self.thisInstance;
-	var parameterNames := self.parameters->collect(p|p.name)->asSet();
-	reachableInstances += self.instanceConditions->select(o|parameterNames->includes(o.variableName));
-	
-	while (sortedResult->size() != allReferencesCount) {
-		var anyAdded := false;
-		
-		var remainingReferences = lhsReferences->symmetricDifference(sortedResult); 
-		remainingReferences->forEach(r) {
-			if (reachableInstances->includes(r.source) and not reachableInstances->includes(r.target)) {
-				reachableInstances += r.target;
-				r.useForExploring := true;
-			} endif;
-			
-			if (reachableInstances->includes(r.source) and reachableInstances->includes(r.target)) {
-				anyAdded := true;
-				order->put(r, i);
-				i := i+1;
-				sortedResult += r;	
-			} endif;
-		};
-		
-		if (not anyAdded) {
-			raise "Cannot reach all instances from this";
-		} endif;
-		
-	};
-	
-	self.referenceConditions->select(r|r.isCreate)->forEach(r) {
-		sortedResult += r;
-	};
-	
-	return sortedResult;
-	
-} 
-
+    var order: Dict(ReferenceCondition, Integer);
+    var reachableInstances: Set(InstanceCondition);
+    var allReferencesCount = lhsReferences->size();
+    var i: Integer := 0;
+    
+    reachableInstances += self.thisInstance;
+    var parameterNames := self.parameters->collect(p|p.name)->asSet();
+    reachableInstances += self.instanceConditions->select(o|parameterNames->includes(o.variableName));
+    
+    while (sortedResult->size() != allReferencesCount) {
+        var anyAdded := false;
+        
+        var remainingReferences = lhsReferences->symmetricDifference(sortedResult); 
+        remainingReferences->forEach(r) {
+            if (reachableInstances->includes(r.source) and not reachableInstances->includes(r.target)) {
+                reachableInstances += r.target;
+                r.useForExploring := true;
+            } endif;
+            
+            if (reachableInstances->includes(r.source) and reachableInstances->includes(r.target)) {
+                anyAdded := true;
+                order->put(r, i);
+                i := i+1;
+                sortedResult += r;    
+            } endif;
+        };
+        
+        if (not anyAdded) {
+            raise "Cannot reach all instances from this";
+        } endif;
+        
+    };
+    
+    self.referenceConditions->select(r|r.isCreate)->forEach(r) {
+        sortedResult += r;
+    };
+    
+    return sortedResult;
+}

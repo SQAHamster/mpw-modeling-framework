@@ -15,7 +15,7 @@ modeltype QueryDsl uses "http://www.mpw.uni-stuttgart.de/querydsl";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
 query parseQuery(string: String, contextClass: EClassifier) : QueryModel::Query {
-	return parseQueryWithParameters(string, contextClass, List{});
+    return parseQueryWithParameters(string, contextClass, List{});
 }
 
 query parseQueryWithParameters(string: String, contextClass: EClassifier, parameters: List(QueryDsl::Parameter)) : QueryModel::Query {
@@ -35,12 +35,12 @@ query parseQueryWithHenshinParameters(string: String, contextClass: EClassifier,
     var resultQuery := parseQueryWithParameters(string, contextClass, queryDslParameters);
     queryDslParameters->forEach (p) {
         // avoid that the temporary parameters are orphan
-    	dummyParameterList.parameters += p;
+        dummyParameterList.parameters += p;
     };
     return resultQuery;
 }
 
 mapping Henshin::Parameter::toQueryDslParameter() : QueryDsl::Parameter {
-	variableName := self.name;
-	typeName := self.type.name;
+    variableName := self.name;
+    typeName := self.type.name;
 }

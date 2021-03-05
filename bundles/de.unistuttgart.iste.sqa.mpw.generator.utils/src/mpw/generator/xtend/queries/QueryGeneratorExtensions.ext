@@ -12,22 +12,22 @@ extension mpw::generator::xtend::types::MetaModelGeneratorExtensions;
 
 toDefaultOperatorCode(CompareOperator this) :
     switch (this) {
-       case CompareOperator::EQUAL: "=="
-       case CompareOperator::NOT_EQUAL: "!="
-       case CompareOperator::GREATER: ">"
-       case CompareOperator::SMALLER: "<"
-       case CompareOperator::GREATER_EQUAL: ">="
-       case CompareOperator::SMALLER_EQUAL: "<="
-       default: ""
+        case CompareOperator::EQUAL: "=="
+        case CompareOperator::NOT_EQUAL: "!="
+        case CompareOperator::GREATER: ">"
+        case CompareOperator::SMALLER: "<"
+        case CompareOperator::GREATER_EQUAL: ">="
+        case CompareOperator::SMALLER_EQUAL: "<="
+        default: ""
     };
 
 toDefaultOperatorCode(CalculationOperator this) :
     switch (this) {
-       case CalculationOperator::PLUS: "+"
-       case CalculationOperator::MINUS: "-"
-       case CalculationOperator::MULTIPLY: "*"
-       case CalculationOperator::DIVIDE: "/"
-       default: ""
+        case CalculationOperator::PLUS: "+"
+        case CalculationOperator::MINUS: "-"
+        case CalculationOperator::MULTIPLY: "*"
+        case CalculationOperator::DIVIDE: "/"
+        default: ""
     };
 
 Query getQueryForOperation(EOperation operation) : 

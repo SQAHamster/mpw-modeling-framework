@@ -4,20 +4,20 @@
 «EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE CommandParametersClassDefinition FOR Transformation»
-        «EXPAND template::cpp::types::CppImportUsedTypesTemplate::CommandParameterIncludeDefinitions FOR this»
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::CommandParameterIncludeDefinitions FOR this»
+    
+    namespace «getCommandNamespace()» {
+    
+    struct «name.toFirstUpper()»CommandParameters final {
+        «EXPAND ParameterFieldDefinitions FOR this»
         
-        namespace «getCommandNamespace()» {
-        
-        struct «name.toFirstUpper()»CommandParameters final {
-            «EXPAND ParameterFieldDefinitions FOR this»
-            
-            «name.toFirstUpper()»CommandParameters(«EXPAND ConstructorParameterDefinitions FOR this»)
-            «EXPAND ConstructorParameterInitializationDefinitions("") FOR this-»
-            {
-            }
-        };
-        
+        «name.toFirstUpper()»CommandParameters(«EXPAND ConstructorParameterDefinitions FOR this»)
+        «EXPAND ConstructorParameterInitializationDefinitions("") FOR this-»
+        {
         }
+    };
+    
+    }
 «ENDDEFINE»
 
 «DEFINE ParameterFieldDefinitions FOR Transformation-»

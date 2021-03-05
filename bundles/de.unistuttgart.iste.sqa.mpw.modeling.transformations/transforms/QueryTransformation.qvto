@@ -1,7 +1,7 @@
 import queries.ExpressionTransformation;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
-	
+    
 modeltype BaseTypes uses "http://www.mpw.uni-stuttgart.de/behavior/basetypes";
 modeltype Input uses "http://www.mpw.uni-stuttgart.de/transformation/inputs";
 modeltype QueryInput uses "http://www.mpw.uni-stuttgart.de/querydsl";
@@ -24,14 +24,14 @@ mapping Input::QueryInputs::toQueryModel() : QueryModel::Module {
 }
 
 helper Sequence(QueryInput::Element)::sortElements(): Sequence(Element) {
-	return self->sortedBy(e|e.toSortPriority());
+    return self->sortedBy(e|e.toSortPriority());
 }
 
 query QueryInput::Element::toSortPriority() : Integer {
-	if (self.allSubobjectsOfType(QueryInput::Statement)->select(s|s.isBasedOnQuery())->isEmpty()) {
-	    return 0;
-	};
-	return 1;
+    if (self.allSubobjectsOfType(QueryInput::Statement)->select(s|s.isBasedOnQuery())->isEmpty()) {
+        return 0;
+    };
+    return 1;
 }
 
 abstract mapping QueryInput::Element::toElement() : QueryModel::ExpressionalElement;
@@ -46,22 +46,22 @@ abstract mapping QueryInput::Element::toElementBase() : QueryModel::Expressional
 
 helper String::trimMarkers() : String {
     if (self.size() >= 5 and self.startsWith("/**") and self.endsWith("*/")) {
-    	return self.substring(4, self.size()-2).trim();
+        return self.substring(4, self.size()-2).trim();
     };
     return self;
 }
 
 mapping QueryInput::Query::toElement() : QueryModel::Query inherits QueryInput::Element::toElementBase {
     name := self.name;
-	type := result.mainExpression.type;
-	isCollection := result.mainExpression.isCollection;
-	isOptional := result.mainExpression.isOptional;
-	
-	internal := self.internal;
-	defaultValueLiteral := result.type.defaultValue.toString();
-	if (self.parameterList != null) {
-		parameters := self.parameterList.parameters->map toParameter();
-	};
+    type := result.mainExpression.type;
+    isCollection := result.mainExpression.isCollection;
+    isOptional := result.mainExpression.isOptional;
+    
+    internal := self.internal;
+    defaultValueLiteral := result.type.defaultValue.toString();
+    if (self.parameterList != null) {
+        parameters := self.parameterList.parameters->map toParameter();
+    };
 }
 
 mapping QueryInput::Parameter::toParameter() : BaseTypes::Parameter {
@@ -96,7 +96,7 @@ mapping QueryInput::Invariant::toElement() : QueryModel::ClassInvariant inherits
 }
 
 mapping String::toContextClass() : ecore::EClass {
-	init { result := findClassifierForName(self).oclAsType(ecore::EClass); }
+    init { result := findClassifierForName(self).oclAsType(ecore::EClass); }
 }
 
 query QueryInput::Element::context() : QueryInput::Context {

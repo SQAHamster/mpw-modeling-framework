@@ -5,32 +5,32 @@
 
 «REM»Template for reflective keys«ENDREM»
 «DEFINE ReflectivePropertyKeyDefinitions FOR EClass»
-      «LET eAllStructuralFeatures.without(eStructuralFeatures).size AS offset-»
-      «FOREACH eStructuralFeatures AS f-»
-      static constexpr unsigned «f.name.toFeatureKeyName()» = «offset+counterInc(this.name)»;
-      «ENDFOREACH-»
-      «FOREACH eAllStructuralFeatures.without(eStructuralFeatures)
-        .reject(f|f.eContainingClass.name == "MiniProgrammingWorld" && f.eType.name == "Stage") AS f-»«REM»Note: Stage has to be filtered out, since it is removed from MiniProgrammingWorld«ENDREM-»
-      using «getBaseClass().name»::«f.name.toFeatureKeyName()»;
-      «ENDFOREACH-»
-      «ENDLET-»
+    «LET eAllStructuralFeatures.without(eStructuralFeatures).size AS offset-»
+    «FOREACH eStructuralFeatures AS f-»
+    static constexpr unsigned «f.name.toFeatureKeyName()» = «offset+counterInc(this.name)»;
+    «ENDFOREACH-»
+    «FOREACH eAllStructuralFeatures.without(eStructuralFeatures)
+      .reject(f|f.eContainingClass.name == "MiniProgrammingWorld" && f.eType.name == "Stage") AS f-»«REM»Note: Stage has to be filtered out, since it is removed from MiniProgrammingWorld«ENDREM-»
+    using «getBaseClass().name»::«f.name.toFeatureKeyName()»;
+    «ENDFOREACH-»
+    «ENDLET-»
 «ENDDEFINE»
 
 «DEFINE ReflectivePropertyKeyDefinitionsForNamedElements(List[ecore::ENamedElement] elements) FOR EClass»
-      «LET elements.size AS offset-»
-      «FOREACH elements AS e-»
-      static constexpr unsigned «e.name.toFeatureKeyName()» = «offset+counterInc(this.name)»;
-      «ENDFOREACH-»
-      «ENDLET-»
+    «LET elements.size AS offset-»
+    «FOREACH elements AS e-»
+    static constexpr unsigned «e.name.toFeatureKeyName()» = «offset+counterInc(this.name)»;
+    «ENDFOREACH-»
+    «ENDLET-»
 «ENDDEFINE»
 
 «REM»Template for reflective operation in C++«ENDREM»
 «DEFINE ReflectivePropertyMethodDeclarations FOR EClass»
-      «IF isInheritedEntity()-»
-      void «EXPAND ReflectiveSetPropertyMethodSignature FOR this» override;
-      void «EXPAND ReflectiveAddToCollectionMethodSignature FOR this» override;
-      void «EXPAND ReflectiveRemoveFromCollectionMethodSignature FOR this» override;
-      «ENDIF-»
+    «IF isInheritedEntity()-»
+    void «EXPAND ReflectiveSetPropertyMethodSignature FOR this» override;
+    void «EXPAND ReflectiveAddToCollectionMethodSignature FOR this» override;
+    void «EXPAND ReflectiveRemoveFromCollectionMethodSignature FOR this» override;
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE ReflectiveSetPropertyMethodSignature FOR Object-»
@@ -46,43 +46,43 @@ removeFromCollection(unsigned featureKey, EntityReference reference)
 «ENDDEFINE»
 
 «DEFINE ReflectivePropertyMethodSources FOR EClass»
-        «IF isInheritedEntity()-»
-        «EXPAND ReflectiveSetPropertyMethod FOR this»
-        
-        «EXPAND ReflectiveAddToCollectionMethod FOR this»
-        
-        «EXPAND ReflectiveRemoveFromCollectionMethod FOR this»
-        «ENDIF-»
+    «IF isInheritedEntity()-»
+    «EXPAND ReflectiveSetPropertyMethod FOR this»
+    
+    «EXPAND ReflectiveAddToCollectionMethod FOR this»
+    
+    «EXPAND ReflectiveRemoveFromCollectionMethod FOR this»
+    «ENDIF-»
 «ENDDEFINE»
 
 «REM»
     Set Property
 «ENDREM»
 «DEFINE ReflectiveSetPropertyMethod FOR EClass»
-        void «name»::«EXPAND ReflectiveSetPropertyMethodSignature FOR this» {
-            switch (featureKey) {
-            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == 1) AS f-»
-            case «f.name.toFeatureKeyName()»: {
-                «IF f.eType.isValueType()-»
-                    «EXPAND SetValueTypeProperty FOR f»
-                «ELSEIF EReference.isInstance(f)-»
-                    «EXPAND SetEntityReferenceProperty FOR f»
-                «ELSEIF f.eType.isEnum()-»
-                    «EXPAND SetEnumProperty FOR f»
-                «ELSE-»
-                    «EXPAND SetSimpleProperty FOR f»
-                «ENDIF-»
-                return;
-            }
-            «ENDFOREACH-»
-            }
-            
-            «IF getBaseClass() != null-»
-            inherited::setProperty(featureKey, value);
+    void «name»::«EXPAND ReflectiveSetPropertyMethodSignature FOR this» {
+        switch (featureKey) {
+        «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == 1) AS f-»
+        case «f.name.toFeatureKeyName()»: {
+            «IF f.eType.isValueType()-»
+                «EXPAND SetValueTypeProperty FOR f»
+            «ELSEIF EReference.isInstance(f)-»
+                «EXPAND SetEntityReferenceProperty FOR f»
+            «ELSEIF f.eType.isEnum()-»
+                «EXPAND SetEnumProperty FOR f»
             «ELSE-»
-            throw std::runtime_error("property with key " + std::to_string(featureKey) + " is not supported");
+                «EXPAND SetSimpleProperty FOR f»
             «ENDIF-»
+            return;
         }
+        «ENDFOREACH-»
+        }
+        
+        «IF getBaseClass() != null-»
+        inherited::setProperty(featureKey, value);
+        «ELSE-»
+        throw std::runtime_error("property with key " + std::to_string(featureKey) + " is not supported");
+        «ENDIF-»
+    }
 «ENDDEFINE»
 
 «DEFINE SetValueTypeProperty FOR EStructuralFeature»
@@ -113,26 +113,26 @@ removeFromCollection(unsigned featureKey, EntityReference reference)
     Add to collection
 «ENDREM»
 «DEFINE ReflectiveAddToCollectionMethod FOR EClass»
-        void «name»::«EXPAND ReflectiveAddToCollectionMethodSignature FOR this» {
-            switch (featureKey) {
-            «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == -1) AS f-»
-            case «f.name.toFeatureKeyName()»: {
-                «IF EReference.isInstance(f)-»
-                    «EXPAND AddEntityReference FOR f»
-                «ELSE-»
-                    «EXPAND AddSimpleReference FOR f»
-                «ENDIF-»
-                return;
-            }
-            «ENDFOREACH-»
-            }
-            
-            «IF getBaseClass() != null-»
-            inherited::addToCollection(featureKey, reference);
+    void «name»::«EXPAND ReflectiveAddToCollectionMethodSignature FOR this» {
+        switch (featureKey) {
+        «FOREACH eStructuralFeatures.select(f|f.changeable && f.upperBound == -1) AS f-»
+        case «f.name.toFeatureKeyName()»: {
+            «IF EReference.isInstance(f)-»
+                «EXPAND AddEntityReference FOR f»
             «ELSE-»
-            throw std::runtime_error("property with key " + std::to_string(featureKey) + " is not supported");
+                «EXPAND AddSimpleReference FOR f»
             «ENDIF-»
+            return;
         }
+        «ENDFOREACH-»
+        }
+        
+        «IF getBaseClass() != null-»
+        inherited::addToCollection(featureKey, reference);
+        «ELSE-»
+        throw std::runtime_error("property with key " + std::to_string(featureKey) + " is not supported");
+        «ENDIF-»
+    }
 «ENDDEFINE»
 
 «DEFINE AddEntityReference FOR EStructuralFeature»

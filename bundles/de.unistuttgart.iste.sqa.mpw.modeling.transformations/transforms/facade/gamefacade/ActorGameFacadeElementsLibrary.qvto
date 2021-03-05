@@ -40,7 +40,7 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
     
     var initCommand := concreteClass.findInitCommandOperation();
     if (initCommand != null) {
-	    eOperations += createConstructorWithParamsOperation(initCommand);
+        eOperations += createConstructorWithParamsOperation(initCommand);
     };
     
     eOperations += createInternalStageConstructorOperation();
@@ -52,45 +52,45 @@ mapping inout EClass::createActorGameFacadeElements() inherits EClass::createEle
 }
 
 helper EClass::createConstructorOperation() : EOperation {
-	return object EOperation {
-    	name := self.name;
-    	eAnnotations += "constructor".toMarkerAnnotation();
-    	
-    	eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
-    		field := self.getEStructuralFeature("internal" + baseName);
-    		constructorTypeName := concreteClass.name;
-    	};
-    	
-    	eAnnotations += toAnnotation("documentation", "Create a new " + baseName + " object without initializing it.");
+    return object EOperation {
+        name := self.name;
+        eAnnotations += "constructor".toMarkerAnnotation();
+        
+        eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
+            field := self.getEStructuralFeature("internal" + baseName);
+            constructorTypeName := concreteClass.name;
+        };
+        
+        eAnnotations += toAnnotation("documentation", "Create a new " + baseName + " object without initializing it.");
     };
 }
 
 query EClass::findInitCommandOperation() : EOperation {
-	return self.eAllOperations->any(o|o.isMarkedWithAnnotation("command") and getCommandForOperation(o).isInit);
+    return self.eAllOperations->any(o|o.isMarkedWithAnnotation("command") and getCommandForOperation(o).isInit);
 }
 
 /*
  * Creates a constructor which is used by the relating stage, e.g. to initialize a "default hamster"
  */
 helper EClass::createConstructorWithParamsOperation(initCommand: EOperation) : EOperation {
-	return object EOperation {
-    	name := self.name;
-    	eParameters += getCommandForOperation(initCommand).mainUnit.parameters->map toConstructorParameter();
-    	eAnnotations += "constructor".toMarkerAnnotation();
-    	
+    return object EOperation {
+        name := self.name;
+        eParameters += getCommandForOperation(initCommand).mainUnit.parameters->map toConstructorParameter();
+        eAnnotations += "constructor".toMarkerAnnotation();
+        
         eAnnotations += object ConstructorSimpleFieldInitializationAnnotation {
             field := self.getEStructuralFeature("internal" + baseName);
             constructorTypeName := concreteClass.name;
         };
     
-    	eAnnotations += object MethodCallAnnotation {
-    	    variableName := "this";
-    		methodName := "init";
-    		parameterInputVariableExpressions += eParameters->map createParameterExpression();
-    		closingStatement := true;
-    	};
-    	
-    	eAnnotations += toAnnotation("documentation", "Create a new " + baseName + " object by initializing it with the relating init() method.");
+        eAnnotations += object MethodCallAnnotation {
+            variableName := "this";
+            methodName := "init";
+            parameterInputVariableExpressions += eParameters->map createParameterExpression();
+            closingStatement := true;
+        };
+        
+        eAnnotations += toAnnotation("documentation", "Create a new " + baseName + " object by initializing it with the relating init() method.");
     };
 }
 
@@ -104,7 +104,7 @@ mapping EParameter::createParameterExpression() : StatementsExpression {
 
 helper EClass::createInternalStageConstructorOperation() : EOperation {
     var mpwClass := findInstanceOfMetaClass("MiniProgrammingWorld");
-	return object EOperation {
+    return object EOperation {
         name := self.name;
         eAnnotations += "constructor".toMarkerAnnotation();
         
@@ -142,33 +142,33 @@ mapping inout EClass::addInputInterfaceOperation() {
 }
 
 helper EClass::createReadIntOperation() : EOperation {
-	return object EOperation {
+    return object EOperation {
         name := "readNumber";
         eParameters += object EParameter {
             name := "message";
-            eType := stringType;	
+            eType := stringType;    
         };
         eType := intType;
         
         eAnnotations += self.createGameInterfaceVariableAnnotation();
         
         eAnnotations += object VariableDefinitionAnnotation {
-        	variableName := "result";
-        	variableTypeName := intType.name;
-        	rhs := object MethodCallAnnotation {
-        	    variableName := "gameInterface";
-        		methodName := "readInteger";
-        		parameterInputVariableExpressions += createPathExpression("message", stringType);
-        	};
+            variableName := "result";
+            variableTypeName := intType.name;
+            rhs := object MethodCallAnnotation {
+                variableName := "gameInterface";
+                methodName := "readInteger";
+                parameterInputVariableExpressions += createPathExpression("message", stringType);
+            };
         };
         eAnnotations += object ReturnAnnotation {
-        	expression := createPathExpression("result", intType);
+            expression := createPathExpression("result", intType);
         };
     };
 }
 
 helper EClass::createReadStringOperation() : EOperation {
-	return object EOperation {
+    return object EOperation {
         name := "readString";
         var messageParameter := object EParameter {
             name := "message";
@@ -195,7 +195,7 @@ helper EClass::createReadStringOperation() : EOperation {
 }
 
 helper EClass::createGameInterfaceVariableAnnotation() : VariableDefinitionAnnotation {
-	return object VariableDefinitionAnnotation {
+    return object VariableDefinitionAnnotation {
         variableName := "gameInterface";
         variableTypeName := "UserInputInferface";
         rhs := object ExpressionAnnotation {

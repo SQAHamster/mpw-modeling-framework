@@ -30,24 +30,24 @@
     
     «documentationToJavaDoc()-»
     public «IF needsImplSubclass() || abstract»abstract«ENDIF» class «this.name» «this.toInheritance()» {
-      «EXPAND template::java::properties::JavaPropertyTemplate::PropertyDefinitions FOR this»
-      «EXPAND template::java::properties::JavaPropertyTemplate::ConstructorDefinition FOR this»
-      «EXPAND template::java::JavaQueriesTemplate::QueryDefinitions FOR this»
-      «EXPAND template::java::commands::JavaCommandCallsTemplate::CommandDefinitions FOR this»
-      «EXPAND template::java::properties::JavaPropertyTemplate::GetPropertyDefinitions FOR this»
-      «EXPAND template::java::properties::JavaPropertyTemplate::GetPropertyValueDefinitions FOR this»
-      «EXPAND template::java::properties::JavaPropertyTemplate::SetPropertyValueDefinitions FOR this»
-      «FOREACH operationsWithoutGenerationAnnotations() AS o-»
-      «o.documentationToJavaDoc()-»
-      public abstract «o.operationToSignature()»;
-      «ENDFOREACH-»
-      «FOREACH operationsWithGenerationAnnotations() AS o»
-      «o.documentationToJavaDoc()-»
-      public «o.operationToSignature()» {
-          «EXPAND template::java::JavaGenerateClassesTemplate::GenerationOperationAnnotation FOREACH o.eAnnotations-»
-      }
-      «ENDFOREACH»
-      «EXPAND GenerationAnnotation FOREACH eAnnotations-»
+        «EXPAND template::java::properties::JavaPropertyTemplate::PropertyDefinitions FOR this»
+        «EXPAND template::java::properties::JavaPropertyTemplate::ConstructorDefinition FOR this»
+        «EXPAND template::java::JavaQueriesTemplate::QueryDefinitions FOR this»
+        «EXPAND template::java::commands::JavaCommandCallsTemplate::CommandDefinitions FOR this»
+        «EXPAND template::java::properties::JavaPropertyTemplate::GetPropertyDefinitions FOR this»
+        «EXPAND template::java::properties::JavaPropertyTemplate::GetPropertyValueDefinitions FOR this»
+        «EXPAND template::java::properties::JavaPropertyTemplate::SetPropertyValueDefinitions FOR this»
+        «FOREACH operationsWithoutGenerationAnnotations() AS o-»
+        «o.documentationToJavaDoc()-»
+        public abstract «o.operationToSignature()»;
+        «ENDFOREACH-»
+        «FOREACH operationsWithGenerationAnnotations() AS o»
+        «o.documentationToJavaDoc()-»
+        public «o.operationToSignature()» {
+            «EXPAND template::java::JavaGenerateClassesTemplate::GenerationOperationAnnotation FOREACH o.eAnnotations-»
+        }
+        «ENDFOREACH»
+        «EXPAND GenerationAnnotation FOREACH eAnnotations-»
     }
     «ENDFILE»
     «IF needsImplSubclass()»
@@ -56,13 +56,13 @@
     «EXPAND template::java::types::JavaImportUsedTypesTemplate::ImplImportDefinitions FOR this»
     
     public class «this.name»Impl extends «this.name» {
-      «EXPAND template::java::properties::JavaPropertyTemplate::ImplConstructorDefinition FOR this»
-      «FOREACH this.getManualImplementedOperations() AS o»
-      @Override
-      public «o.operationToSignature()» {
-          throw new RuntimeException("not implemented");
-      }
-      «ENDFOREACH»
+        «EXPAND template::java::properties::JavaPropertyTemplate::ImplConstructorDefinition FOR this»
+        «FOREACH this.getManualImplementedOperations() AS o»
+        @Override
+        public «o.operationToSignature()» {
+            throw new RuntimeException("not implemented");
+        }
+        «ENDFOREACH»
     }
     «ENDFILE»
     «ENDIF»
@@ -77,14 +77,14 @@
     
     «documentationToJavaDoc()-»
     public interface «this.name» «toInheritance()» {
-      «FOREACH eOperations AS o»
-          «o.documentationToJavaDoc()-»
-          «o.operationToSignature()»;
-          «IF o.isPropertyGetter()-»
-              «o.operationToObservableGetterSignature()»;
-          «ENDIF-»
-      «ENDFOREACH»
-      «EXPAND GenerationAnnotation FOREACH eAnnotations»
+        «FOREACH eOperations AS o»
+            «o.documentationToJavaDoc()-»
+            «o.operationToSignature()»;
+            «IF o.isPropertyGetter()-»
+                «o.operationToObservableGetterSignature()»;
+            «ENDIF-»
+        «ENDFOREACH»
+        «EXPAND GenerationAnnotation FOREACH eAnnotations»
     }
     «ENDFILE»
     «IF isDependency()»
@@ -111,9 +111,9 @@
     
     «documentationToJavaDoc()-»
     public enum «this.name» {
-      «FOREACH eLiterals AS l SEPARATOR ", "»
-      «l»
-	  «ENDFOREACH»
+        «FOREACH eLiterals AS l SEPARATOR ", "»
+        «l»
+        «ENDFOREACH»
     }
     «ENDFILE»
 «ENDDEFINE»

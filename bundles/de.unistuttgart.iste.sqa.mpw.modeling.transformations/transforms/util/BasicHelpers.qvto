@@ -4,7 +4,7 @@
 library BasicHelpers;
 
 query Bag(String)::joinToString(separator: String) : String {
-	return self->asSequence()->joinToString(separator);
+    return self->asSequence()->joinToString(separator);
 }
 
 query Sequence(String)::joinToString(separator: String) : String {
@@ -13,7 +13,7 @@ query Sequence(String)::joinToString(separator: String) : String {
 
 query String::firstToLower() : String {
     if (self.size() <= 1) {
-    	return self.toLowerCase();
+        return self.toLowerCase();
     };
-	return self.substring(1, 1).toLowerCase() + self.substring(2, self.size());
+    return self.substring(1, 1).toLowerCase() + self.substring(2, self.size());
 };

@@ -47,21 +47,21 @@ helper createAddGameLogEntryRule(actorType: EClass, messageExpression: QueryMode
 }
 
 helper createGameLogInstance() : InstanceCondition {
-	return object InstanceCondition {
+    return object InstanceCondition {
         variableName := "gameLog";
         instanceType := findClassForName("GameLog");
     };
 }
 
 helper createSelfInstance(actorType: EClass) : InstanceCondition {
-	return object InstanceCondition {
+    return object InstanceCondition {
         variableName := "self";
         instanceType := actorType;
     };
 }
 
 helper createNewEntryInstance() : InstanceCondition {
-	return object InstanceCondition {
+    return object InstanceCondition {
         variableName := "entry";
         instanceType := findClassForName("LogEntry");
         isCreate := true;
@@ -70,7 +70,7 @@ helper createNewEntryInstance() : InstanceCondition {
 
 helper createGameLogToLogEntryReference(gameLogInstance: InstanceCondition,
         newEntryInstance: InstanceCondition) : ReferenceCondition {
-	return object ManyReferenceCondition {
+    return object ManyReferenceCondition {
         source := gameLogInstance;
         target := newEntryInstance;
         type := findClassForName("GameLog").eReferences->any(r|r.name = "logEntries");
@@ -80,7 +80,7 @@ helper createGameLogToLogEntryReference(gameLogInstance: InstanceCondition,
 }
 
 helper createGameLogToLogEntryReferenceModification(gameLogToLogEntryReference: ReferenceCondition) : Modification {
-	return object Modification {
+    return object Modification {
         action := CommandModel::Action::CREATE;
         reference := gameLogToLogEntryReference;
     };
@@ -88,7 +88,7 @@ helper createGameLogToLogEntryReferenceModification(gameLogToLogEntryReference: 
 
 helper createMessageAttribute(newEntryInstance: InstanceCondition, 
         messageExpression: QueryModel::Expression) : AttributeCondition {
-	return object CommandModel::AttributeCondition {
+    return object CommandModel::AttributeCondition {
         instance := newEntryInstance;
         attributeName := "message";
         attributeValue := messageExpression;
@@ -98,7 +98,7 @@ helper createMessageAttribute(newEntryInstance: InstanceCondition,
 
 helper createEntryToActorReference(newEntryInstance: InstanceCondition, 
         selfInstance: InstanceCondition) : ReferenceCondition {
-	return object SingleReferenceCondition {
+    return object SingleReferenceCondition {
         source := newEntryInstance;
         target := selfInstance;
         type := findClassForName("LogEntry").eReferences->any(r|r.name = "actor");
@@ -108,7 +108,7 @@ helper createEntryToActorReference(newEntryInstance: InstanceCondition,
 }
 
 helper createEntryToActorReferenceModification(entryToActorReference: ReferenceCondition) : Modification{
-	return object Modification {
+    return object Modification {
         action := CommandModel::Action::CREATE;
         reference := entryToActorReference;
     };

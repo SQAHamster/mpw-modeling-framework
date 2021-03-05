@@ -19,14 +19,14 @@ query toDocumentationLines(command: CommandModel::Transformation) : String {
                                ->select(doc|doc <> null and doc.length() > 0)
                                ->joinToString("<br/>\n");
     if (documentation.length() > 0) {
-    	documentation := "<br/>\n<br/>\n" + documentation + "\n";
+        documentation := "<br/>\n<br/>\n" + documentation + "\n";
     };
     assert(not documentation.oclIsInvalid());
     return documentation;
 }
 
 query QueryModel::Constraint::toDocumentation() : String {
-	return self.toDocumentationPrefix() + self.documentation;
+    return self.toDocumentationPrefix() + self.documentation;
 }
 
 query QueryModel::Constraint::toDocumentationPrefix() : String {

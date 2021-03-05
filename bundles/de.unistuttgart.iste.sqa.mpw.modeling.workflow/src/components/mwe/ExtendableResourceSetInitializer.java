@@ -17,67 +17,65 @@ import components.helpers.EclipsePathHelper;
 import static components.mwe.Mwe2ParamsMap.*;
 
 class ExtendableResourceSetInitializer extends RuntimeResourceSetInitializer {
-	private static final String FILE_EXTENSION_JAR = "jar";
+    private static final String FILE_EXTENSION_JAR = "jar";
 
-	protected final static Logger log = Logger.getLogger(ExtendableResourceSetInitializer.class.getName());
-	
-	@Inject
-	private Mwe2ParamsMap paramsMap;
-	
-	public List<String> getClassPathEntries() {
+    protected final static Logger log = Logger.getLogger(ExtendableResourceSetInitializer.class.getName());
+
+    @Inject
+    private Mwe2ParamsMap paramsMap;
+
+    public List<String> getClassPathEntries() {
         final List<String> classPathEntries = super.getClassPathEntries();
-        
+
         final String additionalArchivesPaths = paramsMap.getParams().get(PARAM_KEY_ADDITIONAL_ARCHIVES_PATHS);
         if (additionalArchivesPaths == null) {
-        	return classPathEntries;
+            return classPathEntries;
         }
-        
+
         final var additionalArchivesPathParts = getJarPaths(additionalArchivesPaths);
         for (final String additionalArchivesPath : additionalArchivesPathParts) {
-        	final var jars = collectAdditionalJars(additionalArchivesPath.trim());
-        	classPathEntries.addAll(jars);
+            final var jars = collectAdditionalJars(additionalArchivesPath.trim());
+            classPathEntries.addAll(jars);
         }
 
         return classPathEntries;
     }
 
-	private List<String> getJarPaths(final String additionalArchivesPaths) {
-		final String[] paths = additionalArchivesPaths.split(";");
-		final String includePattern = paramsMap.getParams().get(PARAM_KEY_INCLUDE_JARS_WITH_NAME);
+    private List<String> getJarPaths(final String additionalArchivesPaths) {
+        final String[] paths = additionalArchivesPaths.split(";");
+        final String includePattern = paramsMap.getParams().get(PARAM_KEY_INCLUDE_JARS_WITH_NAME);
         if (includePattern == null) {
-        	return Arrays.asList(paths);
+            return Arrays.asList(paths);
         }
-		return Arrays.asList(paths).stream().filter(path -> path.matches(includePattern)).collect(Collectors.toList());
-	}
-	
-	private List<String> collectAdditionalJars(final String additionalArchivesPath) {
+        return Arrays.asList(paths).stream().filter(path -> path.matches(includePattern)).collect(Collectors.toList());
+    }
+
+    private List<String> collectAdditionalJars(final String additionalArchivesPath) {
         final var additionalEntries = new ArrayList<String>();
-        
+
         var path = EclipsePathHelper.toJavaCompatibleAbsoluteFilePath(additionalArchivesPath);
         path = Path.of(path).toAbsolutePath().toString();
-		log.info("searching additional jars in: " + path);
-		
-		try {
-			final List<String> additionalJars = getAdditionalJars(path);
-			log.info("found additional jars: " + additionalJars);
-			additionalEntries.addAll(additionalJars);
-		} catch (final IOException e) {
-			log.error("failed to process additional archives", e);
-		}
-        return additionalEntries;
-	}
-	
-	private List<String> getAdditionalJars(final String path) throws IOException {
-		if (!Files.isDirectory(Path.of(path))) {
-			return Arrays.asList(path);
-		}
-        return listJarFilesInPath(path);
-	}
+        log.info("searching additional jars in: " + path);
 
-	private List<String> listJarFilesInPath(final String path) throws IOException {
-		return Files.list(Path.of(path))
-        		.map(p -> p.toAbsolutePath().toString())
-        		.filter(p -> p.endsWith(FILE_EXTENSION_JAR))
-        		.collect(Collectors.toList());
-	}
+        try {
+            final List<String> additionalJars = getAdditionalJars(path);
+            log.info("found additional jars: " + additionalJars);
+            additionalEntries.addAll(additionalJars);
+        } catch (final IOException e) {
+            log.error("failed to process additional archives", e);
+        }
+        return additionalEntries;
+    }
+
+    private List<String> getAdditionalJars(final String path) throws IOException {
+        if (!Files.isDirectory(Path.of(path))) {
+            return Arrays.asList(path);
+        }
+        return listJarFilesInPath(path);
+    }
+
+    private List<String> listJarFilesInPath(final String path) throws IOException {
+        return Files.list(Path.of(path)).map(p -> p.toAbsolutePath().toString())
+                .filter(p -> p.endsWith(FILE_EXTENSION_JAR)).collect(Collectors.toList());
+    }
 }

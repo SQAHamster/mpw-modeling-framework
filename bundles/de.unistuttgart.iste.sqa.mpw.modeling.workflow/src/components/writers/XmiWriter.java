@@ -33,193 +33,199 @@ import components.helpers.CustomAnnotationConverter;
 import components.helpers.EclipsePathHelper;
 
 /**
- * Component used to debugging purposes. It writes EMF resources in some points of the workflow to a XMI / Ecore file.
- * This files then can be inspected to see effects of transformation steps.
+ * Component used to debugging purposes. It writes EMF resources in some points
+ * of the workflow to a XMI / Ecore file. This files then can be inspected to
+ * see effects of transformation steps.
  */
 public class XmiWriter extends WorkflowComponentWithModelSlot {
-	private static final String WORKFLOW_CONTEXT_SLOT_ENTITY_MODELS = "entityModels";
-	private static final String FEATURE_NAMEDELEMENT_NAME = "name";
-	private static final String FILE_EXTENSION_ECORE = "ecore";
-	private static final String FILE_EXTENSION_XMI = "xmi";
+    private static final String WORKFLOW_CONTEXT_SLOT_ENTITY_MODELS = "entityModels";
+    private static final String FEATURE_NAMEDELEMENT_NAME = "name";
+    private static final String FILE_EXTENSION_ECORE = "ecore";
+    private static final String FILE_EXTENSION_XMI = "xmi";
 
-	private final static Logger log = Logger.getLogger(XmiWriter.class.getName());
-	
-	private String fileExtension = "xmi";
-	
-	/** suffix for the folder where the files are placed */
-	private String directorySuffix = "";
-	
-	/** the project name in which the files are written */
-	private String projectName;
+    private final static Logger log = Logger.getLogger(XmiWriter.class.getName());
 
-	private String rootPath = "..";
-	
-	public void setFileExtension(final String fileExtension) {
-		this.fileExtension = fileExtension;
-	}
+    private String fileExtension = "xmi";
 
-	public String getFileExtension() {
-		return fileExtension;
-	}
-	
-	public String getDirectorySuffix() {
-		return directorySuffix;
-	}
+    /** suffix for the folder where the files are placed */
+    private String directorySuffix = "";
 
-	public void setDirectorySuffix(final String directorySuffix) {
-		this.directorySuffix = directorySuffix;
-	}
-	
-	public String getProjectName() {
-		return projectName;
-	}
+    /** the project name in which the files are written */
+    private String projectName;
 
-	public void setProjectName(final String projectName) {
-		this.projectName = projectName;
-	}
-	
-	public String getRootPath() {
-		return rootPath;
-	}
+    private String rootPath = "..";
 
-	public void setRootPath(final String rootPath) {
-		this.rootPath = rootPath;
-	}
+    public void setFileExtension(final String fileExtension) {
+        this.fileExtension = fileExtension;
+    }
 
-	@Override
-	protected void invokeInternal(final WorkflowContext context, final ProgressMonitor monitor, final Issues issues) {
-		final var resources = (List<?>)context.get(getModelSlot());
-		for (final var resource : resources) {
-			save(context, (EObject)resource);
-		}
-	}
+    public String getFileExtension() {
+        return fileExtension;
+    }
 
-	private void save(final WorkflowContext context, final EObject object) {
-		final String name = getName(object);
-		final String directoryName = object.eClass().getEPackage().getName() + directorySuffix;
-		final String fileUri = MessageFormat.format("platform:/resource/{0}/debugout/{1}/{2}.{3}", projectName, directoryName, name, fileExtension);
-		
-		try {
-			final EObject copiedObject = EcoreUtil.copy(object);
-			removeAnnotationContents(copiedObject);
-			saveObjectToFileUri(copiedObject, fileUri);
-			
-			replaceEcoreLinksToGeneratedOnes(context, fileUri, directoryName);
-			
-			log.debug(fileUri + " created.");
-		} catch (final IOException e) {
-			log.error("Error during creating Xmi.", e);
-		}
-	}
+    public String getDirectorySuffix() {
+        return directorySuffix;
+    }
 
-	private void saveObjectToFileUri(final EObject copiedObject, final String fileUri) throws IOException {
-		final var resource = createResourceSetForFileUri(fileUri);
-		resource.getContents().add(copiedObject);
-		resource.save(createUtf8SaveOptions());
-	}
+    public void setDirectorySuffix(final String directorySuffix) {
+        this.directorySuffix = directorySuffix;
+    }
 
-	private static Resource createResourceSetForFileUri(final String fileUri) {
-		final var resourceSet = new ResourceSetImpl();
+    public String getProjectName() {
+        return projectName;
+    }
 
-		final var resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
-		resourceFactoryRegistry.getExtensionToFactoryMap().put(FILE_EXTENSION_ECORE, new EcoreResourceFactoryImpl());
-		resourceFactoryRegistry.getExtensionToFactoryMap().put(FILE_EXTENSION_XMI, new XMIResourceFactoryImpl());
-		
-		return resourceSet.createResource(URI.createURI(fileUri));
-	}
+    public void setProjectName(final String projectName) {
+        this.projectName = projectName;
+    }
 
-	private static Map<String, String> createUtf8SaveOptions() {
-		final Map<String, String> saveOptions = new HashMap<String, String>();
-		saveOptions.put(org.eclipse.emf.ecore.xmi.XMLResource.OPTION_ENCODING, StandardCharsets.UTF_8.name());
-		return saveOptions;
-	}
+    public String getRootPath() {
+        return rootPath;
+    }
 
-	/**
-	 * Fix the references to the extended / transformed ecore files
-	 * Note: the transformed ecore files are based on their package names, so regard this.  
-	 * @param context 
-	 */
-	private void replaceEcoreLinksToGeneratedOnes(final WorkflowContext context, final String resourceUri, final String directoryName) throws IOException {
-		final String fileName = URI.createURI(resourceUri).lastSegment();
-		final var filePathString = MessageFormat.format("{0}/debugout/{1}/{2}", EclipsePathHelper.getMappedPlatformUriForProject(projectName).toFileString(), directoryName, fileName);
-		final var path = Paths.get(filePathString);
-		final var charset = StandardCharsets.UTF_8;
+    public void setRootPath(final String rootPath) {
+        this.rootPath = rootPath;
+    }
 
-		var content = new String(Files.readAllBytes(path), charset);
-		content = replaceEntityModelNamesToPackageNames(context, content, directoryName);
-		Files.write(path, content.getBytes(charset));
-	}
-	
-	private String replaceEntityModelNamesToPackageNames(final WorkflowContext context, String text, final String directoryName) {
-		final String projectNameSuffix = projectName.substring(projectName.lastIndexOf('.') + 1);
+    @Override
+    protected void invokeInternal(final WorkflowContext context, final ProgressMonitor monitor, final Issues issues) {
+        final var resources = (List<?>) context.get(getModelSlot());
+        for (final var resource : resources) {
+            save(context, (EObject) resource);
+        }
+    }
 
-		final var modeledEcoreFiles = (List<?>)context.get(WORKFLOW_CONTEXT_SLOT_ENTITY_MODELS);
-		for (final var object : modeledEcoreFiles) {
-			final var ePackage = (EPackage)object;
-			
-			final Resource eResource = ePackage.eResource();
-			final boolean isLoadedFromWorkspaceFile = eResource.getURI().toPlatformString(true) != null;
-			if (isLoadedFromWorkspaceFile) {
-				text = replaceReferences(text, directoryName, projectNameSuffix, ePackage);
-			}
-		}
-			
-		return text;
-	}
+    private void save(final WorkflowContext context, final EObject object) {
+        final String name = getName(object);
+        final String directoryName = object.eClass().getEPackage().getName() + directorySuffix;
+        final String fileUri = MessageFormat.format("platform:/resource/{0}/debugout/{1}/{2}.{3}", projectName,
+                directoryName, name, fileExtension);
 
-	private String replaceReferences(String text, final String directoryName, final String projectNameSuffix,
-			final EPackage ePackage) {
-		final Resource eResource = ePackage.eResource();
-		final var originalUri = eResource.getURI().toString();
-		final String fileName = new File(eResource.getURI().toPlatformString(true)).getName();
-		
-		final String originalUriSuffix = MessageFormat.format("mpw/model//{0}", fileName);
-		final String modifiedUriSuffix = MessageFormat.format("{0}/debugout/{1}//{2}.ecore", projectNameSuffix, directoryName, ePackage.getName());
-		final var modifiedUri = originalUri.replaceAll(originalUriSuffix, modifiedUriSuffix);
-		
-		text = text.replaceAll(originalUri, modifiedUri);
-		return text;
-	}
+        try {
+            final EObject copiedObject = EcoreUtil.copy(object);
+            removeAnnotationContents(copiedObject);
+            saveObjectToFileUri(copiedObject, fileUri);
 
-	private String getName(final EObject object) {
-		final var nameFeature = object.eClass().getEStructuralFeature(FEATURE_NAMEDELEMENT_NAME);
-		return "" + object.eGet(nameFeature);
-	}
-	
-	/**
-	 * opening XMI files with complex annotation contents comes with errors, so remove them.
-	 */
-	private void removeAnnotationContents(final EObject eObject) {
-		CustomAnnotationConverter.convert(eObject);
-		
-		final var annotations = EcoreUtil2.getAllContentsOfType(eObject, EAnnotation.class);
-		for (final var annotation : annotations) {
-			final var contents = annotation.getContents();
-			final var replacedContents = replaceAllObjects(contents);
-			contents.clear();
-			contents.addAll(replacedContents);
-		}
-	}
-	
-	private static List<EAnnotation> replaceAllObjects(final List<? extends EObject> list) {
-		return list.stream()
-				.map(content -> toAnnotation(content))
-				.collect(Collectors.toList());
-	}
-	
-	/**
-	 * convert eobjects so simple dummy annotations 
-	 */
-	private static EAnnotation toAnnotation(final EObject object) {
-		// EAnnotations have not to be replaced
-		if (object.getClass() == EAnnotationImpl.class) {
-			return (EAnnotation)object;
-		}
-		
-		final var annotation = EcoreFactory.eINSTANCE.createEAnnotation();
-		annotation.setSource(object.getClass().getSimpleName());
-		annotation.getDetails().put("content", object.toString());
-		return annotation;
-	}
-	
+            replaceEcoreLinksToGeneratedOnes(context, fileUri, directoryName);
+
+            log.debug(fileUri + " created.");
+        } catch (final IOException e) {
+            log.error("Error during creating Xmi.", e);
+        }
+    }
+
+    private void saveObjectToFileUri(final EObject copiedObject, final String fileUri) throws IOException {
+        final var resource = createResourceSetForFileUri(fileUri);
+        resource.getContents().add(copiedObject);
+        resource.save(createUtf8SaveOptions());
+    }
+
+    private static Resource createResourceSetForFileUri(final String fileUri) {
+        final var resourceSet = new ResourceSetImpl();
+
+        final var resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
+        resourceFactoryRegistry.getExtensionToFactoryMap().put(FILE_EXTENSION_ECORE, new EcoreResourceFactoryImpl());
+        resourceFactoryRegistry.getExtensionToFactoryMap().put(FILE_EXTENSION_XMI, new XMIResourceFactoryImpl());
+
+        return resourceSet.createResource(URI.createURI(fileUri));
+    }
+
+    private static Map<String, String> createUtf8SaveOptions() {
+        final Map<String, String> saveOptions = new HashMap<String, String>();
+        saveOptions.put(org.eclipse.emf.ecore.xmi.XMLResource.OPTION_ENCODING, StandardCharsets.UTF_8.name());
+        return saveOptions;
+    }
+
+    /**
+     * Fix the references to the extended / transformed ecore files Note: the
+     * transformed ecore files are based on their package names, so regard this.
+     * 
+     * @param context
+     */
+    private void replaceEcoreLinksToGeneratedOnes(final WorkflowContext context, final String resourceUri,
+            final String directoryName) throws IOException {
+        final String fileName = URI.createURI(resourceUri).lastSegment();
+        final var filePathString = MessageFormat.format("{0}/debugout/{1}/{2}",
+                EclipsePathHelper.getMappedPlatformUriForProject(projectName).toFileString(), directoryName, fileName);
+        final var path = Paths.get(filePathString);
+        final var charset = StandardCharsets.UTF_8;
+
+        var content = new String(Files.readAllBytes(path), charset);
+        content = replaceEntityModelNamesToPackageNames(context, content, directoryName);
+        Files.write(path, content.getBytes(charset));
+    }
+
+    private String replaceEntityModelNamesToPackageNames(final WorkflowContext context, String text,
+            final String directoryName) {
+        final String projectNameSuffix = projectName.substring(projectName.lastIndexOf('.') + 1);
+
+        final var modeledEcoreFiles = (List<?>) context.get(WORKFLOW_CONTEXT_SLOT_ENTITY_MODELS);
+        for (final var object : modeledEcoreFiles) {
+            final var ePackage = (EPackage) object;
+
+            final Resource eResource = ePackage.eResource();
+            final boolean isLoadedFromWorkspaceFile = eResource.getURI().toPlatformString(true) != null;
+            if (isLoadedFromWorkspaceFile) {
+                text = replaceReferences(text, directoryName, projectNameSuffix, ePackage);
+            }
+        }
+
+        return text;
+    }
+
+    private String replaceReferences(String text, final String directoryName, final String projectNameSuffix,
+            final EPackage ePackage) {
+        final Resource eResource = ePackage.eResource();
+        final var originalUri = eResource.getURI().toString();
+        final String fileName = new File(eResource.getURI().toPlatformString(true)).getName();
+
+        final String originalUriSuffix = MessageFormat.format("mpw/model//{0}", fileName);
+        final String modifiedUriSuffix = MessageFormat.format("{0}/debugout/{1}//{2}.ecore", projectNameSuffix,
+                directoryName, ePackage.getName());
+        final var modifiedUri = originalUri.replaceAll(originalUriSuffix, modifiedUriSuffix);
+
+        text = text.replaceAll(originalUri, modifiedUri);
+        return text;
+    }
+
+    private String getName(final EObject object) {
+        final var nameFeature = object.eClass().getEStructuralFeature(FEATURE_NAMEDELEMENT_NAME);
+        return "" + object.eGet(nameFeature);
+    }
+
+    /**
+     * opening XMI files with complex annotation contents comes with errors, so
+     * remove them.
+     */
+    private void removeAnnotationContents(final EObject eObject) {
+        CustomAnnotationConverter.convert(eObject);
+
+        final var annotations = EcoreUtil2.getAllContentsOfType(eObject, EAnnotation.class);
+        for (final var annotation : annotations) {
+            final var contents = annotation.getContents();
+            final var replacedContents = replaceAllObjects(contents);
+            contents.clear();
+            contents.addAll(replacedContents);
+        }
+    }
+
+    private static List<EAnnotation> replaceAllObjects(final List<? extends EObject> list) {
+        return list.stream().map(content -> toAnnotation(content)).collect(Collectors.toList());
+    }
+
+    /**
+     * convert eobjects so simple dummy annotations
+     */
+    private static EAnnotation toAnnotation(final EObject object) {
+        // EAnnotations have not to be replaced
+        if (object.getClass() == EAnnotationImpl.class) {
+            return (EAnnotation) object;
+        }
+
+        final var annotation = EcoreFactory.eINSTANCE.createEAnnotation();
+        annotation.setSource(object.getClass().getSimpleName());
+        annotation.getDetails().put("content", object.toString());
+        return annotation;
+    }
+
 }

@@ -11,30 +11,30 @@
     «IF name == "Entity"-»
     #include "ReflectivePropertyObject.h"
     «ENDIF-»
-	«IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
+    «IF eStructuralFeatures.union(eOperations).exists(e|e.isCollection())-»
     #include <list>
     #include <unordered_set>
-	«ENDIF-»
+    «ENDIF-»
     «IF eStructuralFeatures.union(eOperations).exists(e|e.eType.isSemaphore())-»
     #include "MpwSemaphore.h"
     «ENDIF-»
-	«IF (abstract ? eOperations : eAllOperations).select(o|o.isQuery()).exists(o|o.getQueryForOperation().isOptional)-»
+    «IF (abstract ? eOperations : eAllOperations).select(o|o.isQuery()).exists(o|o.getQueryForOperation().isOptional)-»
     #include <optional>
-	«ENDIF-»
+    «ENDIF-»
     «IF eOperations.exists(o|o.getUsedTypes().exists(t|t.name == "Throwable"))-»
     #include <exception>
     «ENDIF-»
-	«IF eStructuralFeatures.union(eOperations).exists(e|e.isAny())-»
+    «IF eStructuralFeatures.union(eOperations).exists(e|e.isAny())-»
     #include "Any.h"
-	«ENDIF-»
+    «ENDIF-»
     «IF eStructuralFeatures.exists(f|f.isObservableProperty()) ||
         eOperations.exists(o|o.isPropertyGetter())-»
-	#include "ObservableProperties.h"
+    #include "ObservableProperties.h"
     «ENDIF-»
-	«IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection()) || 
-	    eOperations.exists(o|o.isPropertyGetter())-»
-	#include "ObservableListProperties.h"
-	«ENDIF-»
+    «IF eStructuralFeatures.exists(f|f.isObservableProperty() && f.isCollection()) || 
+        eOperations.exists(o|o.isPropertyGetter())-»
+    #include "ObservableListProperties.h"
+    «ENDIF-»
     «IF eStructuralFeatures.exists(f|!f.isObservableProperty() && f.isCollection()) || 
         eOperations.exists(o|o.isPropertyGetter())-»
     #include "SimpleListProperties.h"
@@ -46,10 +46,10 @@
         .union(eStructuralFeatures.collect(f|f.eType).select(t|t.isEnum() || t.isValueType()))
         .union(eStructuralFeatures.select(f|f.isObjectReference() && f.isCollection()).collect(f|f.eType))
         .union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten().select(t|t.isEnum() || t.isValueType()))
-		.reject(t|t.isDataType())
-		.reject(t|t.isStereotype())
-		.collect(t|t.name)
-		.toSet()»
+        .reject(t|t.isDataType())
+        .reject(t|t.isStereotype())
+        .collect(t|t.name)
+        .toSet()»
     «EXPAND CommandParametersImportDefinition FOREACH (abstract ? eOperations : eAllOperations)
         .select(o|o.isCommand())
         .collect(o|o.getCommandForOperation())»
@@ -69,17 +69,17 @@
     #include "GamePerformance.h"
     «ENDIF-»
     «EXPAND SingleImportDefinition FOREACH eStructuralFeatures
-		.collect(e|e.eType)
-		.union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())
-		.union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
-		.union(eAllContents.typeSelect(Statement).collect(s|s.type))
-		.without(eStructuralFeatures.select(f|f.isObjectReference() && f.isCollection()).collect(f|f.eType))
-		.reject(t|t.name == this.name)
-		.reject(t|t.isDataType())
-		.reject(t|t.isEnum())
+        .collect(e|e.eType)
+        .union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())
+        .union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
+        .union(eAllContents.typeSelect(Statement).collect(s|s.type))
+        .without(eStructuralFeatures.select(f|f.isObjectReference() && f.isCollection()).collect(f|f.eType))
+        .reject(t|t.name == this.name)
+        .reject(t|t.isDataType())
+        .reject(t|t.isEnum())
         .reject(t|t.isValueType())
-		.reject(t|t.isBuiltInType())
-		.reject(t|t.isStereotype())
+        .reject(t|t.isBuiltInType())
+        .reject(t|t.isStereotype())
         .collect(t|t.name)
         .toSet()»
     «EXPAND CommandImportDefinition FOREACH eAllOperations
@@ -97,19 +97,19 @@
 
 «DEFINE ForwardDeclarations FOR EClass»
     «EXPAND SingleForwardDeclarationDefinition FOREACH eStructuralFeatures
-		.collect(e|e.eType)
-		.union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())
-		.union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
-		.union(eAnnotations.typeSelect(GetPropertyAnnotation).collect(a|a.getterType))
-		.union(eAnnotations.typeSelect(GetPropertyDeclarationAnnotation).collect(a|a.getterType))
-		.toSet()
-		.without(eStructuralFeatures.select(f|f.isObjectReference() && f.isCollection()).collect(f|f.eType))
-		.reject(t|t == this)
-		.reject(t|t.isDataType())
-		.reject(t|t.isEnum())
-		.reject(t|t.isValueType())
-		.reject(t|t.isBuiltInType())
-		.reject(t|t.isStereotype())»
+        .collect(e|e.eType)
+        .union((abstract ? eOperations : eAllOperations).collect(o|o.getUsedTypes()).flatten())
+        .union(eAllStructuralFeatures.select(e|e.isConstructorInjectedProperty()).collect(e|e.eType).flatten())
+        .union(eAnnotations.typeSelect(GetPropertyAnnotation).collect(a|a.getterType))
+        .union(eAnnotations.typeSelect(GetPropertyDeclarationAnnotation).collect(a|a.getterType))
+        .toSet()
+        .without(eStructuralFeatures.select(f|f.isObjectReference() && f.isCollection()).collect(f|f.eType))
+        .reject(t|t == this)
+        .reject(t|t.isDataType())
+        .reject(t|t.isEnum())
+        .reject(t|t.isValueType())
+        .reject(t|t.isBuiltInType())
+        .reject(t|t.isStereotype())»
 «ENDDEFINE»
 
 «DEFINE ImplImportDefinitions FOR EClass»
@@ -170,6 +170,6 @@
                                                               .union(this.eAllContents.typeSelect(InstanceCondition).collect(c|c.instanceType))
                                                               .union(this.eAllContents.typeSelect(Statement).collect(s|s.type))
                                                               .reject(t|t.isDataType())
-														      .collect(t|t.getConcreteNameForRoleElseName())
-														      .toSet()»
+                                                              .collect(t|t.getConcreteNameForRoleElseName())
+                                                              .toSet()»
 «ENDDEFINE»

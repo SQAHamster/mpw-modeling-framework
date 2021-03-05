@@ -28,7 +28,7 @@ mapping EClass::toWriteCommand() : CommandModel::Transformation {
     
     var messageParameter := object BaseTypes::Parameter {
         name := "message";
-    	type := EString.oclAsType(EClassifier);
+        type := EString.oclAsType(EClassifier);
     };
     var messageParameterUsageExpression := ExpressionHelperLibrary::createPathExpression(messageParameter.name, messageParameter.type);
     var addGameLogRule := GameLogEntryRuleCreator::createAddGameLogEntryRule(self, messageParameterUsageExpression);

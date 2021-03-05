@@ -10,9 +10,9 @@
         «EXPAND PreconditionsDefinition FOR this»
         «EXPAND OldValueVariablesDefinition FOR this»
         
-	    if (!internalMainUnit()) {
-	        throw new RuntimeException("Transformation was not successfully executed: «getParentTransformation().name»");
-	    }
+        if (!internalMainUnit()) {
+            throw new RuntimeException("Transformation was not successfully executed: «getParentTransformation().name»");
+        }
         «IF getParentTransformation().needsGameLogInsertion()-»
             addGameLog();
         «ENDIF-»

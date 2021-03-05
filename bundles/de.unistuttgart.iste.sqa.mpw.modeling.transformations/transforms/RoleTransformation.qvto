@@ -31,13 +31,13 @@ main() {
 }
 
 mapping Ecore::EPackage::transformClasses() {
-  var classes := self.eClassifiers[EClass];
-  classes[isRelevantType()]->map transformToRoles();
-  self->map replaceRoleReferences();
+    var classes := self.eClassifiers[EClass];
+    classes[isRelevantType()]->map transformToRoles();
+    self->map replaceRoleReferences();
 }
 
 helper Ecore::EClass::isRelevantType() : Boolean {
-  return self.eAllSuperTypes->exists(t|t.name = "Actor" or t.name = "Stage");
+    return self.eAllSuperTypes->exists(t|t.name = "Actor" or t.name = "Stage");
 }
 
 mapping inout Ecore::EClass::transformToRoles() {
@@ -87,28 +87,28 @@ query Ecore::EStructuralFeature::createRoleGetterDefinitionAnnotation(roleName: 
 }
 
 helper Ecore::EClass::createReadOnlyRole(baseName: String) : Ecore::EClass {
-  var readOnlyRole := object EClass {
-    name := "ReadOnly" + baseName;
-    _abstract := true;
-    interface := true;
-    eAnnotations += toAnnotation("role", "readonly");
-    eAnnotations += toAnnotation("baseName", baseName);
-    eSuperTypes += findClassForName("Entity");
-  };
-  readOnlyRole.eOperations += self.eAllStructuralFeatures->select(f|f.changeable)
-                                                         ->map transformFeatureToGetterOperation();
-  
-  var queryModule := Queries->first();
-  var queriesForThisType := self.getQueriesForThisType();
-  
-  readOnlyRole.eOperations += queriesForThisType->reject(q|readOnlyRole.eAllOperations
-                                                           ->exists(o|o.isPropertyGetter() and o.getSimplePropertyGetterName() = q.name))
-                                                           ->map transformQueryToOperation();
-  
-  readOnlyRole.embedQueriesInOperations(queriesForThisType);
-  
-  self.ePackage.eClassifiers += readOnlyRole;
-  return readOnlyRole;
+    var readOnlyRole := object EClass {
+        name := "ReadOnly" + baseName;
+        _abstract := true;
+        interface := true;
+        eAnnotations += toAnnotation("role", "readonly");
+        eAnnotations += toAnnotation("baseName", baseName);
+        eSuperTypes += findClassForName("Entity");
+    };
+    readOnlyRole.eOperations += self.eAllStructuralFeatures->select(f|f.changeable)
+                                                           ->map transformFeatureToGetterOperation();
+    
+    var queryModule := Queries->first();
+    var queriesForThisType := self.getQueriesForThisType();
+    
+    readOnlyRole.eOperations += queriesForThisType->reject(q|readOnlyRole.eAllOperations
+                                                             ->exists(o|o.isPropertyGetter() and o.getSimplePropertyGetterName() = q.name))
+                                                             ->map transformQueryToOperation();
+    
+    readOnlyRole.embedQueriesInOperations(queriesForThisType);
+    
+    self.ePackage.eClassifiers += readOnlyRole;
+    return readOnlyRole;
 }
 
 mapping QueryModel::Query::transformQueryToOperation() : EOperation {
@@ -126,19 +126,19 @@ mapping BaseTypes::Parameter::toEParameter() : EParameter {
 }
 
 helper ecore::EClass::embedQueriesInOperations(queries: Set(QueryModel::Query)) {
-  self.eAllOperations->forEach(o) {
-      var queryForThisOperation := queries->any(q|q.name = o.name or o.isPropertyGetter() and o.getSimplePropertyGetterName() = q.name);
-      if (queryForThisOperation != null) {
-          var annotation := "query".toMarkerAnnotation();
-          annotation.contents += queryForThisOperation.oclAsType(ecore::EObject).deepclone();
-          o.eAnnotations += annotation;
-          
-          var documentationAnnotation := queryForThisOperation.createDocumentationAnnotation();
-          if (documentationAnnotation != null) {
-              o.eAnnotations += documentationAnnotation;
-          };
-      };
-  };
+    self.eAllOperations->forEach(o) {
+        var queryForThisOperation := queries->any(q|q.name = o.name or o.isPropertyGetter() and o.getSimplePropertyGetterName() = q.name);
+        if (queryForThisOperation != null) {
+            var annotation := "query".toMarkerAnnotation();
+            annotation.contents += queryForThisOperation.oclAsType(ecore::EObject).deepclone();
+            o.eAnnotations += annotation;
+            
+            var documentationAnnotation := queryForThisOperation.createDocumentationAnnotation();
+            if (documentationAnnotation != null) {
+                o.eAnnotations += documentationAnnotation;
+            };
+        };
+    };
 }
 
 helper QueryModel::Query::createDocumentationAnnotation() : EAnnotation {
@@ -202,11 +202,11 @@ mapping inout Ecore::EPackage::replaceRoleReferences() {
 }
 
 mapping inout CommandModel::Transformation::replaceRoleReferencesInCommand() {
-	self.allSubobjectsOfKind(BaseTypes::Parameter)->replaceRoleReferencesInParameter(roleName);
-	self.allSubobjectsOfKind(CommandModel::VariableDeclaration)->replaceRoleReferencesInVariableDeclaration(roleName);
-	self.allSubobjectsOfKind(CommandModel::InstanceCondition)->replaceRoleReferencesInInstanceCondition(roleName);
-	
-	clonedCommandsMap->get(self)->map replaceRoleReferencesInCommand();
+    self.allSubobjectsOfKind(BaseTypes::Parameter)->replaceRoleReferencesInParameter(roleName);
+    self.allSubobjectsOfKind(CommandModel::VariableDeclaration)->replaceRoleReferencesInVariableDeclaration(roleName);
+    self.allSubobjectsOfKind(CommandModel::InstanceCondition)->replaceRoleReferencesInInstanceCondition(roleName);
+    
+    clonedCommandsMap->get(self)->map replaceRoleReferencesInCommand();
 }
 
 mapping inout BaseTypes::Parameter::replaceRoleReferencesInParameter(roleName: String) {

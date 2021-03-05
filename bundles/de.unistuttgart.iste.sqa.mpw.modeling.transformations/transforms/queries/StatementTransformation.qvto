@@ -1,7 +1,7 @@
 import types.EmfHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
-	
+    
 modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
 modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
 
@@ -31,11 +31,11 @@ mapping Input::Statement::toStatement() : QueryModel::Statement
 
 abstract mapping Input::Statement::toStatementBase() : QueryModel::Statement {
     init {
-    	var statementIndex := self.parentExpression().statements->indexOf(self);
-    	if (statementIndex > 0) {
-    		var predecessorInput := self.parentExpression().statements->at(statementIndex-1);
-    		result.previous := predecessorInput.resolveoneIn(Input::Statement::toStatement);
-    	}
+        var statementIndex := self.parentExpression().statements->indexOf(self);
+        if (statementIndex > 0) {
+            var predecessorInput := self.parentExpression().statements->at(statementIndex-1);
+            result.previous := predecessorInput.resolveoneIn(Input::Statement::toStatement);
+        }
     }
     end {
         var parentExpression := self.parentExpression();

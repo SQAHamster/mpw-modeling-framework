@@ -51,27 +51,27 @@ abstract mapping inout EClass::createConstructor() {
     var baseName := self.getBaseName();
 
     var constructorOperation := object EOperation {
-    	name := self.name;
-    	
+        name := self.name;
+        
         var gameParameter := object EParameter {
-    	    name := "game";
-    	    eType := findInstanceOfMetaClass("MiniProgrammingWorld");
-    	};
-    	eParameters += gameParameter;
-    	
-    	eAnnotations += "constructor".toMarkerAnnotation();
-    	
-    	eAnnotations += object ParameterToFieldAssignmentAnnotation {
-    		field := self.getEStructuralFeature("game");
-    		parameter := gameParameter;
-    	};
-    	
-    	eAnnotations += object ExpressionFieldAssignmentAnnotation {
-    		field := self.getEStructuralFeature(baseName.firstToLower());
-    		expression := createInternalEditorExpression();
-    	};
-    	
-    	eAnnotations += toAnnotation("documentation", "Creates a new " + self.name + " object which then can be used to defined the given " + baseName + ".");
+            name := "game";
+            eType := findInstanceOfMetaClass("MiniProgrammingWorld");
+        };
+        eParameters += gameParameter;
+        
+        eAnnotations += "constructor".toMarkerAnnotation();
+        
+        eAnnotations += object ParameterToFieldAssignmentAnnotation {
+            field := self.getEStructuralFeature("game");
+            parameter := gameParameter;
+        };
+        
+        eAnnotations += object ExpressionFieldAssignmentAnnotation {
+            field := self.getEStructuralFeature(baseName.firstToLower());
+            expression := createInternalEditorExpression();
+        };
+        
+        eAnnotations += toAnnotation("documentation", "Creates a new " + self.name + " object which then can be used to defined the given " + baseName + ".");
     };
     eOperations += constructorOperation;
     
@@ -83,8 +83,8 @@ query EClass::createInternalEditorExpression() : Expression {
         type := findInstanceOfMetaClass("MiniProgrammingWorld");
     };
     var stageStatement := object FeatureStatement {
-    	feature := gameStatement.type.getFeatureByName(self.getBaseName().firstToLower());
-    	type := findClassForName(self.getBaseName()); // the feature's type will be later changed to facade-stage type by GenerationClassesTransformation::useFacades
+        feature := gameStatement.type.getFeatureByName(self.getBaseName().firstToLower());
+        type := findClassForName(self.getBaseName()); // the feature's type will be later changed to facade-stage type by GenerationClassesTransformation::useFacades
     };
     var getInternalEditorStatement := object GetPropertyStatement { 
         propertyGetterName := "internalEditor".getter() + self.getBaseName();
@@ -112,8 +112,8 @@ mapping Transformation::toBuilderOperation(parentBuilderClass: EClass) : EOperat
     };
     
     eAnnotations += object ReturnAnnotation {
-	    expression := createSelfExpression("this", parentBuilderClass);
-	};
+        expression := createSelfExpression("this", parentBuilderClass);
+    };
 }
 
 mapping EOperation::cloneSimplifiedBuilderOperation() : EOperation {
@@ -123,25 +123,25 @@ mapping EOperation::cloneSimplifiedBuilderOperation() : EOperation {
     var intType := EInt.oclAsType(EClassifier);
     
     self.eParameters->forEach(p) {
-    	if (p.name = "location") {
-    		eParameters += object EParameter {
-    			name := "locationX";
-    			eType := intType;
-    		};
-    		eParameters += object EParameter {
-    			name := "locationY";
-    			eType := intType;
-    		};
-    	} else {
-    		eParameters += p.deepclone();
-    	}
+        if (p.name = "location") {
+            eParameters += object EParameter {
+                name := "locationX";
+                eType := intType;
+            };
+            eParameters += object EParameter {
+                name := "locationY";
+                eType := intType;
+            };
+        } else {
+            eParameters += p.deepclone();
+        }
     };
     
     eAnnotations += object VariableObjectConstructionAnnotation {
-    	variableName := "location";
-    	parameterInputVariableExpressions += createPathExpression("locationX", intType);
-    	parameterInputVariableExpressions += createPathExpression("locationY", intType);
-    	constructorType := findClassifierForName("Location");
+        variableName := "location";
+        parameterInputVariableExpressions += createPathExpression("locationX", intType);
+        parameterInputVariableExpressions += createPathExpression("locationY", intType);
+        constructorType := findClassifierForName("Location");
     };
     
     eAnnotations += self.eAnnotations.deepclone();
