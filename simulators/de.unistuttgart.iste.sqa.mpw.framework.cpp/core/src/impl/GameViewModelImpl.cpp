@@ -9,14 +9,14 @@ namespace viewmodel {
 GameViewModelImpl::GameViewModelImpl() = default;
 
 std::shared_ptr<viewmodel::ViewModelCell> GameViewModelImpl::getCellAt(
-		int rowIndex, int columnIndex) {
+        int rowIndex, int columnIndex) {
     auto row = collectionhelpers::get_at(getRows(), rowIndex);
     auto cell = collectionhelpers::get_at(row->get()->getCells(), columnIndex);
     return cell.value();
 }
 
 std::shared_ptr<const viewmodel::ViewModelCell> GameViewModelImpl::getCellAt(
-		int rowIndex, int columnIndex) const {
+        int rowIndex, int columnIndex) const {
     auto row = collectionhelpers::get_at(getRows(), rowIndex);
     auto cell = collectionhelpers::get_at(row->get()->getCells(), columnIndex);
     return cell.value();

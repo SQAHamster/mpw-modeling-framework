@@ -15,9 +15,9 @@
 
 namespace viewmodel {
 
-class GameViewPresenterBase: public GameViewPresenter {
+class GameViewPresenterBase : public GameViewPresenter {
 private:
-	using inherited = GameViewPresenter;
+    using inherited = GameViewPresenter;
 
 public:
 
@@ -35,20 +35,20 @@ public:
 
 protected:
 
-  // needs to be implemented by derived presenter classes, since here
-  // no concrete Stage is available.
-  virtual const mpw::Size& getStageSizeFromConcreteStage() = 0;
+    // needs to be implemented by derived presenter classes, since here
+    // no concrete Stage is available.
+    virtual const mpw::Size& getStageSizeFromConcreteStage() = 0;
 
-  // needs to be implemented by derived presenter classes, since here
-  // no concrete Stage is available.
-  virtual const framework::ObservableListProperty<mpw::Tile>& getTilesPropertyFromConcreteStage() = 0;
+    // needs to be implemented by derived presenter classes, since here
+    // no concrete Stage is available.
+    virtual const framework::ObservableListProperty<mpw::Tile>& getTilesPropertyFromConcreteStage() = 0;
 
-  virtual Color getColorForLogEntry(const mpw::LogEntry& entry) const;
+    virtual Color getColorForLogEntry(const mpw::LogEntry& entry) const;
 
-  virtual void onBind();
-  virtual void onSetTileNodeAtForCell(ViewModelCell& cell, const mpw::Tile& tile) = 0;
+    virtual void onBind();
+    virtual void onSetTileNodeAtForCell(ViewModelCell& cell, const mpw::Tile& tile) = 0;
 
-  static int getRotationForDirection(mpw::Direction direction);
+    static int getRotationForDirection(mpw::Direction direction);
 
 private:
 

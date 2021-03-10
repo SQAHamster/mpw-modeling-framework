@@ -5,9 +5,9 @@
 
 namespace mpw {
 
-	class ActorFake : public Actor {
+class ActorFake : public Actor {
 
-	};
+};
 
 }
 

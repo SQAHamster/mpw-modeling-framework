@@ -22,9 +22,7 @@ public:
     using ObjectReturnType = typename inherited::ObjectReturnType;
 
     WeakPointerListIterator(ListType& elements, iterator listIterator)
-        : elements(elements)
-        , currentIterator(listIterator)
-    {
+            : elements(elements), currentIterator(listIterator) {
         // ensure that the begin iterator does not point to an
         // expired weak-pointer
         increaseUntilCurrentIsNotNull();
@@ -42,6 +40,7 @@ public:
         }
         return (*currentIterator).lock().get();
     }
+
     ObjectReturnType* next() override {
         currentIterator++;
         increaseUntilCurrentIsNotNull();
@@ -58,19 +57,26 @@ private:
     }
 
     template<typename iterator_type=iterator>
-    typename std::enable_if<std::is_same<iterator_type, typename ListType::iterator>::value, iterator_type>::type endIter() const {
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::iterator>::value, iterator_type>::type
+    endIter() const {
         return elements.end();
     }
+
     template<typename iterator_type=iterator>
-    typename std::enable_if<std::is_same<iterator_type, typename ListType::const_iterator>::value, iterator_type>::type endIter() const {
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::const_iterator>::value, iterator_type>::type
+    endIter() const {
         return elements.cend();
     }
+
     template<typename iterator_type=iterator>
-    typename std::enable_if<std::is_same<iterator_type, typename ListType::reverse_iterator>::value, iterator_type>::type endIter() const {
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::reverse_iterator>::value, iterator_type>::type
+    endIter() const {
         return elements.rend();
     }
+
     template<typename iterator_type=iterator>
-    typename std::enable_if<std::is_same<iterator_type, typename ListType::const_reverse_iterator>::value, iterator_type>::type endIter() const {
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::const_reverse_iterator>::value, iterator_type>::type
+    endIter() const {
         return elements.crend();
     }
 

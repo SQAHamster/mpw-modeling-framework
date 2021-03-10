@@ -6,39 +6,42 @@
 
 namespace mpw {
 
-class GamePerformanceImpl: public GamePerformance {
+class GamePerformanceImpl : public GamePerformance {
 private:
-	using inherited = GamePerformance;
+    using inherited = GamePerformance;
 
 public:
 
-	GamePerformanceImpl();
+    GamePerformanceImpl();
 
-	void startGame() override;
+    void startGame() override;
 
-	void startGamePaused() override;
+    void startGamePaused() override;
 
-	void pauseGame() override;
+    void pauseGame() override;
 
-	void resumeGame() override;
+    void resumeGame() override;
 
-	void stopGame() override;
+    void stopGame() override;
 
-	void hardReset() override;
+    void hardReset() override;
 
-	void abortOrStopGame() override;
+    void abortOrStopGame() override;
 
-	void preExecuteGameCommand() override;
+    void preExecuteGameCommand() override;
 
-	void preExecuteEditorCommand() override;
+    void preExecuteEditorCommand() override;
 
-	void delayControlFlow() override;
+    void delayControlFlow() override;
 
 private:
 
     void startGameInMode(Mode mode);
+
     void clearCommandStack();
+
     void acquireSemaphore();
+
     void unblockForMode(Mode mode);
 
     void stopControlFlowIfPaused();

@@ -27,13 +27,11 @@ public:
     using difference_type = int;
 
     explicit SharedPointerObjectIteratorWrapper(WrappedObjectIterator objectIterator)
-        : objectIterator(objectIterator)
-    {
+            : objectIterator(objectIterator) {
     }
 
     SharedPointerObjectIteratorWrapper(const SharedPointerObjectIteratorWrapper& rhs)
-        : objectIterator(rhs.objectIterator)
-    {
+            : objectIterator(rhs.objectIterator) {
     }
 
     self_type operator++() {

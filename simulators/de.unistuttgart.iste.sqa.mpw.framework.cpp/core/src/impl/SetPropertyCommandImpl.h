@@ -7,22 +7,22 @@
 
 namespace commands {
 
-class SetPropertyCommandImpl: public SetPropertyCommand {
+class SetPropertyCommandImpl : public SetPropertyCommand {
 public:
 
-	SetPropertyCommandImpl();
+    SetPropertyCommandImpl();
 
-	void execute() override;
+    void execute() override;
 
-	void undo() override;
+    void undo() override;
 
-	void redo() override;
+    void redo() override;
 
     /// \brief injected lambda which deletes the raw values, which shall be owned by handleLifeCycleOfValues() semantics
     using deleter = std::function<void(ValueReference)>;
 
-	/// \brief Used for value-types to make unique-pointers owning the raw references of the given values
-	void handleLifeCycleOfValues(deleter deletionFunction);
+    /// \brief Used for value-types to make unique-pointers owning the raw references of the given values
+    void handleLifeCycleOfValues(deleter deletionFunction);
 
 private:
 

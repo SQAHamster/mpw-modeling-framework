@@ -13,16 +13,16 @@ class ObservablePrimitiveProperty {
 public:
 
     using ListenerId = unsigned int;
-    using Listener = std::function<void(const T &, const T &)>;
+    using Listener = std::function<void(const T&, const T&)>;
 
 private:
 
     T value{};
 
     mutable ListenerId nextId = 0;
-    mutable std::map<ListenerId, Listener > listeners;
+    mutable std::map<ListenerId, Listener> listeners;
 
-    void notifyChanged(const T &oldValue, const T &newValue) const {
+    void notifyChanged(const T& oldValue, const T& newValue) const {
         for (auto&[id, listener] : listeners) {
             listener(oldValue, newValue);
         }
@@ -30,7 +30,7 @@ private:
 
 public:
 
-    void set(const T &value) {
+    void set(const T& value) {
         T oldValue = this->value;
 
         if (this->value != value) {
@@ -39,16 +39,18 @@ public:
         }
     }
 
-    const T &get() const {
+    const T& get() const {
         return this->value;
     }
 
-    ListenerId addListener(Listener listener) const { // mark const to allow returning const property which allows modifying listeners
+    ListenerId addListener(
+            Listener listener) const { // mark const to allow returning const property which allows modifying listeners
         listeners[nextId] = listener;
         return nextId++;
     }
 
-    void removeListener(ListenerId id) const { // mark const to allow returning const property which allows modifying listeners
+    void removeListener(
+            ListenerId id) const { // mark const to allow returning const property which allows modifying listeners
         listeners.erase(id);
     }
 

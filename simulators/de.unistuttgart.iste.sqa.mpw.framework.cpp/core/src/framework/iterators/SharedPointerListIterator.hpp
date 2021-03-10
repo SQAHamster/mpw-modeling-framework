@@ -21,9 +21,7 @@ public:
     using ObjectReturnType = typename InternalObjectIterator<T, constType>::ObjectReturnType;
 
     SharedPointerListIterator(ListType& elements, iterator listIterator)
-        : elements(elements)
-        , currentIterator(listIterator)
-    {
+            : elements(elements), currentIterator(listIterator) {
     }
 
     ~SharedPointerListIterator() override = default;
@@ -33,7 +31,7 @@ public:
     }
 
     ObjectReturnType* current() const override {
-        if (currentIterator == endIter())  {
+        if (currentIterator == endIter()) {
             return nullptr;
         }
         return (*currentIterator).get();
@@ -46,22 +44,29 @@ public:
 
 private:
 
-  template<typename iterator_type = iterator>
-  typename std::enable_if<std::is_same<iterator_type, typename ListType::iterator>::value, iterator_type>::type endIter() const {
-    return elements.end();
-  }
-  template<typename iterator_type = iterator>
-  typename std::enable_if<std::is_same<iterator_type, typename ListType::const_iterator>::value, iterator_type>::type endIter() const {
-    return elements.cend();
-  }
-  template<typename iterator_type = iterator>
-  typename std::enable_if<std::is_same<iterator_type, typename ListType::reverse_iterator>::value, iterator_type>::type endIter() const {
-    return elements.rend();
-  }
-  template<typename iterator_type = iterator>
-  typename std::enable_if<std::is_same<iterator_type, typename ListType::const_reverse_iterator>::value, iterator_type>::type endIter() const {
-    return elements.crend();
-  }
+    template<typename iterator_type = iterator>
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::iterator>::value, iterator_type>::type
+    endIter() const {
+        return elements.end();
+    }
+
+    template<typename iterator_type = iterator>
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::const_iterator>::value, iterator_type>::type
+    endIter() const {
+        return elements.cend();
+    }
+
+    template<typename iterator_type = iterator>
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::reverse_iterator>::value, iterator_type>::type
+    endIter() const {
+        return elements.rend();
+    }
+
+    template<typename iterator_type = iterator>
+    typename std::enable_if<std::is_same<iterator_type, typename ListType::const_reverse_iterator>::value, iterator_type>::type
+    endIter() const {
+        return elements.crend();
+    }
 
 };
 

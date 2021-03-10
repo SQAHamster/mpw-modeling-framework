@@ -11,8 +11,11 @@ public:
     using ObjectReturnType = typename std::conditional<constType, const T, T>::type;
 
     virtual ~InternalObjectIterator() = default;
+
     virtual std::unique_ptr<InternalObjectIterator> clone() = 0;
+
     virtual ObjectReturnType* current() const = 0;
+
     virtual ObjectReturnType* next() = 0;
     // virtual bool operator==(const InternalObjectIterator& rhs) const = 0;
 };

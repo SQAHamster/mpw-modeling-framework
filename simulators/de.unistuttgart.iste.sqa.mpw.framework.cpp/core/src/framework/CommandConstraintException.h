@@ -9,17 +9,16 @@ namespace framework {
 
 class CommandConstraintException : public std::exception {
 public:
-  CommandConstraintException(std::string message)
-  : message(message)
-  {
-  }
+    CommandConstraintException(std::string message)
+            : message(message) {
+    }
 
-  const char *what() const noexcept override {
-      return message.c_str();
-  }
+    const char* what() const noexcept override {
+        return message.c_str();
+    }
 
 private:
-  std::string message;
+    std::string message;
 };
 
 }

@@ -31,13 +31,11 @@ public:
     using pointer = ObjectReturnType*;
 
     explicit ObjectIterator(std::unique_ptr<InternalIterator> innerListIterator)
-        : internalIterator(std::move(innerListIterator))
-    {
+            : internalIterator(std::move(innerListIterator)) {
     }
 
     ObjectIterator(const ObjectIterator& rhs)
-        : internalIterator(rhs.internalIterator->clone())
-    {
+            : internalIterator(rhs.internalIterator->clone()) {
     }
 
     self_type operator++() {

@@ -7,20 +7,18 @@
 namespace framework {
 
 /// \brief RAII based lock object
-class SemaphoreLock
-{
+class SemaphoreLock {
 private:
 
     std::mutex& mutex;
 
 public:
     SemaphoreLock(std::mutex& mutex)
-        : mutex(mutex)
-    {
+            : mutex(mutex) {
         mutex.lock();
     }
-    ~SemaphoreLock()
-    {
+
+    ~SemaphoreLock() {
         mutex.unlock();
     }
 };
@@ -35,6 +33,7 @@ public:
     SemaphoreLock lock();
 
     void acquire();
+
     void release();
 
     bool isLocked();

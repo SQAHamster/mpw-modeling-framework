@@ -6,23 +6,23 @@
 
 namespace commands {
 
-class CommandStackImpl: public CommandStack {
+class CommandStackImpl : public CommandStack {
 private:
-	using inherited = CommandStack;
+    using inherited = CommandStack;
 
 public:
 
-	CommandStackImpl();
+    CommandStackImpl();
 
-	void execute(std::shared_ptr<commands::Command> command) override;
+    void execute(std::shared_ptr<commands::Command> command) override;
 
-	void undo() override;
+    void undo() override;
 
-	void redo() override;
+    void redo() override;
 
-	void undoAll() override;
+    void undoAll() override;
 
-	void redoAll() override;
+    void redoAll() override;
 
 };
 

@@ -21,7 +21,7 @@ void RemoveEntityCommandImpl::undo() {
 }
 
 void RemoveEntityCommandImpl::redo() {
-	execute();
+    execute();
 }
 
 }

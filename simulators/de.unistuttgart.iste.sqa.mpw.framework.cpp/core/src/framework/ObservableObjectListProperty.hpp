@@ -77,7 +77,7 @@ public:
         return false;
     }
 
-    void forEach(std::function<void(const T &)> consumer) const override {
+    void forEach(std::function<void(const T&)> consumer) const override {
         std::for_each(references.cbegin(), references.cend(), consumer);
     }
 };

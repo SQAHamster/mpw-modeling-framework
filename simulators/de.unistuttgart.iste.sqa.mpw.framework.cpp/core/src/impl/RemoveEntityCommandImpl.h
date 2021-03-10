@@ -5,16 +5,16 @@
 
 namespace commands {
 
-class RemoveEntityCommandImpl: public RemoveEntityCommand {
+class RemoveEntityCommandImpl : public RemoveEntityCommand {
 public:
 
-	RemoveEntityCommandImpl();
+    RemoveEntityCommandImpl();
 
-	void execute() override;
+    void execute() override;
 
-	void undo() override;
+    void undo() override;
 
-	void redo() override;
+    void redo() override;
 
 };
 

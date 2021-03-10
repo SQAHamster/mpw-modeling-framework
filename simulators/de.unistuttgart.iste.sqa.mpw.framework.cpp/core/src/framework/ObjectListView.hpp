@@ -14,7 +14,7 @@ namespace framework {
 ///
 /// \note The primary use case is to avoid copying a collection of weak-pointers, by defining this
 /// view to allow traversing elements as shared-pointers.
-template < typename T >
+template<typename T>
 class ObjectListView {
 public:
 
@@ -32,12 +32,15 @@ public:
 
     virtual iterator begin() = 0;
     virtual iterator end() = 0;
+
     const_iterator begin() const {
         return cbegin();
     }
+
     const_iterator end() const {
         return cend();
     }
+
     virtual const_iterator cbegin() const = 0;
     virtual const_iterator cend() const = 0;
 
@@ -68,6 +71,7 @@ public:
 
     virtual std::shared_ptr<T> front() = 0;
     virtual std::shared_ptr<const T> front() const = 0;
+
     virtual std::shared_ptr<T> back() = 0;
     virtual std::shared_ptr<const T> back() const = 0;
 

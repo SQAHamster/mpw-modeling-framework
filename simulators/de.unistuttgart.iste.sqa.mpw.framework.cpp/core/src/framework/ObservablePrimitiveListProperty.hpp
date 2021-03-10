@@ -17,7 +17,7 @@ private:
 
 public:
 
-    const std::list<T> &get() const {
+    const std::list<T>& get() const {
         return elements;
     }
 
@@ -31,7 +31,7 @@ public:
         ObservableListProperty<T>::notifyRemoved(element);
     }
 
-    void forEach(std::function<void(const T &)> consumer) const override {
+    void forEach(std::function<void(const T&)> consumer) const override {
         std::for_each(elements.cbegin(), elements.cend(), consumer);
     }
 

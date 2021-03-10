@@ -5,9 +5,9 @@
 
 namespace mpw {
 
-	class StageFake : public Stage {
+class StageFake : public Stage {
 
-	};
+};
 
 }
 

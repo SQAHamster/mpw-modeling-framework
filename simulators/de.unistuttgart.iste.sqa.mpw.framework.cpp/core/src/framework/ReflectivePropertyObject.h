@@ -13,7 +13,9 @@ public:
     virtual ~ReflectivePropertyObject() = default;
 
     virtual void setProperty(unsigned featureKey, Any value) = 0;
+
     virtual void addToCollection(unsigned featureKey, EntityReference reference) = 0;
+
     virtual void removeFromCollection(unsigned featureKey, EntityReference reference) = 0;
 
 };

@@ -21,8 +21,7 @@ namespace viewmodel {
 // TODO remove listeners on removement of relating objects
 
 GameViewPresenterBase::GameViewPresenterBase(std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld)
-    : inherited(Semaphore())
-    , miniProgrammingWorld(std::move(miniProgrammingWorld)) {
+        : inherited(Semaphore()), miniProgrammingWorld(std::move(miniProgrammingWorld)) {
 }
 
 void GameViewPresenterBase::bind() {
@@ -69,8 +68,10 @@ void GameViewPresenterBase::bindButtons() {
     auto& modeProperty = miniProgrammingWorld->getPerformance()->modeProperty();
     auto gameCommandStack = miniProgrammingWorld->getPerformance()->getGameCommandStack();
     modeProperty.addListener([&](Mode, Mode) { updateButtonEnables(); });
-    gameCommandStack->executedCommandsProperty().addOnAnyChangeListener([&](const commands::Command&) { updateButtonEnables(); });
-    gameCommandStack->undoneCommandsProperty().addOnAnyChangeListener([&](const commands::Command&) { updateButtonEnables(); });
+    gameCommandStack->executedCommandsProperty().addOnAnyChangeListener(
+            [&](const commands::Command&) { updateButtonEnables(); });
+    gameCommandStack->undoneCommandsProperty().addOnAnyChangeListener(
+            [&](const commands::Command&) { updateButtonEnables(); });
     updateButtonEnables();
 }
 

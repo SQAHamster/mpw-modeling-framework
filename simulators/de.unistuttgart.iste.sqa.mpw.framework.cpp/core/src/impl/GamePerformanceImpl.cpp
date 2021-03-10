@@ -13,8 +13,7 @@ using namespace framework;
 namespace mpw {
 
 GamePerformanceImpl::GamePerformanceImpl()
-        : inherited(framework::Semaphore())
-{
+        : inherited(framework::Semaphore()) {
 }
 
 void GamePerformanceImpl::startGame() {
@@ -45,11 +44,10 @@ void GamePerformanceImpl::preExecuteGameCommand() {
     checkState(getMode() != Mode::STOPPED);
 }
 
-void GamePerformanceImpl::preExecuteEditorCommand()
-{
-  if (this->getMode() != Mode::INITIALIZING) {
-    throw std::runtime_error("The game needs to be initializing to execute editor commands");
-  }
+void GamePerformanceImpl::preExecuteEditorCommand() {
+    if (this->getMode() != Mode::INITIALIZING) {
+        throw std::runtime_error("The game needs to be initializing to execute editor commands");
+    }
 }
 
 void GamePerformanceImpl::stopControlFlowIfPaused() {

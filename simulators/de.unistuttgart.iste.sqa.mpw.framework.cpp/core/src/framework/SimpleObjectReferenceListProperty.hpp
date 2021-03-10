@@ -34,6 +34,7 @@ public:
     std::list<std::weak_ptr<T>>& get() {
         return elements;
     }
+
     const std::list<std::weak_ptr<T>>& get() const {
         return elements;
     }

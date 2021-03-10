@@ -11,7 +11,7 @@
 namespace framework {
 
 /// \brief Wrapper around an ObjectListView which allows to iterate over the objects with shared-pointers
-template < typename T, bool constType >
+template<typename T, bool constType>
 class SharedPointerObjectListView {
 public:
 
@@ -31,8 +31,7 @@ private:
 public:
 
     explicit SharedPointerObjectListView(ObjectListView& wrappedObjectView)
-        : wrappedObjectView(wrappedObjectView)
-    {
+            : wrappedObjectView(wrappedObjectView) {
     }
 
     ~SharedPointerObjectListView() = default;
@@ -40,13 +39,17 @@ public:
     iterator begin() {
         return wrappedObjectView.
     }
+
     iterator end() = 0;
+
     const_iterator begin() const {
         return cbegin();
     }
+
     const_iterator end() const {
         return cend();
     }
+
     const_iterator cbegin() const = 0;
     const_iterator cend() const = 0;
 

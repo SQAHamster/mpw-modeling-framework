@@ -34,6 +34,7 @@ public:
     std::list<std::shared_ptr<T>>& get() {
         return elements;
     }
+
     const std::list<std::shared_ptr<T>>& get() const {
         return elements;
     }

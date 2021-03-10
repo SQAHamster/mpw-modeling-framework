@@ -5,9 +5,9 @@
 
 namespace mpw {
 
-	class PropFake : public Prop {
+class PropFake : public Prop {
 
-	};
+};
 
 }
 

@@ -5,16 +5,16 @@
 
 namespace commands {
 
-class AddEntityCommandImpl: public AddEntityCommand {
+class AddEntityCommandImpl : public AddEntityCommand {
 public:
 
-	AddEntityCommandImpl();
+    AddEntityCommandImpl();
 
-	void execute() override;
+    void execute() override;
 
-	void undo() override;
+    void undo() override;
 
-	void redo() override;
+    void redo() override;
 
 };
 

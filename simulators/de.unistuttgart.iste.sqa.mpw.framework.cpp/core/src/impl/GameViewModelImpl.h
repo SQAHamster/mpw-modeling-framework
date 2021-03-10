@@ -6,20 +6,19 @@
 
 namespace viewmodel {
 
-class GameViewModelImpl: public GameViewModel {
+class GameViewModelImpl : public GameViewModel {
 private:
-	using inherited = GameViewModel;
+    using inherited = GameViewModel;
 
 public:
 
-	GameViewModelImpl();
+    GameViewModelImpl();
 
     void init(mpw::Size size) override;
 
-    std::shared_ptr<viewmodel::ViewModelCell> getCellAt(int row,
-			int column) override;
-    std::shared_ptr<const viewmodel::ViewModelCell> getCellAt(int row,
-			int column) const override;
+    std::shared_ptr<viewmodel::ViewModelCell> getCellAt(int row, int column) override;
+
+    std::shared_ptr<const viewmodel::ViewModelCell> getCellAt(int row, int column) const override;
 
 };
 

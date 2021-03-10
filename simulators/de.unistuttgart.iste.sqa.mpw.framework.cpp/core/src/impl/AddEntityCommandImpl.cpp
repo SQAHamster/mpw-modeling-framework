@@ -20,7 +20,7 @@ void AddEntityCommandImpl::undo() {
 }
 
 void AddEntityCommandImpl::redo() {
-	execute();
+    execute();
 }
 
 }

@@ -46,25 +46,24 @@ public:
 };
 
 TEST(AddRemoveTest, testAddRemove) {
-  auto actor = std::make_shared<ActorFake>();
-  auto stage = std::make_shared<StageFake>();
-  auto pStage = stage->shared_from_this();
+    auto actor = std::make_shared<ActorFake>();
+    auto stage = std::make_shared<StageFake>();
+    auto pStage = stage->shared_from_this();
 
-  stage->addToTileContents(actor);
-  EXPECT_EQ(1, stage->getTileContents().size());
+    stage->addToTileContents(actor);
+    EXPECT_EQ(1, stage->getTileContents().size());
 
-  stage->removeFromTileContents(actor);
-  EXPECT_EQ(0, stage->getTileContents().size());
+    stage->removeFromTileContents(actor);
+    EXPECT_EQ(0, stage->getTileContents().size());
 
+    auto dummyParentCommand = std::make_shared<CompositeCommandDummy>();
+    auto dummySubCommand = std::make_shared<CompositeCommandDummy>();
 
-  auto dummyParentCommand = std::make_shared<CompositeCommandDummy>();
-  auto dummySubCommand = std::make_shared<CompositeCommandDummy>();
+    dummyParentCommand->addToSubCommands(dummySubCommand);
+    EXPECT_EQ(1, dummyParentCommand->getSubCommands().size());
 
-  dummyParentCommand->addToSubCommands(dummySubCommand);
-  EXPECT_EQ(1, dummyParentCommand->getSubCommands().size());
-
-  dummyParentCommand->removeFromSubCommands(dummySubCommand);
-  EXPECT_EQ(0, dummyParentCommand->getSubCommands().size());
+    dummyParentCommand->removeFromSubCommands(dummySubCommand);
+    EXPECT_EQ(0, dummyParentCommand->getSubCommands().size());
 }
 
 class CompositeCommandDummyTest : public testing::Test, public commands::CompositeCommandBase {
