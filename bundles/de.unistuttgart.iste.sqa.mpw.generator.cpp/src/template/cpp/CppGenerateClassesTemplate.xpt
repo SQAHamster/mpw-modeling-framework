@@ -22,7 +22,7 @@
 «ENDDEFINE»
 
 «DEFINE CppClassHeader FOR EClass-»
-    «FILE "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
+    «FILE toIntermediaryIncludePath() + "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
     
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
@@ -58,7 +58,7 @@
 «ENDDEFINE»
 
 «DEFINE CppClassSource FOR EClass-»
-    «FILE "generated/" + name + ".cpp"»«toCppHeaderGeneratedComment()»
+    «FILE toIntermediaryIncludePath() + "generated/" + name + ".cpp"»«toCppHeaderGeneratedComment()»
 
     #include "«name».h"
     

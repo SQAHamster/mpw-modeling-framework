@@ -2,7 +2,7 @@
 /cmake-build-debug
 *.iml
 
-/core/src/generated/
+/core/src/**/generated/
 
 /.vs
 /out

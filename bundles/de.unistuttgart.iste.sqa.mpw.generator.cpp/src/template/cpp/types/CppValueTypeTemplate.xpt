@@ -8,7 +8,7 @@
 «ENDDEFINE»
 
 «DEFINE ValueTypeTemplateHeader FOR EClass»
-    «FILE "generated/" + name + ".h"»
+    «FILE "datatypes/generated/" + name + ".h"»
     
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
@@ -70,7 +70,7 @@
 «ENDDEFINE»
 
 «DEFINE ValueTypeTemplateSource FOR EClass»
-    «FILE "generated/" + name + ".cpp"»#include "«name».h"
+    «FILE "datatypes/generated/" + name + ".cpp"»#include "«name».h"
     
     #include <utility>
     

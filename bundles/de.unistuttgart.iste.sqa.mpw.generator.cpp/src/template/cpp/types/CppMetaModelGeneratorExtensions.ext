@@ -49,3 +49,16 @@ documentationToCppDoc(EModelElement this) :
 
 toCppHeaderGeneratedComment() : 
     "/*\n * This file is generated. Do not change it manually.\n */";
+
+/*
+ * Determines the intermediary path for the generated class.
+ * Facade types -> "facade"
+ * ValueTypes/Enums -> "datatypes"
+ * View-Model types -> "viewmodel"
+ * else -> ""
+ */
+toIntermediaryIncludePath(EClassifier this) :
+    if (EEnum.isInstance(this) || this.isValueType()) then "datatypes/"
+    else if (isFacade() || name == "MiniProgrammingWorld" || isInheritedMpw()) then "facade/" // note: MiniProgrammingWorld is needed in concrete facade sub-classes as a baseclass, hence it has to be included in facade folder
+    else if (isViewModelType()) then "viewmodel/"
+    else this.ePackage.name + "/";

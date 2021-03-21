@@ -133,11 +133,11 @@
 «ENDDEFINE»
 
 «DEFINE CommandParametersImportDefinition FOR Transformation-»
-    #include "commands/«name.toFirstUpper()»CommandParameters.h"
+    #include "«name.toFirstUpper()»CommandParameters.h"
 «ENDDEFINE»
 
 «DEFINE CommandImportDefinition FOR Transformation-»
-    #include "commands/«name.toFirstUpper()»Command.h"
+    #include "«name.toFirstUpper()»Command.h"
 «ENDDEFINE»
 
 «DEFINE SingleForwardDeclarationDefinition FOR EClassifier-»

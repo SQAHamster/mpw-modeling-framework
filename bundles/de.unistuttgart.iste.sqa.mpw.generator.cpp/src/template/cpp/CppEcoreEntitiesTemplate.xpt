@@ -26,7 +26,7 @@
 «ENDDEFINE»
 
 «DEFINE CppClassHeader FOR EClass»
-    «FILE "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
+    «FILE toIntermediaryIncludePath() + "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
     
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
@@ -110,7 +110,7 @@
 «ENDDEFINE»
 
 «DEFINE CppClassSource FOR EClass»
-    «FILE "generated/" + name + ".cpp"»«toCppHeaderGeneratedComment()»
+    «FILE toIntermediaryIncludePath() + "generated/" + name + ".cpp"»«toCppHeaderGeneratedComment()»
 
     #include "«name».h"
     
@@ -161,7 +161,7 @@
 «ENDDEFINE»
 
 «DEFINE CppInterface FOR EClass»
-    «FILE "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
+    «FILE toIntermediaryIncludePath() + "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
     
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
@@ -201,7 +201,7 @@
     «ENDFILE»
 
     «IF isDependency()»
-    «FILE "generated/Dummy" + name + ".h"»«toCppHeaderGeneratedComment()»
+    «FILE toIntermediaryIncludePath() + "generated/Dummy" + name + ".h"»«toCppHeaderGeneratedComment()»
     
     #ifndef «this.toCppDummyIncludeGuard()»
     #define «this.toCppDummyIncludeGuard()»
@@ -228,7 +228,7 @@
 «ENDDEFINE»
 
 «DEFINE CppEnum FOR EEnum»
-    «FILE "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
+    «FILE toIntermediaryIncludePath() + "/generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
     
     #ifndef «this.toCppIncludeGuard()»
     #define «this.toCppIncludeGuard()»
@@ -270,20 +270,18 @@
 «DEFINE CMakeLists FOR List[EPackage]»
     «FILE "generated/CMakeLists.txt"-»# generated
     
-add_subdirectory(commands)
-    
 set(GEN_SRCS ${GEN_SRCS}
     «FOREACH this.eClassifiers.typeSelect(EClass)
                               .reject(c|c.isDataType())
                               .reject(c|c.interface) AS c-»
-    "core/src/generated/«c.name».cpp"
+    "src/«c.toIntermediaryIncludePath()»generated/«c.name».cpp"
     «ENDFOREACH-»
     «FOREACH this.eClassifiers.typeSelect(EClass)
                               .reject(c|c.isDataType()) AS c-»
-    "core/src/generated/«c.name».h"
+    "src/«c.toIntermediaryIncludePath()»generated/«c.name».h"
     «ENDFOREACH-»
     «FOREACH this.eClassifiers.typeSelect(EEnum) AS c-»
-    "core/src/generated/«c.name».h"
+    "src/«c.toIntermediaryIncludePath()»generated/«c.name».h"
     «ENDFOREACH-»
     ${GEN_COMMAND_SRCS}
     PARENT_SCOPE)
@@ -294,8 +292,8 @@ set(IMPL_GEN_SRCS ${IMPL_GEN_SRCS}
     «FOREACH this.eClassifiers.typeSelect(EClass)
                               .select(c|c.needsImplSubclass())
                               .reject(c|c.isFacade()) AS c-»
-    "core/src/impl/«c.name»Impl.h"
-    "core/src/impl/«c.name»Impl.cpp"
+    "src/impl/«c.name»Impl.h"
+    "src/impl/«c.name»Impl.cpp"
     «ENDFOREACH-»)
     «ENDFILE»
 «ENDDEFINE»
