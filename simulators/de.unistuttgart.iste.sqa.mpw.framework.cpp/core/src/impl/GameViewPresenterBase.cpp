@@ -25,15 +25,21 @@ GameViewPresenterBase::GameViewPresenterBase(std::shared_ptr<mpw::MiniProgrammin
 }
 
 void GameViewPresenterBase::bind() {
-    const Size& size = getStageSizeFromConcreteStage();
-    GameViewPresenter::getViewModel()->init(size);
-
     auto lock = getSemaphore().lock();
 
+    bindSize();
     bindTiles();
     bindGameLog();
     bindButtons();
     onBind();
+}
+
+void GameViewPresenterBase::bindSize() {
+    const framework::ObservablePrimitiveProperty<mpw::Size>& sizeProperty = getStageSizeFromConcreteStage();
+    GameViewPresenter::getViewModel()->init(sizeProperty.get());
+    sizeProperty.addListener([this](auto& oldSize, auto& newSize) {
+        GameViewPresenter::getViewModel()->init(newSize);
+    });
 }
 
 void GameViewPresenterBase::bindTiles() {

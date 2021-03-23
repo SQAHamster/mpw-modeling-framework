@@ -24,6 +24,7 @@ std::shared_ptr<const viewmodel::ViewModelCell> GameViewModelImpl::getCellAt(
 
 void GameViewModelImpl::init(mpw::Size size) {
     setSize(size);
+    clearRows();
     for (int rowIndex = 0; rowIndex < size.getRowCount(); rowIndex++) {
         auto row = std::make_shared<ViewModelRow>();
         addToRows(row);

@@ -15,13 +15,17 @@
 
 namespace viewmodel {
 
+/**
+ * Base class for concrete presenters, which contains common presenter
+ * logic based on the MPW View-Model.
+ */
 class GameViewPresenterBase : public GameViewPresenter {
 private:
     using inherited = GameViewPresenter;
 
 public:
 
-    GameViewPresenterBase(std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld);
+    explicit GameViewPresenterBase(std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld);
 
     void playClicked() override;
     void pauseClicked() override;
@@ -37,7 +41,7 @@ protected:
 
     // needs to be implemented by derived presenter classes, since here
     // no concrete Stage is available.
-    virtual const mpw::Size& getStageSizeFromConcreteStage() = 0;
+    virtual const framework::ObservablePrimitiveProperty<mpw::Size>& getStageSizeFromConcreteStage() = 0;
 
     // needs to be implemented by derived presenter classes, since here
     // no concrete Stage is available.
@@ -52,6 +56,7 @@ protected:
 
 private:
 
+    void bindSize();
     void bindTiles();
     void bindGameLog();
     void bindButtons();
