@@ -48,6 +48,12 @@
             «o.documentationToCppDoc()-»
             «o.operationToCppType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.toCppType()» «p.name»«ENDFOREACH»)«IF o.operationContainsQueryCall()» const noexcept«ENDIF»;
         «ENDFOREACH»
+        
+        /**
+         * Virtual desctructor to support inheritance.
+         */
+        virtual ~«name»() = default;
+        
         «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations»
     };
     
