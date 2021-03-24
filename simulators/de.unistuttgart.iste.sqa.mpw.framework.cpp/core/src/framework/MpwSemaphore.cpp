@@ -2,30 +2,40 @@
 
 namespace framework {
 
-Semaphore::Semaphore()
-        : mutex(std::make_shared<std::mutex>()) {
-
+Semaphore::Semaphore(unsigned int count)
+        : count(std::make_shared<unsigned int>(count))
+        , mutex(std::make_shared<std::mutex>())
+        , conditionVariable(std::make_shared<std::condition_variable>()) {
 }
 
 SemaphoreLock Semaphore::lock() {
-    return SemaphoreLock(*mutex);
+    return SemaphoreLock(*this);
 }
 
 void Semaphore::acquire() {
-    mutex->lock();
+    std::unique_lock<std::mutex> lock(*mutex);
+    while ((*count) == 0) {
+        conditionVariable->wait(lock);
+    }
+    (*count)--;
 }
 
 void Semaphore::release() {
-    mutex->unlock();
+    std::unique_lock<std::mutex> lock(*mutex);
+    (*count)++;
+    conditionVariable->notify_one();
 }
 
 bool Semaphore::isLocked() {
-    if (mutex->try_lock()) {
-        // could aquire lock, so it isn't locked -> unlock it again to reconstruct previous state
-        mutex->unlock();
-        return false;
-    }
-    return true;
+    return (*count) == 0;
 }
 
+SemaphoreLock::SemaphoreLock(Semaphore& semaphore)
+        : semaphore(semaphore) {
+    semaphore.acquire();
+}
+
+SemaphoreLock::~SemaphoreLock() {
+    semaphore.release();
+}
 }
