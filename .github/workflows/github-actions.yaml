@@ -34,7 +34,12 @@ jobs:
         with:
           cmake-version: '3.17.x'
       - name: Build C++ Framework
-        run: cmake -S $PROJECT_CPP_DIR -B $BUILD_DIR && cmake --build $BUILD_DIR && cd $BUILD_DIR && ctest --extra-verbose
+        run: cmake -S $PROJECT_CPP_DIR -B $BUILD_DIR && cmake --build $BUILD_DIR
+        env:
+          PROJECT_CPP_DIR: simulators/de.unistuttgart.iste.sqa.mpw.framework.cpp
+          BUILD_DIR: simulators/de.unistuttgart.iste.sqa.mpw.framework.cpp/build
+      - name: Test C++ Framework
+        run: cd $BUILD_DIR && ctest --extra-verbose
         env:
           PROJECT_CPP_DIR: simulators/de.unistuttgart.iste.sqa.mpw.framework.cpp
           BUILD_DIR: simulators/de.unistuttgart.iste.sqa.mpw.framework.cpp/build
