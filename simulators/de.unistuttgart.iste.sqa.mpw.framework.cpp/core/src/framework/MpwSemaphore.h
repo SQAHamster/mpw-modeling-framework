@@ -15,7 +15,7 @@ class Semaphore;
 class SemaphoreLock final {
 private:
 
-    Semaphore& semaphore;
+    std::unique_ptr<Semaphore> semaphore; // use unique_ptr, since object storage is not supported by forward declaration
 
 public:
 

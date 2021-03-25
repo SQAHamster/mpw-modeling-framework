@@ -31,11 +31,11 @@ bool Semaphore::isLocked() {
 }
 
 SemaphoreLock::SemaphoreLock(Semaphore& semaphore)
-        : semaphore(semaphore) {
-    semaphore.acquire();
+        : semaphore(std::make_unique<Semaphore>(semaphore)) {
+    this->semaphore->acquire();
 }
 
 SemaphoreLock::~SemaphoreLock() {
-    semaphore.release();
+    this->semaphore->release();
 }
 }
