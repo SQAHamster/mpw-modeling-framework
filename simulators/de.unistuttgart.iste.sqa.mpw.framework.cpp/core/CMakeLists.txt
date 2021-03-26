@@ -27,13 +27,6 @@ target_include_directories(mpw_framework_core_lib PUBLIC src/viewmodel/generated
 target_include_directories(mpw_framework_core_lib PUBLIC src/impl)
 target_include_directories(mpw_framework_core_lib PUBLIC ${FACADE_INCLUDES})
 
-# TODO: generate public include and use dynamic library
-install(TARGETS mpw_framework_core_lib DESTINATION lib)
-install(
-    DIRECTORY src
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.h*")
-
 ## Setup GTEST
 
 enable_testing()
