@@ -71,14 +71,16 @@ void GameViewPresenterBase::bindGameLog() {
 
 void GameViewPresenterBase::bindButtons() {
     auto viewModel = getViewModel();
-    auto& modeProperty = miniProgrammingWorld->getPerformance()->modeProperty();
-    auto gameCommandStack = miniProgrammingWorld->getPerformance()->getGameCommandStack();
+    GamePerformance& performance = *miniProgrammingWorld->getPerformance();
+    auto& modeProperty = performance.modeProperty();
+    auto gameCommandStack = performance.getGameCommandStack();
     modeProperty.addListener([&](Mode, Mode) { updateButtonEnables(); });
     gameCommandStack->executedCommandsProperty().addOnAnyChangeListener(
             [&](const commands::Command&) { updateButtonEnables(); });
     gameCommandStack->undoneCommandsProperty().addOnAnyChangeListener(
             [&](const commands::Command&) { updateButtonEnables(); });
     updateButtonEnables();
+    viewModel->setSpeed(performance.getSpeed());
 }
 
 void GameViewPresenterBase::updateButtonEnables() {
