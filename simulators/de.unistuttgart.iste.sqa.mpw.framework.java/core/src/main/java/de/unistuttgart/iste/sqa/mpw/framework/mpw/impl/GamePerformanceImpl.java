@@ -3,7 +3,7 @@ package de.unistuttgart.iste.sqa.mpw.framework.mpw.impl;
 import de.unistuttgart.iste.sqa.mpw.framework.exceptions.CommandConstraintException;
 import de.unistuttgart.iste.sqa.mpw.framework.exceptions.GameAbortedException;
 import de.unistuttgart.iste.sqa.mpw.framework.mpw.GamePerformance;
-import de.unistuttgart.iste.sqa.mpw.framework.mpw.Mode;
+import de.unistuttgart.iste.sqa.mpw.framework.datatypes.Mode;
 
 import java.util.concurrent.Semaphore;
 

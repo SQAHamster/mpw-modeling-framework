@@ -23,11 +23,11 @@ toInheritance(EClass this) :
     else if (filteredInterfaces.size > 0) then "implements " + filteredInterfaces.collect(i|i.name).toString(", ")
     else "";
     
-toJavaPackagePath(EPackage this) :
+toJavaPackagePath(EClassifier this) :
     this.toJavaPackageName().replaceAll("\\.", "/");
 
-toJavaPackageName(EPackage this) :
-    getModulePackage() + "." + this.name;
+toJavaPackageName(EClassifier this) :
+    getModulePackage() + "." + this.toSubPackageName();
     
 getFrameworkBasePackage() : "de.unistuttgart.iste.sqa.mpw.framework";
 

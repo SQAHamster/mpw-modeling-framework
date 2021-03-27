@@ -47,3 +47,17 @@ isMpwFrameworkType(EClassifier this) :
     ePackage.nsURI == "http://www.mpw.uni-stuttgart.de/commands" ||
     ePackage.nsURI == "http://www.mpw.uni-stuttgart.de/mpw" ||
     ePackage.nsURI == "http://www.mpw.uni-stuttgart.de/viewmodel";
+
+/*
+ * Determines the sub-package for a generated class.
+ * Facade types -> "facade"
+ * ValueTypes/Enums -> "datatypes"
+ * View-Model types -> "viewmodel"
+ * else -> ""
+ */
+toSubPackageName(EClassifier this) :
+    if (EEnum.isInstance(this) || this.isValueType()) then "datatypes"
+    else if (isFacade() || name == "MiniProgrammingWorld" || isInheritedMpw()) then "facade" // note: MiniProgrammingWorld is needed in concrete facade sub-classes as a baseclass, hence it has to be included in facade folder
+    else if (isViewModelType()) then "viewmodel"
+    else this.ePackage.name;
+    

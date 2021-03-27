@@ -22,9 +22,9 @@
 «ENDDEFINE»
 
 «DEFINE JavaClass FOR EClass»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
+    «FILE "generated/" + this.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
 
-    package «this.ePackage.toJavaPackageName()»;
+    package «this.toJavaPackageName()»;
     
     «EXPAND template::java::types::JavaImportUsedTypesTemplate::ImportDefinitions FOR this»
     
@@ -51,7 +51,7 @@
     }
     «ENDFILE»
     «IF needsImplSubclass()»
-    «FILE "java/" + this.ePackage.toJavaPackagePath() + "/impl/" + name + "Impl.java"»package «this.ePackage.toJavaPackageName()».impl;
+    «FILE "java/" + this.toJavaPackagePath() + "/impl/" + name + "Impl.java"»package «this.toJavaPackageName()».impl;
     
     «EXPAND template::java::types::JavaImportUsedTypesTemplate::ImplImportDefinitions FOR this»
     
@@ -69,9 +69,9 @@
 «ENDDEFINE»
 
 «DEFINE JavaInterface FOR EClass»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
+    «FILE "generated/" + this.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
     
-    package «this.ePackage.toJavaPackageName()»;
+    package «this.toJavaPackageName()»;
     
     «EXPAND template::java::types::JavaImportUsedTypesTemplate::ImportDefinitions FOR this»
     
@@ -88,7 +88,7 @@
     }
     «ENDFILE»
     «IF isDependency()»
-    «FILE "java/" + this.ePackage.toJavaPackagePath() + "/impl/Dummy" + name + ".java"»package «this.ePackage.toJavaPackageName()».impl;
+    «FILE "java/" + this.toJavaPackagePath() + "/impl/Dummy" + name + ".java"»package «this.toJavaPackageName()».impl;
     
     «EXPAND template::java::types::JavaImportUsedTypesTemplate::ImplImportDefinitions FOR this»
     
@@ -105,9 +105,9 @@
 «ENDDEFINE»
 
 «DEFINE JavaEnum FOR EEnum»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
+    «FILE "generated/" + this.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
     
-    package «this.ePackage.toJavaPackageName()»;
+    package «this.toJavaPackageName()»;
     
     «documentationToJavaDoc()-»
     public enum «this.name» {

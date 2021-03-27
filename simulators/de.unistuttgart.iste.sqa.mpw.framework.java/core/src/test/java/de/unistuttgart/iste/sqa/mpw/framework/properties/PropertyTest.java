@@ -1,6 +1,6 @@
 package de.unistuttgart.iste.sqa.mpw.framework.properties;
 
-import de.unistuttgart.iste.sqa.mpw.framework.mpw.Direction;
+import de.unistuttgart.iste.sqa.mpw.framework.datatypes.Direction;
 import de.unistuttgart.iste.sqa.mpw.framework.mpw.Tile;
 import de.unistuttgart.iste.sqa.mpw.framework.mpw.impl.GamePerformanceImpl;
 import org.junit.jupiter.api.Test;

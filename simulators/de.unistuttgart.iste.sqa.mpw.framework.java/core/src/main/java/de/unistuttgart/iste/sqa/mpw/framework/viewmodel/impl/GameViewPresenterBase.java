@@ -2,7 +2,8 @@ package de.unistuttgart.iste.sqa.mpw.framework.viewmodel.impl;
 
 import de.unistuttgart.iste.sqa.mpw.framework.utils.Preconditions;
 import de.unistuttgart.iste.sqa.mpw.framework.mpw.*;
-import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.Color;
+import de.unistuttgart.iste.sqa.mpw.framework.datatypes.*;
+import de.unistuttgart.iste.sqa.mpw.framework.facade.MiniProgrammingWorld;
 import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.GameViewPresenter;
 import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.ViewModelCell;
 import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.ViewModelLogEntry;

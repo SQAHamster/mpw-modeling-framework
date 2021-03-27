@@ -1,6 +1,6 @@
 package de.unistuttgart.iste.sqa.mpw.framework;
 
-import de.unistuttgart.iste.sqa.mpw.framework.mpw.Location;
+import de.unistuttgart.iste.sqa.mpw.framework.datatypes.Location;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

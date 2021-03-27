@@ -17,11 +17,13 @@
 «ENDDEFINE»
 
 «DEFINE JavaClass FOR EClass-»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
+    «FILE "generated/" + this.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
     
-    package «this.ePackage.toJavaPackageName()»;
+    package «this.toJavaPackageName()»;
     
     import «getFrameworkBasePackage()».mpw.*;
+    import «getFrameworkBasePackage()».datatypes.*;
+    import «getModulePackage()».«this.ePackage.name».*;«REM»Import the types of the "internal" package, where the Concrete-Classes are placed«ENDREM»
     «EXPAND ImportTypeGenerationAnnotation FOREACH eAnnotations.typeSelect(ImportTypeAnnotation)»
     
     «documentationToJavaDoc()-»

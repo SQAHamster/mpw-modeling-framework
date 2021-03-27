@@ -3,7 +3,7 @@
 «EXTENSION template::java::JavaGeneratorExtensions»
 
 «DEFINE ValueTypeTemplate FOR EClass»
-    «FILE "generated/" + this.ePackage.toJavaPackagePath() + "/" + name + ".java"»package «this.ePackage.toJavaPackageName()»;
+    «FILE "generated/" + this.toJavaPackagePath() + "/" + name + ".java"»package «this.toJavaPackageName()»;
     
     public class «this.name» {
         «FOREACH eAttributes AS a-»
