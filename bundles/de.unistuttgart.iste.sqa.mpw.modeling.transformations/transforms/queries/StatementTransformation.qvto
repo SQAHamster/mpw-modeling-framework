@@ -55,7 +55,9 @@ mapping Input::Statement::toSelfStatement() : QueryModel::SelfStatement merges I
 }
 
 mapping Input::Statement::toElementByNameUsageStatement() : QueryModel::ElementByNameUsageStatement merges Input::Statement::toStatementBase
-    when { self.parameterList() != null and self.parameterList().parameters->exists(p|p.variableName = self.target) } {
+    when { self.parameterList() != null 
+        and self.parameterList().parameters->exists(p|p.variableName = self.target)
+        and self.parentExpression().statements->indexOf(self) = 1 } {
     var parameter := self.parameterList().parameters->any(p|p.variableName = self.target);
     type := findClassifierForName(parameter.typeName);
     elementName := parameter.variableName;
