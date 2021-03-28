@@ -24,9 +24,18 @@ inv anyDerivedActor: ePackage.isConcreteMiniProgrammingWorld
 -- concrete MiniProgrammingWorld needs link to a Stage
 inv mpwContainsInheritedStage: inheritsMpw
     implies eAllReferences->exists(r|r.eType.oclAsType(EClass).inheritsStage and r.containment = true)
+    
+-- value types are only allowed to contain attributes
+inv valueTypeOnlyContainsAttributes: inheritsValueType
+    implies eAllStructuralFeatures->size() = eAllAttributes->size()
+    
+-- value types are not allowed to contain operations
+inv valueTypeDoesNotContainOperations: inheritsValueType
+    implies eAllOperations->isEmpty()
 
 def: inheritsMpw : Boolean = eAllSuperTypes->exists(c|c.name = 'MiniProgrammingWorld')
 def: inheritsStage : Boolean = eAllSuperTypes->exists(c|c.name = 'Stage')
 def: inheritsActor : Boolean = eAllSuperTypes->exists(c|c.name = 'Actor')
+def: inheritsValueType : Boolean = eAllSuperTypes->exists(c|c.name = 'ValueType')
 
 endpackage
