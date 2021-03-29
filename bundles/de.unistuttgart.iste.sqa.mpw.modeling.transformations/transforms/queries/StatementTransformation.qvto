@@ -43,6 +43,8 @@ abstract mapping Input::Statement::toStatementBase() : QueryModel::Statement {
         
         currentExpressionTypes->put(parentExpression, result.type);
         currentExpressionTypeCollectionInfo->put(parentExpression, result.isCollection);
+        
+        assert fatal (result.type != null) with log ("invalid statement, it has no type");
     }
 }
 
@@ -89,6 +91,7 @@ mapping Input::Statement::toFeatureStatement() : QueryModel::FeatureStatement me
     var eClass := self.getCurrentExpressionType().oclAsType(ecore::EClass);
     
     feature := eClass.eAllStructuralFeatures->any(f|f.name = self.target);
+    assert fatal (feature != null) with log('feature ' + self.target + ' not found in type ' + eClass.name);
     isCollection := feature.upperBound = -1;
     isOptional := feature.lowerBound = 0 and feature.upperBound = 1;
     type := feature.eType;

@@ -1,5 +1,6 @@
 import types.AnnotationHelpers;
 import types.EmfHelpers;
+import validation.QueryModelValidation;
 
 modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
 
@@ -27,6 +28,7 @@ configuration property Commands: List(CommandModel::Transformation);
 property clonedCommandsMap: Dict(CommandModel::Transformation, CommandModel::Transformation);
 
 main() {
+    QueryModelValidation::validateCommandConstraintsAreUsingExistingCommands(Queries, Commands);
     ecore.rootObjects()[EPackage]->map transformClasses();
 }
 

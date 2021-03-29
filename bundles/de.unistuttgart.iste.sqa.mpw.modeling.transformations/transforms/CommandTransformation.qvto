@@ -32,6 +32,7 @@ main() {
 }
 
 mapping Henshin::Module::toTransformation() : CommandModel::Transformation {
+    log("transforming Command: " + self.name);
     name := self.name;
     documentation := self.description;
     targetClass := self.findTargetClass();

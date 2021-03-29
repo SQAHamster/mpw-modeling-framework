@@ -1,0 +1,18 @@
+modeltype CommandModel uses 'http://www.mpw.uni-stuttgart.de/behavior/command';
+modeltype QueryModel uses 'http://www.mpw.uni-stuttgart.de/behavior/query';
+
+/**
+  *  Library with validation logic for query models.
+  *  Note: It makes also use of available commands to check if constraints are valid, which
+  *        is not easy to make at loading time.
+  */
+library QueryModelValidation;
+
+helper validateCommandConstraintsAreUsingExistingCommands(queryModels: List(QueryModel::Module), commands: List(CommandModel::Transformation)) {
+	var qualifiedCommandNames := commands->collect(c|c.targetClass.name + "::" + c.name)->asSet();
+	queryModels->allSubobjectsOfKind(CommandConstraint)->flatten()->forEach(constraint) {
+	    var qualifiedCommandNameOfConstraint := constraint.contextClass.name + "::" + constraint.commandName;
+	    assert fatal (qualifiedCommandNames->includes(qualifiedCommandNameOfConstraint))
+	        with log (constraint.metaClassName() + ": refers to unknown command " + qualifiedCommandNameOfConstraint);
+	};
+}

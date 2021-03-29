@@ -45,7 +45,7 @@ mapping Input::Expression::toExpression() : QueryModel::Expression
 mapping Input::NotExpression::toNotExpression() : QueryModel::NotExpression {
     inner := self.expression.map toExpression();
     
-    assert(inner.type = EBoolean.oclAsType(EClassifier) and not inner.isCollection);
+    assert fatal (inner.type = EBoolean.oclAsType(EClassifier) and not inner.isCollection) with log ("invalid nested NOT expression");
     type := EBoolean.oclAsType(EClassifier);
 }
 
@@ -71,8 +71,7 @@ mapping Input::ImpliesExpression::toImpliesExpression() : QueryModel::ImpliesExp
     lhs := self.left.map toExpression();
     rhs := self.right.map toExpression();
     
-    assert(lhs.type = EBoolean.oclAsType(EClassifier) and not lhs.isCollection);
-    assert(rhs.type = EBoolean.oclAsType(EClassifier) and not rhs.isCollection);
+    result.assertBinaryBooleanLeftAndRightExpressionsAreValid();
     type := EBoolean.oclAsType(EClassifier);
 }
 
@@ -80,8 +79,7 @@ mapping Input::OrExpression::toOrExpression() : QueryModel::OrExpression {
     lhs := self.left.map toExpression();
     rhs := self.right.map toExpression();
     
-    assert(lhs.type = EBoolean.oclAsType(EClassifier) and not lhs.isCollection);
-    assert(rhs.type = EBoolean.oclAsType(EClassifier) and not rhs.isCollection);
+    result.assertBinaryBooleanLeftAndRightExpressionsAreValid();
     type := EBoolean.oclAsType(EClassifier);
 }
 
@@ -89,8 +87,7 @@ mapping Input::AndExpression::toAndExpression() : QueryModel::AndExpression {
     lhs := self.left.map toExpression();
     rhs := self.right.map toExpression();
     
-    assert(lhs.type = EBoolean.oclAsType(EClassifier) and not lhs.isCollection);
-    assert(rhs.type = EBoolean.oclAsType(EClassifier) and not rhs.isCollection);
+    result.assertBinaryBooleanLeftAndRightExpressionsAreValid();
     type := EBoolean.oclAsType(EClassifier);
 }
 
@@ -99,7 +96,7 @@ mapping Input::ComparisonExpression::toCompareExpression() : QueryModel::Compare
     rhs := self.right.map toExpression();
     operator := self.op.toOperator();
     
-    assert(not lhs.isCollection and not rhs.isCollection);
+    assert fatal (not lhs.isCollection and not rhs.isCollection) with log ("invalid nested expressions");
     type := EBoolean.oclAsType(EClassifier);
 }
 
@@ -108,7 +105,7 @@ mapping Input::EqualityExpression::toCompareExpression() : QueryModel::CompareEx
     rhs := self.right.map toExpression();
     operator := self.operation.toOperator();
     
-    assert(not lhs.isCollection and not rhs.isCollection);
+    assert fatal (not lhs.isCollection and not rhs.isCollection) with log ("invalid nested expressions");
     type := EBoolean.oclAsType(EClassifier);
 }
 
@@ -130,8 +127,7 @@ mapping Input::PlusExpression::toCalculationExpression() : QueryModel::Calculati
     rhs := self.right.map toExpression();
     operator := CalculationOperator::PLUS;
     
-    assert(lhs.type = EInt.oclAsType(EClassifier) and not lhs.isCollection);
-    assert(rhs.type = EInt.oclAsType(EClassifier) and not rhs.isCollection);
+    result.assertBinaryNumericLeftAndRightExpressionsAreValid();
     type := EInt.oclAsType(EClassifier);
 }
 
@@ -140,8 +136,7 @@ mapping Input::MinusExpression::toCalculationExpression() : QueryModel::Calculat
     rhs := self.right.map toExpression();
     operator := CalculationOperator::MINUS;
     
-    assert(lhs.type = EInt.oclAsType(EClassifier) and not lhs.isCollection);
-    assert(rhs.type = EInt.oclAsType(EClassifier) and not rhs.isCollection);
+    result.assertBinaryNumericLeftAndRightExpressionsAreValid();
     type := EInt.oclAsType(EClassifier);
 }
 
@@ -150,8 +145,7 @@ mapping Input::MultiplicationExpression::toCalculationExpression() : QueryModel:
     rhs := self.right.map toExpression();
     operator := CalculationOperator::MULTIPLY;
     
-    assert(lhs.type = EInt.oclAsType(EClassifier) and not lhs.isCollection);
-    assert(rhs.type = EInt.oclAsType(EClassifier) and not rhs.isCollection);
+    result.assertBinaryNumericLeftAndRightExpressionsAreValid();
     type := EInt.oclAsType(EClassifier);
 }
 
@@ -160,8 +154,7 @@ mapping Input::DivisionExpression::toCalculationExpression() : QueryModel::Calcu
     rhs := self.right.map toExpression();
     operator := CalculationOperator::DIVIDE;
     
-    assert(lhs.type = EInt.oclAsType(EClassifier) and not lhs.isCollection);
-    assert(rhs.type = EInt.oclAsType(EClassifier) and not rhs.isCollection);
+    result.assertBinaryNumericLeftAndRightExpressionsAreValid();
     type := EInt.oclAsType(EClassifier);
 }
 
@@ -192,9 +185,28 @@ mapping Input::StatementsExpression::toStatementExpression() : QueryModel::State
     self.allSubobjectsOfKind(Input::Expression)->map toExpression();
     
     statements += self.statements->map toStatement();
+    assert fatal (statements->size() > 0) with log ("invalid statements expression, it has no statements");
+    
     type := statements->last().type;
     isCollection := statements->last().isCollection;
     isOptional := false; // TODO Queries currently do not allow optional returns, this requires an extension of QueryDSL, e.g. by '?' syntax
 
     result.map convertIntermediaryStatements();
+    
+    assert fatal (type != null) with log ("invalid statements expression, it has no type (last: " + statements->last().toString() + ")");
+}
+
+
+helper QueryModel::BinaryExpression::assertBinaryBooleanLeftAndRightExpressionsAreValid() {
+	assert fatal (self.lhs.type = EBoolean.oclAsType(EClassifier)) with log ("invalid left expression, it has not an EBoolean: " + self.rhs.type.toString());
+	assert fatal (self.rhs.type = EBoolean.oclAsType(EClassifier)) with log ("invalid right expression, it has not an EBoolean: " + self.rhs.type.toString());
+    assert fatal (not self.lhs.isCollection) with log ("invalid left expression, it is a collection type");
+    assert fatal (not self.rhs.isCollection) with log ("invalid right expression, it is a collection type");
+}
+
+helper QueryModel::BinaryExpression::assertBinaryNumericLeftAndRightExpressionsAreValid() {
+	assert fatal (self.lhs.type = EInt.oclAsType(EClassifier)) with log ("invalid left expression, it has not an EBoolean: " + self.rhs.type.toString());
+	assert fatal (self.rhs.type = EInt.oclAsType(EClassifier)) with log ("invalid right expression, it has not an EBoolean: " + self.rhs.type.toString());
+    assert fatal (not self.lhs.isCollection) with log ("invalid left expression, it is a collection type");
+    assert fatal (not self.rhs.isCollection) with log ("invalid right expression, it is a collection type");
 }

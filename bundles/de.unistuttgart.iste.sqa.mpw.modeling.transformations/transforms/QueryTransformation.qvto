@@ -14,6 +14,9 @@ modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
   */
 transformation TransformQueryDsl2Query(in inModel: QueryInput, out outModel: QueryModel);
 
+// Note the current element name for usage in assertion logs
+property currentDebugElementName: String;
+
 main() {
     inModel.rootObjects()[Input::QueryInputs]->map toQueryModel();
 }
@@ -38,10 +41,24 @@ abstract mapping QueryInput::Element::toElement() : QueryModel::ExpressionalElem
 
 abstract mapping QueryInput::Element::toElementBase() : QueryModel::ExpressionalElement {
     init {
+        self.determineDebugElementName();
+        if (self.name != "dummy") { // there are ad-hoc queries embedded e.g. in commands, skip their output
+            log("transforming " + self.metaClassName() + ": " + currentDebugElementName);
+        };
         result.documentation := self.documentation.trimMarkers();
         result.contextClass := self.context().className.map toContextClass();
         result.mainExpression := self.expressions->first().map toExpression();
     }
+}
+
+helper QueryInput::Element::determineDebugElementName() {
+	currentDebugElementName := self.context().className;
+	if (self.context().oclIsKindOf(CommandContext)) {
+		currentDebugElementName := currentDebugElementName + "::" + self.context().oclAsType(CommandContext).commandName;
+	};
+    if (self.name != null) {
+    	currentDebugElementName := currentDebugElementName + "::" + self.name;
+    };
 }
 
 helper String::trimMarkers() : String {
@@ -70,6 +87,7 @@ mapping QueryInput::Parameter::toParameter() : BaseTypes::Parameter {
 }
 
 mapping QueryInput::CommandConstraint::toCommandConstraintBase() : QueryModel::CommandConstraint inherits QueryInput::Element::toElementBase {
+    assert fatal (not result.contextClass.eAllSuperTypes->exists(t|t.name = 'ValueType')) with log(currentDebugElementName + ': given type (' + result.contextClass.name + ') must not be a value type');
     if (self.name != null) {
         result.name := self.name;
     } else {
@@ -95,8 +113,16 @@ mapping QueryInput::Invariant::toElement() : QueryModel::ClassInvariant inherits
     }
 }
 
+// use a mapping to allow later resolveOne by the string name
 mapping String::toContextClass() : ecore::EClass {
-    init { result := findClassifierForName(self).oclAsType(ecore::EClass); }
+    init { 
+        var foundClassifier := findClassifierForName(self);
+	    assert fatal (foundClassifier != null) with log (currentDebugElementName + ': type with name ' + self + ' not found');
+	    var foundClass := foundClassifier.oclAsType(ecore::EClass);
+	    assert fatal (foundClass != null and not foundClass.oclIsUndefined()) with log(currentDebugElementName + ': given type (' + self + ') is not an EClass');
+	    assert fatal (not foundClass.interface) with log(currentDebugElementName + ': given type (' + self + ') must not be a interface');
+        result := foundClass;
+    }
 }
 
 query QueryInput::Element::context() : QueryInput::Context {

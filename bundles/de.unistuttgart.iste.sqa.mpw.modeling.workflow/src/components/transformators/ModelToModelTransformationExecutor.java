@@ -17,6 +17,7 @@ import org.eclipse.m2m.qvt.oml.ExecutionContextImpl;
 import org.eclipse.m2m.qvt.oml.ExecutionDiagnostic;
 import org.eclipse.m2m.qvt.oml.TransformationExecutor;
 
+import behaviorInputs.QueryInputs;
 import behaviorsbase.NamedElement;
 import components.helpers.EclipsePathHelper;
 import components.helpers.QvtoLogger;
@@ -173,6 +174,8 @@ final class ModelToModelTransformationExecutor {
         final StringBuilder stringBuilder = new StringBuilder();
         new LambdaVisitor<Object>().on(NamedElement.class).then(namedElement -> {
             stringBuilder.append(namedElement.getName());
+        }).on(QueryInputs.class).then(queryDslInputs -> {
+            stringBuilder.append("QueryDsl Inputs");
         }).orElse(() -> {
             stringBuilder.append(object.toString());
         }).accept(object);
