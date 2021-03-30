@@ -46,8 +46,14 @@ void GameViewPresenterBase::bindSize() {
 void GameViewPresenterBase::bindTiles() {
     auto& tilesProperty = getTilesPropertyFromConcreteStage();
 
-    tilesProperty.addOnAddedListener([this](auto& tile) { addTileNode(tile); });
-    tilesProperty.addOnRemovedListener([this](auto& tile) { removeTileNode(tile); });
+    tilesProperty.addOnAddedListener([this](auto& tile) {
+        auto lock = getSemaphore().lock();
+        addTileNode(tile);
+    });
+    tilesProperty.addOnRemovedListener([this](auto& tile) {
+        auto lock = getSemaphore().lock();
+        removeTileNode(tile);
+    });
     tilesProperty.forEach([this](auto& tile) { addTileNode(tile); });
 }
 
