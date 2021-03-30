@@ -37,6 +37,34 @@ It allows to control a ladybug to collect leafs and move mushrooms in a mini wor
 
 See: https://github.com/Fumapps/mpw-modeling-kara
 
+## Modeling Modules
+
+![modeling approach](documentation/graphics/modules.svg)
+
+**bundles** (contains Eclipse bundles)
+
+*modeling.mpw*: defines the (meta-)meta-models for MPWs
+
+*modeling.framework*: contains a MPW2 workflow to generate MPW Simulator Framework code
+
+*modeling.transformation*: contains several QVTo transformations to transform concrete MPW input models into adjusted intermediary models used for code generation. Types of input models are meta-models (like the concrete Hamster meta-model), commands, queries or constraints.
+
+*modeling.workflow*: contains the essence of the MWE2 modeling workflow in a reusable manner. It is used by other modules like *modeling.framework* to perform specific workflow runs.
+
+*modeling.generator.cpp*: contains Xpand templates for generating C++ source code
+
+*modeling.generator.java*: contains Xpand templates for generating Java source code
+
+**features** (contains Eclipse features)
+
+*feature*: defines the Eclipse feature for all required bundles to build the updatesite and deploy the MPW Modeling Framework
+
+**releng** (contains release engineering artifacts)
+
+*updatesite*: defines an updatesite which can be used for concrete MPW modeling environments to make use of the MPW Modeling Framework
+
+*targetplatform*: defines a target platform for the Eclipse environment for all specific Eclipse plugin dependencies
+
 ## Wiki
 
 Please visit the wiki (https://github.com/Fumapps/mpw-modeling-framework/wiki) for further information regarding design, architecture or other topics.
