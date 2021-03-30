@@ -38,6 +38,7 @@ void GameViewPresenterBase::bindSize() {
     const framework::ObservablePrimitiveProperty<mpw::Size>& sizeProperty = getStageSizeFromConcreteStage();
     GameViewPresenter::getViewModel()->init(sizeProperty.get());
     sizeProperty.addListener([this](auto& oldSize, auto& newSize) {
+        auto lock = getSemaphore().lock();
         GameViewPresenter::getViewModel()->init(newSize);
     });
 }
