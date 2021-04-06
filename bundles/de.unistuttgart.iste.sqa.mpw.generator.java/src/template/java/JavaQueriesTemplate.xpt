@@ -47,7 +47,13 @@
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR CompareExpression-»
-    «EXPAND ExpressionDefinition FOR lhs» «operator.toOperatorCode()» «EXPAND ExpressionDefinition FOR rhs-»
+    «IF lhs.type.isValueType() && operator == CompareOperator::EQUAL-»
+        java.util.Objects.equals(«EXPAND ExpressionDefinition FOR lhs», «EXPAND ExpressionDefinition FOR rhs-»)
+    «ELSEIF lhs.type.isValueType() && operator == CompareOperator::NOT_EQUAL-»
+        !java.util.Objects.equals(«EXPAND ExpressionDefinition FOR lhs», «EXPAND ExpressionDefinition FOR rhs-»)
+    «ELSE-»
+        «EXPAND ExpressionDefinition FOR lhs» «operator.toOperatorCode()» «EXPAND ExpressionDefinition FOR rhs-»
+    «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE ExpressionDefinition FOR CalculationExpression-»
