@@ -4,7 +4,7 @@
 «EXTENSION template::cpp::CppGeneratorExtensions»
 
 «DEFINE UnitDeclaration FOR Unit»
-    bool «IF mainUnit»internalMainUnit«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF»);
+    bool «IF mainUnit»internalMainUnit«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCommandParameterSignature()»«ENDFOREACH»«ENDIF»);
     «EXPAND FindObjectDeclaration FOREACH eAllContents.typeSelect(ManyReferenceCondition).select(r|!r.isCreate && r.useForExploring)-»
 «ENDDEFINE»
 
@@ -30,7 +30,8 @@
         «EXPAND PostconditionsDefinition FOR this»
     }
     «ENDIF-»
-    bool «getParentTransformation().name.toFirstUpper()»Command::«IF mainUnit»internalMainUnit«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCppType()» «p.name»«ENDFOREACH»«ENDIF») {
+    bool «getParentTransformation().name.toFirstUpper()»Command::«IF mainUnit»internalMainUnit«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCommandParameterSignature()»«ENDFOREACH»«ENDIF») {
+        «EXPAND VariableDefinition FOREACH variables»
         «EXPAND UnitExpandBody FOR this»
     }
     «EXPAND PostUnitExpand FOR this»
@@ -73,11 +74,10 @@
 «ENDDEFINE»
 
 «DEFINE InvocationCall FOR Invocation»
-    «targetMethodName»(«FOREACH mappedParameters AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+    «targetMethodName»(«FOREACH mappedParameters AS mapping SEPARATOR ", "»«mapping.toCommandParameterNameForInvocation()»«ENDFOREACH»)
 «ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR Rule»
-    «EXPAND VariableDefinition FOREACH variables»
     «EXPAND InstanceDefinition FOREACH instanceConditions»
     «EXPAND ReferenceDefinition FOREACH referenceConditions»
     «EXPAND VariableAssignmentDefinition FOREACH variableAssignments»
@@ -86,6 +86,7 @@
     «EXPAND ClearModificationDefinition FOREACH modifications.select(m|m.action == Action::CLEAR)»
     «EXPAND CreateModificationDefinition FOREACH modifications.select(m|m.action == Action::CREATE)»
     «EXPAND AttributeModificationDefinition FOREACH modifications.select(m|m.action == Action::MODIFY)»
+    «EXPAND OutParameterAssignments FOREACH parameters.typeSelect(OutParameter)»
     return true;
 «ENDDEFINE»
 
@@ -230,16 +231,20 @@
 
 «DEFINE CreateModificationDefinition FOR Modification»
     «IF this.instance != null»
-    // create instance: «this.action» «this.instance.variableName» «this.instance.instanceType.name»
+        // create instance: «this.action» «this.instance.variableName» «this.instance.instanceType.name»
     «ENDIF»
     «IF this.reference != null»
-    // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
-    «IF this.reference.metaType == SingleReferenceCondition»
-        «commandSetter(this.reference.target.instanceType)»(«this.reference.source.variableName», «this.reference.referenceName.toFeatureKeyAccess(reference.source.instanceType)», «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
-    «ELSE»
-        «commandAdder()»(«this.reference.source.variableName», «this.reference.referenceName.toFeatureKeyAccess(reference.source.instanceType)», «this.reference.target.variableName»);
+        // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
+	    «IF this.reference.metaType == SingleReferenceCondition-»
+	        «commandSetter(this.reference.target.instanceType)»(«this.reference.source.variableName», «this.reference.referenceName.toFeatureKeyAccess(reference.source.instanceType)», «this.reference.source.variableName»«this.reference.accessor()»«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
+	    «ELSE-»
+	        «commandAdder()»(«this.reference.source.variableName», «this.reference.referenceName.toFeatureKeyAccess(reference.source.instanceType)», «this.reference.target.variableName»);
+	    «ENDIF-»
     «ENDIF»
-    «ENDIF»
+«ENDDEFINE»
+
+«DEFINE OutParameterAssignments FOR OutParameter»
+    «this.name» = «this.name»_forOutParameter;
 «ENDDEFINE»
 
 «DEFINE AttributeModificationDefinition FOR Modification»

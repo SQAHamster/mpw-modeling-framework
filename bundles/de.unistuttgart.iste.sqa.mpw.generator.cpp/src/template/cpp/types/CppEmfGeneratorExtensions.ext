@@ -18,6 +18,9 @@ toCppType(EClassifier this) : toCppType(name, metaType.name, ePackage);
 
 toCppType(String this, String metaTypeName, EPackage thisPackage) : toCppTypeInternal(metaTypeName, thisPackage, "");
 
+toCppType(behaviorsbase::TypedElement element) :
+    toCppType(element.type.name, element.type.metaType.name, element.type.ePackage);
+
 /* adds const to shared ptr, other primitives are not const-correctness relevant */
 toConstCppType(ETypedElement this) : toConstCppType(this.eType.name, this.eType.metaType.name, this.eType.ePackage);
 toConstCppType(EClassifier this) : toConstCppType(name, metaType.name, ePackage);

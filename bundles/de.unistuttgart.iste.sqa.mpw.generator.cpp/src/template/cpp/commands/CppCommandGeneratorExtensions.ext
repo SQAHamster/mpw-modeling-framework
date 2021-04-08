@@ -1,5 +1,6 @@
 import commandBehavior;
 import queryBehavior;
+import behaviorsbase;
 import ecore;
 
 extension mpw::generator::xtend::commands::CommandGeneratorExtensions reexport;
@@ -39,3 +40,15 @@ isComplexMethodStatement(CollectionMethodStatement this) :
         case CollectionMethodType::TYPE_SELECT: true
         default: false
     };
+
+toCommandParameterSignature(Parameter p) :
+    p.toCommandParameterSignatureType() + " " + p.name;
+
+private toCommandParameterSignatureType(Parameter p) :
+    if (OutParameter.isInstance(p)) then p.toCppType() + "&"
+    else p.toCppType();
+
+toCommandParameterNameForInvocation(ParameterMapping mapping) :
+    if (mapping.sourceVariable != null) then mapping.sourceVariable.variableName
+    else mapping.source.name;
+    

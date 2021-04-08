@@ -17,9 +17,6 @@ toOperatorCode(CompareOperator this) : toDefaultOperatorCode();
 
 toOperatorCode(CalculationOperator this) : toDefaultOperatorCode();
 
-toCppType(behaviorsbase::TypedElement element) :
-    toCppType(element.type.name, element.type.metaType.name, element.type.ePackage);
-
 toConstCppType(behaviorsbase::TypedElement element) :
     toConstCppType(element.type.name, element.type.metaType.name, element.type.ePackage);
 
