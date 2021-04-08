@@ -1,5 +1,6 @@
 import commandBehavior;
 import queryBehavior;
+import behaviorsbase;
 import ecore;
 
 extension mpw::generator::xtend::commands::CommandGeneratorExtensions reexport;
@@ -22,6 +23,33 @@ getVisibility(Unit this) :
   
 // override from general CommandGeneratorExtensions
 commandSetter() : "executeSetProperty";
+
+toCommandParameterSignature(Parameter p) :
+    p.toCommandParameterSignatureType() + " " + p.toCommandParameterSignatureName();
+
+toCommandParameterSignatureType(Parameter p) :
+    if (OutParameter.isInstance(p)) then "OutParameter<" + p.type.name.toJavaType() + ">"
+    else p.type.name.toJavaType();
+
+toCommandParameterNameForInvocation(Invocation invocation, ParameterMapping mapping) :
+    if (OutParameter.isInstance(mapping.target)) then invocation.targetMethodName + mapping.target.name.toFirstUpper() + "OutParameterWrapper"
+    else if (mapping.sourceVariable != null) then mapping.sourceVariable.variableName
+    else mapping.source.name;
+
+/** Sources can refer to real parameters, or to variables of an unit. Hence the case of "sourceVariable" vs "source" has to be made. */
+sourceName(ParameterMapping mapping) :
+    if (mapping.sourceVariable != null) then mapping.sourceVariable.variableName
+    else mapping.source.name;
+    
+/** Special method used for the constructor of the OutParameter wrapper, which only shall use a source variable's value, if it is an inout parameter. */
+sourceNameOnlyIfTargetParameterIsInOut(ParameterMapping mapping) :
+    let outParameter = (OutParameter)mapping.target :
+    if (outParameter.isInOut) then mapping.sourceName()
+    else "";
+    
+toCommandParameterSignatureName(Parameter p) :
+    if (OutParameter.isInstance(p)) then p.name + "OutParameterWrapper"
+    else p.name;
 
 toJml(List[Constraint] this) : 
     if (size > 0) then 

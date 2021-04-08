@@ -20,54 +20,97 @@
         «EXPAND PostconditionsDefinition FOR this»
     }
     «ENDIF-»
-    private boolean «IF mainUnit»internalMainUnit«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.type.name.toJavaType()» «p.name»«ENDFOREACH»«ENDIF») {
+    private boolean «IF mainUnit»internalMainUnit«ELSE»«name»«ENDIF»(«IF !mainUnit»«FOREACH parameters AS p SEPARATOR ", "»«p.toCommandParameterSignature()»«ENDFOREACH»«ENDIF») {
+        «EXPAND InOutVariableEnrollment FOR this-»
+        «EXPAND VariableDefinition FOREACH variables»
         «EXPAND UnitExpandBody FOR this»
     }
     «EXPAND PostUnitExpand FOR this»
 «ENDDEFINE»
 
+«REM»Writes the value of an inout parameter to a variable. Has to be called at the beginning of the unit.«ENDREM»
+«DEFINE InOutVariableEnrollment FOR Unit-»
+    «FOREACH parameters.typeSelect(OutParameter).select(p|p.isInOut) AS outParameter-»
+        «outParameter.type.name.toJavaType()» «outParameter.name» = «outParameter.toCommandParameterSignatureName()».get();
+    «ENDFOREACH-»
+«ENDDEFINE»
+
+«REM»Writes a variable to an output parameter. Have to be called at the (positive) return of the unit.«ENDREM»
+«DEFINE OutVariableWriting FOR Unit-»
+    «FOREACH parameters.typeSelect(OutParameter).select(p|p.isInOut) AS outParameter-»
+        «outParameter.toCommandParameterSignatureName()».set(«outParameter.name»);
+    «ENDFOREACH-»
+«ENDDEFINE»
+
 «DEFINE UnitExpandBody FOR Unit»«ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR IfElseUnit»
-    if («EXPAND InvocationCall FOR ifInvocation») {
-        return «EXPAND InvocationCall FOR thenInvocation»;
+    boolean result;
+    «EXPAND InvocationCall FOR ifInvocation»
+    if (result) {
+        «EXPAND InvocationCall FOR thenInvocation»
+    } else {
+        «EXPAND InvocationCall FOR elseInvocation»
     }
-    return «EXPAND InvocationCall FOR elseInvocation»;
+    «EXPAND OutVariableWriting FOR this»
+    return result;
 «ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR PriorityChainUnit»
-    if«FOREACH conditionalInvocations AS i SEPARATOR " else if "-»
-    («EXPAND InvocationCall FOR i») {
-        return true;
-    }
+    boolean result;
+    «FOREACH conditionalInvocations AS i-»
+	    «EXPAND InvocationCall FOR i»
+	    if (result) {
+            «EXPAND OutVariableWriting FOR this»
+	        return true;
+	    }
     «ENDFOREACH»
     return false;
 «ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR SequentialUnit»
+    boolean result;
     «FOREACH targetInvocations AS i-»
-    if (!«EXPAND InvocationCall FOR i») {
-        return false;
-    }
+	    «EXPAND InvocationCall FOR i»
+	    if (!result) {
+	        return false;
+	    }
     «ENDFOREACH-»
+    «EXPAND OutVariableWriting FOR this»
     return true;
 «ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR IteratedUnit»
+    boolean result;
     for (int i = 0; i < («repeat»); i++) {
-        if (!«EXPAND InvocationCall FOR targetInvocation») {
+        «EXPAND InvocationCall FOR targetInvocation»
+        if (!result) {
             return false;
         }
     }
+    «EXPAND OutVariableWriting FOR this»
     return true;
 «ENDDEFINE»
 
 «DEFINE InvocationCall FOR Invocation»
-    «targetMethodName»(«FOREACH mappedParameters AS p SEPARATOR ", "»«p.name»«ENDFOREACH»)
+    «EXPAND AssignToOutParameterWrapperBeforeInvocationCall FOR this»
+    result = «targetMethodName»(«FOREACH mappedParameters AS mapping SEPARATOR ", "»«this.toCommandParameterNameForInvocation(mapping)»«ENDFOREACH»);
+    «EXPAND AssignFromOutParameterWrapperAfterInvocationCall FOR this»
+«ENDDEFINE»
+
+«DEFINE AssignToOutParameterWrapperBeforeInvocationCall FOR Invocation»
+    «FOREACH mappedParameters.select(mp|OutParameter.isInstance(mp.target)) AS mapping»
+        «mapping.target.toCommandParameterSignatureType()» «this.toCommandParameterNameForInvocation(mapping)» = new «mapping.target.toCommandParameterSignatureType()»(«mapping.sourceNameOnlyIfTargetParameterIsInOut()»);
+    «ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE AssignFromOutParameterWrapperAfterInvocationCall FOR Invocation»
+    «FOREACH mappedParameters.select(mp|OutParameter.isInstance(mp.target)) AS mapping»
+        «mapping.sourceName()» = «this.toCommandParameterNameForInvocation(mapping)».get();
+    «ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE UnitExpandBody FOR Rule»
-    «EXPAND VariableDefinition FOREACH variables»
     «EXPAND InstanceDefinition FOREACH instanceConditions»
     «EXPAND ReferenceDefinition FOREACH referenceConditions»
     «EXPAND VariableAssignmentDefinition FOREACH variableAssignments»
@@ -76,6 +119,7 @@
     «EXPAND ClearModificationDefinition FOREACH modifications.select(m|m.action == Action::CLEAR)»
     «EXPAND CreateModificationDefinition FOREACH modifications.select(m|m.action == Action::CREATE)»
     «EXPAND AttributeModificationDefinition FOREACH modifications.select(m|m.action == Action::MODIFY)»
+    «EXPAND OutParameterAssignments FOREACH parameters.typeSelect(OutParameter)»
     return true;
 «ENDDEFINE»
 
@@ -218,21 +262,25 @@
 
 «DEFINE CreateModificationDefinition FOR Modification»
     «IF this.instance != null»
-    // create instance: «this.action» «this.instance.variableName» «this.instance.instanceType.name»
+        // create instance: «this.action» «this.instance.variableName» «this.instance.instanceType.name»
     «ENDIF»
     «IF this.reference != null»
-    // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
-    «IF this.reference.metaType == SingleReferenceCondition»
-        «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
-    «ELSE»
-        «commandAdder()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
-    «ENDIF»
+	    // create reference: «this.action» «this.reference.source.variableName»:«this.reference.source.instanceType.name» -> «this.reference.referenceName» -> «this.reference.target.variableName»:«this.reference.target.instanceType.name»
+	    «IF this.reference.metaType == SingleReferenceCondition-»
+	        «commandSetter()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.source.variableName».«this.reference.referenceName.getter()»(), «this.reference.target.variableName»);
+	    «ELSE-»
+	        «commandAdder()»(«this.reference.source.variableName», "«this.reference.referenceName»", «this.reference.target.variableName»);
+	    «ENDIF-»
     «ENDIF»
 «ENDDEFINE»
 
 «DEFINE AttributeModificationDefinition FOR Modification»
     // set attribute: «this.attribute.instance.variableName».«this.attribute.attributeName» := «this.newAttributeValue»
     «commandSetter()»(«this.attribute.instance.variableName», "«this.attribute.attributeName»", «this.attribute.instance.variableName».«this.attribute.attributeName.getter()»(), «this.newAttributeValue»);
+«ENDDEFINE»
+
+«DEFINE OutParameterAssignments FOR OutParameter»
+    «this.toCommandParameterSignatureName()».set(«this.name»_forOutParameter);
 «ENDDEFINE»
 
 «DEFINE FindObjectDefinition FOR ManyReferenceCondition»

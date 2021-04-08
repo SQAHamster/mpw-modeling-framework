@@ -16,6 +16,8 @@
         import «getFrameworkBasePackage()».commands.impl.*;
         import «getFrameworkBasePackage()».datatypes.*;
         import static «getFrameworkBasePackage()».datatypes.Direction.*;
+        import «getFrameworkBasePackage()».datatypes.Direction.*;
+        import «getFrameworkBasePackage()».utils.hamster.*;
         import java.util.stream.Collectors;
         
         «REM»TODO JML«constraints.toJml()»«ENDREM-»

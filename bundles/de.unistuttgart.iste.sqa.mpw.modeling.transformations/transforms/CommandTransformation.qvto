@@ -1,6 +1,7 @@
 import commands.RuleReferenceSorter;
 import commands.GameLogEntryRuleCreator;
 import commands.ContractDocumentationGenerator;
+import commands.InOutParameterInstanceAdjustifier;
 import queries.QueryParserLibrary;
 import types.AnnotationHelpers;
 import types.EmfHelpers;
@@ -95,17 +96,21 @@ mapping Henshin::Unit::toUnit() : CommandModel::Unit
               Henshin::ConditionalUnit::toIfElseUnit,
               Henshin::PriorityUnit::toConditionalUnit;
 
-mapping Henshin::Rule::toRule() : CommandModel::Rule {
+abstract mapping Henshin::Unit::toUnitBase() : CommandModel::Unit {
+    init {
+        result.name := self.name;
+        result.parameters := self.parameters->map toParameter();
+        result.variables := self.parameters->map toVariableDeclaration();
+    }
+}
+
+mapping Henshin::Rule::toRule() : CommandModel::Rule inherits Henshin::Unit::toUnitBase {
     number := 0;
     
-    name := self.name;
-    parameters := self.parameters->map toParameter();
-      
     instanceConditions := self.lhs.nodes->map toInstanceCondition();
     instanceConditions += self.rhs.nodes[action.toString() = "create"]->map toCreateInstanceCondition();
     instanceConditions += self.getDeleteStarNodes()->map toInstanceCondition();
     
-    variables := self.parameters->map toVariableDeclaration();
     attributeConditions := self.lhs.nodes.allSubobjectsOfType(Attribute)->map toAttributeCondition();
     attributeConditions += self.rhs.nodes.allSubobjectsOfType(Attribute)[action.toString() = "create"]->map toCreateAttributeCondition();
     variableAssignments := self.lhs.nodes.allSubobjectsOfType(Attribute)->map toVariableAssignment();
@@ -128,6 +133,8 @@ mapping Henshin::Rule::toRule() : CommandModel::Rule {
     referenceConditions := result.sortReferences();
     
     thisInstance.variableName := "self";
+    
+    result->adjustOutParameters();
 }
 
 query Henshin::Rule::getDeleteStarNodes() : Set(Node) {
@@ -152,30 +159,22 @@ helper Henshin::Attribute::getRhsAttribute() : Henshin::Attribute {
     return rhsNode.attributes->any(type = self.type);
 }
 
-mapping Henshin::IteratedUnit::toIteratedUnit() : CommandModel::IteratedUnit {
-    name := self.name;
+mapping Henshin::IteratedUnit::toIteratedUnit() : CommandModel::IteratedUnit inherits Henshin::Unit::toUnitBase {
     repeat := self.iterations;
-    parameters := self.parameters->map toParameter();
     targetInvocation := self.subUnit.map toInvocation(self);
 }
 
-mapping Henshin::SequentialUnit::toSequentialUnit() : CommandModel::SequentialUnit {
-    name := self.name;
-    parameters := self.parameters->map toParameter();
+mapping Henshin::SequentialUnit::toSequentialUnit() : CommandModel::SequentialUnit inherits Henshin::Unit::toUnitBase {
     targetInvocations := self.subUnits->map toInvocation(self);
 }
 
-mapping Henshin::ConditionalUnit::toIfElseUnit() : CommandModel::IfElseUnit {
-    name := self.name;
-    parameters := self.parameters->map toParameter();
+mapping Henshin::ConditionalUnit::toIfElseUnit() : CommandModel::IfElseUnit inherits Henshin::Unit::toUnitBase {
     ifInvocation := self._if.map toInvocation(self);
     thenInvocation := self._then.map toInvocation(self);
     elseInvocation := self._else.map toInvocation(self);
 }
 
-mapping Henshin::PriorityUnit::toConditionalUnit() : CommandModel::PriorityChainUnit {
-    name := self.name;
-    parameters := self.parameters->map toParameter();
+mapping Henshin::PriorityUnit::toConditionalUnit() : CommandModel::PriorityChainUnit inherits Henshin::Unit::toUnitBase {
     conditionalInvocations := self.subUnits->map toInvocation(self);
 }
 
@@ -185,7 +184,11 @@ mapping Henshin::Unit::toInvocation(parentUnit: Henshin::Unit) : CommandModel::I
         var foundMapping = parentUnit.parameterMappings->any(m|m.target = p);
         assert(foundMapping != null);
         if (foundMapping != null) {
-            result.mappedParameters += foundMapping.source.resolveone(BaseTypes::Parameter);
+            result.mappedParameters += object CommandModel::ParameterMapping {
+                source := foundMapping.source.resolveone(BaseTypes::Parameter);
+                sourceVariable := foundMapping.source.resolveone(CommandModel::VariableDeclaration); // Henshin VAR parameters are only mapped to VariableDeclaration objects
+                target := foundMapping.target.late resolveone(BaseTypes::Parameter);
+            }
         }
         
     }
@@ -211,9 +214,20 @@ mapping Henshin::Node::toCreateInstanceCondition() : CommandModel::InstanceCondi
 }
 
 mapping Henshin::Parameter::toParameter() : BaseTypes::Parameter
-    when { self.kind = ParameterKind::IN; } {
+    disjuncts Henshin::Parameter::toInParameter,
+              Henshin::Parameter::toOutParameter;
+
+mapping Henshin::Parameter::toInParameter() : BaseTypes::Parameter
+    when { self.kind = ParameterKind::IN } {
     name := self.name;
     type := self.type;
+}
+
+mapping Henshin::Parameter::toOutParameter() : CommandModel::OutParameter
+    when { self.kind = ParameterKind::OUT or self.kind = ParameterKind::INOUT } {
+    name := self.name;
+    type := self.type;
+    isInOut := self.kind = ParameterKind::INOUT;
 }
 
 mapping Henshin::Parameter::toVariableDeclaration() : CommandModel::VariableDeclaration

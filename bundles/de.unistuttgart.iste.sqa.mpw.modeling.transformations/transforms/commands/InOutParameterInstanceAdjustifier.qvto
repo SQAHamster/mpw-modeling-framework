@@ -1,0 +1,47 @@
+import util.BasicHelpers;
+
+modeltype Henshin uses "http://www.eclipse.org/emf/2011/Henshin";
+modeltype CommandModel uses "http://www.mpw.uni-stuttgart.de/behavior/command";
+
+/**
+  * Library used for inout parameters which are used to point to another instance at the end of the rule.
+  *
+  * To simplify the handling of this special case, the naming will be adjusted to have separate instance nodes,
+  * while the output parameter is assigned to the other instance at the end of the rule explicitly.
+  *
+  * Motivation: In Henshin the use case of pointing to another instance by a performed rule is handled by naming
+  * both the input and output nodes with the same name. By transforming to distinct names, the later handling
+  * is performed in a more simple way.
+  */
+library InOutParameterInstanceAdjustifier;
+
+helper CommandModel::Rule::adjustOutParameters() {
+    self.adjustInOutParametersForReassign();
+    self.adjustOutOnlyParametersForCommonNaming();
+}
+
+helper CommandModel::Rule::adjustInOutParametersForReassign() {
+    var inOutParameters := self.parameters->selectByType(CommandModel::OutParameter)->select(p|p.isInOut);
+    var inOutParameterNames := inOutParameters->collect(p|p.name)->asSet();
+    
+    var lhsNodeNames := self.instanceConditions->select(c|not c.isCreate)->collect(c|c.variableName)->asSet();
+    var rhsCreateNodeNames := self.instanceConditions->select(c|c.isCreate)->collect(c|c.variableName)->asSet();
+    var nodeNamesWhichAreRenamed := lhsNodeNames->intersection(rhsCreateNodeNames);
+    
+    nodeNamesWhichAreRenamed->forEach (name) {
+        var relatedParameter := inOutParameters->selectOne(p|p.name = name);
+        var relatedInstanceCondition := self.instanceConditions->selectOne(c|c.isCreate and c.variableName = name);
+        relatedInstanceCondition.variableName := name + "_forOutParameter";
+        relatedParameter.differentOutVariableName := relatedInstanceCondition.variableName;
+    };
+}
+
+helper CommandModel::Rule::adjustOutOnlyParametersForCommonNaming() {
+    var outOnlyParameters := self.parameters->selectByType(CommandModel::OutParameter)->select(p|not p.isInOut);
+    var outOnlyParameterNames := outOnlyParameters->collect(p|p.name);
+    
+    outOnlyParameterNames->forEach (name) {
+        var relatedInstanceCondition := self.instanceConditions->selectOne(c|c.variableName = name);
+        relatedInstanceCondition.variableName := name + "_forOutParameter";
+    };
+}

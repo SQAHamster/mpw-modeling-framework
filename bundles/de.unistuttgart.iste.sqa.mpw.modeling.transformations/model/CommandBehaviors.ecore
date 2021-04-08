@@ -35,6 +35,8 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="ecore:EClass BehaviorsBaseTypes.ecore#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//VariableDeclaration" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mainUnit" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
@@ -54,8 +56,6 @@
         eType="#//AttributeCondition" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifications" upperBound="-1"
         eType="#//Modification" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
-        eType="#//VariableDeclaration" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeCondition">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -190,6 +190,28 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetMethodName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mappedParameters" upperBound="-1"
+        eType="#//ParameterMapping" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterMapping">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
         eType="ecore:EClass BehaviorsBaseTypes.ecore#//Parameter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceVariable" lowerBound="1"
+        eType="#//VariableDeclaration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A special parameter which can be used in a ParameterMapping to define a Variable as source of an invocation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="ecore:EClass BehaviorsBaseTypes.ecore#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutParameter" eSuperTypes="BehaviorsBaseTypes.ecore#//Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInOut" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="differentOutVariableName"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Only used for isInOut = true:&#xA;Used for the case, that a input reference shall be different from the output reference.&#xA;To avoid two nodes with same variable name, which is more difficult to handle in generated code,&#xA;the output parameter can alternatively point to another variable name which is used for retrieving the&#xA;output value. The Parameter.variableName is then only used for an input value."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>
