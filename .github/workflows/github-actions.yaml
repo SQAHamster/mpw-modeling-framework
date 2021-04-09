@@ -24,8 +24,6 @@ jobs:
         run: mvn clean install --file pom.xml
 
       # Build and test Java Framework
-      - name: Copy Maven settings.xml
-        run: cp simulators/de.unistuttgart.iste.sqa.mpw.framework.java/.m2/settings.xml ~/.m2
       - name: Build Java Framework
         run: mvn --settings simulators/de.unistuttgart.iste.sqa.mpw.framework.java/.m2/settings.xml -Dmaven.javadoc.skip=true -B deploy --file simulators/de.unistuttgart.iste.sqa.mpw.framework.java/pom.xml
         env:
@@ -73,12 +71,4 @@ jobs:
         run: git clean -ffd && rm -rf ./core && rm -f CMakeLists.txt && cp -R ~/deploy-cpp-framework-to-branch/core ./core && cp ~/deploy-cpp-framework-to-branch/CMakeLists.txt ./CMakeLists.txt
       - name: commit
         run: git add -A && git commit -am 'C++ framework code snapshot' && git push origin cpp-framework --force
-
-      # Deploy java-framework to branch
-      - name: switch to java framework branch
-        run: git fetch && git checkout mpw-framework-repository && git reset --hard c03bae99a8aca5e6785db3bab2063dc693cf3f72
-      - name: java framework repository folder
-        run: git clean -ffd && rm -rf ./repository && cp -R ~/deploy-java-framework-to-branch/repository ./repository
-      - name: commit
-        run: git add -A && git commit -am 'Java framework repository snapshot' && git push origin mpw-framework-repository --force
 
