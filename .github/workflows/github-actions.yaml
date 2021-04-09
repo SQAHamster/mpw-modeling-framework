@@ -23,10 +23,10 @@ jobs:
         run: mvn clean install --file pom.xml
 
       # Build and test Java Framework
+      - name: Copy Maven settings.xml
+        run: cp simulators/de.unistuttgart.iste.sqa.mpw.framework.java/.m2/settings.xml ~/.m2
       - name: Build Java Framework
         run: mvn -Dmaven.javadoc.skip=true -B deploy --file simulators/de.unistuttgart.iste.sqa.mpw.framework.java/pom.xml
-        env:
-          SNAPSHOT_REPOSITORY_URL: file:///${HOME}/deploy-java-framework-to-branch/repository
 
       # Build and test C++ Framework
       - name: Setup CMake
