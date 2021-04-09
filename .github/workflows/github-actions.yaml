@@ -10,6 +10,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: rss-artifactory-mpw-deploy
 
     steps:
       - uses: actions/checkout@v2
@@ -26,7 +27,10 @@ jobs:
       - name: Copy Maven settings.xml
         run: cp simulators/de.unistuttgart.iste.sqa.mpw.framework.java/.m2/settings.xml ~/.m2
       - name: Build Java Framework
-        run: mvn -Dmaven.javadoc.skip=true -B deploy --file simulators/de.unistuttgart.iste.sqa.mpw.framework.java/pom.xml
+        run: mvn --settings simulators/de.unistuttgart.iste.sqa.mpw.framework.java/.m2/settings.xml -Dmaven.javadoc.skip=true -B deploy --file simulators/de.unistuttgart.iste.sqa.mpw.framework.java/pom.xml
+        env:
+          MAVEN_REPO_USER: ${{ secrets.MAVEN_REPO_USER }}
+          MAVEN_REPO_PASS: ${{ secrets.MAVEN_REPO_PASS }}
 
       # Build and test C++ Framework
       - name: Setup CMake
