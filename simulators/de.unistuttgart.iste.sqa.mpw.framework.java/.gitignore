@@ -2,21 +2,17 @@
 target
 
 # Eclipse
-
 bin/
 .settings
 .classpath
 .project
 
 # IntelliJ
-
 *.iml
 .idea
 
 # Generation
-
 */src/main/generated/
 
 # Sonar
-
 run-sonar.cmd

@@ -166,10 +166,15 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>snapshot-deployment</id>
-			<name>Snapshot repository</name>
-			<url>${env.SNAPSHOT_REPOSITORY_URL}</url>
+			<id>${distributionManagement.server.id}</id>
+			<name>snapshots-dist-server</name>
+			<url>${distributionManagement.snapshots.url}</url>
 		</snapshotRepository>
+		<repository>
+			<id>${distributionManagement.server.id}</id>
+			<name>releases-dist-server</name>
+			<url>${distributionManagement.releases.url}</url>
+		</repository>
 	</distributionManagement>
 
 </project>
