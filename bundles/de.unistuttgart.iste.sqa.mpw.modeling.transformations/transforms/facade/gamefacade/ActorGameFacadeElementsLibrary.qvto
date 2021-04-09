@@ -164,7 +164,7 @@ helper EClass::createReadIntOperation() : EOperation {
         eAnnotations += object ReturnAnnotation {
             expression := createPathExpression("result", intType);
         };
-        eAnnotations += toAnnotation("documentation", "Read a number from the hamster simulator UI for further use.");
+        eAnnotations += toAnnotation("documentation", "Read a number from the simulator UI for further use.");
     };
 }
 
@@ -192,7 +192,7 @@ helper EClass::createReadStringOperation() : EOperation {
         eAnnotations += object ReturnAnnotation {
             expression := createPathExpression("result", stringType);
         };
-        eAnnotations += toAnnotation("documentation", "Read a string from the hamster simulator UI for further use.");
+        eAnnotations += toAnnotation("documentation", "Read a string from the simulator UI for further use.");
     };
 }
 

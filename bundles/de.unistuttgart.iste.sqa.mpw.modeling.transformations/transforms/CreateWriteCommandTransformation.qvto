@@ -37,7 +37,5 @@ mapping EClass::toWriteCommand() : CommandModel::Transformation {
     mainUnit.mainUnit := true;
     units := mainUnit;
     
-    documentation := "Writes a new string for this hamster to the game log. The message
-     * will be displayed in a way that it can be associated to this hamster
-     * object.";
+    documentation := "Writes a new string for this actor to the game log. The message\nwill be displayed in a way that it can be associated to this object.";
 }
