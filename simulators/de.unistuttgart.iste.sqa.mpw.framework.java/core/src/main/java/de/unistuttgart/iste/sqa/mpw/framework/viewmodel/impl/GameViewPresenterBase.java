@@ -8,6 +8,7 @@ import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.GameViewPresenter;
 import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.ViewModelCell;
 import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.ViewModelLogEntry;
 import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ListChangeListener;
 
 import java.util.HashMap;
@@ -26,10 +27,8 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 
 	@Override
 	public void bind() {
-		final Size size = getStageSizeFromConcreteStage();
-		getViewModel().init(size);
-
 		runLocked(() -> {
+			bindSize();
 			bindTiles();
 			bindGameLog();
 			bindButtons();
@@ -39,10 +38,20 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 
 	// needs to be implemented by derived presenter classes, since here
 	// no concrete Stage is available.
-	protected abstract Size getStageSizeFromConcreteStage();
+	protected abstract ReadOnlyObjectProperty<Size> getStageSizeFromConcreteStage();
 
 	protected void onBind() {
 		// can be overridden by subclasses
+	}
+
+	private void bindSize() {
+		final ReadOnlyObjectProperty<Size> sizeProperty = getStageSizeFromConcreteStage();
+		getViewModel().init(sizeProperty.get());
+		sizeProperty.addListener((observableValue, oldSize, newSize) -> {
+			runLocked(() -> {
+				getViewModel().init(newSize);
+			});
+		});
 	}
 
 	private void bindTiles() {
@@ -135,7 +144,7 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 
 	private void addTileNode(final Tile tile) {
 		final Location location = tile.getLocation();
-		tile.contentsProperty().addListener((v, c, l) -> {
+		tile.contentsProperty().addListener((observableValue, oldSize, newSize) -> {
 			runLocked(() -> {
 				setTileNodeAt(tile.getLocation(), tile);
 			});

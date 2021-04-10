@@ -20,6 +20,7 @@ public class GameViewModelImpl extends GameViewModel {
 	@Override
 	public void init(final Size size) {
 		setSize(size);
+		getRows().clear();
 		for (int rowIndex = 0; rowIndex < size.getRowCount(); rowIndex++) {
 			final var row = new ViewModelRow();
 			addToRows(row);
