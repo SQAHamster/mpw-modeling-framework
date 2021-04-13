@@ -1,0 +1,45 @@
+«IMPORT ecore»
+«IMPORT commandBehavior»
+«IMPORT queryBehavior»
+«IMPORT generationAnnotations»
+
+«EXTENSION template::java::JavaGeneratorExtensions»
+
+«REM»
+    Generates facade classes based on GenerationAnnotations.
+«ENDREM»
+«DEFINE main FOR EPackage»
+    «EXPAND JavaClass FOREACH this.eClassifiers.typeSelect(EClass)
+                                               .select(c|c.isFacade())
+                                               .reject(c|c.interface)»
+«ENDDEFINE»
+
+«DEFINE JavaClass FOR EClass-»
+    «FILE "generated/" + this.toJavaPackagePath() + "/" + name + ".java"»«toJavaHeaderGeneratedComment()»
+    
+    package «this.toJavaPackageName()»;
+    
+    import «getFrameworkBasePackage()».mpw.*;
+    import «getFrameworkBasePackage()».datatypes.*;
+    import «getModulePackage()».«this.ePackage.name».*;«REM»Import the types of the "internal" package, where the Concrete-Classes are placed«ENDREM»
+    «EXPAND template::java::annotations::JavaGenerationAnnotationTemplate::ImportTypeGenerationAnnotation FOREACH eAnnotations.typeSelect(ImportTypeAnnotation)»
+    
+    «documentationToJavaDoc()-»
+    public class «name» {
+        «FOREACH eStructuralFeatures AS f-»
+            «f.documentationToJavaDoc()-»
+            private «f.featureToJavaType()» «f.name»;
+        «ENDFOREACH-»
+        
+        «FOREACH eOperations AS o-»
+            «REM»TODO JML«constraints.toJml()»«ENDREM-»
+            «o.documentationToJavaDoc()-»
+            public «o.operationToJavaType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.name.toJavaType()» «p.name»«ENDFOREACH») {
+            «EXPAND template::java::annotations::JavaGenerationAnnotationTemplate::GenerationOperationAnnotation FOREACH o.eAnnotations-»
+            }
+            
+        «ENDFOREACH»
+        «EXPAND template::java::annotations::JavaGenerationAnnotationTemplate::GenerationAnnotation FOREACH eAnnotations»
+    }
+    «ENDFILE»
+«ENDDEFINE»

@@ -1,0 +1,83 @@
+«IMPORT ecore»
+«IMPORT commandBehavior»
+«IMPORT queryBehavior»
+«IMPORT generationAnnotations»
+
+«EXTENSION template::cpp::CppGeneratorExtensions»
+
+«REM»
+    Generates facade classes.
+«ENDREM»
+«DEFINE main FOR EPackage»
+    «EXPAND CppClass FOREACH this.eClassifiers.typeSelect(EClass)
+                                               .select(c|c.isFacade())
+                                               .reject(c|c.interface)»
+«ENDDEFINE»
+
+«DEFINE CppClass FOR EClass»
+    «EXPAND CppClassHeader FOR this»
+    «EXPAND CppClassSource FOR this»
+«ENDDEFINE»
+
+«DEFINE CppClassHeader FOR EClass-»
+    «FILE toIntermediaryIncludePath() + "generated/" + name + ".h"»«toCppHeaderGeneratedComment()»
+    
+    #ifndef «this.toCppIncludeGuard()»
+    #define «this.toCppIncludeGuard()»
+    
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::HeaderImportDefinitions FOR this»
+    
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::ForwardDeclarations FOR this»
+    
+    namespace «this.ePackage.name» {
+    
+    «documentationToCppDoc()-»
+    class «name» «toInheritance()» {
+        private:
+
+        «FOREACH eStructuralFeatures AS f-»
+            «f.documentationToCppDoc()-»
+            «f.featureToSimpleFieldType()» «f.name»;
+        «ENDFOREACH-»
+        
+        public:
+
+        «FOREACH eOperations AS o-»
+            «o.documentationToCppDoc()-»
+            «o.operationToCppType()» «o.name» («FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.toCppType()» «p.name»«ENDFOREACH»)«IF o.operationContainsQueryCall()» const noexcept«ENDIF»;
+        «ENDFOREACH»
+        
+        /**
+         * Virtual desctructor to support inheritance.
+         */
+        virtual ~«name»() = default;
+        
+        «EXPAND template::cpp::annotations::CppGenerationAnnotationTemplate::GenerationAnnotationDeclaration FOREACH eAnnotations»
+    };
+    
+    }
+    
+    #endif //«this.toCppIncludeGuard()»
+    «ENDFILE»
+«ENDDEFINE»
+
+«DEFINE CppClassSource FOR EClass-»
+    «FILE toIntermediaryIncludePath() + "generated/" + name + ".cpp"»«toCppHeaderGeneratedComment()»
+
+    #include "«name».h"
+    
+    «EXPAND template::cpp::types::CppImportUsedTypesTemplate::SourceImportDefinitions FOR this»
+    
+    namespace «this.ePackage.name» {
+    
+        «FOREACH eOperations AS o-»
+            «o.operationToCppType()» «name»::«o.name»(«FOREACH o.eParameters AS p SEPARATOR ", "»«p.eType.toCppType()» «p.name»«ENDFOREACH»)«IF o.operationContainsQueryCall()» const noexcept«ENDIF» {
+            «EXPAND template::cpp::annotations::CppGenerationAnnotationTemplate::GenerationAnnotationOperationDefinition FOREACH o.eAnnotations-»
+            }
+            
+        «ENDFOREACH»
+        «EXPAND template::cpp::annotations::CppGenerationAnnotationTemplate::GenerationAnnotationDefinition(this) FOREACH eAnnotations»
+    }
+    
+    «ENDFILE»
+«ENDDEFINE»

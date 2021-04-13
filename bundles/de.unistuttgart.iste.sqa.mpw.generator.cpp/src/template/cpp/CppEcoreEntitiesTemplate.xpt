@@ -70,7 +70,7 @@
             «o.operationToNonVirtualSignature()»;
         «ENDFOREACH»
         
-        «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations-»
+        «EXPAND template::cpp::annotations::CppGenerationAnnotationTemplate::GenerationAnnotationDeclaration FOREACH eAnnotations-»
         «EXPAND template::cpp::properties::CppReflectivePropertyAccessorsTemplate::ReflectivePropertyKeyDefinitions FOR this»
         «EXPAND template::cpp::properties::CppReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodDeclarations FOR this»
 
@@ -130,11 +130,11 @@
         «ENDFOREACH-»
         «FOREACH operationsWithGenerationAnnotations() AS o»
             «o.operationToSourceSignature(name)» {
-                «EXPAND template::cpp::CppGenerateClassesTemplate::GenerationAnnotationOperationDefinition FOREACH o.eAnnotations-»
+                «EXPAND template::cpp::annotations::CppGenerationAnnotationTemplate::GenerationAnnotationOperationDefinition FOREACH o.eAnnotations-»
             }
         «ENDFOREACH»
         
-        «EXPAND GenerationAnnotationDefinition(this) FOREACH eAnnotations-»
+        «EXPAND template::cpp::annotations::CppGenerationAnnotationTemplate::GenerationAnnotationDefinition(this) FOREACH eAnnotations-»
         «EXPAND template::cpp::properties::CppReflectivePropertyAccessorsTemplate::ReflectivePropertyMethodSources FOR this»
     }
     «ENDFILE»
@@ -191,7 +191,7 @@
             «o.operationToVirtualSignature()»«IF o.isQuery()» const noexcept«ENDIF» = 0;
         «ENDIF-»
         «ENDFOREACH»
-        «EXPAND GenerationAnnotationDeclaration FOREACH eAnnotations»
+        «EXPAND template::cpp::annotations::CppGenerationAnnotationTemplate::GenerationAnnotationDeclaration FOREACH eAnnotations»
     };
     
     }
@@ -247,24 +247,6 @@
     #endif //«this.toCppIncludeGuard()»
     
     «ENDFILE»
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotationDeclaration FOR EAnnotation»«ENDDEFINE»
-
-«DEFINE GenerationAnnotationDeclaration FOR GetPropertyDeclarationAnnotation»
-    virtual «getterType.toCppType()» «getterOperationName»() noexcept = 0;
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotationDeclaration FOR GetPropertyAnnotation»
-    «getterType.toCppType()» «getterOperationName»() noexcept«IF override» override«ENDIF»;
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR EAnnotation»«ENDDEFINE»
-
-«DEFINE GenerationAnnotationDefinition(EClass class) FOR GetPropertyAnnotation»
-    «getterType.toCppType()» «class.name»::«getterOperationName»() noexcept {
-        return this->«field.resolveFieldValue()»;
-    }
 «ENDDEFINE»
 
 «DEFINE CMakeLists FOR List[EPackage]»

@@ -63,7 +63,7 @@ Workflow {
             value = generatedProjectBasePackage
         }
         metaModel = mm_emf
-        expand = "template::cpp::CppGenerateClassesTemplate::main FOREACH generationEcoreModels"
+        expand = "template::cpp::CppFacadeClassesTemplate::main FOREACH generationEcoreModels"
         outlet = {
             path = simulatorTargetSrc
             overwrite = true

@@ -44,10 +44,10 @@
         «FOREACH operationsWithGenerationAnnotations() AS o»
         «o.documentationToJavaDoc()-»
         public «o.operationToSignature()» {
-            «EXPAND template::java::JavaGenerateClassesTemplate::GenerationOperationAnnotation FOREACH o.eAnnotations-»
+            «EXPAND template::java::annotations::JavaGenerationAnnotationTemplate::GenerationOperationAnnotation FOREACH o.eAnnotations-»
         }
         «ENDFOREACH»
-        «EXPAND GenerationAnnotation FOREACH eAnnotations-»
+        «EXPAND template::java::annotations::JavaGenerationAnnotationTemplate::GenerationAnnotation FOREACH eAnnotations-»
     }
     «ENDFILE»
     «IF needsImplSubclass()»
@@ -84,7 +84,7 @@
                 «o.operationToObservableGetterSignature()»;
             «ENDIF-»
         «ENDFOREACH»
-        «EXPAND GenerationAnnotation FOREACH eAnnotations»
+        «EXPAND template::java::annotations::JavaGenerationAnnotationTemplate::GenerationAnnotation FOREACH eAnnotations»
     }
     «ENDFILE»
     «IF isDependency()»
@@ -116,18 +116,4 @@
         «ENDFOREACH»
     }
     «ENDFILE»
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotation FOR EAnnotation»«ENDDEFINE»
-
-«DEFINE GenerationAnnotation FOR GetPropertyDeclarationAnnotation»
-    «getterType.name» «getterOperationName»();
-«ENDDEFINE»
-
-«DEFINE GenerationAnnotation FOR GetPropertyAnnotation»
-    «IF override»@Override
-    «ENDIF-»
-    public «getterType.name» «getterOperationName»() {
-        return «field.name»;
-    }
 «ENDDEFINE»

@@ -64,7 +64,7 @@ Workflow {
             value = generatedProjectBasePackage
         }
         metaModel = mm_emf
-        expand = "template::java::JavaGenerateClassesTemplate::main FOREACH generationEcoreModels"
+        expand = "template::java::JavaFacadeClassesTemplate::main FOREACH generationEcoreModels"
         outlet = {
             path = simulatorTargetSrc
             overwrite = false // avoid that Impl classes are overwritten
