@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: de.unistuttgart.iste.sqa.mpw.modeling.framework;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -22,9 +22,9 @@ Require-Bundle: org.eclipse.xtend.profiler;resolution:=optional,
  org.eclipse.core.resources;bundle-version="3.13.800",
  org.junit,
  org.junit.jupiter.api,
- de.unistuttgart.iste.sqa.mpw.modeling.mpw;bundle-version="1.0.0";visibility:=reexport,
- de.unistuttgart.iste.sqa.mpw.modeling.workflow;bundle-version="1.0.0",
- de.unistuttgart.iste.sqa.mpw.modeling.transformations;bundle-version="1.0.0"
+ de.unistuttgart.iste.sqa.mpw.modeling.mpw;visibility:=reexport,
+ de.unistuttgart.iste.sqa.mpw.modeling.workflow,
+ de.unistuttgart.iste.sqa.mpw.modeling.transformations
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-15
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.framework

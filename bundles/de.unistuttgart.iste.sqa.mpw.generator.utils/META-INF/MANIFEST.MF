@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.unistuttgart.iste.sqa.mpw.generator.utils
 Bundle-SymbolicName: de.unistuttgart.iste.sqa.mpw.generator.utils; singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1.qualifier
 Require-Bundle: org.apache.commons.logging,
  org.apache.log4j;resolution:=optional,
  org.eclipse.jdt.core;bundle-version="3.5.0",
@@ -16,8 +16,8 @@ Require-Bundle: org.apache.commons.logging,
  org.eclipse.core.resources;bundle-version="3.13.800",
  org.junit,
  org.junit.jupiter.api,
- de.unistuttgart.iste.sqa.mpw.modeling.mpw;bundle-version="1.0.0",
- de.unistuttgart.iste.sqa.mpw.modeling.transformations;bundle-version="1.0.0"
+ de.unistuttgart.iste.sqa.mpw.modeling.mpw,
+ de.unistuttgart.iste.sqa.mpw.modeling.transformations
 Bundle-RequiredExecutionEnvironment: JavaSE-15
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.generator.utils
 Export-Package: mpw.generator.xtend

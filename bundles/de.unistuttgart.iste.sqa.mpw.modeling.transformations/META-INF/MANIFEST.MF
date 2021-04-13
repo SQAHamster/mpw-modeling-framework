@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: de.unistuttgart.iste.sqa.mpw.modeling.transformations;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.logging,
  org.eclipse.emf.henshin.model;bundle-version="1.6.0";visibility:=reexport,
  org.eclipse.m2m.qvt.oml,
- de.unistuttgart.iste.sqa.mpw.modeling.querydsl;bundle-version="1.0.0";visibility:=reexport,
+ de.unistuttgart.iste.sqa.mpw.modeling.querydsl;visibility:=reexport,
  org.eclipse.xtext;bundle-version="2.24.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-15
