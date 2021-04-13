@@ -15,7 +15,10 @@
 «DEFINE GenerationAnnotationDeclaration FOR EAnnotation»«ENDDEFINE-»
 
 «DEFINE GenerationAnnotationDeclaration FOR GetPropertyDeclarationAnnotation»
+    «documentationToCppDoc()-»
     virtual «getterType.toCppType()» «getterOperationName»() noexcept = 0;
+    «documentationToCppDoc()-»
+    virtual «getterType.toConstCppType()» «getterOperationName»() const noexcept = 0;
 «ENDDEFINE»
 
 «DEFINE GenerationAnnotationDeclaration FOR GetPropertyAnnotation-»
