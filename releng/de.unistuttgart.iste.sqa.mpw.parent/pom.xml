@@ -178,13 +178,4 @@
 
     </build>
 
-
-    <distributionManagement>
-        <repository>
-            <id>bintray-fumapps-mpw-modeling-framework</id>
-            <name>Fumapps-mpw-modeling-framework</name>
-            <url>https://api.bintray.com/maven/fumapps/mpw-modeling-framework/${project.artifactId}/;publish=1</url>
-        </repository>
-    </distributionManagement>
-
 </project>

@@ -7,10 +7,10 @@ A framework to allow modeling of Mini Programming Worlds (MPWs).
 The approach defines four sections:
 
 * MPW Modeling Framework: represented by this repository, here the framework based on EMF is implemented
-* Concrete MPW Modeling: based on the MPW Modeling, concrete MPWs can be modeled (see https://github.com/Fumapps/mpw-modeling-hamster)
+* Concrete MPW Modeling: based on the MPW Modeling, concrete MPWs can be modeled (see https://github.com/SQAHamster/mpw-modeling-hamster)
 * MPW Simulator Framework: the generated meta-models are provided as a basic framework for the concrete simulators
     * The framework is placed under `/simulators` for the languages Java and C++
-* Concrete MPW Simulator: this section relates to the final simulator, which can be executed (see under `/simulators` of https://github.com/Fumapps/mpw-modeling-hamster)
+* Concrete MPW Simulator: this section relates to the final simulator, which can be executed (see under `/simulators` of https://github.com/SQAHamster/mpw-modeling-hamster)
 
 ## Motivation
 
@@ -28,14 +28,14 @@ Note: wrapping the JVM and provide a C-API works for many projects, but for teac
 MPW which is based on the [Boles](https://www.java-hamster-modell.de/simulator.html) and [PSE](https://git.rss.iste.uni-stuttgart.de/open-to-public/pse) hamster-simulator, to teach programming
 based on controlling a hamster in a territory, to pick and put grains.
 
-See: https://github.com/Fumapps/mpw-modeling-hamster
+See: https://github.com/SQAHamster/mpw-modeling-hamster
 
 ### Kara the ladybug Simulator
 
 MPW which is based on the "Kara the ladybug" game (https://www.swisseduc.ch/compscience/karatojava/kara/).
 It allows to control a ladybug to collect leafs and move mushrooms in a mini world.
 
-See: https://github.com/Fumapps/mpw-modeling-kara
+See: https://github.com/SQAHamster/mpw-modeling-kara
 
 ## Modeling Modules
 
@@ -67,7 +67,7 @@ See: https://github.com/Fumapps/mpw-modeling-kara
 
 ## Wiki
 
-Please visit the wiki (https://github.com/Fumapps/mpw-modeling-framework/wiki) for further information regarding design, architecture or other topics.
+Please visit the wiki (https://github.com/SQAHamster/mpw-modeling-framework/wiki) for further information regarding design, architecture or other topics.
 
 ## Java Version
 
@@ -100,8 +100,8 @@ Example:
     * Update site: http://download.eclipse.org/modeling/emft/henshin/updates/release
 * C/C++ Development Tools - 10.1.0
     * Update site: https://download.eclipse.org/tools/cdt/releases/10.1/
-* Query-DSL (QueryDSL Feature - 1.0.0-SNAPSHOT)
-    * Update site: https://raw.githubusercontent.com/Fumapps/mpw-modeling-querydsl/querydsl-updatesite/repository
+* Query-DSL (QueryDSL Feature - 1.0.0)
+    * Update site: https://raw.githubusercontent.com/SQAHamster/mpw-modeling-querydsl/1.0.0-updatesite/repository
 
 ### Optional: Setup Maven
 
