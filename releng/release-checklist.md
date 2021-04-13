@@ -18,7 +18,7 @@
 
 ## C++ Framework
 
-(also: wait until updatesite is built on GitHub)
+* wait until C++ Framework is built on GitHub
 * switch to branch "mpw-cpp-framework"
 * replace files from remote branch "mpw-cpp-framework-snapshot"
 * commit with pattern "C++ Framework: Version X.Y.Z"
