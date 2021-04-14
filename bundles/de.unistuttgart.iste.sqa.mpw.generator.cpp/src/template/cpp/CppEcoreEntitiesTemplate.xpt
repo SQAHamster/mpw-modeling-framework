@@ -126,7 +126,6 @@
         «EXPAND template::cpp::properties::CppPropertyTemplate::GetPropertyValueDefinitions FOR this»
         «EXPAND template::cpp::properties::CppPropertyTemplate::SetPropertyValueDefinitions FOR this»
         «FOREACH operationsWithoutGenerationAnnotations() AS o-»
-        // TODO Source Operation «o.operationToSourceSignature(name)» {}
         «ENDFOREACH-»
         «FOREACH operationsWithGenerationAnnotations() AS o»
             «o.operationToSourceSignature(name)» {
