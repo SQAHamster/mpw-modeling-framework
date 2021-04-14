@@ -9,7 +9,9 @@ import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.ViewModelCell;
 import de.unistuttgart.iste.sqa.mpw.framework.viewmodel.ViewModelLogEntry;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +21,7 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 	private final MiniProgrammingWorld miniProgrammingWorld;
 
 	private final Map<LogEntry, ViewModelLogEntry> logEntryMap = new HashMap<>();
+	private final Map<Tile, ListChangeListener<TileContent>> tileContentsChangeListeners = new HashMap<>();
 
 	public GameViewPresenterBase(final MiniProgrammingWorld miniProgrammingWorld) {
 		super(new Semaphore(1, true));
@@ -144,19 +147,27 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 
 	private void addTileNode(final Tile tile) {
 		final Location location = tile.getLocation();
-		tile.contentsProperty().addListener((observableValue, oldSize, newSize) -> {
+		final ListChangeListener<TileContent> contentChangeListener = change -> {
 			runLocked(() -> {
 				setTileNodeAt(tile.getLocation(), tile);
 			});
-		});
+		};
+		tile.contentsProperty().addListener(contentChangeListener);
+		tileContentsChangeListeners.put(tile, contentChangeListener);
 		setTileNodeAt(location, tile);
 	}
 
 	private void removeTileNode(final Tile tile) {
 		final var cell = getViewModel().getCellAt(tile.getLocation().getRow(), tile.getLocation().getColumn());
 		cell.getLayers().clear();
-		final var tilesProperty = getTilesPropertyFromConcreteStage();
-		tilesProperty.removeListener(tilesChangedListener);
+		removeTileContentsListenerForTile(tile);
+	}
+
+	private void removeTileContentsListenerForTile(Tile tile) {
+		final ListChangeListener<TileContent> contentChangeListener = tileContentsChangeListeners.remove(tile);
+		if (contentChangeListener != null) {
+			tile.contentsProperty().removeListener(contentChangeListener);
+		}
 	}
 
 	private void setTileNodeAt(final Location location, final Tile tile) {
