@@ -1,0 +1,40 @@
+import types.TypeHelpers;
+
+/**
+  * Library with is used to determine a unique name for old-value variables in its generated scope.
+  */
+library OldValueNameHelperLibrary;
+
+modeltype Ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
+modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
+modeltype QueryModel uses "http://www.mpw.uni-stuttgart.de/behavior/query";
+
+property oldValueIndices: Dict(Input::OldValueExpression, Integer);
+property nextOldValueCountForExpressionalElements: Dict(Input::Element, Integer);
+
+/**
+ * For a OldValueExpression, determine a variable name, which is unique in the scope of the
+ * parent expressional element.
+ */
+query Input::OldValueExpression::determineVariableName() : String {
+    var index: Integer;
+    if (oldValueIndices->keys()->includes(self)) {
+    	index := oldValueIndices->get(self);
+    } else {
+        var parentInputElement := self.parentInputElement();
+	    index := getNextIndexForParentElement(parentInputElement);
+	    // ensure that the index will stay the same for this expression element
+	    oldValueIndices->put(self, index);
+    };
+    return "oldValue" + index.toString();
+}
+
+helper getNextIndexForParentElement(parentInputElement: Input::Element) : Integer {
+    var index := 0;
+    if (nextOldValueCountForExpressionalElements->keys()->includes(parentInputElement)) {
+    	index := nextOldValueCountForExpressionalElements->get(parentInputElement);
+    };
+    var nextIndex := index + 1;
+    nextOldValueCountForExpressionalElements->put(parentInputElement, nextIndex);
+    return index;
+}

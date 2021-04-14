@@ -1,5 +1,6 @@
 import queries.StatementTransformation;
 import queries.IntermediaryStatementConverterLibrary;
+import queries.OldValueNameHelperLibrary;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
     
@@ -61,10 +62,6 @@ mapping Input::OldValueExpression::toOldExpression() : QueryModel::OldExpression
     };
     
     type := inner.type;
-}
-
-query Input::OldValueExpression::determineVariableName() : String {
-    return "oldValue"; // todo use a more advanced way to choose a variable name: self.expression.allSubobjectsOfKind(Statement)->collect(s|s.target.firstToUpper())->joinToString("");
 }
 
 mapping Input::ImpliesExpression::toImpliesExpression() : QueryModel::ImpliesExpression {

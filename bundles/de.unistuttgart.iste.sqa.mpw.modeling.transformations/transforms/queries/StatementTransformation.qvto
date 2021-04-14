@@ -1,4 +1,5 @@
 import types.EmfHelpers;
+import types.TypeHelpers;
 
 modeltype ecore uses ecore('http://www.eclipse.org/emf/2002/Ecore');
     
@@ -68,7 +69,7 @@ mapping Input::Statement::toElementByNameUsageStatement() : QueryModel::ElementB
 }
 
 query Input::Statement::determineSelfAlias() : String {
-    if (self.parentElement().oclIsTypeOf(Input::Query)) {
+    if (self.parentInputElement().oclIsTypeOf(Input::Query)) {
         return "this";
     } else {
         return "self";
@@ -198,20 +199,12 @@ query Input::Statement::commandContext() : Input::CommandContext {
 }
 
 query Input::Statement::parameterList() : Input::ParameterList {
-    if (self.parentElement().oclIsTypeOf(Input::Query)) {
-        return self.parentElement().oclAsType(Input::Query).parameterList;
+    if (self.parentInputElement().oclIsTypeOf(Input::Query)) {
+        return self.parentInputElement().oclAsType(Input::Query).parameterList;
     } elif (self.commandContext() != null) {
         return self.commandContext().parameterList;
     };
     return null;
-}
-
-query Input::Statement::parentElement() : Input::Element {
-    var current := self.container();
-    while (current != null and not current.oclIsKindOf(Input::Element)) {
-        current := current.container();
-    };
-    return current.oclAsType(Input::Element);
 }
 
 query getAllQueries() : List(Input::Query) {

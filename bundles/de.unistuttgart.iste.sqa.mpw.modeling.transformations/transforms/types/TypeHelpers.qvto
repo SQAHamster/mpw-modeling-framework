@@ -1,0 +1,15 @@
+/**
+  * Library with some convenient functions related to type handling.
+  */
+library TypeHelpers;
+
+modeltype Input uses "http://www.mpw.uni-stuttgart.de/querydsl";
+
+/** Traverses the parent containers, until an Input::Element is found */
+query Stdlib::Element::parentInputElement() : Input::Element {
+    var current := self.container();
+    while (current != null and not current.oclIsKindOf(Input::Element)) {
+        current := current.container();
+    };
+    return current.oclAsType(Input::Element);
+}
