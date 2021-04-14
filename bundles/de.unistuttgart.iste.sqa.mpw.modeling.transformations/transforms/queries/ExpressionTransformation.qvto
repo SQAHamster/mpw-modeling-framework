@@ -189,7 +189,7 @@ mapping Input::StatementsExpression::toStatementExpression() : QueryModel::State
     
     type := statements->last().type;
     isCollection := statements->last().isCollection;
-    isOptional := false; // TODO Queries currently do not allow optional returns, this requires an extension of QueryDSL, e.g. by '?' syntax
+    isOptional := false; // Note: Queries currently do not allow optional returns, this requires an extension of QueryDSL, e.g. by '?' syntax
 
     result.map convertIntermediaryStatements();
     

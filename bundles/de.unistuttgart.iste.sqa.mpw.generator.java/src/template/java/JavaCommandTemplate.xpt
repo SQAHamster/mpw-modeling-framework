@@ -20,7 +20,6 @@
         import «getFrameworkBasePackage()».utils.*;
         import java.util.stream.Collectors;
         
-        «REM»TODO JML«constraints.toJml()»«ENDREM-»
         «documentation.toJavaDoc()»
         public class «name.toFirstUpper()»Command extends CompositeCommandBase {
             private final «targetClass.getConcreteName()» self;
