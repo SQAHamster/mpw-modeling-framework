@@ -16,7 +16,7 @@
         «ENDIF-»
         «EXPAND StatementDefinition FOR s-»
         «IF CollectionMethodStatement.isInstance(s) && s.isOptional-»
-            .value()«REM»TODO implement safe optional access«ENDREM-»
+            .value()«REM»Note: in future, it might be necessary to do this optional-access in a more safe way«ENDREM-»
         «ENDIF-»
     «ENDFOREACH-»
 «ENDDEFINE»
