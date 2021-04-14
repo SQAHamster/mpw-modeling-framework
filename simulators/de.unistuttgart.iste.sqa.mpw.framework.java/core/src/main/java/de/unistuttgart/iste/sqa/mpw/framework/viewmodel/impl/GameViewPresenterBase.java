@@ -155,6 +155,8 @@ public abstract class GameViewPresenterBase extends GameViewPresenter {
 	private void removeTileNode(final Tile tile) {
 		final var cell = getViewModel().getCellAt(tile.getLocation().getRow(), tile.getLocation().getColumn());
 		cell.getLayers().clear();
+		final var tilesProperty = getTilesPropertyFromConcreteStage();
+		tilesProperty.removeListener(tilesChangedListener);
 	}
 
 	private void setTileNodeAt(final Location location, final Tile tile) {
