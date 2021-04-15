@@ -4,7 +4,7 @@
 
 * replace pom.xml versions
 * replace MANIFEST.MF versions
-* replace plugin.xml versions
+* replace plugin.xml, feature.xml versions
 * commit with pattern: "Version X.Y.Z"
 * create tag on master
 
