@@ -36,6 +36,4 @@ framework::Semaphore GameViewPresenter::getSemaphore() const noexcept {
 	return this->semaphore;
 }
 
-// TODO Source Operation void GameViewPresenter::bind() {}
-
 }

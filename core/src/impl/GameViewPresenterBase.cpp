@@ -18,8 +18,6 @@ using namespace framework;
 
 namespace viewmodel {
 
-// TODO remove listeners on removement of relating objects
-
 GameViewPresenterBase::GameViewPresenterBase(std::shared_ptr<mpw::MiniProgrammingWorld> miniProgrammingWorld)
         : inherited(Semaphore()), miniProgrammingWorld(std::move(miniProgrammingWorld)) {
 }
@@ -139,11 +137,20 @@ void GameViewPresenterBase::addTileNode(const mpw::Tile& tile) {
     setTileNodeAt(location, tile);
 }
 
+static void clearListenersForTile(std::unordered_map<const mpw::Tile*, unsigned int>& listenersMap, const mpw::Tile& tile) {
+    auto iterator = listenersMap.find(&tile);
+    if (iterator != listenersMap.end()) {
+        listenersMap.erase(iterator);
+    }
+}
+
 void GameViewPresenterBase::removeTileNode(const mpw::Tile& tile) {
     auto cell = getViewModel()->getCellAt(
             tile.getLocation().getRow(),
             tile.getLocation().getColumn());
     cell->clearLayers();
+    clearListenersForTile(addedContentListenerIds, tile);
+    clearListenersForTile(removedContentListenerIds, tile);
 }
 
 void GameViewPresenterBase::setTileNodeAt(const Location& location, const Tile& tile) {

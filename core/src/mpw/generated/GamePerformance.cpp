@@ -96,15 +96,4 @@ void GamePerformance::setDelayEnabled(bool delayEnabled) noexcept {
 	this->delayEnabled.set(delayEnabled);
 }
 
-// TODO Source Operation void GamePerformance::startGame() {}
-// TODO Source Operation void GamePerformance::startGamePaused() {}
-// TODO Source Operation void GamePerformance::pauseGame() {}
-// TODO Source Operation void GamePerformance::resumeGame() {}
-// TODO Source Operation void GamePerformance::stopGame() {}
-// TODO Source Operation void GamePerformance::hardReset() {}
-// TODO Source Operation void GamePerformance::abortOrStopGame() {}
-// TODO Source Operation void GamePerformance::preExecuteGameCommand() {}
-// TODO Source Operation void GamePerformance::preExecuteEditorCommand() {}
-// TODO Source Operation void GamePerformance::delayControlFlow() {}
-
 }

@@ -207,7 +207,4 @@ void GameViewModel::setSpeed(double speed) noexcept {
 	this->speed.set(speed);
 }
 
-// TODO Source Operation std::shared_ptr<viewmodel::ViewModelCell> GameViewModel::getCellAt(int row, int column) {}
-// TODO Source Operation void GameViewModel::init(mpw::Size size) {}
-
 }

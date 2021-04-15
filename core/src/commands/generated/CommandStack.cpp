@@ -90,10 +90,4 @@ void CommandStack::clearUndoneCommands() noexcept {
 	}
 }
 
-// TODO Source Operation void CommandStack::execute(std::shared_ptr<commands::Command> command) {}
-// TODO Source Operation void CommandStack::undo() {}
-// TODO Source Operation void CommandStack::redo() {}
-// TODO Source Operation void CommandStack::undoAll() {}
-// TODO Source Operation void CommandStack::redoAll() {}
-
 }
