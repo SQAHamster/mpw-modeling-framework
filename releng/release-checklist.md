@@ -28,5 +28,5 @@
 
 * replace pom.xml versions to next snapshot
 * replace MANIFEST.MF versions to next snapshot
-* replace plugin.xml versions to next snapshot
+* replace plugin.xml, feature.xml versions to next snapshot
 * commit with pattern: "Version X.Y.Z-SNAPSHOT"
