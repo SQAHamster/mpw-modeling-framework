@@ -21,7 +21,7 @@ query toDocumentationLines(command: CommandModel::Transformation) : String {
     if (documentation.length() > 0) {
         documentation := "<br/>\n<br/>\n" + documentation + "\n";
     };
-    assert(not documentation.oclIsInvalid());
+    assert(not documentation.oclIsInvalid()) with log("please add documentation to: " + command.name);
     return documentation;
 }
 
