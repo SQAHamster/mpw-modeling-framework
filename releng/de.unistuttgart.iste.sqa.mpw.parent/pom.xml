@@ -15,7 +15,7 @@
         <xtext.version>2.24.0</xtext.version>
         <henshin.version>1.6.0</henshin.version>
         <cdt.version>10.1</cdt.version>
-        <emf.mwe.launch.version>2.12.0</emf.mwe.launch.version>
+        <emf.mwe.launch.version>2.12.1</emf.mwe.launch.version>
         <tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
         
         <!-- Skip the deployment here, submodules can override this property -->
