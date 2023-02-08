@@ -29,7 +29,7 @@ Require-Bundle: org.eclipse.xtend.profiler;resolution:=optional,
  de.unistuttgart.iste.sqa.mpw.modeling.transformations,
  de.unistuttgart.iste.sqa.mpw.modeling.mpw,
  de.unistuttgart.iste.sqa.mpw.generator.utils
-Bundle-RequiredExecutionEnvironment: JavaSE-15
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.generator.cpp
 Import-Package: mpw.generator.xtend,
  org.eclipse.emf.codegen.ecore.genmodel,

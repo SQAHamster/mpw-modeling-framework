@@ -26,7 +26,7 @@ Require-Bundle: org.eclipse.xtend.profiler;resolution:=optional,
  de.unistuttgart.iste.sqa.mpw.modeling.workflow,
  de.unistuttgart.iste.sqa.mpw.modeling.transformations
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-15
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.framework
 Import-Package: org.eclipse.emf.codegen.ecore.genmodel,
  org.eclipse.emf.mwe2.ecore,

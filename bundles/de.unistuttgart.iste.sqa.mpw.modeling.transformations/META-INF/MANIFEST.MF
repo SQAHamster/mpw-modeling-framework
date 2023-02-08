@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  de.unistuttgart.iste.sqa.mpw.modeling.querydsl;visibility:=reexport,
  org.eclipse.xtext;bundle-version="2.24.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-15
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: behaviorInputs,
  behaviorInputs.impl,
  behaviorInputs.util,

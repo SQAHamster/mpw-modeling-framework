@@ -71,7 +71,7 @@ Please visit the wiki (https://github.com/SQAHamster/mpw-modeling-framework/wiki
 
 ## Java Version
 
-The project is developed with JDK 15. Ensure that Eclipse has mapped a JavaSE-15.
+The project is developed with JDK 15. Ensure that Eclipse has mapped a JavaSE-17.
 
 Note: Eclipse can be started with a custom Java Runtime by specifying the `-vm` property in the `eclipse.ini` file
 

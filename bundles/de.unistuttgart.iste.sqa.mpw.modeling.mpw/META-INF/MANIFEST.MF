@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.log4j;resolution:=optional,
  org.apache.commons.logging
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-15
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: basetypes,
  basetypes.impl,
  basetypes.util,
