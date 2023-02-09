@@ -12,6 +12,8 @@
         <maven.compiler.release>17</maven.compiler.release>
         <tycho-version>2.7.4</tycho-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <eclipse.core.version>3.26.100</eclipse.core.version>
+        <equinox.version>3.17.0</equinox.version>
         <xtext.version>2.29.0</xtext.version>
         <henshin.version>1.6.0</henshin.version>
         <cdt.version>11.0</cdt.version>
