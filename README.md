@@ -83,23 +83,23 @@ Example:
 
 ## Installed Eclipse Plugins
 
-* Eclipse Modeling Tools - 2020-12
-    * https://www.eclipse.org/downloads/packages/release/2020-12/r/eclipse-modeling-tools
-* QVT Operational SDK - 3.10.2
+* Eclipse Modeling Tools - 2022-12
+    * https://www.eclipse.org/downloads/packages/release/2022-12/r/eclipse-modeling-tools
+* QVT Operational SDK - 3.10.7
     * Update site: https://download.eclipse.org/releases/latest
-* OCL Examples and Editors SDK - 6.13.0
+* OCL Examples and Editors SDK - 6.18.0
     * Update site: https://download.eclipse.org/releases/latest
 * Xpand SDK	- 2.2.0
     * Update site: https://download.eclipse.org/releases/latest
 * Xpand/Xtend Additional Support - 2.2.0
     * Update site: https://download.eclipse.org/modeling/m2t/xpand/updates/
-* Xtext Complete SDK - 2.24.0
+* Xtext Complete SDK - 2.29.0
     * Update site: https://download.eclipse.org/releases/latest
     * if later downloading of ANTLR parser generator failed, also install `Xtext Antlr Runtime Feature` from http://download.itemis.com/updates/
-* Henshin SDK (Incubation) - 1.6.0
+* Henshin SDK - 1.8.0
     * Update site: http://download.eclipse.org/modeling/emft/henshin/updates/release
-* C/C++ Development Tools - 10.1.0
-    * Update site: https://download.eclipse.org/tools/cdt/releases/10.1/
+* C/C++ Development Tools - 11.0.0
+    * Update site: https://download.eclipse.org/tools/cdt/releases/11.0/
 * Query-DSL (QueryDSL Feature - 1.0.0)
     * Update site: https://raw.githubusercontent.com/SQAHamster/mpw-modeling-querydsl/1.0.0-updatesite/repository
 
