@@ -15,7 +15,7 @@
         <eclipse.core.version>3.26.100</eclipse.core.version>
         <equinox.version>3.17.0</equinox.version>
         <xtext.version>2.29.0</xtext.version>
-        <henshin.version>1.6.0</henshin.version>
+        <henshin.version>1.8.0</henshin.version>
         <cdt.version>11.0</cdt.version>
         <emf.mwe.launch.version>2.14.0</emf.mwe.launch.version>
         <tycho.disableP2Mirrors>true</tycho.disableP2Mirrors>
