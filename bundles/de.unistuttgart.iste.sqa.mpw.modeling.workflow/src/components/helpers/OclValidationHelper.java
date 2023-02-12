@@ -1,5 +1,6 @@
 package components.helpers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EValidator;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.henshin.model.HenshinPackage;
@@ -17,6 +19,10 @@ import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.ocl.pivot.utilities.OCL;
 import org.eclipse.ocl.xtext.completeocl.CompleteOCLStandaloneSetup;
 import org.eclipse.ocl.xtext.completeocl.validation.CompleteOCLEObjectValidator;
+import org.eclipse.xtext.mwe.RuntimeResourceSetInitializer;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * Helper class which validates a resource content with a given OCL validation
@@ -27,6 +33,7 @@ public class OclValidationHelper {
 
     private final EValidator validator;
     private BasicDiagnostic currentDiagnostics;
+
 
     // Note: ocl instance has to be kept in this variable, since it must not be
     // garbage collected until the last validation through this object ends
@@ -84,15 +91,14 @@ public class OclValidationHelper {
      * @return true, if the commandModel is valid.
      */
     private boolean isValid(final EObject content) {
-        // todo: with Tycho 2.7.0 & Eclipse 4.22 the URI to the ocl file in de.unistuttgart.iste.sqa.mpw.modeling.workflow cannot be found any more
-//        currentDiagnostics = Diagnostician.INSTANCE.createDefaultDiagnostic(content);
-//        var contentIterator = EcoreUtil.<EObject>getAllContents(content, false);
-//        while (contentIterator.hasNext()) {
-//            validator.validate(contentIterator.next(), currentDiagnostics, new HashMap<Object, Object>());
-//            if (currentDiagnostics.getSeverity() != Diagnostic.OK) {
-//                return false;
-//            }
-//        }
+        currentDiagnostics = Diagnostician.INSTANCE.createDefaultDiagnostic(content);
+        var contentIterator = EcoreUtil.<EObject>getAllContents(content, false);
+        while (contentIterator.hasNext()) {
+            validator.validate(contentIterator.next(), currentDiagnostics, new HashMap<Object, Object>());
+            if (currentDiagnostics.getSeverity() != Diagnostic.OK) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -106,8 +112,7 @@ public class OclValidationHelper {
     private static String getWorkflowProjectResourcePathPrefix() {
         final String workflowProjectName = "de.unistuttgart.iste.sqa.mpw.modeling.workflow";
         final StringBuilder uri = new StringBuilder();
-        uri.append("platform:/resource/");
-        uri.append(workflowProjectName);
+        uri.append(EclipsePathHelper.getMappedPlatformUriForProject(workflowProjectName));
         if (EclipsePathHelper.isProjectInSameWorkspace(workflowProjectName)) {
             uri.append("/src");
         }
