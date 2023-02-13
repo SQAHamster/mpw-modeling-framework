@@ -1,6 +1,5 @@
 package components.helpers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +10,6 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EValidator;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.henshin.model.HenshinPackage;
@@ -19,10 +17,6 @@ import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.ocl.pivot.utilities.OCL;
 import org.eclipse.ocl.xtext.completeocl.CompleteOCLStandaloneSetup;
 import org.eclipse.ocl.xtext.completeocl.validation.CompleteOCLEObjectValidator;
-import org.eclipse.xtext.mwe.RuntimeResourceSetInitializer;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 /**
  * Helper class which validates a resource content with a given OCL validation
@@ -111,9 +105,15 @@ public class OclValidationHelper {
 
     private static String getWorkflowProjectResourcePathPrefix() {
         final String workflowProjectName = "de.unistuttgart.iste.sqa.mpw.modeling.workflow";
+        boolean projectInSameWorkspace = EclipsePathHelper.isProjectInSameWorkspace(workflowProjectName);
+        
         final StringBuilder uri = new StringBuilder();
         uri.append(EclipsePathHelper.getMappedPlatformUriForProject(workflowProjectName));
-        if (EclipsePathHelper.isProjectInSameWorkspace(workflowProjectName)) {
+        if (uri.toString().endsWith("/")) {
+        	uri.deleteCharAt(uri.length()-1);
+        }
+        
+        if (projectInSameWorkspace) {
             uri.append("/src");
         }
         return uri.toString();
