@@ -1,4 +1,5 @@
 import java.io.File
+import java.lang.IllegalArgumentException
 import java.nio.charset.Charset
 
 /*
@@ -8,13 +9,18 @@ import java.nio.charset.Charset
  */
 
 /* Configuration */
-val sourceVersion = "1.0.1"
-val targetVersion = "1.0.2-SNAPSHOT"
-val rootDir = "../../.."
+val sourceVersion = "1.0.2-SNAPSHOT"
+val targetVersion = "1.0.2"
+val rootDir = ".."
 val projectName = "framework"
 
 /* Start of Script Logic */
-File(rootDir).walkTopDown().forEach { file ->
+val expectedRootDirName = "mpw-modeling-$projectName"
+val absolutePathToRootDir = File(rootDir).canonicalFile
+if (absolutePathToRootDir.nameWithoutExtension != expectedRootDirName) {
+    throw IllegalArgumentException("The root directory has to be $expectedRootDirName, but is ${absolutePathToRootDir.nameWithoutExtension}")
+}
+absolutePathToRootDir.walkTopDown().forEach { file ->
     file.on("pom.xml") {
         this.replaceFirstAfter("</modelVersion>", sourceVersion, targetVersion)
             .replaceInDependencyTags()
