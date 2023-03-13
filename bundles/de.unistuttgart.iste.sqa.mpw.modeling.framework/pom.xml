@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.unistuttgart.iste.sqa.mpw.modeling</groupId>
         <artifactId>de.unistuttgart.iste.sqa.mpw.parent</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
         <relativePath>../../releng/de.unistuttgart.iste.sqa.mpw.parent</relativePath>
     </parent>
     
@@ -89,6 +89,11 @@
                     <dependency>
                         <groupId>${project.groupId}</groupId>
                         <artifactId>de.unistuttgart.iste.sqa.mpw.modeling.transformations</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>de.unistuttgart.iste.sqa.mpw.modeling.workflow</artifactId>
                         <version>${project.version}</version>
                     </dependency>
 					<dependency>

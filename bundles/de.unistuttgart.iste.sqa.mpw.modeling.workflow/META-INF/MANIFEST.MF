@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.unistuttgart.iste.sqa.mpw.modeling.workflow
 Bundle-SymbolicName: de.unistuttgart.iste.sqa.mpw.modeling.workflow; singleton:=true
-Bundle-Version: 1.0.2.qualifier
+Bundle-Version: 1.0.2
 Require-Bundle: org.eclipse.xtend.profiler;resolution:=optional,
  org.apache.commons.logging,
  org.apache.log4j;resolution:=optional,
  org.eclipse.jdt.core;bundle-version="3.5.0",
  com.ibm.icu;bundle-version="4.0.1",
  org.antlr.runtime;bundle-version="3.0.0",
- org.eclipse.core.runtime;bundle-version="3.5.0",
+ org.eclipse.core.runtime;bundle-version="3.26.100",
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.mwe.utils;bundle-version="1.0.0",
  org.eclipse.emf.ecore.xmi;bundle-version="2.5.0",
@@ -30,7 +30,7 @@ Require-Bundle: org.eclipse.xtend.profiler;resolution:=optional,
  de.unistuttgart.iste.sqa.mpw.generator.cpp,
  org.eclipse.cdt;bundle-version="10.1.0",
  org.eclipse.cdt.core;bundle-version="7.1.100"
-Bundle-RequiredExecutionEnvironment: JavaSE-15
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: de.unistuttgart.iste.sqa.mpw.modeling.workflow
 Import-Package: org.eclipse.emf.codegen.ecore.genmodel,
  org.eclipse.emf.mwe2.ecore,

@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.unistuttgart.iste.sqa.mpw.modeling</groupId>
         <artifactId>de.unistuttgart.iste.sqa.mpw.parent</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
         <relativePath>../../releng/de.unistuttgart.iste.sqa.mpw.parent</relativePath>
     </parent>
     
@@ -43,7 +43,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.9.1</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>add-test-source</id>
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.4.0</version>
+            <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>    

@@ -28,6 +28,7 @@ public class OclValidationHelper {
     private final EValidator validator;
     private BasicDiagnostic currentDiagnostics;
 
+
     // Note: ocl instance has to be kept in this variable, since it must not be
     // garbage collected until the last validation through this object ends
     private final OCL ocl = OCL.newInstance();
@@ -104,10 +105,15 @@ public class OclValidationHelper {
 
     private static String getWorkflowProjectResourcePathPrefix() {
         final String workflowProjectName = "de.unistuttgart.iste.sqa.mpw.modeling.workflow";
+        boolean projectInSameWorkspace = EclipsePathHelper.isProjectInSameWorkspace(workflowProjectName);
+        
         final StringBuilder uri = new StringBuilder();
-        uri.append("platform:/resource/");
-        uri.append(workflowProjectName);
-        if (EclipsePathHelper.isProjectInSameWorkspace(workflowProjectName)) {
+        uri.append(EclipsePathHelper.getMappedPlatformUriForProject(workflowProjectName));
+        if (uri.toString().endsWith("/")) {
+        	uri.deleteCharAt(uri.length()-1);
+        }
+        
+        if (projectInSameWorkspace) {
             uri.append("/src");
         }
         return uri.toString();
