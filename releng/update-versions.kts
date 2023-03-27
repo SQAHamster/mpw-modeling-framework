@@ -9,8 +9,8 @@ import java.nio.charset.Charset
  */
 
 /* Configuration */
-val sourceVersion = "1.0.2-SNAPSHOT"
-val targetVersion = "1.0.2"
+val sourceVersion = "1.0.2"
+val targetVersion = "1.0.3-SNAPSHOT"
 val rootDir = ".."
 val projectName = "framework"
 
