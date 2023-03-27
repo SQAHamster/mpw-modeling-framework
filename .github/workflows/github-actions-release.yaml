@@ -40,4 +40,5 @@ jobs:
 
       # Deploy update-site to branch
       - name: commit & tag update-site
-        run: git add -A && git tag -a ${GITHUB_REF##*/} -m 'Updatesite Version X.Y.Z' && git push origin ${GITHUB_REF##*/}
+        run: |
+          git add -A && git tag -a ${{ github.ref_name }}-updatesite -m "Updatesite Version: ${{ github.ref_name }}" && git push origin ${{ github.ref_name }}-updatesite
