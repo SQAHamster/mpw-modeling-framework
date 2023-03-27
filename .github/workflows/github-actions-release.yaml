@@ -1,0 +1,41 @@
+name: Release with Maven / CMake
+
+on:
+  push:
+    branches: [ 'automateReleases' ]
+#    tags:
+#      - '*.*.*'
+#      - '!*.*.*-updatesite'
+#      - '!*.*.*-cpp-framework'
+
+jobs:
+  call-build-workflow:
+    uses: ./.github/workflows/workflow-build.yaml
+  release:
+    runs-on: ubuntu-latest
+    environment: rss-artifactory-mpw-deploy
+    needs: call-build-workflow
+    steps:
+      # Prepare Git Repository
+      - name: set identity
+        run: git config user.email "updatesite@users.noreply.github.com" && git config user.name "Updatesite"
+
+      # Switch to snapshot-update-site to branch
+      - name: switch to mpw-updatesite-snapshot branch
+        run: git fetch && git checkout mpw-updatesite-snapshot
+
+      # Copy update artifacts to temporary folder
+      - name: copy snapshot updatesite repository
+        run:  mkdir ~/deploy-updatesite-to-branch && cp -R repository ~/deploy-updatesite-to-branch
+
+      # Switch to update-site to branch
+      - name: switch to mpw-updatesite branch
+        run: git fetch && git checkout mpw-updatesite
+
+      # Replace artifacts from temporary folder
+      - name: updatesite branch repository folder
+        run: git clean -ffd && rm -rf ./repository && cp -R ~/deploy-updatesite-to-branch/repository ./repository
+
+      # Deploy update-site to branch
+      - name: commit & tag update-site
+        run: git add -A && git tag -a ${GITHUB_REF##*/} -m 'Updatesite Version X.Y.Z' && git push origin ${GITHUB_REF##*/}
