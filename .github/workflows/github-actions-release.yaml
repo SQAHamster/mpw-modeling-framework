@@ -8,6 +8,11 @@ on:
 #      - '!*.*.*-updatesite'
 #      - '!*.*.*-cpp-framework'
 
+env:
+  UPDATESITE_BASE_NAME: "mpw-updatesite"
+  CPP_MODULE_BASE_NAME: "mpw-cpp-framework"
+  CPP_MODULE_TAG_SUFFIX: "framework"
+
 jobs:
   call-build-workflow:
     uses: ./.github/workflows/workflow-build.yaml
@@ -23,16 +28,16 @@ jobs:
         run: git config user.email "updatesite@users.noreply.github.com" && git config user.name "Updatesite"
 
       # Switch to snapshot-update-site to branch
-      - name: switch to mpw-updatesite-snapshot branch
-        run: git fetch && git checkout mpw-updatesite-snapshot
+      - name: switch to updatesite-snapshot branch
+        run: git clean -ffd && git fetch && git checkout ${{ env.UPDATESITE_BASE_NAME }}-snapshot
 
-      # Copy update artifacts to temporary folder
+      # Copy updatesite artifacts to temporary folder
       - name: copy snapshot updatesite repository
         run:  mkdir ~/deploy-updatesite-to-branch && cp -R repository ~/deploy-updatesite-to-branch
 
-      # Switch to update-site to branch
-      - name: switch to mpw-updatesite branch
-        run: git fetch && git checkout mpw-updatesite
+      # Switch to update-site branch
+      - name: switch to updatesite branch
+        run: git fetch && git checkout ${{ env.UPDATESITE_BASE_NAME }}
 
       # Replace artifacts from temporary folder
       - name: updatesite branch repository folder
@@ -42,3 +47,24 @@ jobs:
       - name: commit & tag update-site
         run: |
           git add -A && git tag -a ${{ github.ref_name }}-updatesite -m "Updatesite Version: ${{ github.ref_name }}" && git push origin ${{ github.ref_name }}-updatesite
+
+      # Switch to snapshot cpp module branch
+      - name: switch to snapshot cpp module branch
+        run: git reset --hard && git fetch && git checkout ${{ env.CPP_MODULE_BASE_NAME }}-snapshot
+
+      # Copy cpp module artifacts to temporary folder
+      - name: copy snapshot cpp module repository
+        run:  mkdir ~/deploy-cpp-module-to-branch && cp -R ./core ~/deploy-cpp-module-to-branch && cp ./CMakeLists.txt ~/deploy-cpp-module-to-branch
+
+      # Switch to cpp module branch
+      - name: switch to cpp module branch
+        run: git fetch && git checkout ${{ env.CPP_MODULE_BASE_NAME }}
+
+      # Replace artifacts from temporary folder
+      - name: cpp module branch core folder
+        run: git clean -ffd && rm -rf ./core && rm -f CMakeLists.txt && cp -R ~/deploy-cpp-module-to-branch/core ./core && cp ~/deploy-cpp-module-to-branch/CMakeLists.txt ./CMakeLists.txt
+
+      # Deploy cpp-framework snapshot to branch
+      - name: commit & tag cpp module
+        run: |
+          git add -A && git tag -a ${{ github.ref_name }}-${{ env.CPP_MODULE_TAG_SUFFIX }} -m "C++ Framework: Version ${{ github.ref_name }}" && git push origin ${{ github.ref_name }}-${{ env.CPP_MODULE_TAG_SUFFIX }}

@@ -3,6 +3,10 @@ name: Java/C++ Build
 on:
   workflow_call:
 
+env:
+  UPDATESITE_BASE_NAME: "mpw-updatesite"
+  CPP_MODULE_BASE_NAME: "mpw-cpp-framework"
+
 jobs:
   build:
 
@@ -56,16 +60,16 @@ jobs:
 
       # Deploy update-site to branch
       - name: switch to updatesite branch
-        run: git fetch && git checkout mpw-updatesite-snapshot && git reset --hard db24f3d4f34d25d6634350bb909c90ab21589a01
+        run: git fetch && git checkout ${{ env.UPDATESITE_BASE_NAME }}-snapshot && git reset --hard db24f3d4f34d25d6634350bb909c90ab21589a01
       - name: updatesite branch repository folder
         run: git clean -ffd && rm -rf ./repository && cp -R ~/deploy-updatesite-to-branch/repository ./repository
       - name: commit
-        run: git add -A && git commit -am 'Update repository snapshot' && git push origin mpw-updatesite-snapshot --force
+        run: git add -A && git commit -am 'Update repository snapshot' && git push origin ${{ env.UPDATESITE_BASE_NAME }}-snapshot --force
 
       # Deploy cpp-framework snapshot to branch
       - name: switch to cpp framework branch
-        run: git fetch && git checkout mpw-cpp-framework-snapshot && git reset --hard e8389b8b97c803777473011ca5f6c769a33b6875
+        run: git fetch && git checkout ${{ env.CPP_MODULE_BASE_NAME }}-snapshot && git reset --hard e8389b8b97c803777473011ca5f6c769a33b6875
       - name: cpp framework branch core folder
         run: git clean -ffd && rm -rf ./core && rm -f CMakeLists.txt && cp -R ~/deploy-cpp-framework-to-branch/core ./core && cp ~/deploy-cpp-framework-to-branch/CMakeLists.txt ./CMakeLists.txt
       - name: commit
-        run: git add -A && git commit -am 'C++ framework code snapshot' && git push origin mpw-cpp-framework-snapshot --force
+        run: git add -A && git commit -am 'C++ framework code snapshot' && git push origin ${{ env.CPP_MODULE_BASE_NAME }}-snapshot --force
