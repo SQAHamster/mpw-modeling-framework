@@ -16,6 +16,8 @@ jobs:
     environment: rss-artifactory-mpw-deploy
     needs: call-build-workflow
     steps:
+      - uses: actions/checkout@v2
+
       # Prepare Git Repository
       - name: set identity
         run: git config user.email "updatesite@users.noreply.github.com" && git config user.name "Updatesite"
