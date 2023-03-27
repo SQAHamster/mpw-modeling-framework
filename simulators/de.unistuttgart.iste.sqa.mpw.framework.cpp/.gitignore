@@ -6,4 +6,5 @@
 
 /.vs
 /out
+/build
 *.DotSettings.user
