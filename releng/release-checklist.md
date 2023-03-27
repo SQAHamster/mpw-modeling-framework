@@ -2,9 +2,7 @@
 
 ## New Release of Source Code
 
-* replace pom.xml versions
-* replace MANIFEST.MF versions
-* replace plugin.xml, feature.xml versions
+* replace versions (adapt/run update-versions.kts)
 * commit with pattern: "Version X.Y.Z"
 * create tag on master
 
