@@ -10,8 +10,9 @@ on:
 
 env:
   UPDATESITE_BASE_NAME: "mpw-updatesite"
+  UPDATESITE_TAG_SUFFIX: "updatesite"
   CPP_MODULE_BASE_NAME: "mpw-cpp-framework"
-  CPP_MODULE_TAG_SUFFIX: "framework"
+  CPP_MODULE_TAG_SUFFIX: "cpp-framework"
 
 jobs:
   call-build-workflow:
@@ -46,7 +47,7 @@ jobs:
       # Deploy update-site to branch
       - name: commit & tag update-site
         run: |
-          git add -A && git tag -a ${{ github.ref_name }}-updatesite -m "Updatesite Version: ${{ github.ref_name }}" && git push origin ${{ github.ref_name }}-updatesite
+          git add -A && git tag -a ${{ github.ref_name }}-${{ env.UPDATESITE_TAG_SUFFIX }} -m "Updatesite Version: ${{ github.ref_name }}" && git push origin ${{ github.ref_name }}-${{ env.UPDATESITE_TAG_SUFFIX }}
 
       # Switch to snapshot cpp module branch
       - name: switch to snapshot cpp module branch
