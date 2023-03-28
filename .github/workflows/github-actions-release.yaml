@@ -34,7 +34,7 @@ jobs:
 
       # Copy updatesite artifacts to temporary folder
       - name: copy snapshot updatesite repository
-        run:  mkdir ~/deploy-updatesite-to-branch && cp -R repository ~/deploy-updatesite-to-branch
+        run: mkdir ~/deploy-updatesite-to-branch && cp -R repository ~/deploy-updatesite-to-branch
 
       # Switch to update-site branch
       - name: switch to updatesite branch
@@ -46,9 +46,8 @@ jobs:
 
       # Deploy update-site to branch
       - name: commit update-site
-        continue-on-error: true
         run: |
-          git add -A && git commit -m "Updatesite Version: ${{ github.ref_name }}"
+          git add -A && git commit -m "Updatesite Version: ${{ github.ref_name }}" --allow-empty
       - name: tag update-site
         run: |
           git tag ${{ github.ref_name }}-${{ env.UPDATESITE_TAG_SUFFIX }} && \
@@ -72,9 +71,8 @@ jobs:
 
       # Deploy cpp-framework snapshot to branch
       - name: commit cpp module
-        continue-on-error: true
         run: |
-          git add -A && git commit -m "C++ Framework: Version ${{ github.ref_name }}"
+          git add -A && git commit -m "C++ Framework: Version ${{ github.ref_name }}" --allow-empty
       - name: tag cpp module
         run: |
           git tag ${{ github.ref_name }}-${{ env.CPP_MODULE_TAG_SUFFIX }} && \
