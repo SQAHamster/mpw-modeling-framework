@@ -26,8 +26,7 @@ jobs:
 
       # Build and test Java Framework
       - name: Build Java Framework
-        run: mvn --settings simulators/de.unistuttgart.iste.sqa.mpw.framework.java/.m2/settings.xml -B install --file simulators/de.unistuttgart.iste.sqa.mpw.framework.java/pom.xml
-#        run: mvn --settings simulators/de.unistuttgart.iste.sqa.mpw.framework.java/.m2/settings.xml -B deploy --file simulators/de.unistuttgart.iste.sqa.mpw.framework.java/pom.xml
+        run: mvn --settings simulators/de.unistuttgart.iste.sqa.mpw.framework.java/.m2/settings.xml -B deploy --file simulators/de.unistuttgart.iste.sqa.mpw.framework.java/pom.xml
         env:
           MAVEN_REPO_USER: ${{ secrets.MAVEN_REPO_USER }}
           MAVEN_REPO_PASS: ${{ secrets.MAVEN_REPO_PASS }}

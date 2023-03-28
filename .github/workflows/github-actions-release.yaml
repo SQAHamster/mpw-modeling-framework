@@ -2,11 +2,10 @@ name: Release with Maven / CMake
 
 on:
   push:
-    branches: [ 'automateReleases' ]
-#    tags:
-#      - '*.*.*'
-#      - '!*.*.*-updatesite'
-#      - '!*.*.*-cpp-framework'
+    tags:
+      - '*.*.*'
+      - '!*.*.*-updatesite'
+      - '!*.*.*-cpp-framework'
 
 env:
   UPDATESITE_BASE_NAME: "mpw-updatesite"
