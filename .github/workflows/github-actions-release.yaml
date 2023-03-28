@@ -26,7 +26,7 @@ jobs:
 
       # Prepare Git Repository
       - name: set identity
-        run: git config user.email "updatesite@users.noreply.github.com" && git config user.name "Updatesite"
+        run: git config user.email "sqa-mpw-githubactions@users.noreply.github.com" && git config user.name "GitHub Actions"
 
       # Switch to snapshot-update-site to branch
       - name: switch to updatesite-snapshot branch
@@ -45,9 +45,14 @@ jobs:
         run: git clean -ffd && rm -rf ./repository && cp -R ~/deploy-updatesite-to-branch/repository ./repository
 
       # Deploy update-site to branch
-      - name: commit & tag update-site
+      - name: commit update-site
+        continue-on-error: true
         run: |
-          git add -A && git tag -a ${{ github.ref_name }}-${{ env.UPDATESITE_TAG_SUFFIX }} -m "Updatesite Version: ${{ github.ref_name }}" && git push origin ${{ github.ref_name }}-${{ env.UPDATESITE_TAG_SUFFIX }}
+          git add -A && git commit -m "Updatesite Version: ${{ github.ref_name }}"
+      - name: tag update-site
+        run: |
+          git tag ${{ github.ref_name }}-${{ env.UPDATESITE_TAG_SUFFIX }} && \
+          git push origin ${{ env.UPDATESITE_BASE_NAME }} && git push origin ${{ github.ref_name }}-${{ env.UPDATESITE_TAG_SUFFIX }}
 
       # Switch to snapshot cpp module branch
       - name: switch to snapshot cpp module branch
@@ -66,6 +71,11 @@ jobs:
         run: git clean -ffd && rm -rf ./core && rm -f CMakeLists.txt && cp -R ~/deploy-cpp-module-to-branch/core ./core && cp ~/deploy-cpp-module-to-branch/CMakeLists.txt ./CMakeLists.txt
 
       # Deploy cpp-framework snapshot to branch
-      - name: commit & tag cpp module
+      - name: commit cpp module
+        continue-on-error: true
         run: |
-          git add -A && git tag -a ${{ github.ref_name }}-${{ env.CPP_MODULE_TAG_SUFFIX }} -m "C++ Framework: Version ${{ github.ref_name }}" && git push origin ${{ github.ref_name }}-${{ env.CPP_MODULE_TAG_SUFFIX }}
+          git add -A && git commit -m "C++ Framework: Version ${{ github.ref_name }}"
+      - name: tag cpp module
+        run: |
+          git tag ${{ github.ref_name }}-${{ env.CPP_MODULE_TAG_SUFFIX }} && \
+          git push origin ${{ env.CPP_MODULE_BASE_NAME }} && git push origin ${{ github.ref_name }}-${{ env.CPP_MODULE_TAG_SUFFIX }}
