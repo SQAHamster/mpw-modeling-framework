@@ -2,6 +2,11 @@ name: Java/C++ Build
 
 on:
   workflow_call:
+    secrets:
+      MAVEN_REPO_USER:
+        required: true
+      MAVEN_REPO_PASS:
+        required: true
 
 env:
   UPDATESITE_BASE_NAME: "mpw-updatesite"

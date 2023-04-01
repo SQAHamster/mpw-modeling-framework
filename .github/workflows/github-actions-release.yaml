@@ -16,6 +16,9 @@ env:
 jobs:
   call-build-workflow:
     uses: ./.github/workflows/workflow-build.yaml
+    secrets:
+      MAVEN_REPO_USER: ${{ secrets.MAVEN_REPO_USER }}
+      MAVEN_REPO_PASS: ${{ secrets.MAVEN_REPO_PASS }}
   release:
     runs-on: ubuntu-latest
     environment: rss-artifactory-mpw-deploy
