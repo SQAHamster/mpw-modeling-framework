@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>de.unistuttgart.iste.sqa.mpw.modeling</groupId>
 		<artifactId>de.unistuttgart.iste.sqa.mpw.parent</artifactId>
-		<version>1.0.3</version>
+		<version>1.0.4-SNAPSHOT</version>
 		<relativePath>../../releng/de.unistuttgart.iste.sqa.mpw.parent</relativePath>
 	</parent>
 
