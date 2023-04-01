@@ -8,19 +8,11 @@
 
 ## Updatesite
 
-* wait until updatesite is built on GitHub
-* switch to branch "mpw-updatesite"
-* replace files from remote branch "mpw-updatesite-snapshot"
-* commit with pattern "Updatesite: Version X.Y.Z"
-* tag with pattern "X.Y.Z-updatesite"
+* updatesite-tag will be handled by GitHub Actions automatically
 
 ## C++ Framework
 
-* wait until C++ Framework is built on GitHub
-* switch to branch "mpw-cpp-framework"
-* replace files from remote branch "mpw-cpp-framework-snapshot"
-* commit with pattern "C++ Framework: Version X.Y.Z"
-* tag with pattern "X.Y.Z-cpp-framework"
+* cpp-framework-tag will be handled by GitHub Actions automatically
 
 ## Set new SNAPSHOT Version
 
