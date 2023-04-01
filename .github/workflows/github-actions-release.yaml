@@ -25,7 +25,7 @@ jobs:
 
       # Prepare Git Repository
       - name: set identity
-        run: git config user.email "sqa-mpw-githubactions@users.noreply.github.com" && git config user.name "GitHub Actions"
+        run: git config user.email "mpw-deployment@users.noreply.github.com" && git config user.name "Deployment"
 
       # Switch to snapshot-update-site to branch
       - name: switch to updatesite-snapshot branch
