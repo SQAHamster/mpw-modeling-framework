@@ -86,18 +86,18 @@ Example:
 * Eclipse Modeling Tools - 2022-12
     * https://www.eclipse.org/downloads/packages/release/2022-12/r/eclipse-modeling-tools
 * QVT Operational SDK - 3.10.7
-    * Update site: https://download.eclipse.org/releases/latest
+    * Update site: https://download.eclipse.org/releases/2022-12
 * OCL Examples and Editors SDK - 6.18.0
-    * Update site: https://download.eclipse.org/releases/latest
+    * Update site: https://download.eclipse.org/releases/2022-12
 * Xpand SDK	- 2.2.0
-    * Update site: https://download.eclipse.org/releases/latest
+    * Update site: https://download.eclipse.org/releases/2022-12
 * Xpand/Xtend Additional Support - 2.2.0
     * Update site: https://download.eclipse.org/modeling/m2t/xpand/updates/
 * Xtext Complete SDK - 2.29.0
-    * Update site: https://download.eclipse.org/releases/latest
+    * Update site: https://download.eclipse.org/releases/2022-12
     * if later downloading of ANTLR parser generator failed, also install `Xtext Antlr Runtime Feature` from http://download.itemis.com/updates/
 * Henshin SDK - 1.8.0
-    * Update site: http://download.eclipse.org/modeling/emft/henshin/updates/release
+    * Update site: http://download.eclipse.org/modeling/emft/henshin/updates/1.8.0
 * C/C++ Development Tools - 11.0.0
     * Update site: https://download.eclipse.org/tools/cdt/releases/11.0/
 * Query-DSL (QueryDSL Feature - 1.0.0)
@@ -105,9 +105,9 @@ Example:
 
 ### Optional: Setup Maven
 
-* m2e: Maven integration in Eclipse - 1.17.1
-    * Update site: https://download.eclipse.org/releases/latest
-* Tycho Project Configurators - 0.8.1
+* m2e: Maven integration in Eclipse - 2.2.1
+    * Update site: https://download.eclipse.org/releases/2022-12
+* Tycho Project Configurators - 0.10.0
     * under Preferences / Maven / Discovery / Open Catalog, search for the Tycho Configurators and install them 
 
 ## Setup
